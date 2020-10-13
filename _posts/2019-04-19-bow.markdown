@@ -58,36 +58,36 @@ tag: [计算机视觉]
 
 这种方法在建立字典时就可以统计出$IDF$的值，比如某个叶子节点$w_{i}$中的特征数量相对于所有特征数量的比例，就是次叶子节点的$IDF$值。假设所有特征数量为$n$，$w_{i}$中的特征数量为$n_{i}$，那么该单词的$IDF$为：
 
-$$
+$
 \operatorname{IDF}_{i}=\log \frac{n}{n_{i}}
-$$
+$
 
 此外，$TF$部分是指某个特征在单个图像中出现的频率。假设图像$A$中，单词$w_{i}$出现了$n_{i}$次，而一共出现的单词次数为$n$，那么$TF$为：
 
-$$
+$
 \mathrm{TF}_{i}=\frac{n_{i}}{n}
-$$
+$
 
 最后，对于单词$w_{i}$在这幅图像中的权重等于$TF$与$IDF$的乘积：
 
-$$
+$
 \eta_{i}=\mathrm{TF}_{i} \times \operatorname{IDF}_{i}
-$$
+$
 
 在考虑权重之后，对于某个图像$A$，它的特征点可对应到许多个单词，组成它的$Bag-of-Words$：
 
-$$
+$
 A=\left\{\left(w_{1}, \eta_{1}\right),\left(w_{2}, \eta_{2}\right), \ldots,\left(w_{N}, \eta_{N}\right)\right\} \triangleq v_{A}
-$$
+$
 
 > 由于一般字典会比较大，一副图像中包含的单词种类有限，因此$v_{A}$中会存在大量的零。不过通过词袋向量我们还是可以描述一个图像，只不过这个词袋向量是稀疏的。
 
 ### 相似性对量
 接下来便是如何表示两个词袋向量之间的差异，这个问题其实可以使用很多种方法，在$DBoW$库中如果不指定会默认是$L_{1}$范数形式：
 
-$$
+$
 s\left(\boldsymbol{v}_{A}-\boldsymbol{v}_{B}\right)=2 \sum_{i=1}^{N}\left|\boldsymbol{v}_{A i}\right|+\left|\boldsymbol{v}_{B i}\right|-\left|\boldsymbol{v}_{A i}-\boldsymbol{v}_{B i}\right|
-$$
+$
 
 ## 代码实例
 下面代码都是基于$DBoW3$库，这时一个$cmake$工程，直接默认方式编译安装即可，使用$cmake$使用它时与其他库一样。，$github$地址是`https://github.com/rmsalinas/DBow3`

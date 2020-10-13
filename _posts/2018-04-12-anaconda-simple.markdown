@@ -125,3 +125,11 @@ pip install jupyterlab
 	jupyter lab --ip=0.0.0.0 --port=8080
 
 > windows的话直接安装anaconda，然后在navigator里便可以找到jupyter
+
+## 切换清华镜像源
+
+```bash
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
+conda config --set show_channel_urls yes
+```

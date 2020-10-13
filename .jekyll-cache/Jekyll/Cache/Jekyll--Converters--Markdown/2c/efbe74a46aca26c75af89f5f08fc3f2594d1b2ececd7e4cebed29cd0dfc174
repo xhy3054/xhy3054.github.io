@@ -1,4 +1,4 @@
-I"\	<p>主要近来又发现本人的记忆力水平需要笔记辅助，因此写来备忘。</p>
+I"1	<p>主要近来又发现本人的记忆力水平需要笔记辅助，因此写来备忘。</p>
 
 <h1 id="目录">目录</h1>
 
@@ -57,7 +57,7 @@
 
 <p>最终的loss为</p>
 
-<script type="math/tex; mode=display">L = max(d(a,p) - d(a,n) + margin, 0)</script>
+\[L = max(d(a,p) - d(a,n) + margin, 0)\]
 
 <p>最小化L，则<code class="highlighter-rouge">d(a,p)-&gt;0，d(a,n)-&gt;margin</code></p>
 :ET

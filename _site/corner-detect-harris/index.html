@@ -22,17 +22,23 @@
 	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
 	<!-- Styles -->
 	<link rel="stylesheet" href="/assets/css/main.css">
-    <!--将该代码放入博客模板的head中即可-->
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        processEscapes: true
-        }
-    });
-    </script>
-    <!--latex数学显示公式-->
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
+<!-- mathjax config similar to math.stackexchange --> 
+<script type="text/x-mathjax-config"> 
+MathJax.Hub.Config({ 
+    jax: ["input/TeX", "output/HTML-CSS"], 
+    tex2jax: { 
+        inlineMath: [ ['$', '$'] ], 
+        displayMath: [ ['$$', '$$']], 
+        processEscapes: true, 
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
+    messageStyle: "none", 
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
+}); 
+</script>
+
+
 </head>
 
 <body>
@@ -80,7 +86,7 @@
 <h2 id="21-原理">2.1 原理</h2>
 <p>由1.1中所述，我们知道在一个角点处设置一个滑动窗口，这个窗口无论朝哪个方向滑动，对应位置上的亮度都会有很大变化。对应如下公式</p>
 
-<script type="math/tex; mode=display">E(u,v) = \sum _{x,y} w(x,y)[ I(x+u,y+v) - I(x,y)]^{2}</script>
+<p>[E(u,v) = \sum _{x,y} w(x,y)[ I(x+u,y+v) - I(x,y)]^{2}]</p>
 
 <p>其中：</p>
 <ul>
@@ -91,30 +97,27 @@
 
 <p>上述公式中，有如下一项存在操作空间</p>
 
-<script type="math/tex; mode=display">[I(x+u,y+v) - I(x,y)]^{2}</script>
+<p>[[I(x+u,y+v) - I(x,y)]^{2}]</p>
 
 <p>可以泰勒展开<strong>近似</strong>成</p>
 
-<script type="math/tex; mode=display">[ I(x,y) + u I_{x} + vI_{y} - I(x,y)]^{2}</script>
+<p>[[ I(x,y) + u I_{x} + vI_{y} - I(x,y)]^{2}]</p>
 
 <p>消去并展开方程，带入原式得</p>
 
-<script type="math/tex; mode=display">E(u,v) \approx \sum _{x,y} w(x,y)(u^{2}I_{x}^{2} + 2uvI_{x}I_{y} + v^{2}I_{y}^{2})</script>
+<p>[E(u,v) \approx \sum <em>{x,y} w(x,y)(u^{2}I</em>{x}^{2} + 2uvI_{x}I_{y} + v^{2}I_{y}^{2})]</p>
 
 <p>写成矩阵形式是（可以这样写是因为$(u,v)$仅仅代表一个移动方向，与窗口的大小、系数都不相关）：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-E(u,v) \approx \begin{bmatrix} u & v \end{bmatrix} \left ( \displaystyle \sum_{x,y} w(x,y) \begin{bmatrix} I_x^{2} & I_{x}I_{y} \\ I_xI_{y} & I_{y}^{2} \end{bmatrix} \right ) \begin{bmatrix} u \\ v \end{bmatrix} %]]></script>
+<p>[E(u,v) \approx \begin{bmatrix} u &amp; v \end{bmatrix} \left ( \displaystyle \sum_{x,y} w(x,y) \begin{bmatrix} I_x^{2} &amp; I_{x}I_{y} \ I_xI_{y} &amp; I_{y}^{2} \end{bmatrix} \right ) \begin{bmatrix} u \ v \end{bmatrix}]</p>
 
 <p>可以定义矩阵M为</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-M = \displaystyle \sum_{x,y} w(x,y) \begin{bmatrix} I_x^{2} & I_{x}I_{y} \\ I_xI_{y} & I_{y}^{2} \end{bmatrix} %]]></script>
+<p>[M = \displaystyle \sum_{x,y} w(x,y) \begin{bmatrix} I_x^{2} &amp; I_{x}I_{y} \ I_xI_{y} &amp; I_{y}^{2} \end{bmatrix}]</p>
 
 <p>现在式子变成</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-E(u,v) \approx \begin{bmatrix} u & v \end{bmatrix} M \begin{bmatrix} u \\ v \end{bmatrix} %]]></script>
+<p>[E(u,v) \approx \begin{bmatrix} u &amp; v \end{bmatrix} M \begin{bmatrix} u \ v \end{bmatrix}]</p>
 
 <blockquote>
   <p>我们知道，如果是角点的话，无论$(u,v)$往哪个方向，$E(u,v)$的值都会变化很大，而这个性质是由二维矩阵$M$决定的。或者说，这个性质是由矩阵M的特征值与特征向量决定的。在特征值大的特征向量方向，$E(u,v)$的值变化较快，在特征值较小的特征向量方向，$E(u,v)$的值变化较慢</p>
@@ -122,8 +125,7 @@ E(u,v) \approx \begin{bmatrix} u & v \end{bmatrix} M \begin{bmatrix} u \\ v \end
 
 <p>上式如果左值固定，这个式子本质上是一个椭圆，椭圆的扁率与尺寸是由M的特征值$ \lambda_1、\lambda_2 $决定的，椭圆的方向是由M的特征矢量决定的。假设椭圆方程如下</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{bmatrix} u & v \end{bmatrix} M \begin{bmatrix} u \\ v \end{bmatrix} = 1 %]]></script>
+<p>[\begin{bmatrix} u &amp; v \end{bmatrix} M \begin{bmatrix} u \ v \end{bmatrix} = 1]</p>
 
 <div style="text-align: center">
 <img src="/assets/img/harris/eclipse.png" width="400" height="200" />
@@ -141,7 +143,7 @@ E(u,v) \approx \begin{bmatrix} u & v \end{bmatrix} M \begin{bmatrix} u \\ v \end
 
 <p>上述分析过后，我们知道如何使用M矩阵的特征值来判断一个点是边缘点、平面点还是角点。Harris提出可以计算一个harris<strong>角点响应值R</strong>来判断一个点是否是角点，而无需计算具体的矩阵特征值。R的计算公式如下：</p>
 
-<script type="math/tex; mode=display">R=det \boldsymbol{M} - \alpha(trace\boldsymbol{M})^2</script>
+<p>[R=det \boldsymbol{M} - \alpha(trace\boldsymbol{M})^2]</p>
 
 <p>其中：</p>
 <ul>
@@ -159,10 +161,10 @@ E(u,v) \approx \begin{bmatrix} u & v \end{bmatrix} M \begin{bmatrix} u \\ v \end
 <p>在上述原理讲解完毕后，代码实现主要可以分为五步：</p>
 <ol>
   <li>
-    <p>分别计算像素I(x,y)在x,y方向的梯度，使用<strong>sobel算子</strong>：<script type="math/tex">I_x=\frac{\partial I}{\partial x}=I\otimes(-1\ 0\ 1)，I_y =\frac{\partial I}{\partial x}=I\otimes(-1\ 0\ 1)^T</script></p>
+    <p>分别计算像素I(x,y)在x,y方向的梯度，使用<strong>sobel算子</strong>：\(I_x=\frac{\partial I}{\partial x}=I\otimes(-1\ 0\ 1)，I_y =\frac{\partial I}{\partial x}=I\otimes(-1\ 0\ 1)^T\)</p>
   </li>
   <li>
-    <p>计算两个方向梯度的乘积：<script type="math/tex">I_x^2=I_x\cdot I_y，I_y^2=I_y\cdot I_y，I_{xy}=I_x\cdot I_y</script></p>
+    <p>计算两个方向梯度的乘积：\(I_x^2=I_x\cdot I_y，I_y^2=I_y\cdot I_y，I_{xy}=I_x\cdot I_y\)</p>
   </li>
   <li>
     <p>生成高斯系数窗口，并最终<strong>确定M矩阵</strong>(前三步都是为了确定矩阵M)。</p>
@@ -197,15 +199,15 @@ E(u,v) \approx \begin{bmatrix} u & v \end{bmatrix} M \begin{bmatrix} u \\ v \end
 <h3 id="234-参数alpha的意义">2.3.4 参数$\alpha$的意义</h3>
 <p>假设已经得到了矩阵M的特征值$\lambda_1\ge\lambda_2\ge0$，令$\lambda_2=k\lambda_1,0\le k\le 1$。由特征值与矩阵M的直迹和行列式的关系可得：</p>
 
-<script type="math/tex; mode=display">det\boldsymbol{M}=\prod_i\lambda_i \ \ \ \ \ \  trace\boldsymbol{M}=\sum_i\lambda_i</script>
+<p>[det\boldsymbol{M}=\prod_i\lambda_i \ \ \ \ \ \  trace\boldsymbol{M}=\sum_i\lambda_i]</p>
 
 <p>所以角点的响应值为</p>
 
-<script type="math/tex; mode=display">R=\lambda_2\lambda_2=\alpha(\lambda_2+\lambda_2)^2=\lambda^2(k-\alpha(1+k)^2)</script>
+<p>[R=\lambda_2\lambda_2=\alpha(\lambda_2+\lambda_2)^2=\lambda^2(k-\alpha(1+k)^2)]</p>
 
 <p>若有R不小于0，则</p>
 
-<script type="math/tex; mode=display">0\le \alpha \le\frac{k}{(1+k)^2}\le0.25</script>
+<p>[0\le \alpha \le\frac{k}{(1+k)^2}\le0.25]</p>
 
 <p>并且有如下结论：<strong>增大α的值，将减小角点响应值R，降低角点检测的灵性，减少被检测角点的数量；减小α值，将增大角点响应值R，增加角点检测的灵敏性，增加被检测角点的数量。</strong></p>
 

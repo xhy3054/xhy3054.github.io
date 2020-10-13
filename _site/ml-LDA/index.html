@@ -22,17 +22,23 @@
 	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
 	<!-- Styles -->
 	<link rel="stylesheet" href="/assets/css/main.css">
-    <!--将该代码放入博客模板的head中即可-->
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        processEscapes: true
-        }
-    });
-    </script>
-    <!--latex数学显示公式-->
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
+<!-- mathjax config similar to math.stackexchange --> 
+<script type="text/x-mathjax-config"> 
+MathJax.Hub.Config({ 
+    jax: ["input/TeX", "output/HTML-CSS"], 
+    tex2jax: { 
+        inlineMath: [ ['$', '$'] ], 
+        displayMath: [ ['$$', '$$']], 
+        processEscapes: true, 
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
+    messageStyle: "none", 
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
+}); 
+</script>
+
+
 </head>
 
 <body>
@@ -90,12 +96,12 @@
       <li>投影后类间方差为$ w^T\Sigma_0w $与$ w^T\Sigma_1w $，类内方差为</li>
     </ul>
 
-    <script type="math/tex; mode=display">||w^T\mu_0-w^T\mu_1||_2^2 =  w^T(\mu_0-\mu_1)(\mu_0-\mu_1)^Tw</script>
+\[||w^T\mu_0-w^T\mu_1||_2^2 =  w^T(\mu_0-\mu_1)(\mu_0-\mu_1)^Tw\]
   </li>
   <li>
     <p>我们的目标是投影后类内方差最小，类间方差最大，即：</p>
 
-    <script type="math/tex; mode=display">\underbrace{arg\;max}_w\;\;J(w) = \frac{||w^T\mu_0-w^T\mu_1||_2^2}{w^T\Sigma_0w+w^T\Sigma_1w} = \frac{w^T(\mu_0-\mu_1)(\mu_0-\mu_1)^Tw}{w^T(\Sigma_0+\Sigma_1)w}</script>
+\[\underbrace{arg\;max}_w\;\;J(w) = \frac{||w^T\mu_0-w^T\mu_1||_2^2}{w^T\Sigma_0w+w^T\Sigma_1w} = \frac{w^T(\mu_0-\mu_1)(\mu_0-\mu_1)^Tw}{w^T(\Sigma_0+\Sigma_1)w}\]
   </li>
   <li>
     <p>一般我们定义类内散度为$S_w$为：</p>
@@ -122,7 +128,7 @@
 <h3 id="瑞利商">瑞利商</h3>
 <p>瑞利商是指这样的函数$ R(A,x) $</p>
 
-<script type="math/tex; mode=display">R(A,x) = \frac{x^HAx}{x^Hx}</script>
+<p>[R(A,x) = \frac{x^HAx}{x^Hx}]</p>
 
 <p>其中：</p>
 <ul>
@@ -132,7 +138,7 @@
 
 <p>瑞利商$R(A,x)$有一个非常重要的性质，即它的最大值等于矩阵A最大的特征值（此时x为对应的特征向量），而最小值等于矩阵A的最小的特征值，也就满足</p>
 
-<script type="math/tex; mode=display">\lambda_{min} \leq \frac{x^HAx}{x^Hx} \leq \lambda_{max}</script>
+<p>[\lambda_{min} \leq \frac{x^HAx}{x^Hx} \leq \lambda_{max}]</p>
 
 <blockquote>
   <p>我们可以发现瑞利商的分子分母都是x的二次项，所以最后的结果肯定是与x的长度无关的，只会与x的方向有关，这个结论刚好体现了这样一点。</p>
@@ -141,7 +147,7 @@
 <h3 id="广义瑞利商">广义瑞利商</h3>
 <p>广义瑞利商是指这样的函数$R(A,B,x)$;</p>
 
-<script type="math/tex; mode=display">R(A,x) = \frac{x^HAx}{x^HBx}</script>
+<p>[R(A,x) = \frac{x^HAx}{x^HBx}]</p>
 
 <p>其中：</p>
 <ul>
@@ -151,22 +157,22 @@
 
 <p>另$x = B^{-1/2}x’ $,此处分母可以转换成：</p>
 
-<script type="math/tex; mode=display">x^HBx = x'^H(B^{-1/2})^HBB^{-1/2}x' = x'^HB^{-1/2}BB^{-1/2}x' = x'^Hx'</script>
+<p>[x^HBx = x’^H(B^{-1/2})^HBB^{-1/2}x’ = x’^HB^{-1/2}BB^{-1/2}x’ = x’^Hx’]</p>
 
 <p>分子可以转换成：</p>
 
-<script type="math/tex; mode=display">x^HAx =  x'^HB^{-1/2}AB^{-1/2}x'</script>
+<p>[x^HAx =  x’^HB^{-1/2}AB^{-1/2}x’]</p>
 
 <p>此时我们的$R(A,B,x)$转化为 $ R(A,B,x’) $</p>
 
-<script type="math/tex; mode=display">R(A,B,x') = \frac{x'^HB^{-1/2}AB^{-1/2}x'}{x'^Hx'}</script>
+<p>[R(A,B,x’) = \frac{x’^HB^{-1/2}AB^{-1/2}x’}{x’^Hx’}]</p>
 
 <p>利用前面的瑞利商的性质，我们可以很快的知道，$R(A,B,x)$的最大值为矩阵$ B^{-1/2}AB^{-1/2} $的最大特征值，而最小值为矩阵$ B^{-1/2}AB^{-1/2} $的最小特征值。或者说是$B^{-1}A$的最大特征值。</p>
 
 <h3 id="二类lda的广义瑞利商结果">二类LDA的广义瑞利商结果</h3>
 <p>接下来回到二类LDA的优化目标</p>
 
-<script type="math/tex; mode=display">\underbrace{arg\;max}_w\;\;J(w) = \frac{w^TS_bw}{w^TS_ww}</script>
+<p>[\underbrace{arg\;max}_w\;\;J(w) = \frac{w^TS_bw}{w^TS_ww}]</p>
 
 <p>这个广义瑞利商的最大值为矩阵$ S^{−\frac{1}{2}}_wS_bS^{−\frac{1}{2}}_w $的最大特征值，对应的w为其对应的特征向量。而$S_w^{-1}S_b$的特征值和$S^{−\frac{1}{2}}_wS_bS^{−\frac{1}{2}}_w$的特征值相同，$S_w^{-1}S_b$的特征向量w’和$S^{−\frac{1}{2}}_wS_bS^{−\frac{1}{2}}_w$的特征向量满足$w’ = S^{−\frac{1}{2}}_ww$的关系。
 　　　　</p>
@@ -181,7 +187,7 @@
 
 <p>此时优化目标是：</p>
 
-<script type="math/tex; mode=display">\frac{W^TS_bW}{W^TS_wW}</script>
+<p>[\frac{W^TS_bW}{W^TS_wW}]</p>
 
 <p>其中，</p>
 <ul>
@@ -193,7 +199,7 @@
 
 <p>可以将上式进行分解(与奇异值分解压缩形式类似)</p>
 
-<script type="math/tex; mode=display">J(W) = \frac{W^TS_bW}{W^TS_wW} = \frac{\prod\limits_{i=1}^dw_i^TS_bw_i}{\prod\limits_{i=1}^dw_i^TS_ww_i} = \prod\limits_{i=1}^d\frac{w_i^TS_bw_i}{w_i^TS_ww_i}</script>
+<p>[J(W) = \frac{W^TS_bW}{W^TS_wW} = \frac{\prod\limits_{i=1}^dw_i^TS_bw_i}{\prod\limits_{i=1}^dw_i^TS_ww_i} = \prod\limits_{i=1}^d\frac{w_i^TS_bw_i}{w_i^TS_ww_i}]</p>
 
 <p>此时右边又变成了广义瑞利商。每个乘积项最大值是矩阵$S_w^{-1}S_b$的最大特征值，最大的乘积就是矩阵$S_w^{-1}S_b$的最大的d个特征值的乘积。此时对应的投影矩阵W就对应着最大的d个特征值对应的特征向量张成的矩阵。</p>
 

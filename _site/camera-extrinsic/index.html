@@ -22,17 +22,23 @@
 	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
 	<!-- Styles -->
 	<link rel="stylesheet" href="/assets/css/main.css">
-    <!--将该代码放入博客模板的head中即可-->
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        processEscapes: true
-        }
-    });
-    </script>
-    <!--latex数学显示公式-->
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
+<!-- mathjax config similar to math.stackexchange --> 
+<script type="text/x-mathjax-config"> 
+MathJax.Hub.Config({ 
+    jax: ["input/TeX", "output/HTML-CSS"], 
+    tex2jax: { 
+        inlineMath: [ ['$', '$'] ], 
+        displayMath: [ ['$$', '$$']], 
+        processEscapes: true, 
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
+    messageStyle: "none", 
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
+}); 
+</script>
+
+
 </head>
 
 <body>
@@ -65,7 +71,7 @@
 <h1 id="外参标定">外参标定</h1>
 
 <h2 id="外参">外参</h2>
-<p>此处的外参指的是相机坐标系到imu坐标系（body）的变换矩阵。下文中会使用<script type="math/tex">T_{bc}</script>来表示。</p>
+<p>此处的外参指的是相机坐标系到imu坐标系（body）的变换矩阵。下文中会使用\(T_{bc}\)来表示。</p>
 
 <h2 id="vins中的设置">vins中的设置</h2>
 <p>在vins中可以通过在配置文件中设置<code class="highlighter-rouge">estimate_extrinsic</code>值来选择对外参进行如何处理</p>
@@ -87,19 +93,19 @@
 </blockquote>
 
 <h2 id="标定原理">标定原理</h2>
-<p>首先，从第$k+1$帧相机坐标系到第$k$帧body坐标系的旋转变换<script type="math/tex">R_{b_k c_{k+1}}</script>可以使用两种如下方式求得</p>
+<p>首先，从第$k+1$帧相机坐标系到第$k$帧body坐标系的旋转变换\(R_{b_k c_{k+1}}\)可以使用两种如下方式求得</p>
 
-<script type="math/tex; mode=display">R_{b_k c_{k+1}} = R_{b_k b_{k+1}} * R_{bc} = R_{bc} * R_{c_k c_{k+1}}</script>
+<p>[R_{b_k c_{k+1}} = R_{b_k b_{k+1}} * R_{bc} = R_{bc} * R_{c_k c_{k+1}}]</p>
 
 <p>上面等式用四元数重写为如下形式</p>
 
-<script type="math/tex; mode=display">q_{b_k b_{k+1}} * q_{bc} = q_{bc} * q_{c_k c_{k+1}}</script>
+<p>[q_{b_k b_{k+1}} * q_{bc} = q_{bc} * q_{c_k c_{k+1}}]</p>
 
-<p>上面的第一个等式我们会发现<script type="math/tex">R_{bc}</script>在等式两边都出现了，只是一边是左乘了一个矩阵，一边是右乘了一个矩阵，我们可以将等式右边的右乘矩阵<script type="math/tex">R_{c_k c_{k+1}}</script>变换成左乘形式<script type="math/tex">R_{c_k c_{k+1}}^{right}</script>然后移动到右边，然后上式子就变成了</p>
+<p>上面的第一个等式我们会发现\(R_{bc}\)在等式两边都出现了，只是一边是左乘了一个矩阵，一边是右乘了一个矩阵，我们可以将等式右边的右乘矩阵\(R_{c_k c_{k+1}}\)变换成左乘形式\(R_{c_k c_{k+1}}^{right}\)然后移动到右边，然后上式子就变成了</p>
 
-<script type="math/tex; mode=display">[ R_{b_k b_{k+1}} - R_{c_k c_{k+1}}^{right} ] * R_{bc} = 0</script>
+<p>[[ R_{b_k b_{k+1}} - R_{c_k c_{k+1}}^{right} ] * R_{bc} = 0]</p>
 
-<p>将多帧之间的等式关系联立我们可以构建一个超定方程<script type="math/tex">Ax=0</script>。对$A$进行$svd$分解，其中最小奇异值对应的右奇异向量便是结果<script type="math/tex">R_{bc}</script>。</p>
+<p>将多帧之间的等式关系联立我们可以构建一个超定方程\(Ax=0\)。对$A$进行$svd$分解，其中最小奇异值对应的右奇异向量便是结果\(R_{bc}\)。</p>
 
 <h2 id="vins中的实现">vins中的实现</h2>
 <p>在vins的实现中流程如下：</p>
@@ -109,10 +115,10 @@
     <p>取得连续两帧之间匹配到（跟踪到）的归一化特征点集合；</p>
   </li>
   <li>
-    <p>根据帧间匹配集合由随意抽样一致方法通过对极几何约束得到前后两帧的相机坐标系的相对旋转变换<script type="math/tex">R_{c_k c_{k+1}}</script></p>
+    <p>根据帧间匹配集合由随意抽样一致方法通过对极几何约束得到前后两帧的相机坐标系的相对旋转变换\(R_{c_k c_{k+1}}\)</p>
   </li>
   <li>
-    <p>根据imu预积分得到前后两帧BODY坐标系的相对旋转变换<script type="math/tex">R_{b_k b_{k+1}}</script></p>
+    <p>根据imu预积分得到前后两帧BODY坐标系的相对旋转变换\(R_{b_k b_{k+1}}\)</p>
   </li>
   <li>
     <p>连续积累滑动窗口数个上面的方程，解方程得到。</p>
@@ -120,11 +126,11 @@
 </ol>
 
 <h3 id="实现细节">实现细节</h3>
-<p>在vins实现中，构建的左乘矩阵$L$是<script type="math/tex">R_{c_k c_{k+1}}</script>的左乘矩阵，构建的右乘矩阵$R$是<script type="math/tex">R_{b_k b_{k+1}}</script>，相当于其解方程的公式如下：</p>
+<p>在vins实现中，构建的左乘矩阵$L$是\(R_{c_k c_{k+1}}\)的左乘矩阵，构建的右乘矩阵$R$是\(R_{b_k b_{k+1}}\)，相当于其解方程的公式如下：</p>
 
-<script type="math/tex; mode=display">[ R_{c_k c_{k+1}} - R_{b_k b_{k+1}}^{right} ] * R_{cb} = 0</script>
+<p>[[ R_{c_k c_{k+1}} - R_{b_k b_{k+1}}^{right} ] * R_{cb} = 0]</p>
 
-<p>所以解方程求得的是<script type="math/tex">R_{cb}</script>，因此代码的最后会对其进行求逆来获得<script type="math/tex">R_{bc}</script></p>
+<p>所以解方程求得的是\(R_{cb}\)，因此代码的最后会对其进行求逆来获得\(R_{bc}\)</p>
 
 <h1 id="参考资料">参考资料</h1>
 <ul>

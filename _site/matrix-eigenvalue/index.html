@@ -22,17 +22,23 @@
 	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
 	<!-- Styles -->
 	<link rel="stylesheet" href="/assets/css/main.css">
-    <!--将该代码放入博客模板的head中即可-->
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        processEscapes: true
-        }
-    });
-    </script>
-    <!--latex数学显示公式-->
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
+<!-- mathjax config similar to math.stackexchange --> 
+<script type="text/x-mathjax-config"> 
+MathJax.Hub.Config({ 
+    jax: ["input/TeX", "output/HTML-CSS"], 
+    tex2jax: { 
+        inlineMath: [ ['$', '$'] ], 
+        displayMath: [ ['$$', '$$']], 
+        processEscapes: true, 
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
+    messageStyle: "none", 
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
+}); 
+</script>
+
+
 </head>
 
 <body>
@@ -109,7 +115,7 @@
 <h2 id="特征值分解其实是运动分解">特征值分解其实是运动分解</h2>
 <p>一个矩阵进行特征值分解，这是一种将矩阵分解表示的操作。可以通过只保留比较重要的特征向量（将其他置为零）来压缩矩阵。</p>
 
-<script type="math/tex; mode=display">\mathbf{A} = \mathbf{V} \mathbf{D} \mathbf{V^{-1}}</script>
+<p>[\mathbf{A} = \mathbf{V} \mathbf{D} \mathbf{V^{-1}}]</p>
 
 <p>其中，</p>
 <ul>
@@ -160,7 +166,7 @@
   <p>这是因为只有方阵才能够在矩阵空间提取出符合<strong>完全正交基</strong>的特征向量，这样对于任何一个目标向量进行变换时，才能使用特征向量对目标向量进行完全表示。如果不能提取出满足条件的特征向量，则特征值分解的公式是<strong>不成立</strong>的!</p>
 </blockquote>
 
-<script type="math/tex; mode=display">\mathbf{A} = \mathbf{V} \mathbf{D} \mathbf{V^{-1}}</script>
+<p>[\mathbf{A} = \mathbf{V} \mathbf{D} \mathbf{V^{-1}}]</p>
 
 <p>那不能特征值分解时怎么办呢？我们可以使用<strong>奇异值分解</strong></p>
 
@@ -171,7 +177,7 @@
 </div>
 <p>这个图片可以放到一个矩阵里面去，就是把每个像素的颜色值填入到一个$512 \times 512$的A矩阵中。
 根据之前描述的有：
-<script type="math/tex">\mathbf{A} = \mathbf{V} \mathbf{D} \mathbf{V^{-1}}</script></p>
+\(\mathbf{A} = \mathbf{V} \mathbf{D} \mathbf{V^{-1}}\)</p>
 
 <p>其中，$ \mathbf{D} $是对角阵，对角线上是从大到小排列的特征值。</p>
 

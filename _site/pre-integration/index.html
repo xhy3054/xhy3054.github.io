@@ -22,17 +22,23 @@
 	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
 	<!-- Styles -->
 	<link rel="stylesheet" href="/assets/css/main.css">
-    <!--将该代码放入博客模板的head中即可-->
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        processEscapes: true
-        }
-    });
-    </script>
-    <!--latex数学显示公式-->
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
+<!-- mathjax config similar to math.stackexchange --> 
+<script type="text/x-mathjax-config"> 
+MathJax.Hub.Config({ 
+    jax: ["input/TeX", "output/HTML-CSS"], 
+    tex2jax: { 
+        inlineMath: [ ['$', '$'] ], 
+        displayMath: [ ['$$', '$$']], 
+        processEscapes: true, 
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
+    messageStyle: "none", 
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
+}); 
+</script>
+
+
 </head>
 
 <body>
@@ -70,18 +76,17 @@
 
 <p>此处假设IMU的真实值是$\omega, \mathbf{a}$，测量值为$\tilde{\boldsymbol{\omega}}, \tilde{\mathbf{a}}$，则有：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned} \tilde{\omega}^{b} &=\omega^{b}+\mathbf{b}^{g}+\mathbf{n}^{g} \\ \tilde{\mathbf{a}}^{b} &=\mathbf{q}_{b w}\left(\mathbf{a}^{w}+\mathbf{g}^{w}\right)+\mathbf{b}^{a}+\mathbf{n}^{a} \end{aligned} %]]></script>
+<p>[\begin{aligned} \tilde{\omega}^{b} &amp;=\omega^{b}+\mathbf{b}^{g}+\mathbf{n}^{g} \ \tilde{\mathbf{a}}^{b} &amp;=\mathbf{q}_{b w}\left(\mathbf{a}^{w}+\mathbf{g}^{w}\right)+\mathbf{b}^{a}+\mathbf{n}^{a} \end{aligned}]</p>
 
 <p>其中上标$g$表示gyro（陀螺仪坐标系），$a$表示acc（加速度计坐标系），$w$表示在世界坐标系world，$b$表示imu机体坐标系body。</p>
 
 <p>根据运动学方程，位置、速度、姿态（PVQ）的导数有如下：</p>
 
-<script type="math/tex; mode=display">\begin{array}{l}{\dot{\mathbf{p}}_{w b_{t}}=\mathbf{v}_{t}^{w}} \\ {\dot{\mathbf{v}}_{t}^{w}=\mathbf{a}_{t}^{w}} \\ {\dot{\mathbf{q}}_{w b_{t}}=\mathbf{q}_{w b_{t}} \otimes\left[\begin{array}{c}{0} \\ {\frac{1}{2} \boldsymbol{\omega}^{b_{t}}}\end{array}\right]}\end{array}</script>
+<p>[\begin{array}{l}{\dot{\mathbf{p}}<em>{w b</em>{t}}=\mathbf{v}<em>{t}^{w}} \ {\dot{\mathbf{v}}</em>{t}^{w}=\mathbf{a}<em>{t}^{w}} \ {\dot{\mathbf{q}}</em>{w b_{t}}=\mathbf{q}<em>{w b</em>{t}} \otimes\left[\begin{array}{c}{0} \ {\frac{1}{2} \boldsymbol{\omega}^{b_{t}}}\end{array}\right]}\end{array}]</p>
 
 <p>从第i时刻的PVQ对IMU的测量值进行积分得到第j时刻的PVQ：</p>
 
-<script type="math/tex; mode=display">\begin{array}{l}{\mathbf{p}_{w b_{j}}=\mathbf{p}_{w b_{i}}+\mathbf{v}_{i}^{w} \Delta t+\iint_{t \in[i, j]}\left(\mathbf{q}_{w b_{t}} \mathbf{a}^{b_{t}}-\mathbf{g}^{w}\right) \delta t^{2}} \\ {\mathbf{v}_{j}^{w}=\mathbf{v}_{i}^{w}+\int_{t \in[i, j]}\left(\mathbf{q}_{w b_{t}} \mathbf{a}^{b_{t}}-\mathbf{g}^{w}\right) \delta t} \\ {\mathbf{q}_{w b_{j}}=\int_{t \in[i, j]} \mathbf{q}_{w b_{t}} \otimes\left[\begin{array}{c}{0} \\ {\frac{1}{2} \boldsymbol{\omega}^{b_{t}} ] \delta t}\end{array}\right.}\end{array}</script>
+<p>[\begin{array}{l}{\mathbf{p}<em>{w b</em>{j}}=\mathbf{p}<em>{w b</em>{i}}+\mathbf{v}<em>{i}^{w} \Delta t+\iint</em>{t \in[i, j]}\left(\mathbf{q}<em>{w b</em>{t}} \mathbf{a}^{b_{t}}-\mathbf{g}^{w}\right) \delta t^{2}} \ {\mathbf{v}<em>{j}^{w}=\mathbf{v}</em>{i}^{w}+\int_{t \in[i, j]}\left(\mathbf{q}<em>{w b</em>{t}} \mathbf{a}^{b_{t}}-\mathbf{g}^{w}\right) \delta t} \ {\mathbf{q}<em>{w b</em>{j}}=\int_{t \in[i, j]} \mathbf{q}<em>{w b</em>{t}} \otimes\left[\begin{array}{c}{0} \ {\frac{1}{2} \boldsymbol{\omega}^{b_{t}} ] \delta t}\end{array}\right.}\end{array}]</p>
 
 <blockquote>
   <p>此时我们发现，在积分项中存在全局姿态$q_{wb_{t}}$，同时在$\mathbf{a}^{b_{t}}$等测量值中还会引入bias。这样每次在迭代优化过后，由于$q_{wb_{t}}$与bias都会更新，因此此时就需要重新进行积分操作。这个计算量是非常巨大的。</p>
@@ -90,16 +95,15 @@
 <h2 id="预积分消减计算量">预积分消减计算量</h2>
 <p>为了消减计算量，有人提出了通过如下的简单变换，<strong>将上述积分模型转换成预积分模型</strong>。这个变换是：</p>
 
-<script type="math/tex; mode=display">\mathbf{q}_{w b_{t}}=\mathbf{q}_{w b_{i}} \otimes \mathbf{q}_{b_{i} b_{t}}</script>
+<p>[\mathbf{q}<em>{w b</em>{t}}=\mathbf{q}<em>{w b</em>{i}} \otimes \mathbf{q}<em>{b</em>{i} b_{t}}]</p>
 
 <p>转换后，整个PVQ的积分形式变为：</p>
 
-<script type="math/tex; mode=display">\begin{array}{l}{\mathbf{p}_{w b_{j}}=\mathbf{p}_{w b_{i}}+\mathbf{v}_{i}^{w} \Delta t-\frac{1}{2} \mathbf{g}^{w} \Delta t^{2}+\mathbf{q}_{w b_{i}} \iint_{t \in[i, j]}\left(\mathbf{q}_{b_{i} b_{t}} \mathbf{a}^{b_{t}}\right) \delta t^{2}} \\ {\mathbf{v}_{j}^{w}=\mathbf{v}_{i}^{w}-\mathbf{g}^{w} \Delta t+\mathbf{q}_{w b_{i}} \int_{t \in[i, j]}\left(\mathbf{q}_{b_{i} b_{t}} \mathbf{a}^{b_{t}}\right) \delta t} \\ {\mathbf{q}_{w b_{j}}=\mathbf{q}_{w b_{i}} \int_{t \in[i, j]} \mathbf{q}_{b_{i} b_{t}} \otimes\left[\begin{array}{c}{0} \\ {\frac{1}{2} \boldsymbol{\omega}^{b_{t}}}\end{array}\right] \delta t}\end{array}</script>
+<p>[\begin{array}{l}{\mathbf{p}<em>{w b</em>{j}}=\mathbf{p}<em>{w b</em>{i}}+\mathbf{v}<em>{i}^{w} \Delta t-\frac{1}{2} \mathbf{g}^{w} \Delta t^{2}+\mathbf{q}</em>{w b_{i}} \iint_{t \in[i, j]}\left(\mathbf{q}<em>{b</em>{i} b_{t}} \mathbf{a}^{b_{t}}\right) \delta t^{2}} \ {\mathbf{v}<em>{j}^{w}=\mathbf{v}</em>{i}^{w}-\mathbf{g}^{w} \Delta t+\mathbf{q}<em>{w b</em>{i}} \int_{t \in[i, j]}\left(\mathbf{q}<em>{b</em>{i} b_{t}} \mathbf{a}^{b_{t}}\right) \delta t} \ {\mathbf{q}<em>{w b</em>{j}}=\mathbf{q}<em>{w b</em>{i}} \int_{t \in[i, j]} \mathbf{q}<em>{b</em>{i} b_{t}} \otimes\left[\begin{array}{c}{0} \ {\frac{1}{2} \boldsymbol{\omega}^{b_{t}}}\end{array}\right] \delta t}\end{array}]</p>
 
 <p>上面公式中，我们可以将其中一部分提取出来，叫做<strong>预积分量</strong>：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned} \boldsymbol{\alpha}_{b_{i} b_{j}} &=\iint_{t \in[i, j]}\left(\mathbf{q}_{b_{i} b_{t}} \mathbf{a}^{b_{t}}\right) \delta t^{2} \\ \boldsymbol{\beta}_{b_{i} b_{j}} &=\int_{t \in[i, j]}\left(\mathbf{q}_{b_{i} b_{t}} \mathbf{a}^{b_{t}}\right) \delta t \\ \mathbf{q}_{b_{i} b_{j}} &=\int_{t \in[i, j]} \mathbf{q}_{b_{i} b_{t}} \otimes\left[\begin{array}{c}{0} \\ {\frac{1}{2} \boldsymbol{\omega}^{b_{t}}}\end{array}\right] \delta t \end{aligned} %]]></script>
+<p>[\begin{aligned} \boldsymbol{\alpha}<em>{b</em>{i} b_{j}} &amp;=\iint_{t \in[i, j]}\left(\mathbf{q}<em>{b</em>{i} b_{t}} \mathbf{a}^{b_{t}}\right) \delta t^{2} \ \boldsymbol{\beta}<em>{b</em>{i} b_{j}} &amp;=\int_{t \in[i, j]}\left(\mathbf{q}<em>{b</em>{i} b_{t}} \mathbf{a}^{b_{t}}\right) \delta t \ \mathbf{q}<em>{b</em>{i} b_{j}} &amp;=\int_{t \in[i, j]} \mathbf{q}<em>{b</em>{i} b_{t}} \otimes\left[\begin{array}{c}{0} \ {\frac{1}{2} \boldsymbol{\omega}^{b_{t}}}\end{array}\right] \delta t \end{aligned}]</p>
 
 <blockquote>
   <p>如上，我们发现，其实预积分就是将原本的积分变成了相邻两帧中相对运动的积分。这使得<strong>预积分量</strong>只与IMU的测量有关，如果不考虑更新IMU的bias，那么我们只需要进行一次预积分，以后就无需在重新计算了。</p>
@@ -109,45 +113,42 @@
 
 <p>此时状态量（世界位姿与bias等）和预积分的映射关系如下：</p>
 
-<script type="math/tex; mode=display">\left[\begin{array}{c}{\mathbf{p}_{w b_{j}}} \\ {\mathbf{v}_{j}^{w}} \\ {\mathbf{q}_{w b_{j}}} \\ {\mathbf{b}_{j}^{a}} \\ {\mathbf{b}_{j}^{g}}\end{array}\right]=\left[\begin{array}{cc}{\mathbf{p}_{w b_{i}}+\mathbf{v}_{i}^{w} \Delta t-\frac{1}{2} \mathbf{g}^{w} \Delta t^{2}+\mathbf{q}_{w b_{i}} \mathbf{\alpha}_{b_{i} b_{j}}} \\ {\mathbf{v}_{i}^{w}-\mathbf{g}^{w} \Delta t+\mathbf{q}_{w b_{i}} \boldsymbol{\beta}_{b_{i} b_{j}}} \\ {\mathbf{q} w b_{i} \mathbf{q}_{b i}} \\ {\mathbf{b}_{i}^{a}} \\ {\mathbf{b}_{i}^{g}}\end{array}\right]</script>
+<p>[\left[\begin{array}{c}{\mathbf{p}<em>{w b</em>{j}}} \ {\mathbf{v}<em>{j}^{w}} \ {\mathbf{q}</em>{w b_{j}}} \ {\mathbf{b}<em>{j}^{a}} \ {\mathbf{b}</em>{j}^{g}}\end{array}\right]=\left[\begin{array}{cc}{\mathbf{p}<em>{w b</em>{i}}+\mathbf{v}<em>{i}^{w} \Delta t-\frac{1}{2} \mathbf{g}^{w} \Delta t^{2}+\mathbf{q}</em>{w b_{i}} \mathbf{\alpha}<em>{b</em>{i} b_{j}}} \ {\mathbf{v}<em>{i}^{w}-\mathbf{g}^{w} \Delta t+\mathbf{q}</em>{w b_{i}} \boldsymbol{\beta}<em>{b</em>{i} b_{j}}} \ {\mathbf{q} w b_{i} \mathbf{q}<em>{b i}} \ {\mathbf{b}</em>{i}^{a}} \ {\mathbf{b}_{i}^{g}}\end{array}\right]]</p>
 
 <p>此时，如果我们想要建立基于目前状态的预积分误差，则是如下形式（其中表示位姿的四元数我们取其虚部并乘以2恢复出旋转向量）：</p>
 
-<script type="math/tex; mode=display">\left[\begin{array}{c}{\mathbf{r}_{p}} \\ {\mathbf{r}_{q}} \\ {\mathbf{r}_{v}} \\ {\mathbf{r}_{b a}} \\ {\mathbf{r}_{b g}}\end{array}\right]_{15 \times 1}=\left[\begin{array}{c}{\mathbf{q}_{b_{i} w}\left(\mathbf{p}_{w b_{j}}-\mathbf{p}_{w b_{i}}-\mathbf{v}_{i}^{w} \Delta t+\frac{1}{2} \mathbf{g}^{w} \Delta t^{2}\right)-\boldsymbol{\alpha}_{b_{i} b_{j}}} \\ {2\left[\mathbf{q}_{b_{j} b_{i}} \otimes\left(\mathbf{q}_{b_{i} w} \otimes \mathbf{q}_{w b_{j}}\right)\right]_{x y z}} \\ {\mathbf{q}_{b_{i} w}\left(\mathbf{v}_{j}^{w}-\mathbf{v}_{i}^{w}+\mathbf{g}^{w} \Delta t\right)-\beta_{b_{i} b_{j}}} \\ {\mathbf{b}_{j}^{a}-\mathbf{b}_{i}^{a}} \\ {\mathbf{b}_{j}^{g}-\mathbf{b}_{i}^{g}}\end{array}\right]</script>
+<p>[\left[\begin{array}{c}{\mathbf{r}<em>{p}} \ {\mathbf{r}</em>{q}} \ {\mathbf{r}<em>{v}} \ {\mathbf{r}</em>{b a}} \ {\mathbf{r}<em>{b g}}\end{array}\right]</em>{15 \times 1}=\left[\begin{array}{c}{\mathbf{q}<em>{b</em>{i} w}\left(\mathbf{p}<em>{w b</em>{j}}-\mathbf{p}<em>{w b</em>{i}}-\mathbf{v}<em>{i}^{w} \Delta t+\frac{1}{2} \mathbf{g}^{w} \Delta t^{2}\right)-\boldsymbol{\alpha}</em>{b_{i} b_{j}}} \ {2\left[\mathbf{q}<em>{b</em>{j} b_{i}} \otimes\left(\mathbf{q}<em>{b</em>{i} w} \otimes \mathbf{q}<em>{w b</em>{j}}\right)\right]<em>{x y z}} \ {\mathbf{q}</em>{b_{i} w}\left(\mathbf{v}<em>{j}^{w}-\mathbf{v}</em>{i}^{w}+\mathbf{g}^{w} \Delta t\right)-\beta_{b_{i} b_{j}}} \ {\mathbf{b}<em>{j}^{a}-\mathbf{b}</em>{i}^{a}} \ {\mathbf{b}<em>{j}^{g}-\mathbf{b}</em>{i}^{g}}\end{array}\right]]</p>
 
 <p>由于k+1帧段的预积分受其他变量的影响，为了以后方便处理，可以推导出其雅克比矩阵，整体形式如下：</p>
 
-<script type="math/tex; mode=display">\left[\begin{array}{c}{\delta \boldsymbol{\alpha}_{b_{k+1} b_{k+1}^{\prime}}} \\ {\delta \boldsymbol{\theta}_{b_{k+1} b_{k+1}^{\prime}}} \\ {\delta \boldsymbol{\beta}_{b_{k+1} b_{k+1}^{\prime}}} \\ {\delta \mathbf{b}_{k+1}^{a}} \\ {\delta \mathbf{b}_{k+1}^{g}}\end{array}\right]=\mathbf{F}\left[\begin{array}{c}{\delta \boldsymbol{\alpha}_{b_{k} b_{k}^{\prime}}} \\ {\delta \boldsymbol{\theta}_{b_{k} b_{k}^{\prime}}} \\ {\delta \boldsymbol{\beta}_{b_{k} b_{k}^{\prime}}} \\ {\delta \mathbf{b}_{k}^{a}} \\ {\delta \mathbf{b}_{k}^{g}}\end{array}\right]+\mathbf{G}\left[\begin{array}{c}{\mathbf{n}_{k}^{a}} \\ {\mathbf{n}_{k}^{g}} \\ {\mathbf{n}_{k+1}^{a}} \\ {\mathbf{n}_{k+1}^{g}} \\ {\mathbf{n}_{\mathbf{b}_{k}^{a}}} \\ {\mathbf{n}_{\mathbf{b}_{k}^{g}}^{g}}\end{array}\right]</script>
+<p>[\left[\begin{array}{c}{\delta \boldsymbol{\alpha}<em>{b</em>{k+1} b_{k+1}^{\prime}}} \ {\delta \boldsymbol{\theta}<em>{b</em>{k+1} b_{k+1}^{\prime}}} \ {\delta \boldsymbol{\beta}<em>{b</em>{k+1} b_{k+1}^{\prime}}} \ {\delta \mathbf{b}<em>{k+1}^{a}} \ {\delta \mathbf{b}</em>{k+1}^{g}}\end{array}\right]=\mathbf{F}\left[\begin{array}{c}{\delta \boldsymbol{\alpha}<em>{b</em>{k} b_{k}^{\prime}}} \ {\delta \boldsymbol{\theta}<em>{b</em>{k} b_{k}^{\prime}}} \ {\delta \boldsymbol{\beta}<em>{b</em>{k} b_{k}^{\prime}}} \ {\delta \mathbf{b}<em>{k}^{a}} \ {\delta \mathbf{b}</em>{k}^{g}}\end{array}\right]+\mathbf{G}\left[\begin{array}{c}{\mathbf{n}<em>{k}^{a}} \ {\mathbf{n}</em>{k}^{g}} \ {\mathbf{n}<em>{k+1}^{a}} \ {\mathbf{n}</em>{k+1}^{g}} \ {\mathbf{n}<em>{\mathbf{b}</em>{k}^{a}}} \ {\mathbf{n}<em>{\mathbf{b}</em>{k}^{g}}^{g}}\end{array}\right]]</p>
 
 <p>其中部分雅克比系数的推导如下：</p>
 
-<script type="math/tex; mode=display">\mathbf{f}_{12}=\frac{\partial \boldsymbol{\alpha}_{b_{i} b_{k+1}}}{\partial \delta \boldsymbol{\theta}_{b_{k} b_{k}^{\prime}}}=-\frac{1}{4}\left(\mathbf{R}_{b_{i} b_{k}}\left[\mathbf{a}^{b_{k}}-\mathbf{b}_{k}^{a}\right]_{ \times} \delta t^{2}+\mathbf{R}_{b_{i} b_{k+1}}\left[\left(\mathbf{a}^{b_{k+1}}-\mathbf{b}_{k}^{a}\right)\right]_{ \times}\left(\mathbf{I}-[\boldsymbol{\omega}]_{ \times} \boldsymbol{\delta} t\right) \delta t^{2}\right)</script>
+<p>[\mathbf{f}<em>{12}=\frac{\partial \boldsymbol{\alpha}</em>{b_{i} b_{k+1}}}{\partial \delta \boldsymbol{\theta}<em>{b</em>{k} b_{k}^{\prime}}}=-\frac{1}{4}\left(\mathbf{R}<em>{b</em>{i} b_{k}}\left[\mathbf{a}^{b_{k}}-\mathbf{b}<em>{k}^{a}\right]</em>{ \times} \delta t^{2}+\mathbf{R}<em>{b</em>{i} b_{k+1}}\left[\left(\mathbf{a}^{b_{k+1}}-\mathbf{b}<em>{k}^{a}\right)\right]</em>{ \times}\left(\mathbf{I}-[\boldsymbol{\omega}]_{ \times} \boldsymbol{\delta} t\right) \delta t^{2}\right)]</p>
 
-<script type="math/tex; mode=display">\mathbf{f}_{32}=\frac{\partial \boldsymbol{\beta}_{b_{i} b_{k+1}}}{\partial \delta \boldsymbol{\theta}_{b_{k} b_{k}^{\prime}}}=-\frac{1}{2}\left(\mathbf{R}_{b_{i} b_{k}}\left[\mathbf{a}^{b_{k}}-\mathbf{b}_{k}^{a}\right]_{ \times} \delta t+\mathbf{R}_{b_{i} b_{k+1}}\left[\left(\mathbf{a}^{b_{k+1}}-\mathbf{b}_{k}^{a}\right)\right]_{ \times}\left(\mathbf{I}-[\boldsymbol{\omega}]_{ \times} \delta t\right) \delta t\right)</script>
+<p>[\mathbf{f}<em>{32}=\frac{\partial \boldsymbol{\beta}</em>{b_{i} b_{k+1}}}{\partial \delta \boldsymbol{\theta}<em>{b</em>{k} b_{k}^{\prime}}}=-\frac{1}{2}\left(\mathbf{R}<em>{b</em>{i} b_{k}}\left[\mathbf{a}^{b_{k}}-\mathbf{b}<em>{k}^{a}\right]</em>{ \times} \delta t+\mathbf{R}<em>{b</em>{i} b_{k+1}}\left[\left(\mathbf{a}^{b_{k+1}}-\mathbf{b}<em>{k}^{a}\right)\right]</em>{ \times}\left(\mathbf{I}-[\boldsymbol{\omega}]_{ \times} \delta t\right) \delta t\right)]</p>
 
-<script type="math/tex; mode=display">\mathbf{f}_{15}=\frac{\partial \boldsymbol{\alpha}_{b_{i} b_{k+1}}}{\partial \delta \mathbf{b}_{k}^{g}}=-\frac{1}{4}\left(\mathbf{R}_{b_{i} b_{k+1}}\left[\left(\mathbf{a}^{b_{k+1}}-\mathbf{b}_{k}^{a}\right)\right] \times \delta t^{2}\right)(-\delta t)</script>
+<p>[\mathbf{f}<em>{15}=\frac{\partial \boldsymbol{\alpha}</em>{b_{i} b_{k+1}}}{\partial \delta \mathbf{b}<em>{k}^{g}}=-\frac{1}{4}\left(\mathbf{R}</em>{b_{i} b_{k+1}}\left[\left(\mathbf{a}^{b_{k+1}}-\mathbf{b}_{k}^{a}\right)\right] \times \delta t^{2}\right)(-\delta t)]</p>
 
-<script type="math/tex; mode=display">\mathbf{f}_{35}=\frac{\partial \boldsymbol{\beta}_{b_{i} b_{k+1}}}{\partial \delta \mathbf{b}_{k}^{g}}=-\frac{1}{2}\left(\mathbf{R}_{b_{i} b_{k+1}}\left[\left(\mathbf{a}^{b_{k+1}}-\mathbf{b}_{k}^{a}\right)\right] \times \delta t\right)(-\delta t)</script>
+<p>[\mathbf{f}<em>{35}=\frac{\partial \boldsymbol{\beta}</em>{b_{i} b_{k+1}}}{\partial \delta \mathbf{b}<em>{k}^{g}}=-\frac{1}{2}\left(\mathbf{R}</em>{b_{i} b_{k+1}}\left[\left(\mathbf{a}^{b_{k+1}}-\mathbf{b}_{k}^{a}\right)\right] \times \delta t\right)(-\delta t)]</p>
 
-<script type="math/tex; mode=display">\mathbf{g}_{12}=\frac{\partial \boldsymbol{\alpha}_{b_{i} b_{k+1}}}{\partial \mathbf{n}_{k}^{g}}=\mathbf{g}_{14}=\frac{\partial \boldsymbol{\alpha}_{b_{i} b_{k+1}}}{\partial \mathbf{n}_{k+1}^{g}}=-\frac{1}{4}\left(\mathbf{R}_{b_{i} b_{k+1}}\left[\left(\mathbf{a}^{b_{k+1}}-\mathbf{b}_{k}^{a}\right)\right] \times \delta t^{2}\right)\left(\frac{1}{2} \delta t\right)</script>
+<p>[\mathbf{g}<em>{12}=\frac{\partial \boldsymbol{\alpha}</em>{b_{i} b_{k+1}}}{\partial \mathbf{n}<em>{k}^{g}}=\mathbf{g}</em>{14}=\frac{\partial \boldsymbol{\alpha}<em>{b</em>{i} b_{k+1}}}{\partial \mathbf{n}<em>{k+1}^{g}}=-\frac{1}{4}\left(\mathbf{R}</em>{b_{i} b_{k+1}}\left[\left(\mathbf{a}^{b_{k+1}}-\mathbf{b}_{k}^{a}\right)\right] \times \delta t^{2}\right)\left(\frac{1}{2} \delta t\right)]</p>
 
-<script type="math/tex; mode=display">\mathbf{g}_{32}=\frac{\partial \boldsymbol{\beta}_{b_{i} b_{k+1}}}{\partial \mathbf{n}_{k}^{g}}=\mathbf{g}_{34}=\frac{\partial \boldsymbol{\beta}_{b_{i} b_{k+1}}}{\partial \mathbf{n}_{k+1}^{g}}=-\frac{1}{2}\left(\mathbf{R}_{b_{i} b_{k+1}}\left[\left(\mathbf{a}^{b_{k+1}}-\mathbf{b}_{k}^{a}\right)\right] \times \delta t\right)\left(\frac{1}{2} \delta t\right)</script>
+<p>[\mathbf{g}<em>{32}=\frac{\partial \boldsymbol{\beta}</em>{b_{i} b_{k+1}}}{\partial \mathbf{n}<em>{k}^{g}}=\mathbf{g}</em>{34}=\frac{\partial \boldsymbol{\beta}<em>{b</em>{i} b_{k+1}}}{\partial \mathbf{n}<em>{k+1}^{g}}=-\frac{1}{2}\left(\mathbf{R}</em>{b_{i} b_{k+1}}\left[\left(\mathbf{a}^{b_{k+1}}-\mathbf{b}_{k}^{a}\right)\right] \times \delta t\right)\left(\frac{1}{2} \delta t\right)]</p>
 
 <h2 id="基于中值积分的预积分">基于中值积分的预积分</h2>
 <p>首先，对于姿态变化的中值积分首先进行</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned} \boldsymbol{\omega} &=\frac{1}{2}\left(\left(\boldsymbol{\omega}^{b_{k}}+\mathbf{n}_{k}^{g}-\mathbf{b}_{k}^{g}\right)+\left(\boldsymbol{\omega}^{b_{k+1}}+\mathbf{n}_{k+1}^{g}-\mathbf{b}_{k}^{g}\right)\right) \\ \mathbf{q}_{b_{i} b_{k+1}} &=\mathbf{q}_{b_{i} b_{k}} \otimes\left[\begin{array}{c}{1} \\ {\frac{1}{2} \boldsymbol{\omega} \delta t}\end{array}\right] \end{aligned} %]]></script>
+<p>[\begin{aligned} \boldsymbol{\omega} &amp;=\frac{1}{2}\left(\left(\boldsymbol{\omega}^{b_{k}}+\mathbf{n}<em>{k}^{g}-\mathbf{b}</em>{k}^{g}\right)+\left(\boldsymbol{\omega}^{b_{k+1}}+\mathbf{n}<em>{k+1}^{g}-\mathbf{b}</em>{k}^{g}\right)\right) \ \mathbf{q}<em>{b</em>{i} b_{k+1}} &amp;=\mathbf{q}<em>{b</em>{i} b_{k}} \otimes\left[\begin{array}{c}{1} \ {\frac{1}{2} \boldsymbol{\omega} \delta t}\end{array}\right] \end{aligned}]</p>
 
 <p>然后，会完成位置变化的中值积分</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned} \mathbf{a} &=\frac{1}{2}\left(\mathbf{q}_{b_{i} b_{k}}\left(\mathbf{a}^{b_{k}}+\mathbf{n}_{k}^{a}-\mathbf{b}_{k}^{a}\right)+\mathbf{q}_{b_{i} b_{k+1}}\left(\mathbf{a}^{b_{k+1}}+\mathbf{n}_{k+1}^{a}-\mathbf{b}_{k}^{a}\right)\right) \\ \boldsymbol{\alpha}_{b_{i} b_{k+1}} &=\boldsymbol{\alpha}_{b_{i} b_{k}}+\boldsymbol{\beta}_{b_{i} b_{k}} \delta t+\frac{1}{2} \mathbf{a} \delta t^{2} \\ \boldsymbol{\beta}_{b_{i} b_{k+1}} &=\boldsymbol{\beta}_{b_{i} b_{k}}+\mathbf{a} \delta t \end{aligned} %]]></script>
+<p>[\begin{aligned} \mathbf{a} &amp;=\frac{1}{2}\left(\mathbf{q}<em>{b</em>{i} b_{k}}\left(\mathbf{a}^{b_{k}}+\mathbf{n}<em>{k}^{a}-\mathbf{b}</em>{k}^{a}\right)+\mathbf{q}<em>{b</em>{i} b_{k+1}}\left(\mathbf{a}^{b_{k+1}}+\mathbf{n}<em>{k+1}^{a}-\mathbf{b}</em>{k}^{a}\right)\right) \ \boldsymbol{\alpha}<em>{b</em>{i} b_{k+1}} &amp;=\boldsymbol{\alpha}<em>{b</em>{i} b_{k}}+\boldsymbol{\beta}<em>{b</em>{i} b_{k}} \delta t+\frac{1}{2} \mathbf{a} \delta t^{2} \ \boldsymbol{\beta}<em>{b</em>{i} b_{k+1}} &amp;=\boldsymbol{\beta}<em>{b</em>{i} b_{k}}+\mathbf{a} \delta t \end{aligned}]</p>
 
 <p>最后是bias的更新：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned} \mathbf{b}_{k+1}^{a} &=\mathbf{b}_{k}^{a} \\ \mathbf{b}_{k+1}^{g} &=\mathbf{b}_{k}^{g} \end{aligned} %]]></script>
+<p>[\begin{aligned} \mathbf{b}<em>{k+1}^{a} &amp;=\mathbf{b}</em>{k}^{a} \ \mathbf{b}<em>{k+1}^{g} &amp;=\mathbf{b}</em>{k}^{g} \end{aligned}]</p>
 
 <p>在vins中，这部分的代码如下（<code class="highlighter-rouge">vins_estimator</code>模块中<code class="highlighter-rouge">factor</code>文件夹下的头文件<code class="highlighter-rouge">integration_base.h</code>中的<code class="highlighter-rouge">midPointIntegration</code>函数）：</p>
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="c1">//此处预积分也就是在相邻两帧之间的相对积分，得到的是相对的位姿变换</span>
@@ -177,8 +178,7 @@
 
 <p>其实在vins中为了解决这个问题，是这样做的(当更新前后bias变化比较小时)：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned} \boldsymbol{\alpha}_{b_{k+1}}^{b_{k}} & \approx \hat{\boldsymbol{\alpha}}_{b_{k+1}}^{b_{k}}+\mathbf{J}_{b_{a}}^{\alpha} \delta \mathbf{b}_{a_{k}}+\mathbf{J}_{b_{w}}^{\alpha} \delta \mathbf{b}_{w_{k}} \\ \boldsymbol{\beta}_{b_{k+1}}^{b_{k}} & \approx \hat{\boldsymbol{\beta}}_{b_{k+1}}^{b_{k}}+\mathbf{J}_{b_{a}}^{\beta} \delta \mathbf{b}_{a_{k}}+\mathbf{J}_{b_{w}}^{\beta} \delta \mathbf{b}_{w_{k}} \\ \boldsymbol{\gamma}_{b_{k+1}}^{b_{k}} & \approx \hat{\boldsymbol{\gamma}}_{b_{k+1}}^{b_{k}} \otimes\left[\begin{array}{c}{1} \\ {\frac{1}{2} \mathbf{J}_{b_{w}}^{\gamma} \delta \mathbf{b}_{w_{k}}}\end{array}\right] \end{aligned} %]]></script>
+<p>[\begin{aligned} \boldsymbol{\alpha}<em>{b</em>{k+1}}^{b_{k}} &amp; \approx \hat{\boldsymbol{\alpha}}<em>{b</em>{k+1}}^{b_{k}}+\mathbf{J}<em>{b</em>{a}}^{\alpha} \delta \mathbf{b}<em>{a</em>{k}}+\mathbf{J}<em>{b</em>{w}}^{\alpha} \delta \mathbf{b}<em>{w</em>{k}} \ \boldsymbol{\beta}<em>{b</em>{k+1}}^{b_{k}} &amp; \approx \hat{\boldsymbol{\beta}}<em>{b</em>{k+1}}^{b_{k}}+\mathbf{J}<em>{b</em>{a}}^{\beta} \delta \mathbf{b}<em>{a</em>{k}}+\mathbf{J}<em>{b</em>{w}}^{\beta} \delta \mathbf{b}<em>{w</em>{k}} \ \boldsymbol{\gamma}<em>{b</em>{k+1}}^{b_{k}} &amp; \approx \hat{\boldsymbol{\gamma}}<em>{b</em>{k+1}}^{b_{k}} \otimes\left[\begin{array}{c}{1} \ {\frac{1}{2} \mathbf{J}<em>{b</em>{w}}^{\gamma} \delta \mathbf{b}<em>{w</em>{k}}}\end{array}\right] \end{aligned}]</p>
 
 <blockquote>
   <p>当一次非线性优化后，<strong>如果bias的变化比较小</strong>，会使用一阶展开来近似更新<strong>从k帧到k+1帧</strong>的预积分量。<strong>当bias变化比较大时</strong>，近似效果会不好，此时需要重新进行积分。（此处假设使用欧拉积分）这样做可以很大的消减基于优化的方法的计算量。</p>

@@ -22,17 +22,23 @@
 	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
 	<!-- Styles -->
 	<link rel="stylesheet" href="/assets/css/main.css">
-    <!--将该代码放入博客模板的head中即可-->
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        processEscapes: true
-        }
-    });
-    </script>
-    <!--latex数学显示公式-->
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
+<!-- mathjax config similar to math.stackexchange --> 
+<script type="text/x-mathjax-config"> 
+MathJax.Hub.Config({ 
+    jax: ["input/TeX", "output/HTML-CSS"], 
+    tex2jax: { 
+        inlineMath: [ ['$', '$'] ], 
+        displayMath: [ ['$$', '$$']], 
+        processEscapes: true, 
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
+    messageStyle: "none", 
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
+}); 
+</script>
+
+
 </head>
 
 <body>
@@ -84,7 +90,7 @@
 <h2 id="基本矩阵f">基本矩阵F</h2>
 <p>由上面的讲述，我们知道，在深度未知的情况下，对于一幅图像上的一点x，映射在另一幅图像上是一条与之对应的对极线I’。</p>
 
-<script type="math/tex; mode=display">x \rightarrowtail I'</script>
+<p>[x \rightarrowtail I’]</p>
 
 <p><strong>基本矩阵F表示的正是这个从一个点到一条直线的射影映射</strong>。</p>
 
@@ -95,9 +101,9 @@
 <h3 id="推导出基础矩阵与本质矩阵">推导出基础矩阵与本质矩阵</h3>
 <p>由<a href="https://xhy3054.github.io/camerca-module/">相机成像的几何描述</a>我们可以理解如下的公式(世界坐标到像素坐标的转换)：</p>
 
-<script type="math/tex; mode=display">Z_1p_{uv1} = K_1P_w</script>
+<p>[Z_1p_{uv1} = K_1P_w]</p>
 
-<script type="math/tex; mode=display">Z_2p_{uv2} = K_2(RP_w + t)</script>
+<p>[Z_2p_{uv2} = K_2(RP_w + t)]</p>
 
 <p>其中K是相机内参，R与t是第二个相机在第一个相机的相机坐标系下的外参，$P_w$是此空间点在第一个相机的相机坐标系下的坐标。Z是空间点到相机光心的距离(也是相机坐标系下的z轴坐标)。$p_{uv1}$与$p_{uv2}$是空间点$P_w$在两个相机平面上的投影点。</p>
 
@@ -105,47 +111,47 @@
   <li>首先做出如下定义（其中$x_1$与$x_2$是归一化的相机坐标（X/Z,Y/Z,1））：</li>
 </ul>
 
-<script type="math/tex; mode=display">x_1 = K_1^{-1}p_{uv1}</script>
+<p>[x_1 = K_1^{-1}p_{uv1}]</p>
 
-<script type="math/tex; mode=display">x_2 = K_2^{-1}p_{uv2}</script>
+<p>[x_2 = K_2^{-1}p_{uv2}]</p>
 
 <ul>
   <li>带入如上定义可得：</li>
 </ul>
 
-<script type="math/tex; mode=display">Z_2 x_2 = Z_1 Rx_1 + t</script>
+<p>[Z_2 x_2 = Z_1 Rx_1 + t]</p>
 
 <ul>
   <li>上式两边同时左乘<code class="highlighter-rouge">t^</code>，也就是两侧同时与t做外积：</li>
 </ul>
 
-<script type="math/tex; mode=display">Z_2 t^{\land} x_2 = Z_1 t^{\land} R x_1</script>
+<p>[Z_2 t^{\land} x_2 = Z_1 t^{\land} R x_1]</p>
 
 <ul>
   <li>两侧同时左乘$x_{2}^T$：</li>
 </ul>
 
-<script type="math/tex; mode=display">Z_2 x_{2}^T t^{\land} x_2 = Z_1 x_{2}^T t^{\land} R x_1</script>
+<p>[Z_2 x_{2}^T t^{\land} x_2 = Z_1 x_{2}^T t^{\land} R x_1]</p>
 
 <ul>
   <li>上式中由于等式左侧 $t^{\land} x_2$ 是一个与t、$x_2$都垂直的向量，再和$x_2$做内积将得到0，因此上式子其实可以写成如下形式：</li>
 </ul>
 
-<script type="math/tex; mode=display">x_{2}^T t^{\land} R x_1 = 0</script>
+<p>[x_{2}^T t^{\land} R x_1 = 0]</p>
 
 <ul>
   <li>上式就是大名鼎鼎的<strong>対极约束</strong>，将 $x_1$ 与 $x_2$ 换下，重新带入 $p_{uv1}$ 与 $p_{uv2}$ 可得：</li>
 </ul>
 
-<script type="math/tex; mode=display">p_{uv2}^T K_2^{-T} t^{\land} R K_1^{-1} p_{uv1} = 0</script>
+<p>[p_{uv2}^T K_2^{-T} t^{\land} R K_1^{-1} p_{uv1} = 0]</p>
 
 <ul>
   <li>其中，中间项就是<strong>基础矩阵</strong>，满足如下：</li>
 </ul>
 
-<script type="math/tex; mode=display">p_{uv2}^T F p_{uv1} = 0</script>
+<p>[p_{uv2}^T F p_{uv1} = 0]</p>
 
-<script type="math/tex; mode=display">F = K_2^{-T} t^{\land} R K_1^{-1}</script>
+<p>[F = K_2^{-T} t^{\land} R K_1^{-1}]</p>
 
 <blockquote>
   <p>此处注意，当点$p_{uv1}$与基础矩阵F确定时，上式演变成一个直线方程，更好的诠释了基础矩阵的本质是<strong>从一个点到一条直线的射影映射的代数表示。</strong></p>
@@ -155,9 +161,9 @@
   <li><strong>本质矩阵</strong>是基础矩阵中只与外参相关的部分，即去掉相机内参，可以得到：</li>
 </ul>
 
-<script type="math/tex; mode=display">E = t^{\land} R</script>
+<p>[E = t^{\land} R]</p>
 
-<script type="math/tex; mode=display">F = K_2^{-T} E K_1^{-1}</script>
+<p>[F = K_2^{-T} E K_1^{-1}]</p>
 
 <h2 id="基础矩阵与本质矩阵的性质">基础矩阵与本质矩阵的性质</h2>
 <ol>
@@ -192,36 +198,34 @@
 <h2 id="基础矩阵与本质矩阵的求解">基础矩阵与本质矩阵的求解</h2>
 <p>由上面我们知道基础矩阵自由度为7，所以最少我们可以使用7对点来求解基础矩阵。同样，本质矩阵自由度是5，我们最小可以使用5对点进行求解。但是因为它们的内在性质中很多都是非线性的性质，因此使用最少的点数求解会比较麻烦，所以一般情况下，只考虑尺度等价性，然后使用8对点进行求解。这也叫作<strong>八点法</strong>。</p>
 
-<p>考虑一对匹配点，它们的像素坐标（如果是求解本质矩阵，那就是归一化坐标）为<script type="math/tex">x_1 = [u_1, v_1, 1]^T, x_2 = [u_2, v_2, 1]^T</script>。根据对极约束，有：</p>
+<p>考虑一对匹配点，它们的像素坐标（如果是求解本质矩阵，那就是归一化坐标）为\(x_1 = [u_1, v_1, 1]^T, x_2 = [u_2, v_2, 1]^T\)。根据对极约束，有：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\left(u_{2}, v_{2}, 1\right)\left(\begin{array}{lll}{e_{1}} & {e_{2}} & {e_{3}} \\ {e_{4}} & {e_{5}} & {e_{6}} \\ {e_{7}} & {e_{8}} & {e_{9}}\end{array}\right)\left(\begin{array}{l}{u_{1}} \\ {v_{1}} \\ {1}\end{array}\right)=0 %]]></script>
+<p>[\left(u_{2}, v_{2}, 1\right)\left(\begin{array}{lll}{e_{1}} &amp; {e_{2}} &amp; {e_{3}} \ {e_{4}} &amp; {e_{5}} &amp; {e_{6}} \ {e_{7}} &amp; {e_{8}} &amp; {e_{9}}\end{array}\right)\left(\begin{array}{l}{u_{1}} \ {v_{1}} \ {1}\end{array}\right)=0]</p>
 
 <p>将上面矩阵展开，写成向量的形式（为了后续好解）：</p>
 
-<script type="math/tex; mode=display">e=\left[e_{1}, e_{2}, e_{3}, e_{4}, e_{5}, e_{6}, e_{7}, e_{8}, e_{9}\right]^{\mathrm{T}}</script>
+<p>[e=\left[e_{1}, e_{2}, e_{3}, e_{4}, e_{5}, e_{6}, e_{7}, e_{8}, e_{9}\right]^{\mathrm{T}}]</p>
 
 <p>此时上面对极约束的等式可以写成如下的形式</p>
 
-<script type="math/tex; mode=display">\left[u_{2} u_{1}, u_{2} v_{1}, u_{2}, v_{2} u_{1}, v_{2} v_{1}, v_{2}, u_{1}, v_{1}, 1\right] \cdot e=0</script>
+<p>[\left[u_{2} u_{1}, u_{2} v_{1}, u_{2}, v_{2} u_{1}, v_{2} v_{1}, v_{2}, u_{1}, v_{1}, 1\right] \cdot e=0]</p>
 
 <p>将八个点的对极约束放在一起便可以得到一个方程组：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\left(\begin{array}{cccccccc}{u_{2}^{1} u_{1}^{1}} & {u_{2}^{1} v_{1}^{1}} & {u_{2}^{1}} & {v_{2}^{1} u_{1}^{1}} & {v_{2}^{1} v_{1}^{1}} & {v_{2}^{1}} & {u_{1}^{1}} & {v_{1}^{1}} & {1} \\ {u_{2}^{2} u_{1}^{2}} & {u_{2}^{2} v_{1}^{2}} & {u_{2}^{2}} & {v_{2}^{2} u_{1}^{2}} & {v_{2}^{2} v_{1}^{2}} & {v_{2}^{2}} & {u_{1}^{2}} & {v_{1}^{2}} & {1} \\ {\vdots} & {\vdots} & {\vdots} & {\vdots} & {\vdots} & {\vdots} & {\vdots} & {\vdots} \\ {u_{2}^{8} u_{1}^{8}} & {u_{2}^{8} v_{1}^{8}} & {u_{2}^{8}} & {v_{2}^{8} u_{1}^{8}} & {v_{2}^{8} v_{1}^{8}} & {v_{2}^{8}} & {u_{1}^{8}} & {v_{1}^{8}} & {1}\end{array}\right)\left(\begin{array}{c}{e_{1}} \\ {e_{2}} \\ {e_{3}} \\ {e_{4}} \\ {e_{5}} \\ {e_{6}} \\ {e_{7}} \\ {e_{8}} \\ {e_{9}}\end{array}\right) = 0 %]]></script>
+<p>[\left(\begin{array}{cccccccc}{u_{2}^{1} u_{1}^{1}} &amp; {u_{2}^{1} v_{1}^{1}} &amp; {u_{2}^{1}} &amp; {v_{2}^{1} u_{1}^{1}} &amp; {v_{2}^{1} v_{1}^{1}} &amp; {v_{2}^{1}} &amp; {u_{1}^{1}} &amp; {v_{1}^{1}} &amp; {1} \ {u_{2}^{2} u_{1}^{2}} &amp; {u_{2}^{2} v_{1}^{2}} &amp; {u_{2}^{2}} &amp; {v_{2}^{2} u_{1}^{2}} &amp; {v_{2}^{2} v_{1}^{2}} &amp; {v_{2}^{2}} &amp; {u_{1}^{2}} &amp; {v_{1}^{2}} &amp; {1} \ {\vdots} &amp; {\vdots} &amp; {\vdots} &amp; {\vdots} &amp; {\vdots} &amp; {\vdots} &amp; {\vdots} &amp; {\vdots} \ {u_{2}^{8} u_{1}^{8}} &amp; {u_{2}^{8} v_{1}^{8}} &amp; {u_{2}^{8}} &amp; {v_{2}^{8} u_{1}^{8}} &amp; {v_{2}^{8} v_{1}^{8}} &amp; {v_{2}^{8}} &amp; {u_{1}^{8}} &amp; {v_{1}^{8}} &amp; {1}\end{array}\right)\left(\begin{array}{c}{e_{1}} \ {e_{2}} \ {e_{3}} \ {e_{4}} \ {e_{5}} \ {e_{6}} \ {e_{7}} \ {e_{8}} \ {e_{9}}\end{array}\right) = 0]</p>
 
 <p>解方程组便可以求解出本质矩阵或基础矩阵。</p>
 
 <h2 id="通过本质矩阵恢复处r与t">通过本质矩阵恢复处R与T</h2>
 <p>在上述工作完成求解出本质矩阵E之后，可以通过SVD分解得到如下等式</p>
 
-<script type="math/tex; mode=display">\boldsymbol{E}=\boldsymbol{U} \boldsymbol{\Sigma} \boldsymbol{V}^{\mathrm{T}}</script>
+<p>[\boldsymbol{E}=\boldsymbol{U} \boldsymbol{\Sigma} \boldsymbol{V}^{\mathrm{T}}]</p>
 
-<p>其中U和V是正交阵，中间$\boldsymbol{\Sigma}$是奇异值矩阵。根据E的内在性质，我们知道<script type="math/tex">\boldsymbol{\Sigma} = diag(\mu, \mu, 0)</script>。通过SVD分解，任意一个E，存在两个可能的R和t与其对应。</p>
+<p>其中U和V是正交阵，中间$\boldsymbol{\Sigma}$是奇异值矩阵。根据E的内在性质，我们知道\(\boldsymbol{\Sigma} = diag(\mu, \mu, 0)\)。通过SVD分解，任意一个E，存在两个可能的R和t与其对应。</p>
 
-<script type="math/tex; mode=display">\begin{array}{l}{t_{1}^{\wedge}=U R_{Z}\left(\frac{\pi}{2}\right) \Sigma U^{\mathrm{T}}, \quad R_{1}=U R_{Z}^{\mathrm{T}}\left(\frac{\pi}{2}\right) V^{\mathrm{T}}} \\ {t_{2}^{\wedge}=U R_{Z}\left(-\frac{\pi}{2}\right) \Sigma U^{\mathrm{T}}, \quad R_{2}=U R_{Z}^{\mathrm{T}}\left(-\frac{\pi}{2}\right) V^{\mathrm{T}}}\end{array}</script>
+<p>[\begin{array}{l}{t_{1}^{\wedge}=U R_{Z}\left(\frac{\pi}{2}\right) \Sigma U^{\mathrm{T}}, \quad R_{1}=U R_{Z}^{\mathrm{T}}\left(\frac{\pi}{2}\right) V^{\mathrm{T}}} \ {t_{2}^{\wedge}=U R_{Z}\left(-\frac{\pi}{2}\right) \Sigma U^{\mathrm{T}}, \quad R_{2}=U R_{Z}^{\mathrm{T}}\left(-\frac{\pi}{2}\right) V^{\mathrm{T}}}\end{array}]</p>
 
-<p>其中<script type="math/tex">R_{Z}\left(\frac{\pi}{2}\right)</script>表示沿Z轴旋转90°得到的旋转矩阵。同时由于E无论是否取符号都是等价的，因此对上面得到的t取负号也会得到相同的结果。因此每个E通过分解一共有四种可能的解。</p>
+<p>其中\(R_{Z}\left(\frac{\pi}{2}\right)\)表示沿Z轴旋转90°得到的旋转矩阵。同时由于E无论是否取符号都是等价的，因此对上面得到的t取负号也会得到相同的结果。因此每个E通过分解一共有四种可能的解。</p>
 
 <h1 id="参考资料">参考资料</h1>
 <ul>

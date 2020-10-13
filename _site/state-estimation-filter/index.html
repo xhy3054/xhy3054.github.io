@@ -22,17 +22,23 @@
 	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
 	<!-- Styles -->
 	<link rel="stylesheet" href="/assets/css/main.css">
-    <!--将该代码放入博客模板的head中即可-->
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        processEscapes: true
-        }
-    });
-    </script>
-    <!--latex数学显示公式-->
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
+<!-- mathjax config similar to math.stackexchange --> 
+<script type="text/x-mathjax-config"> 
+MathJax.Hub.Config({ 
+    jax: ["input/TeX", "output/HTML-CSS"], 
+    tex2jax: { 
+        inlineMath: [ ['$', '$'] ], 
+        displayMath: [ ['$$', '$$']], 
+        processEscapes: true, 
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
+    messageStyle: "none", 
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
+}); 
+</script>
+
+
 </head>
 
 <body>
@@ -65,7 +71,7 @@
 <h1 id="状态估计问题">状态估计问题</h1>
 <p>首先列出状态估计方程，由运动方程与观测方程组成</p>
 
-<script type="math/tex; mode=display">\left\{\begin{array}{l}{\boldsymbol{x}_{k}=f\left(\boldsymbol{x}_{k-1}, \boldsymbol{u}_{k}\right)+\boldsymbol{w}_{k}} \\ {\boldsymbol{z}_{k}=h\left(\boldsymbol{x}_{k}\right)+\boldsymbol{\upsilon}_{k}}\end{array}\right. \quad k=1, \ldots, N</script>
+<p>[\left{\begin{array}{l}{\boldsymbol{x}<em>{k}=f\left(\boldsymbol{x}</em>{k-1}, \boldsymbol{u}<em>{k}\right)+\boldsymbol{w}</em>{k}} \ {\boldsymbol{z}<em>{k}=h\left(\boldsymbol{x}</em>{k}\right)+\boldsymbol{\upsilon}_{k}}\end{array}\right. \quad k=1, \ldots, N]</p>
 
 <p>其中</p>
 <ul>
@@ -79,11 +85,27 @@
 <h1 id="贝叶斯法则">贝叶斯法则</h1>
 <p>对于上述状态估计问题，我们想做的是估计出现在状态的分布</p>
 
-<script type="math/tex; mode=display">P\left(\boldsymbol{x}_{k} | \boldsymbol{x}_{0}, \boldsymbol{u}_{1 : k}, \boldsymbol{z}_{1 : k}\right)</script>
+<table>
+  <tbody>
+    <tr>
+      <td>[P\left(\boldsymbol{x}_{k}</td>
+      <td>\boldsymbol{x}<em>{0}, \boldsymbol{u}</em>{1 : k}, \boldsymbol{z}_{1 : k}\right)]</td>
+    </tr>
+  </tbody>
+</table>
 
 <p>按照贝叶斯法则，我们可以有如下结论</p>
 
-<script type="math/tex; mode=display">P\left(\boldsymbol{x}_{k} | \boldsymbol{x}_{0}, \boldsymbol{u}_{1 : k}, \boldsymbol{z}_{1 : k}\right) \propto P\left(\boldsymbol{z}_{k} | \boldsymbol{x}_{k}\right) P\left(\boldsymbol{x}_{k} | \boldsymbol{x}_{0}, \boldsymbol{u}_{1 : k}, \boldsymbol{z}_{1 : k-1}\right)</script>
+<table>
+  <tbody>
+    <tr>
+      <td>[P\left(\boldsymbol{x}_{k}</td>
+      <td>\boldsymbol{x}<em>{0}, \boldsymbol{u}</em>{1 : k}, \boldsymbol{z}<em>{1 : k}\right) \propto P\left(\boldsymbol{z}</em>{k}</td>
+      <td>\boldsymbol{x}<em>{k}\right) P\left(\boldsymbol{x}</em>{k}</td>
+      <td>\boldsymbol{x}<em>{0}, \boldsymbol{u}</em>{1 : k}, \boldsymbol{z}_{1 : k-1}\right)]</td>
+    </tr>
+  </tbody>
+</table>
 
 <p>其中左边是<strong>后验</strong>概率分布（k时刻状态已经发生），右边第一项是<strong>似然</strong>概率分布，第二项是<strong>先验</strong>概率分布（k时刻状态还没发生）。</p>
 
@@ -96,13 +118,13 @@
 
 <p>满足上述假设的状态估计问题可以重写为</p>
 
-<script type="math/tex; mode=display">\left\{\begin{array}{l}{\boldsymbol{x}_{k}=\boldsymbol{A}_{k} \boldsymbol{x}_{k-1}+\boldsymbol{u}_{k}+\boldsymbol{w}_{k}} \\ {\boldsymbol{z}_{k}=\boldsymbol{C}_{k} \boldsymbol{x}_{k}+\boldsymbol{v}_{k}}\end{array}\right. \quad k=1, \ldots, N</script>
+<p>[\left{\begin{array}{l}{\boldsymbol{x}<em>{k}=\boldsymbol{A}</em>{k} \boldsymbol{x}<em>{k-1}+\boldsymbol{u}</em>{k}+\boldsymbol{w}<em>{k}} \ {\boldsymbol{z}</em>{k}=\boldsymbol{C}<em>{k} \boldsymbol{x}</em>{k}+\boldsymbol{v}_{k}}\end{array}\right. \quad k=1, \ldots, N]</p>
 
 <p>其中第一个为运动方程，第二个为状态方程，并且<strong>所有的状态与噪声均满足高斯分布</strong>。这里噪声满足如下零均值高斯分布</p>
 
-<script type="math/tex; mode=display">\boldsymbol{w}_{k} \sim N(\mathbf{0}, \boldsymbol{R}) . \quad \boldsymbol{v}_{k} \sim N(\mathbf{0}, \boldsymbol{Q})</script>
+<p>[\boldsymbol{w}<em>{k} \sim N(\mathbf{0}, \boldsymbol{R}) . \quad \boldsymbol{v}</em>{k} \sim N(\mathbf{0}, \boldsymbol{Q})]</p>
 
-<p>由于马尔科夫性，假设我们已经有了$k-1$时刻状态的<strong>后验概率分布</strong>：均值 <script type="math/tex">\hat{x}_{k-1}</script> 与协方差 <script type="math/tex">\hat{P}_{k-1}</script> ，现在需要做的是<strong>根据k时刻的输入与观测数据，确定$x_{k}$的后验概率分布</strong>。</p>
+<p>由于马尔科夫性，假设我们已经有了$k-1$时刻状态的<strong>后验概率分布</strong>：均值 \(\hat{x}_{k-1}\) 与协方差 \(\hat{P}_{k-1}\) ，现在需要做的是<strong>根据k时刻的输入与观测数据，确定$x_{k}$的后验概率分布</strong>。</p>
 
 <blockquote>
   <p>此处需要先声明，对于噪声的协方差R与Q，为了方便我们省略了他们的下标。而我们用尖帽子表示后验，横线表示先验。</p>
@@ -110,48 +132,61 @@
 
 <p>卡尔曼滤波的<strong>第一步</strong>是依据运动方程确定$x_{k}$的先验概率分布。如下</p>
 
-<script type="math/tex; mode=display">P\left(\boldsymbol{x}_{k} | \boldsymbol{x}_{0}, \boldsymbol{u}_{1 : k}, \boldsymbol{z}_{1 : k-1}\right)=N\left(\boldsymbol{A}_{k} \hat{\boldsymbol{x}}_{k-1}+\boldsymbol{u}_{k}, \boldsymbol{A}_{k} \hat{\boldsymbol{P}}_{k-1} \boldsymbol{A}_{k}^{T}+\boldsymbol{R}\right)</script>
+<table>
+  <tbody>
+    <tr>
+      <td>[P\left(\boldsymbol{x}_{k}</td>
+      <td>\boldsymbol{x}<em>{0}, \boldsymbol{u}</em>{1 : k}, \boldsymbol{z}<em>{1 : k-1}\right)=N\left(\boldsymbol{A}</em>{k} \hat{\boldsymbol{x}}<em>{k-1}+\boldsymbol{u}</em>{k}, \boldsymbol{A}<em>{k} \hat{\boldsymbol{P}}</em>{k-1} \boldsymbol{A}_{k}^{T}+\boldsymbol{R}\right)]</td>
+    </tr>
+  </tbody>
+</table>
 
 <p>其中，利用线性高斯系统的性质，我们得到$x_{k}$的先验分布也是高斯分布，并且均值与方差如下：</p>
 
-<script type="math/tex; mode=display">\overline{\boldsymbol{x}}_{k}=\boldsymbol{A}_{k} \hat{\boldsymbol{x}}_{k-1}+\boldsymbol{u}_{k}, \quad \overline{\boldsymbol{P}}_{k}=\boldsymbol{A}_{k} \hat{\boldsymbol{P}}_{k-1} \boldsymbol{A}_{k}^{T}+\boldsymbol{R}</script>
+<p>[\overline{\boldsymbol{x}}<em>{k}=\boldsymbol{A}</em>{k} \hat{\boldsymbol{x}}<em>{k-1}+\boldsymbol{u}</em>{k}, \quad \overline{\boldsymbol{P}}<em>{k}=\boldsymbol{A}</em>{k} \hat{\boldsymbol{P}}<em>{k-1} \boldsymbol{A}</em>{k}^{T}+\boldsymbol{R}]</p>
 
 <p><strong>下一步，我们由观测方程得到似然分布</strong></p>
 
-<script type="math/tex; mode=display">P\left(\boldsymbol{z}_{k} | \boldsymbol{x}_{k}\right)=N\left(\boldsymbol{C}_{k} \boldsymbol{x}_{k}, \boldsymbol{Q}\right)</script>
+<table>
+  <tbody>
+    <tr>
+      <td>[P\left(\boldsymbol{z}_{k}</td>
+      <td>\boldsymbol{x}<em>{k}\right)=N\left(\boldsymbol{C}</em>{k} \boldsymbol{x}_{k}, \boldsymbol{Q}\right)]</td>
+    </tr>
+  </tbody>
+</table>
 
 <p><strong>然后</strong>，由贝叶斯法则我们知道，后验概率分布与似然分布和先验概率分布的乘积成正比，即</p>
 
-<script type="math/tex; mode=display">N\left(\hat{\boldsymbol{x}}_{k}, \hat{\boldsymbol{P}}_{k}\right) \propto N\left(\boldsymbol{C}_{k} \boldsymbol{x}_{k}, \boldsymbol{Q}\right) \cdot N\left(\overline{\boldsymbol{x}}_{k}, \overline{\boldsymbol{P}}_{k}\right)</script>
+<p>[N\left(\hat{\boldsymbol{x}}<em>{k}, \hat{\boldsymbol{P}}</em>{k}\right) \propto N\left(\boldsymbol{C}<em>{k} \boldsymbol{x}</em>{k}, \boldsymbol{Q}\right) \cdot N\left(\overline{\boldsymbol{x}}<em>{k}, \overline{\boldsymbol{P}}</em>{k}\right)]</p>
 
 <p><strong>因为上述三个分布都是高斯分布，上述等式两侧又成正比，所以我们无需关系高斯分布系数部分内容，只需要保证等式两侧指数部分是相等的即可</strong>。即得到下式</p>
 
-<script type="math/tex; mode=display">\left(\boldsymbol{x}_{k}-\hat{\boldsymbol{x}}_{k}\right)^{T} \hat{\boldsymbol{P}}_{k}^{-1}\left(\boldsymbol{x}_{k}-\hat{\boldsymbol{x}}_{k}\right)=\left(\boldsymbol{z}_{k}-\boldsymbol{C}_{k} \boldsymbol{x}_{k}\right)^{T} \boldsymbol{Q}^{-1}\left(\boldsymbol{z}_{k}-\boldsymbol{C}_{k} \boldsymbol{x}_{k}\right)+\left(\boldsymbol{x}_{k}-\overline{\boldsymbol{x}}_{k}\right)^{T} \boldsymbol{P}_{k}^{-1}\left(\boldsymbol{x}_{k}-\overline{\boldsymbol{x}}_{k}\right)</script>
+<p>[\left(\boldsymbol{x}<em>{k}-\hat{\boldsymbol{x}}</em>{k}\right)^{T} \hat{\boldsymbol{P}}<em>{k}^{-1}\left(\boldsymbol{x}</em>{k}-\hat{\boldsymbol{x}}<em>{k}\right)=\left(\boldsymbol{z}</em>{k}-\boldsymbol{C}<em>{k} \boldsymbol{x}</em>{k}\right)^{T} \boldsymbol{Q}^{-1}\left(\boldsymbol{z}<em>{k}-\boldsymbol{C}</em>{k} \boldsymbol{x}<em>{k}\right)+\left(\boldsymbol{x}</em>{k}-\overline{\boldsymbol{x}}<em>{k}\right)^{T} \boldsymbol{P}</em>{k}^{-1}\left(\boldsymbol{x}<em>{k}-\overline{\boldsymbol{x}}</em>{k}\right)]</p>
 
 <p>为了保证上面等式成立，我们将两边展开，另$x_{k}$的二次系数与一次系数两边相等。对于<strong>二次系数</strong>，我们得到</p>
 
-<script type="math/tex; mode=display">\hat{\boldsymbol{P}}_{k}^{-1}=\boldsymbol{C}_{k}^{T} \boldsymbol{Q}^{-1} \boldsymbol{C}_{k}+\overline{\boldsymbol{P}}_{k}^{-1}</script>
+<p>[\hat{\boldsymbol{P}}<em>{k}^{-1}=\boldsymbol{C}</em>{k}^{T} \boldsymbol{Q}^{-1} \boldsymbol{C}<em>{k}+\overline{\boldsymbol{P}}</em>{k}^{-1}]</p>
 
-<p>这个等式给出了$x_{k}$分布的协方差的计算过程，此处另<script type="math/tex">\boldsymbol{K}=\hat{\boldsymbol{P}}_{k} \boldsymbol{C}_{k}^{T} \boldsymbol{Q}^{-1}</script>，并将上式左右同时乘以<script type="math/tex">\hat{P}_{k}</script>，有</p>
+<p>这个等式给出了$x_{k}$分布的协方差的计算过程，此处另\(\boldsymbol{K}=\hat{\boldsymbol{P}}_{k} \boldsymbol{C}_{k}^{T} \boldsymbol{Q}^{-1}\)，并将上式左右同时乘以\(\hat{P}_{k}\)，有</p>
 
-<script type="math/tex; mode=display">\boldsymbol{I}=\hat{\boldsymbol{P}}_{k} \boldsymbol{C}_{k}^{T} \boldsymbol{Q}^{-1} \boldsymbol{C}_{k}+\hat{\boldsymbol{P}}_{k} \overline{\boldsymbol{P}}_{k}^{-1}=\boldsymbol{K} \boldsymbol{C}_{k}+\hat{\boldsymbol{P}}_{k} \overline{\boldsymbol{P}}_{k}^{-1}</script>
+<p>[\boldsymbol{I}=\hat{\boldsymbol{P}}<em>{k} \boldsymbol{C}</em>{k}^{T} \boldsymbol{Q}^{-1} \boldsymbol{C}<em>{k}+\hat{\boldsymbol{P}}</em>{k} \overline{\boldsymbol{P}}<em>{k}^{-1}=\boldsymbol{K} \boldsymbol{C}</em>{k}+\hat{\boldsymbol{P}}<em>{k} \overline{\boldsymbol{P}}</em>{k}^{-1}]</p>
 
-<p>于是，我们得到卡尔曼滤波中<script type="math/tex">\hat{P}_{k}</script>的更新公式</p>
+<p>于是，我们得到卡尔曼滤波中\(\hat{P}_{k}\)的更新公式</p>
 
-<script type="math/tex; mode=display">\hat{\boldsymbol{P}}_{k}=\left(\boldsymbol{I}-\boldsymbol{K} \boldsymbol{C}_{k}\right) \overline{\boldsymbol{P}}_{k}</script>
+<p>[\hat{\boldsymbol{P}}<em>{k}=\left(\boldsymbol{I}-\boldsymbol{K} \boldsymbol{C}</em>{k}\right) \overline{\boldsymbol{P}}_{k}]</p>
 
 <p>其中，K的更新公式是</p>
 
-<script type="math/tex; mode=display">\boldsymbol{K}=\overline{\boldsymbol{P}}_{k} \boldsymbol{C}_{k}^{T}\left(\boldsymbol{C}_{k} \overline{\boldsymbol{P}}_{k} \boldsymbol{C}_{k}^{T}+\boldsymbol{Q}\right)^{-1}</script>
+<p>[\boldsymbol{K}=\overline{\boldsymbol{P}}<em>{k} \boldsymbol{C}</em>{k}^{T}\left(\boldsymbol{C}<em>{k} \overline{\boldsymbol{P}}</em>{k} \boldsymbol{C}_{k}^{T}+\boldsymbol{Q}\right)^{-1}]</p>
 
 <p>同样，由<strong>一次项系数</strong>相同可以得到</p>
 
-<script type="math/tex; mode=display">-2 \hat{\boldsymbol{x}}_{k}^{T} \hat{\boldsymbol{P}}_{k}^{-1} \boldsymbol{x}_{k}=-2 \boldsymbol{z}_{k}^{T} \boldsymbol{Q}^{-1} \boldsymbol{C}_{k} \boldsymbol{x}_{k}-2 \overline{\boldsymbol{x}}_{k}^{T} \overline{\boldsymbol{P}}_{k}^{-1} \boldsymbol{x}_{k}</script>
+<p>[-2 \hat{\boldsymbol{x}}<em>{k}^{T} \hat{\boldsymbol{P}}</em>{k}^{-1} \boldsymbol{x}<em>{k}=-2 \boldsymbol{z}</em>{k}^{T} \boldsymbol{Q}^{-1} \boldsymbol{C}<em>{k} \boldsymbol{x}</em>{k}-2 \overline{\boldsymbol{x}}<em>{k}^{T} \overline{\boldsymbol{P}}</em>{k}^{-1} \boldsymbol{x}_{k}]</p>
 
 <p>整理可得卡尔曼滤波中$\hat{x}_{k}$的更新公式</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned} \hat{\boldsymbol{x}}_{k} &=\hat{\boldsymbol{P}}_{k} \boldsymbol{C}_{k}^{T} \boldsymbol{Q}^{-1} \boldsymbol{z}_{k}+\hat{\boldsymbol{P}}_{k} \overline{\boldsymbol{P}}_{k}^{-1} \overline{\boldsymbol{x}}_{k} \\ &=\boldsymbol{K} \boldsymbol{z}_{k}+\left(\boldsymbol{I}-\boldsymbol{K} \boldsymbol{C}_{k}\right) \overline{\boldsymbol{x}}_{k} \\ &=\overline{\boldsymbol{x}}_{k}+\boldsymbol{K}\left(\boldsymbol{z}_{k}-\boldsymbol{C}_{k} \overline{\boldsymbol{x}}_{k}\right) \end{aligned} %]]></script>
+<p>[\begin{aligned} \hat{\boldsymbol{x}}<em>{k} &amp;=\hat{\boldsymbol{P}}</em>{k} \boldsymbol{C}<em>{k}^{T} \boldsymbol{Q}^{-1} \boldsymbol{z}</em>{k}+\hat{\boldsymbol{P}}<em>{k} \overline{\boldsymbol{P}}</em>{k}^{-1} \overline{\boldsymbol{x}}<em>{k} \ &amp;=\boldsymbol{K} \boldsymbol{z}</em>{k}+\left(\boldsymbol{I}-\boldsymbol{K} \boldsymbol{C}<em>{k}\right) \overline{\boldsymbol{x}}</em>{k} \ &amp;=\overline{\boldsymbol{x}}<em>{k}+\boldsymbol{K}\left(\boldsymbol{z}</em>{k}-\boldsymbol{C}<em>{k} \overline{\boldsymbol{x}}</em>{k}\right) \end{aligned}]</p>
 
 <h2 id="卡尔曼滤波步骤归纳">卡尔曼滤波步骤归纳</h2>
 <p>由上面推导，我们可以将卡尔曼滤波归纳成如下<strong>预测</strong>与<strong>更新</strong>两个步骤：</p>
@@ -160,19 +195,18 @@
   <li>预测：</li>
 </ul>
 
-<script type="math/tex; mode=display">\overline{\boldsymbol{x}}_{k}=\boldsymbol{A}_{k} \hat{\boldsymbol{x}}_{k-1}+\boldsymbol{u}_{k}, \quad \overline{\boldsymbol{P}}_{k}=\boldsymbol{A}_{k} \hat{\boldsymbol{P}}_{k-1} \boldsymbol{A}_{k}^{T}+\boldsymbol{R}</script>
+<p>[\overline{\boldsymbol{x}}<em>{k}=\boldsymbol{A}</em>{k} \hat{\boldsymbol{x}}<em>{k-1}+\boldsymbol{u}</em>{k}, \quad \overline{\boldsymbol{P}}<em>{k}=\boldsymbol{A}</em>{k} \hat{\boldsymbol{P}}<em>{k-1} \boldsymbol{A}</em>{k}^{T}+\boldsymbol{R}]</p>
 
 <ul>
   <li>更新：
 首先计算K（卡尔曼增益）</li>
 </ul>
 
-<script type="math/tex; mode=display">\boldsymbol{K}=\overline{\boldsymbol{P}}_{k} C_{k}^{T}\left(\boldsymbol{C}_{k} \overline{\boldsymbol{P}}_{k} \boldsymbol{C}_{k}^{T}+\boldsymbol{Q}\right)^{-1}</script>
+<p>[\boldsymbol{K}=\overline{\boldsymbol{P}}<em>{k} C</em>{k}^{T}\left(\boldsymbol{C}<em>{k} \overline{\boldsymbol{P}}</em>{k} \boldsymbol{C}_{k}^{T}+\boldsymbol{Q}\right)^{-1}]</p>
 
 <p>然后计算后验概率的分布</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned} \hat{\boldsymbol{x}}_{k} &=\overline{\boldsymbol{x}}_{k}+\boldsymbol{K}\left(\boldsymbol{z}_{k}-\boldsymbol{C}_{k} \overline{\boldsymbol{x}}_{k}\right) \\ \hat{\boldsymbol{P}}_{k} &=\left(\boldsymbol{I}-\boldsymbol{K} \boldsymbol{C}_{k}\right) \overline{\boldsymbol{P}}_{k} \end{aligned} %]]></script>
+<p>[\begin{aligned} \hat{\boldsymbol{x}}<em>{k} &amp;=\overline{\boldsymbol{x}}</em>{k}+\boldsymbol{K}\left(\boldsymbol{z}<em>{k}-\boldsymbol{C}</em>{k} \overline{\boldsymbol{x}}<em>{k}\right) \ \hat{\boldsymbol{P}}</em>{k} &amp;=\left(\boldsymbol{I}-\boldsymbol{K} \boldsymbol{C}<em>{k}\right) \overline{\boldsymbol{P}}</em>{k} \end{aligned}]</p>
 
 <blockquote>
   <p>卡尔曼滤波是线性系统的最优无偏估计</p>
@@ -187,25 +221,67 @@
 
 <p>经过线性化（一阶泰勒展开）之后，我们得到的<strong>运动方程</strong>如下</p>
 
-<script type="math/tex; mode=display">\boldsymbol{x}_{k} \approx f\left(\hat{\boldsymbol{x}}_{k-1}, \boldsymbol{u}_{k}\right)+\left.\frac{\partial f}{\partial \boldsymbol{x}_{k-1}}\right|_{\hat{\boldsymbol{x}}_{k-1}}\left(\boldsymbol{x}_{k-1}-\hat{\boldsymbol{x}}_{k-1}\right)+\boldsymbol{w}_{k}</script>
+<table>
+  <tbody>
+    <tr>
+      <td>[\boldsymbol{x}<em>{k} \approx f\left(\hat{\boldsymbol{x}}</em>{k-1}, \boldsymbol{u}<em>{k}\right)+\left.\frac{\partial f}{\partial \boldsymbol{x}</em>{k-1}}\right</td>
+      <td><em>{\hat{\boldsymbol{x}}</em>{k-1}}\left(\boldsymbol{x}<em>{k-1}-\hat{\boldsymbol{x}}</em>{k-1}\right)+\boldsymbol{w}_{k}]</td>
+    </tr>
+  </tbody>
+</table>
 
 <p><strong>观测方程</strong>如下</p>
 
-<script type="math/tex; mode=display">z_{k} \approx h\left(\overline{x}_{k}\right)+\left.\frac{\partial h}{\partial x_{k}}\right|_{\overline{x}_{k}}\left(x_{k}-\hat{x}_{k}\right)+n_{k}</script>
+<table>
+  <tbody>
+    <tr>
+      <td>[z_{k} \approx h\left(\overline{x}<em>{k}\right)+\left.\frac{\partial h}{\partial x</em>{k}}\right</td>
+      <td><em>{\overline{x}</em>{k}}\left(x_{k}-\hat{x}<em>{k}\right)+n</em>{k}]</td>
+    </tr>
+  </tbody>
+</table>
 
 <p>此处，我们另两个方程中的<strong>两个偏导数</strong>为</p>
 
-<script type="math/tex; mode=display">\boldsymbol{F}=\left.\frac{\partial f}{\partial \boldsymbol{x}_{k-1}}\right|_{\hat{\boldsymbol{x}}_{k-1}}</script>
+<table>
+  <tbody>
+    <tr>
+      <td>[\boldsymbol{F}=\left.\frac{\partial f}{\partial \boldsymbol{x}_{k-1}}\right</td>
+      <td><em>{\hat{\boldsymbol{x}}</em>{k-1}}]</td>
+    </tr>
+  </tbody>
+</table>
 
-<script type="math/tex; mode=display">\boldsymbol{H}=\left.\frac{\partial h}{\partial \boldsymbol{x}_{k}}\right|_{\overline{\boldsymbol{x}}_{k}}</script>
+<table>
+  <tbody>
+    <tr>
+      <td>[\boldsymbol{H}=\left.\frac{\partial h}{\partial \boldsymbol{x}_{k}}\right</td>
+      <td><em>{\overline{\boldsymbol{x}}</em>{k}}]</td>
+    </tr>
+  </tbody>
+</table>
 
 <p>然后，根据运动方程，我们得到的<strong>先验概率分布</strong>为</p>
 
-<script type="math/tex; mode=display">P\left(\boldsymbol{x}_{k} | \boldsymbol{x}_{0}, \boldsymbol{u}_{1 : k}, \boldsymbol{z}_{0 : k-1}\right)=N\left(f\left(\hat{\boldsymbol{x}}_{k-1}, \boldsymbol{u}_{k}\right), \boldsymbol{F} \hat{\boldsymbol{P}}_{k-1} \boldsymbol{F}^{\mathrm{T}}+\boldsymbol{R}_{k}\right)</script>
+<table>
+  <tbody>
+    <tr>
+      <td>[P\left(\boldsymbol{x}_{k}</td>
+      <td>\boldsymbol{x}<em>{0}, \boldsymbol{u}</em>{1 : k}, \boldsymbol{z}<em>{0 : k-1}\right)=N\left(f\left(\hat{\boldsymbol{x}}</em>{k-1}, \boldsymbol{u}<em>{k}\right), \boldsymbol{F} \hat{\boldsymbol{P}}</em>{k-1} \boldsymbol{F}^{\mathrm{T}}+\boldsymbol{R}_{k}\right)]</td>
+    </tr>
+  </tbody>
+</table>
 
 <p>根据观测方程，我们得到的<strong>似然概率分布</strong>为</p>
 
-<script type="math/tex; mode=display">P\left(\boldsymbol{z}_{k} | \boldsymbol{x}_{k}\right)=N\left(h\left(\overline{\boldsymbol{x}}_{k}\right)+\boldsymbol{H}\left(\boldsymbol{x}_{k}-\overline{\boldsymbol{x}}_{k}\right), \boldsymbol{Q}_{k}\right)</script>
+<table>
+  <tbody>
+    <tr>
+      <td>[P\left(\boldsymbol{z}_{k}</td>
+      <td>\boldsymbol{x}<em>{k}\right)=N\left(h\left(\overline{\boldsymbol{x}}</em>{k}\right)+\boldsymbol{H}\left(\boldsymbol{x}<em>{k}-\overline{\boldsymbol{x}}</em>{k}\right), \boldsymbol{Q}_{k}\right)]</td>
+    </tr>
+  </tbody>
+</table>
 
 <p>下面的推导与卡尔曼滤波相同，通过贝叶斯公式使得高斯分布中的指数部分相同。</p>
 
@@ -214,17 +290,17 @@
   <li>预测</li>
 </ul>
 
-<script type="math/tex; mode=display">\overline{\boldsymbol{x}}_{k}=f\left(\hat{\boldsymbol{x}}_{k-1}, \boldsymbol{u}_{k}\right), \quad \overline{\boldsymbol{P}}_{k}=\boldsymbol{F} \hat{\boldsymbol{P}}_{k} \boldsymbol{F}^{T}+\boldsymbol{R}_{k}</script>
+<p>[\overline{\boldsymbol{x}}<em>{k}=f\left(\hat{\boldsymbol{x}}</em>{k-1}, \boldsymbol{u}<em>{k}\right), \quad \overline{\boldsymbol{P}}</em>{k}=\boldsymbol{F} \hat{\boldsymbol{P}}<em>{k} \boldsymbol{F}^{T}+\boldsymbol{R}</em>{k}]</p>
 
 <ul>
   <li>更新，先计算K（卡尔曼增益）</li>
 </ul>
 
-<script type="math/tex; mode=display">\boldsymbol{K}_{k}=\overline{\boldsymbol{P}}_{k} \boldsymbol{H}^{\mathrm{T}}\left(\boldsymbol{H} \overline{\boldsymbol{P}}_{k} \boldsymbol{H}^{\mathrm{T}}+\boldsymbol{Q}_{k}\right)^{-1}</script>
+<p>[\boldsymbol{K}<em>{k}=\overline{\boldsymbol{P}}</em>{k} \boldsymbol{H}^{\mathrm{T}}\left(\boldsymbol{H} \overline{\boldsymbol{P}}<em>{k} \boldsymbol{H}^{\mathrm{T}}+\boldsymbol{Q}</em>{k}\right)^{-1}]</p>
 
 <p>然后更新后验分布的均值与方差</p>
 
-<script type="math/tex; mode=display">\hat{\boldsymbol{x}}_{k}=\overline{\boldsymbol{x}}_{k}+\boldsymbol{K}_{k}\left(\boldsymbol{z}_{k}-h\left(\overline{\boldsymbol{x}}_{k}\right)\right) \\ \hat{\boldsymbol{P}}_{k}=\left(\boldsymbol{I}-\boldsymbol{K}_{k} \boldsymbol{H}\right) \overline{\boldsymbol{P}}_{k}</script>
+<p>[\hat{\boldsymbol{x}}<em>{k}=\overline{\boldsymbol{x}}</em>{k}+\boldsymbol{K}<em>{k}\left(\boldsymbol{z}</em>{k}-h\left(\overline{\boldsymbol{x}}<em>{k}\right)\right) \ \hat{\boldsymbol{P}}</em>{k}=\left(\boldsymbol{I}-\boldsymbol{K}<em>{k} \boldsymbol{H}\right) \overline{\boldsymbol{P}}</em>{k}]</p>
 
 <h2 id="ekf的评价">EKF的评价</h2>
 <ul>

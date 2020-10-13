@@ -22,17 +22,23 @@
 	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
 	<!-- Styles -->
 	<link rel="stylesheet" href="/assets/css/main.css">
-    <!--将该代码放入博客模板的head中即可-->
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        processEscapes: true
-        }
-    });
-    </script>
-    <!--latex数学显示公式-->
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
+<!-- mathjax config similar to math.stackexchange --> 
+<script type="text/x-mathjax-config"> 
+MathJax.Hub.Config({ 
+    jax: ["input/TeX", "output/HTML-CSS"], 
+    tex2jax: { 
+        inlineMath: [ ['$', '$'] ], 
+        displayMath: [ ['$$', '$$']], 
+        processEscapes: true, 
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
+    messageStyle: "none", 
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
+}); 
+</script>
+
+
 </head>
 
 <body>
@@ -119,7 +125,7 @@
   <p>批处理归一化层主要用来进行数据归一化，使得在relu之前不会因数据过大而导致网络性能不稳定。对于一个（1,3，H,W）的输入，主要的处理如下：</p>
 </blockquote>
 
-<script type="math/tex; mode=display">y=\frac{x-\mathrm{E}[x]}{\sqrt{\operatorname{Var}[x]+\epsilon}} * \gamma+\beta</script>
+<p>[y=\frac{x-\mathrm{E}[x]}{\sqrt{\operatorname{Var}[x]+\epsilon}} * \gamma+\beta]</p>
 
 <p>上面计算是对3个通道分别进行的，其中x为一个一个像素位置多个通道值组成的向量，E为每个通道的平均数组成的向量，var为每个通道的标准差组成的向量，$\epsilon$是为了数值稳定性在分母上增加的值，$\gamma$（默认1）和$beta$（默认0）为可学习的参数向量（维度为通道数）。上面公式写成向量形式，但是实际理解可以是对特征的每个通道分别执行上式。</p>
 
@@ -144,7 +150,7 @@
   <p>在指定的维度上执行$L_p$归一化操作，其实就是在某个维度上对每个元素做$L_p$操作并做sum，然后当前元素值为原值除以sum，公式为：</p>
 </blockquote>
 
-<script type="math/tex; mode=display">v=\frac{v}{\max \left(\|v\|_{p}, \epsilon\right)}</script>
+<p>[v=\frac{v}{\max \left(|v|_{p}, \epsilon\right)}]</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="nb">input</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> 
 	<span class="n">p</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> 
@@ -166,7 +172,7 @@
   <p>逐元素执行如下操作，note:为了数值稳定，当$\beta x &gt; threshold$时实现变为线性函数。</p>
 </blockquote>
 
-<script type="math/tex; mode=display">\text { Softplus }(x)=\frac{1}{\beta} * \log (1+\exp (\beta * x))</script>
+<p>[\text { Softplus }(x)=\frac{1}{\beta} * \log (1+\exp (\beta * x))]</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">softplus</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span> <span class="err">→</span> <span class="n">Tensor</span>
 </code></pre></div></div>
@@ -177,7 +183,7 @@
   <p>也是一种归一化操作，沿着某个维度执行如下操作，使得该维度向量每个元素值在0到1之间，并且和为1。</p>
 </blockquote>
 
-<script type="math/tex; mode=display">\operatorname{Softmax}\left(x_{i}\right)=\frac{\exp \left(x_{i}\right)}{\sum_{j} \exp \left(x_{j}\right)}</script>
+<p>[\operatorname{Softmax}\left(x_{i}\right)=\frac{\exp \left(x_{i}\right)}{\sum_{j} \exp \left(x_{j}\right)}]</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="nb">input</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> 
 	<span class="n">dim</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> 
@@ -212,7 +218,7 @@
   <p>对每个元素执行如下操作：</p>
 </blockquote>
 
-<script type="math/tex; mode=display">ELU(x)=max(0,x)+min(0,α∗(exp(x)−1))</script>
+<p>[ELU(x)=max(0,x)+min(0,α∗(exp(x)−1))]</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CLASStorch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ELU</span><span class="p">(</span><span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
 </code></pre></div></div>

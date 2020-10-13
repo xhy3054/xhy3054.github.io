@@ -22,17 +22,23 @@
 	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
 	<!-- Styles -->
 	<link rel="stylesheet" href="/assets/css/main.css">
-    <!--将该代码放入博客模板的head中即可-->
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        processEscapes: true
-        }
-    });
-    </script>
-    <!--latex数学显示公式-->
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
+<!-- mathjax config similar to math.stackexchange --> 
+<script type="text/x-mathjax-config"> 
+MathJax.Hub.Config({ 
+    jax: ["input/TeX", "output/HTML-CSS"], 
+    tex2jax: { 
+        inlineMath: [ ['$', '$'] ], 
+        displayMath: [ ['$$', '$$']], 
+        processEscapes: true, 
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
+    messageStyle: "none", 
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
+}); 
+</script>
+
+
 </head>
 
 <body>
@@ -73,11 +79,11 @@
 </div>
 <p>那么根据三角形相似的关系有：</p>
 
-<script type="math/tex; mode=display">\frac{Z}{f} = - \frac{X}{X'} = - \frac{Y}{Y'}</script>
+<p>[\frac{Z}{f} = - \frac{X}{X’} = - \frac{Y}{Y’}]</p>
 
 <p>其中负号是因为成的像是<strong>倒</strong>的，所以坐标系数会相反，不过一般为了简化模型，我们统一将成像平面对称到相机的前方，使得成像平面与三维空间点一起放在摄像机坐标系的同一侧，这叫做<strong>虚像</strong>。这样，我们可以去掉上式中的负号，如下：</p>
 
-<script type="math/tex; mode=display">\frac{Z}{f} = \frac{X}{X'} = \frac{Y}{Y'}</script>
+<p>[\frac{Z}{f} = \frac{X}{X’} = \frac{Y}{Y’}]</p>
 
 <blockquote>
   <p>此处之所以可以随意的将成像平面挪到前方，是因为我们拍照相机输出的照片都是正常的，并不是倒像，这是因为相机自身的软件会帮助我们翻转这张图片。虽然原理上小孔成像是倒的，但是实际应用中我们在理解照片与实际场景的成像时应该是将成像平面放到前面的。</p>
@@ -101,7 +107,7 @@
   <li>第二步是旋转操作，旋转矩阵是将相机角度旋转到朝向ｚ轴的那个矩阵。</li>
 </ul>
 
-<script type="math/tex; mode=display">P_c=R(P_w - C)</script>
+<p>[P_c=R(P_w - C)]</p>
 
 <p>上式中，R是旋转矩阵，C是一个平移矩阵，式中将其写为了负的形式，整个矩阵形式如下图</p>
 <div style="text-align: center">
@@ -129,28 +135,27 @@
 <h2 id="转换为像素坐标">转换为像素坐标</h2>
 <p>由上已经知道，空间点相机坐标系坐标<code class="highlighter-rouge">(X,Y,Z)</code>到成像平面投影的坐标<code class="highlighter-rouge">(x,y)</code>变换为</p>
 
-<script type="math/tex; mode=display">x = f\frac{X}{Z}</script>
+<p>[x = f\frac{X}{Z}]</p>
 
-<script type="math/tex; mode=display">y = f\frac{Y}{Z}</script>
+<p>[y = f\frac{Y}{Z}]</p>
 
 <p>而像素坐标系通常的定义方式是：原点o’位于图像的左上角，$\mu$轴向右与本来x轴平行，$\nu$轴向下与y轴平行。像素坐标系与成像平面之间，相差了一个缩放和一个原点的平移。我们假设像素坐标在$\mu$轴上缩放了$\alpha$倍，在$\nu$上缩放了$\beta$倍。同时，原点平移了$[c_x,c_y]^T$。所以，(x,y)与(u,v)的关系如下：</p>
 
-<script type="math/tex; mode=display">u = \alpha x + c_x</script>
+<p>[u = \alpha x + c_x]</p>
 
-<script type="math/tex; mode=display">v = \beta y + c_y</script>
+<p>[v = \beta y + c_y]</p>
 
 <p>其中$\alpha$代表的含义可以理解为横轴分辨率(1m有多少像素)，$\beta$类似，接下来将上面两个式子合并，得到直接<strong>从相机坐标系坐标到像素坐标</strong>的变换如下：</p>
 
-<script type="math/tex; mode=display">u = f_x\frac{X}{Z} + c_x</script>
+<p>[u = f_x\frac{X}{Z} + c_x]</p>
 
-<script type="math/tex; mode=display">v = f_y\frac{Y}{Z} + c_y</script>
+<p>[v = f_y\frac{Y}{Z} + c_y]</p>
 
 <p>其中，将$\alpha f$合并成$f_x$，$\beta f$合并成$f_y$。</p>
 
 <p>下面是使用矩阵表示，左边使用齐次坐标。</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\left( \begin{array}{ccc} u\\  v\\   1 \end{array} \right) = \frac{1}{Z} \left( \begin{array}{ccc} f_x& 0 & c_x\\  0& f_y& c_y\\   0 & 0& 1 \end{array} \right) \left( \begin{array}{ccc} X\\  Y\\   Z \end{array} \right) = \frac{1}{Z} K P_c %]]></script>
+<p>[\left( \begin{array}{ccc} u\  v\   1 \end{array} \right) = \frac{1}{Z} \left( \begin{array}{ccc} f_x&amp; 0 &amp; c_x\  0&amp; f_y&amp; c_y\   0 &amp; 0&amp; 1 \end{array} \right) \left( \begin{array}{ccc} X\  Y\   Z \end{array} \right) = \frac{1}{Z} K P_c]</p>
 
 <p>其中矩阵K就是相机的<strong>内参矩阵</strong>，我们通常认为，内参矩阵在相机出厂之后是固定的，不会再使用过程中发生变化。有时我们并不知道相机的内参，自己确定内参的操作叫做<strong>标定</strong>。</p>
 
@@ -177,7 +182,7 @@
 
 <p>上述<strong>整合</strong>起来也得到：</p>
 
-<script type="math/tex; mode=display">ZP_{uv} = K(RP_w + t)</script>
+<p>[ZP_{uv} = K(RP_w + t)]</p>
 
 <blockquote>
   <p>参考上面详细的成像原理，其实总结中的第三步与第四步是可以没有先后关系的。因为都是线性的运算，所以谁先谁后都不影响最后结果。</p>

@@ -22,17 +22,23 @@
 	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
 	<!-- Styles -->
 	<link rel="stylesheet" href="/assets/css/main.css">
-    <!--将该代码放入博客模板的head中即可-->
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        processEscapes: true
-        }
-    });
-    </script>
-    <!--latex数学显示公式-->
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
+<!-- mathjax config similar to math.stackexchange --> 
+<script type="text/x-mathjax-config"> 
+MathJax.Hub.Config({ 
+    jax: ["input/TeX", "output/HTML-CSS"], 
+    tex2jax: { 
+        inlineMath: [ ['$', '$'] ], 
+        displayMath: [ ['$$', '$$']], 
+        processEscapes: true, 
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
+    messageStyle: "none", 
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
+}); 
+</script>
+
+
 </head>
 
 <body>
@@ -76,11 +82,11 @@
 
 <p>根据上图，假设一个空间点P，在左右目各成一像$P_L$与$P_R$，分别以两个光心垂直的位置为二维坐标原点，则$P_L$的横坐标为$u_L$，$P_R$的横坐标为$u_R$，可以发现$u_R$是一个负数。根据上图中右侧三角形相似的原理，可以得到下面公式</p>
 
-<script type="math/tex; mode=display">\frac{z-f}{z}=\frac{b-u_{L}+u_{R}}{b}</script>
+<p>[\frac{z-f}{z}=\frac{b-u_{L}+u_{R}}{b}]</p>
 
 <p>经过整理，可以得到</p>
 
-<script type="math/tex; mode=display">z = \frac{fb}{d}, d= u_L -u_R</script>
+<p>[z = \frac{fb}{d}, d= u_L -u_R]</p>
 
 <p>此处d为投影点在左右图上的横坐标之差，也叫作<strong>视差</strong>，因此，根据视差我们就可以估计出这个空间点的深度了。此处可以发现，视差最小也就是1个像素，因此双目可以测量的最大深度是有上限的，而这个值和$fb$有关，所以一般相机焦距f确定的时候，双目基线越大，可测量的最远深度也越大。</p>
 

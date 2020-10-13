@@ -22,17 +22,23 @@
 	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
 	<!-- Styles -->
 	<link rel="stylesheet" href="/assets/css/main.css">
-    <!--将该代码放入博客模板的head中即可-->
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        processEscapes: true
-        }
-    });
-    </script>
-    <!--latex数学显示公式-->
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
+<!-- mathjax config similar to math.stackexchange --> 
+<script type="text/x-mathjax-config"> 
+MathJax.Hub.Config({ 
+    jax: ["input/TeX", "output/HTML-CSS"], 
+    tex2jax: { 
+        inlineMath: [ ['$', '$'] ], 
+        displayMath: [ ['$$', '$$']], 
+        processEscapes: true, 
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
+    messageStyle: "none", 
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
+}); 
+</script>
+
+
 </head>
 
 <body>
@@ -65,8 +71,7 @@
 <h1 id="舒尔补">舒尔补</h1>
 <p>给定任意的矩阵块M，如下所示：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\mathbf{M}=\left[\begin{array}{ll}{\mathbf{A}} & {\mathbf{B}} \\ {\mathbf{C}} & {\mathbf{D}}\end{array}\right] %]]></script>
+<p>[\mathbf{M}=\left[\begin{array}{ll}{\mathbf{A}} &amp; {\mathbf{B}} \ {\mathbf{C}} &amp; {\mathbf{D}}\end{array}\right]]</p>
 
 <ul>
   <li>如果，矩阵块D是可逆的，则$\mathbf{A}-\mathbf{B D}^{-1} \mathbf{C}$称之为D关于M的舒尔补。</li>
@@ -76,47 +81,52 @@
 <h2 id="舒尔补的来由">舒尔补的来由</h2>
 <p>当我们想要将矩阵M变成上三角或者下三角过程中，都会遇到舒尔补，如下：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\left[\begin{array}{cc}{\mathbf{I}} & {\mathbf{0}} \\ {-\mathbf{C A}^{-1}} & {\mathbf{I}}\end{array}\right]\left[\begin{array}{ll}{\mathbf{A}} & {\mathbf{B}} \\ {\mathbf{C}} & {\mathbf{D}}\end{array}\right]=\left[\begin{array}{cc}{\mathbf{A}} & {\mathbf{B}} \\ {\mathbf{0}} & {\Delta_{\mathbf{A}}}\end{array}\right] %]]></script>
+<p>[\left[\begin{array}{cc}{\mathbf{I}} &amp; {\mathbf{0}} \ {-\mathbf{C A}^{-1}} &amp; {\mathbf{I}}\end{array}\right]\left[\begin{array}{ll}{\mathbf{A}} &amp; {\mathbf{B}} \ {\mathbf{C}} &amp; {\mathbf{D}}\end{array}\right]=\left[\begin{array}{cc}{\mathbf{A}} &amp; {\mathbf{B}} \ {\mathbf{0}} &amp; {\Delta_{\mathbf{A}}}\end{array}\right]]</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\left[\begin{array}{cc}{\mathbf{A}} & {\mathbf{B}} \\ {\mathbf{C}} & {\mathbf{D}}\end{array}\right]\left[\begin{array}{cc}{\mathbf{I}} & {-\mathbf{A}^{-1} \mathbf{B}} \\ {\mathbf{0}} & {\mathbf{I}}\end{array}\right]=\left[\begin{array}{cc}{\mathbf{A}} & {0} \\ {\mathbf{C}} & {\Delta_{\mathbf{A}}}\end{array}\right] %]]></script>
+<p>[\left[\begin{array}{cc}{\mathbf{A}} &amp; {\mathbf{B}} \ {\mathbf{C}} &amp; {\mathbf{D}}\end{array}\right]\left[\begin{array}{cc}{\mathbf{I}} &amp; {-\mathbf{A}^{-1} \mathbf{B}} \ {\mathbf{0}} &amp; {\mathbf{I}}\end{array}\right]=\left[\begin{array}{cc}{\mathbf{A}} &amp; {0} \ {\mathbf{C}} &amp; {\Delta_{\mathbf{A}}}\end{array}\right]]</p>
 
 <p>其中，不论是上三角还是下三角，都是$\Delta_{\mathrm{A}}=\mathbf{D}-\mathbf{C A}^{-1} \mathbf{B}$。联合起来，可以<strong>将M便形成对角形</strong>：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\left[\begin{array}{cc}{\mathbf{I}} & {\mathbf{0}} \\ {-\mathbf{C A}^{-1}} & {\mathbf{I}}\end{array}\right]\left[\begin{array}{ll}{\mathbf{A}} & {\mathbf{B}} \\ {\mathbf{C}} & {\mathbf{D}}\end{array}\right]\left[\begin{array}{rr}{\mathbf{I}} & {-\mathbf{A}^{-1} \mathbf{B}} \\ {\mathbf{0}} & {\mathbf{I}}\end{array}\right]=\left[\begin{array}{cc}{\mathbf{A}} & {\mathbf{0}} \\ {\mathbf{0}} & {\Delta_{\mathbf{A}}}\end{array}\right] %]]></script>
+<p>[\left[\begin{array}{cc}{\mathbf{I}} &amp; {\mathbf{0}} \ {-\mathbf{C A}^{-1}} &amp; {\mathbf{I}}\end{array}\right]\left[\begin{array}{ll}{\mathbf{A}} &amp; {\mathbf{B}} \ {\mathbf{C}} &amp; {\mathbf{D}}\end{array}\right]\left[\begin{array}{rr}{\mathbf{I}} &amp; {-\mathbf{A}^{-1} \mathbf{B}} \ {\mathbf{0}} &amp; {\mathbf{I}}\end{array}\right]=\left[\begin{array}{cc}{\mathbf{A}} &amp; {\mathbf{0}} \ {\mathbf{0}} &amp; {\Delta_{\mathbf{A}}}\end{array}\right]]</p>
 
 <p>反过来，我们又能<strong>从对角形恢复成矩阵M</strong>:</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\left[\begin{array}{cc}{\mathbf{I}} & {\mathbf{0}} \\ {\mathbf{C A}^{-1}} & {\mathbf{I}}\end{array}\right]\left[\begin{array}{cc}{\mathbf{A}} & {\mathbf{0}} \\ {\mathbf{0}} & {\Delta_{\mathbf{A}}}\end{array}\right]\left[\begin{array}{cc}{\mathbf{I}} & {\mathbf{A}^{-1} \mathbf{B}} \\ {\mathbf{0}} & {\mathbf{I}}\end{array}\right]=\left[\begin{array}{cc}{\mathbf{A}} & {\mathbf{B}} \\ {\mathbf{C}} & {\mathbf{D}}\end{array}\right] %]]></script>
+<p>[\left[\begin{array}{cc}{\mathbf{I}} &amp; {\mathbf{0}} \ {\mathbf{C A}^{-1}} &amp; {\mathbf{I}}\end{array}\right]\left[\begin{array}{cc}{\mathbf{A}} &amp; {\mathbf{0}} \ {\mathbf{0}} &amp; {\Delta_{\mathbf{A}}}\end{array}\right]\left[\begin{array}{cc}{\mathbf{I}} &amp; {\mathbf{A}^{-1} \mathbf{B}} \ {\mathbf{0}} &amp; {\mathbf{I}}\end{array}\right]=\left[\begin{array}{cc}{\mathbf{A}} &amp; {\mathbf{B}} \ {\mathbf{C}} &amp; {\mathbf{D}}\end{array}\right]]</p>
 
 <p>此处注意有这么个性质：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\left[\begin{array}{cc}{\mathbf{I}} & {-\mathbf{A}^{-1} \mathbf{B}} \\ {\mathbf{0}} & {\mathbf{I}}\end{array}\right]\left[\begin{array}{cc}{\mathbf{I}} & {\mathbf{A}^{-1} \mathbf{B}} \\ {\mathbf{0}} & {\mathbf{I}}\end{array}\right]=\mathbf{I} %]]></script>
+<p>[\left[\begin{array}{cc}{\mathbf{I}} &amp; {-\mathbf{A}^{-1} \mathbf{B}} \ {\mathbf{0}} &amp; {\mathbf{I}}\end{array}\right]\left[\begin{array}{cc}{\mathbf{I}} &amp; {\mathbf{A}^{-1} \mathbf{B}} \ {\mathbf{0}} &amp; {\mathbf{I}}\end{array}\right]=\mathbf{I}]</p>
 
 <p>所以还可以这样<strong>计算M的的逆</strong>：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\left[\begin{array}{cc}{\mathbf{A}} & {\mathbf{B}} \\ {\mathbf{C}} & {\mathbf{D}}\end{array}\right]^{-1}=\left[\begin{array}{cc}{\mathbf{I}} & {-\mathbf{A}^{-1} \mathbf{B}} \\ {\mathbf{0}} & {\mathbf{I}}\end{array}\right]\left[\begin{array}{cc}{\mathbf{A}^{-1}} & {\mathbf{0}} \\ {\mathbf{0}} & {\Delta_{\mathbf{A}}^{-1}}\end{array}\right]\left[\begin{array}{cc}{\mathbf{I}} & {\mathbf{0}} \\ {-\mathbf{C A}^{-1}} & {\mathbf{I}}\end{array}\right] %]]></script>
+<p>[\left[\begin{array}{cc}{\mathbf{A}} &amp; {\mathbf{B}} \ {\mathbf{C}} &amp; {\mathbf{D}}\end{array}\right]^{-1}=\left[\begin{array}{cc}{\mathbf{I}} &amp; {-\mathbf{A}^{-1} \mathbf{B}} \ {\mathbf{0}} &amp; {\mathbf{I}}\end{array}\right]\left[\begin{array}{cc}{\mathbf{A}^{-1}} &amp; {\mathbf{0}} \ {\mathbf{0}} &amp; {\Delta_{\mathbf{A}}^{-1}}\end{array}\right]\left[\begin{array}{cc}{\mathbf{I}} &amp; {\mathbf{0}} \ {-\mathbf{C A}^{-1}} &amp; {\mathbf{I}}\end{array}\right]]</p>
 
 <h1 id="将舒尔补应用于多元高斯分布">将舒尔补应用于多元高斯分布</h1>
 <p>假设多元变量$x$服从高斯分布，且由两部分组成：$\mathbf{x}=\left[\begin{array}{l}{a} \ {b}\end{array}\right]$，变量之间构成的协方差矩阵为：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\mathbf{K}=\left[\begin{array}{cc}{A} & {C^{\top}} \\ {C} & {D}\end{array}\right] %]]></script>
+<p>[\mathbf{K}=\left[\begin{array}{cc}{A} &amp; {C^{\top}} \ {C} &amp; {D}\end{array}\right]]</p>
 
 <p>其中$A=\operatorname{cov}(a, a), D=\operatorname{cov}(b, b), C=\operatorname{cov}(a, b)$。由此变量$x$的概率分布为：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-P(a, b)=P(a) P(b | a) \propto \exp \left(-\frac{1}{2}\left[\begin{array}{l}{a} \\ {b}\end{array}\right]^{\top}\left[\begin{array}{cc}{A} & {C^{\top}} \\ {C} & {D}\end{array}\right]^{-1}\left[\begin{array}{l}{a} \\ {b}\end{array}\right]\right) %]]></script>
+<table>
+  <tbody>
+    <tr>
+      <td>[P(a, b)=P(a) P(b</td>
+      <td>a) \propto \exp \left(-\frac{1}{2}\left[\begin{array}{l}{a} \ {b}\end{array}\right]^{\top}\left[\begin{array}{cc}{A} &amp; {C^{\top}} \ {C} &amp; {D}\end{array}\right]^{-1}\left[\begin{array}{l}{a} \ {b}\end{array}\right]\right)]</td>
+    </tr>
+  </tbody>
+</table>
 
 <p>利用上面介绍的舒尔补的性质，我们可以对高斯分布进行分解，得到如下：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{array}{l}{P(a, b)} \\ {\propto \exp \left(-\frac{1}{2}\left[\begin{array}{l}{a} \\ {b}\end{array}\right]^{\top}\left[\begin{array}{cc}{A} & {C^{\top}} \\ {C} & {D}\end{array}\right]^{-1}\left[\begin{array}{l}{a} \\ {b}\end{array}\right]\right)} \\ {\propto \exp \left(-\frac{1}{2}\left[\begin{array}{c}{a} \\ {b}\end{array}\right]^{\top}\left[\begin{array}{cc}{I} & {-A^{-1} C^{\top}} \\ {0} & {I}\end{array}\right]\left[\begin{array}{cc}{A^{-1}} & {0} \\ {0} & {\Delta_{\mathrm{A}}^{-1}}\end{array}\right]\left[\begin{array}{cc}{I} & {0} \\ {-C A^{-1}} & {I}\end{array}\right]\left[\begin{array}{c}{a} \\ {b}\end{array}\right]\right)} \\ {\propto \exp \left(-\frac{1}{2}\left[a^{\top} \quad\left(b-C A^{-1} a\right)^{\top}\right]\left[\begin{array}{cc}{A^{-1}} & {0} \\ {0} & {\Delta_{\mathrm{A}}^{-1}}\end{array}\right]\left[\begin{array}{c}{a} \\ {b-C A^{-1} a}\end{array}\right]\right)} \\ {\propto \exp \left(-\frac{1}{2}\left(a^{\top} A^{-1} a\right)+\left(b-C A^{-1} a\right)^{\top} \Delta_{\mathrm{A}}^{-1}\left(b-C A^{-1} a\right)\right)} \\ {\propto \underbrace{\exp \left(-\frac{1}{2} a^{\top} A^{-1} a\right)}_{p(a)} \underbrace{\exp \left(-\frac{1}{2}\left(b-C A^{-1} a\right)^{\top} \Delta_{\mathrm{A}}^{-1}\left(b-C A^{-1} a\right)\right)}_{p(b | a)}} \end{array} %]]></script>
+<table>
+  <tbody>
+    <tr>
+      <td>[\begin{array}{l}{P(a, b)} \ {\propto \exp \left(-\frac{1}{2}\left[\begin{array}{l}{a} \ {b}\end{array}\right]^{\top}\left[\begin{array}{cc}{A} &amp; {C^{\top}} \ {C} &amp; {D}\end{array}\right]^{-1}\left[\begin{array}{l}{a} \ {b}\end{array}\right]\right)} \ {\propto \exp \left(-\frac{1}{2}\left[\begin{array}{c}{a} \ {b}\end{array}\right]^{\top}\left[\begin{array}{cc}{I} &amp; {-A^{-1} C^{\top}} \ {0} &amp; {I}\end{array}\right]\left[\begin{array}{cc}{A^{-1}} &amp; {0} \ {0} &amp; {\Delta_{\mathrm{A}}^{-1}}\end{array}\right]\left[\begin{array}{cc}{I} &amp; {0} \ {-C A^{-1}} &amp; {I}\end{array}\right]\left[\begin{array}{c}{a} \ {b}\end{array}\right]\right)} \ {\propto \exp \left(-\frac{1}{2}\left[a^{\top} \quad\left(b-C A^{-1} a\right)^{\top}\right]\left[\begin{array}{cc}{A^{-1}} &amp; {0} \ {0} &amp; {\Delta_{\mathrm{A}}^{-1}}\end{array}\right]\left[\begin{array}{c}{a} \ {b-C A^{-1} a}\end{array}\right]\right)} \ {\propto \exp \left(-\frac{1}{2}\left(a^{\top} A^{-1} a\right)+\left(b-C A^{-1} a\right)^{\top} \Delta_{\mathrm{A}}^{-1}\left(b-C A^{-1} a\right)\right)} \ {\propto \underbrace{\exp \left(-\frac{1}{2} a^{\top} A^{-1} a\right)}<em>{p(a)} \underbrace{\exp \left(-\frac{1}{2}\left(b-C A^{-1} a\right)^{\top} \Delta</em>{\mathrm{A}}^{-1}\left(b-C A^{-1} a\right)\right)}_{p(b</td>
+      <td>a)}} \end{array}]</td>
+    </tr>
+  </tbody>
+</table>
 
 <table>
   <tbody>
@@ -130,8 +140,7 @@ P(a, b)=P(a) P(b | a) \propto \exp \left(-\frac{1}{2}\left[\begin{array}{l}{a} \
 <h2 id="原先分布的协方差矩阵与信息矩阵">原先分布的协方差矩阵与信息矩阵</h2>
 <p>我们已知的协方差矩阵的逆就是信息矩阵，它们是如下的关系：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\left[\begin{array}{cc}{A} & {C^{\top}} \\ {C} & {D}\end{array}\right]^{-1}=\left[\begin{array}{cc}{A^{-1}+A^{-1} C^{\top} \Delta_{\mathrm{A}}^{-1} C A^{-1}} & {-A^{-1} C^{\top} \Delta_{\mathrm{A}}^{-1}} \\ {-\Delta_{\mathrm{A}}^{-1} C A^{-1}} & {\Delta_{\mathrm{A}}^{-1}}\end{array}\right] \triangleq\left[\begin{array}{cc}{\Lambda_{a a}} & {\Lambda_{a b}} \\ {\Lambda_{b a}} & {\Lambda_{b b}}\end{array}\right] %]]></script>
+<p>[\left[\begin{array}{cc}{A} &amp; {C^{\top}} \ {C} &amp; {D}\end{array}\right]^{-1}=\left[\begin{array}{cc}{A^{-1}+A^{-1} C^{\top} \Delta_{\mathrm{A}}^{-1} C A^{-1}} &amp; {-A^{-1} C^{\top} \Delta_{\mathrm{A}}^{-1}} \ {-\Delta_{\mathrm{A}}^{-1} C A^{-1}} &amp; {\Delta_{\mathrm{A}}^{-1}}\end{array}\right] \triangleq\left[\begin{array}{cc}{\Lambda_{a a}} &amp; {\Lambda_{a b}} \ {\Lambda_{b a}} &amp; {\Lambda_{b b}}\end{array}\right]]</p>
 
 <h2 id="分离出来的边界概率分布">分离出来的边界概率分布</h2>
 
@@ -141,11 +150,11 @@ P(a, b)=P(a) P(b | a) \propto \exp \left(-\frac{1}{2}\left[\begin{array}{l}{a} \
 
 <p>分离出来的边界概率分布的协方差矩阵就是从联合分布K中取对应的矩阵块A就行了。</p>
 
-<script type="math/tex; mode=display">\begin{array}{l}{P(a)=\int_{b} P(a, b)} \\ {P(a) \propto \exp \left(-\frac{1}{2} a^{\top} A^{-1} a\right) \sim \mathcal{N}(0, A)}\end{array}</script>
+<p>[\begin{array}{l}{P(a)=\int_{b} P(a, b)} \ {P(a) \propto \exp \left(-\frac{1}{2} a^{\top} A^{-1} a\right) \sim \mathcal{N}(0, A)}\end{array}]</p>
 
 <p>分离出来的边界概率分布的信息矩阵是：</p>
 
-<script type="math/tex; mode=display">A^{-1}=\Lambda_{a a}-\Lambda_{a b} \Lambda_{b b}^{-1} \Lambda_{b a}</script>
+<p>[A^{-1}=\Lambda_{a a}-\Lambda_{a b} \Lambda_{b b}^{-1} \Lambda_{b a}]</p>
 
 <blockquote>
   <p>此处我们会发现，分离出来的边界分布变量之间的协方差是不变的，但是信息矩阵改变了。这是因为信息矩阵中的相关计算是遵循链式法则，在分离出来的变量固定住以后，原本不想关的变量可以变成相关的。</p>
@@ -155,11 +164,18 @@ P(a, b)=P(a) P(b | a) \propto \exp \left(-\frac{1}{2}\left[\begin{array}{l}{a} \
 
 <p>分离出来a后的条件概率分布的协方差矩阵变为a对应的舒尔补，均值也变了。</p>
 
-<script type="math/tex; mode=display">P(b | a) \propto \exp \left(-\frac{1}{2}\left(b-C A^{-1} a\right)^{\top} \Delta_{\mathrm{A}}^{-1}\left(b-C A^{-1} a\right)\right)</script>
+<table>
+  <tbody>
+    <tr>
+      <td>[P(b</td>
+      <td>a) \propto \exp \left(-\frac{1}{2}\left(b-C A^{-1} a\right)^{\top} \Delta_{\mathrm{A}}^{-1}\left(b-C A^{-1} a\right)\right)]</td>
+    </tr>
+  </tbody>
+</table>
 
 <p>分离出来的条件概率分布的信息矩阵是：</p>
 
-<script type="math/tex; mode=display">\Delta_{A}^{-1}=\Lambda_{b b}</script>
+<p>[\Delta_{A}^{-1}=\Lambda_{b b}]</p>
 
 <h2 id="总结">总结</h2>
 <blockquote>
@@ -170,8 +186,7 @@ P(a, b)=P(a) P(b | a) \propto \exp \left(-\frac{1}{2}\left[\begin{array}{l}{a} \
 
 <p>对于原分布：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-P(\boldsymbol{a}, \boldsymbol{b})=\mathcal{N}\left(\left[\begin{array}{c}{\boldsymbol{\mu}_{a}} \\ {\boldsymbol{\mu}_{b}}\end{array}\right],\left[\begin{array}{cc}{\boldsymbol{\Sigma}_{a a}} & {\boldsymbol{\Sigma}_{a b}} \\ {\boldsymbol{\Sigma}_{b a}} & {\boldsymbol{\Sigma}_{b b}}\end{array}\right]\right)=\mathcal{N}^{-1}\left(\left[\begin{array}{c}{\boldsymbol{\eta}_{a}} \\ {\boldsymbol{\eta}_{b}}\end{array}\right],\left[\begin{array}{cc}{\boldsymbol{\Lambda}_{a a}} & {\mathbf{\Lambda}_{a a}} \\ {\boldsymbol{\Lambda}_{b a}} & {\boldsymbol{\Lambda}_{b b}}\end{array}\right]\right) %]]></script>
+<p>[P(\boldsymbol{a}, \boldsymbol{b})=\mathcal{N}\left(\left[\begin{array}{c}{\boldsymbol{\mu}<em>{a}} \ {\boldsymbol{\mu}</em>{b}}\end{array}\right],\left[\begin{array}{cc}{\boldsymbol{\Sigma}<em>{a a}} &amp; {\boldsymbol{\Sigma}</em>{a b}} \ {\boldsymbol{\Sigma}<em>{b a}} &amp; {\boldsymbol{\Sigma}</em>{b b}}\end{array}\right]\right)=\mathcal{N}^{-1}\left(\left[\begin{array}{c}{\boldsymbol{\eta}<em>{a}} \ {\boldsymbol{\eta}</em>{b}}\end{array}\right],\left[\begin{array}{cc}{\boldsymbol{\Lambda}<em>{a a}} &amp; {\mathbf{\Lambda}</em>{a a}} \ {\boldsymbol{\Lambda}<em>{b a}} &amp; {\boldsymbol{\Lambda}</em>{b b}}\end{array}\right]\right)]</p>
 
 <p>两种marg变量的方式后剩下的可以用表格总结如下：</p>
 <div style="text-align: center">

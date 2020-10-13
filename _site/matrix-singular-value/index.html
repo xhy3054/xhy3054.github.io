@@ -22,17 +22,23 @@
 	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
 	<!-- Styles -->
 	<link rel="stylesheet" href="/assets/css/main.css">
-    <!--将该代码放入博客模板的head中即可-->
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        processEscapes: true
-        }
-    });
-    </script>
-    <!--latex数学显示公式-->
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
+<!-- mathjax config similar to math.stackexchange --> 
+<script type="text/x-mathjax-config"> 
+MathJax.Hub.Config({ 
+    jax: ["input/TeX", "output/HTML-CSS"], 
+    tex2jax: { 
+        inlineMath: [ ['$', '$'] ], 
+        displayMath: [ ['$$', '$$']], 
+        processEscapes: true, 
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
+    messageStyle: "none", 
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
+}); 
+</script>
+
+
 </head>
 
 <body>
@@ -67,7 +73,7 @@
 <h1 id="简单回顾特征值分解">简单回顾特征值分解</h1>
 <p>如果一个<code class="highlighter-rouge">n*n</code>矩阵A有n个特征值，并且这n个特征值所对应的n个特征向量线性无关，则矩阵A可以使用下式进行特征值分解：</p>
 
-<script type="math/tex; mode=display">A=W\Sigma W^{-1}</script>
+<p>[A=W\Sigma W^{-1}]</p>
 
 <p>其中，W是n个特征向量所张成的<code class="highlighter-rouge">n*n</code>维矩阵，而$Sigma$是一个对角矩阵，对角线上是矩阵A的n个特征值。</p>
 
@@ -78,7 +84,7 @@
 <h1 id="奇异值分解">奇异值分解</h1>
 <p>奇异值分解并没有特征值分解那么苛刻的要求，对于任意一个<code class="highlighter-rouge">m*n</code>的矩阵A，可以对其进行如下奇异值分解：</p>
 
-<script type="math/tex; mode=display">A = U\Sigma V^T</script>
+<p>[A = U\Sigma V^T]</p>
 
 <p>其中，</p>
 <ul>
@@ -100,14 +106,14 @@
   </li>
   <li>
     <p>最后，利用下式求得每个<strong>奇异值</strong>
-<script type="math/tex">A=U\Sigma V^T \Rightarrow AV=U\Sigma V^TV \Rightarrow AV=U\Sigma \Rightarrow  Av_i = \sigma_i u_i  \Rightarrow  \sigma_i =  Av_i / u_i</script></p>
+\(A=U\Sigma V^T \Rightarrow AV=U\Sigma V^TV \Rightarrow AV=U\Sigma \Rightarrow  Av_i = \sigma_i u_i  \Rightarrow  \sigma_i =  Av_i / u_i\)</p>
   </li>
 </ol>
 
 <h3 id="上述奇异值分解步骤的依据">上述奇异值分解步骤的依据</h3>
 <p>在上面，我们说矩阵$A^TA$的特征向量组成的就是SVD的V矩阵，矩阵$AA^T$的特征向量组成的就是SVD的U矩阵，可以通过如下推导证明(以V矩阵为例)：</p>
 
-<script type="math/tex; mode=display">A=U\Sigma V^T \Rightarrow A^T=V\Sigma^T U^T \Rightarrow A^TA = V\Sigma^T U^TU\Sigma V^T = V\Sigma^2V^T</script>
+<p>[A=U\Sigma V^T \Rightarrow A^T=V\Sigma^T U^T \Rightarrow A^TA = V\Sigma^T U^TU\Sigma V^T = V\Sigma^2V^T]</p>
 
 <blockquote>
   <p>上式中我们还发现矩阵$A^TA$特征值矩阵等于A奇异值矩阵的平方，即$\sigma_i = \sqrt{\lambda_i}$，所以其实在第三步中我们求奇异值的方式其实也可以通过求出矩阵$A^TA$的特征值取平方根来求奇异值。</p>
@@ -118,54 +124,48 @@
   <li>对于一个矩阵A:</li>
 </ul>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\mathbf{A} = \left( \begin{array}{ccc} 0& 1\\  1& 1\\   1& 0 \end{array} \right) %]]></script>
+<p>[\mathbf{A} = \left( \begin{array}{ccc} 0&amp; 1\  1&amp; 1\   1&amp; 0 \end{array} \right)]</p>
 
 <ul>
   <li>首先计算出$A^TA$和$AA^T$</li>
 </ul>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\mathbf{A^TA} = \left( \begin{array}{ccc} 0& 1 &1\\ 1&1& 0 \end{array} \right) \left( \begin{array}{ccc} 0& 1\\  1& 1\\   1& 0 \end{array} \right) = \left( \begin{array}{ccc} 2& 1 \\ 1& 2 \end{array} \right) %]]></script>
+<p>[\mathbf{A^TA} = \left( \begin{array}{ccc} 0&amp; 1 &amp;1\ 1&amp;1&amp; 0 \end{array} \right) \left( \begin{array}{ccc} 0&amp; 1\  1&amp; 1\   1&amp; 0 \end{array} \right) = \left( \begin{array}{ccc} 2&amp; 1 \ 1&amp; 2 \end{array} \right)]</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\mathbf{AA^T} =  \left( \begin{array}{ccc} 0& 1\\  1& 1\\   1& 0 \end{array} \right) \left( \begin{array}{ccc} 0& 1 &1\\ 1&1& 0 \end{array} \right) = \left( \begin{array}{ccc} 1& 1 & 0\\ 1& 2 & 1\\ 0& 1& 1 \end{array} \right) %]]></script>
+<p>[\mathbf{AA^T} =  \left( \begin{array}{ccc} 0&amp; 1\  1&amp; 1\   1&amp; 0 \end{array} \right) \left( \begin{array}{ccc} 0&amp; 1 &amp;1\ 1&amp;1&amp; 0 \end{array} \right) = \left( \begin{array}{ccc} 1&amp; 1 &amp; 0\ 1&amp; 2 &amp; 1\ 0&amp; 1&amp; 1 \end{array} \right)]</p>
 
 <ul>
   <li>求出$A^TA$的特征值与特征向量</li>
 </ul>
 
-<script type="math/tex; mode=display">\lambda_1= 3; v_1 = \left( \begin{array}{ccc} 1/\sqrt{2} \\ 1/\sqrt{2} \end{array} \right); \lambda_2= 1; v_2 = \left( \begin{array}{ccc} -1/\sqrt{2} \\ 1/\sqrt{2} \end{array} \right)</script>
+<p>[\lambda_1= 3; v_1 = \left( \begin{array}{ccc} 1/\sqrt{2} \ 1/\sqrt{2} \end{array} \right); \lambda_2= 1; v_2 = \left( \begin{array}{ccc} -1/\sqrt{2} \ 1/\sqrt{2} \end{array} \right)]</p>
 
 <ul>
   <li>求出$AA^T$的特征值与特征向量</li>
 </ul>
 
-<script type="math/tex; mode=display">\lambda_1= 3; u_1 = \left( \begin{array}{ccc} 1/\sqrt{6} \\ 2/\sqrt{6} \\ 1/\sqrt{6} \end{array} \right); \lambda_2= 1; u_2 = \left( \begin{array}{ccc} 1/\sqrt{2} \\ 0 \\ -1/\sqrt{2} \end{array} \right);  \lambda_3= 0; u_3 = \left( \begin{array}{ccc} 1/\sqrt{3} \\ -1/\sqrt{3} \\ 1/\sqrt{3} \end{array} \right)</script>
+<p>[\lambda_1= 3; u_1 = \left( \begin{array}{ccc} 1/\sqrt{6} \ 2/\sqrt{6} \ 1/\sqrt{6} \end{array} \right); \lambda_2= 1; u_2 = \left( \begin{array}{ccc} 1/\sqrt{2} \ 0 \ -1/\sqrt{2} \end{array} \right);  \lambda_3= 0; u_3 = \left( \begin{array}{ccc} 1/\sqrt{3} \ -1/\sqrt{3} \ 1/\sqrt{3} \end{array} \right)]</p>
 
 <ul>
   <li>利用$ Av_i = \sigma_i u_i, i=1,2 $求得奇异值，我们会发现求得的结果与$ \sigma_i = \sqrt{\lambda_i} $的结果相同;</li>
 </ul>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\left( \begin{array}{ccc} 0& 1\\  1& 1\\   1& 0 \end{array} \right) \left( \begin{array}{ccc} 1/\sqrt{2} \\ 1/\sqrt{2} \end{array} \right) = \sigma_1 \left( \begin{array}{ccc} 1/\sqrt{6} \\ 2/\sqrt{6} \\ 1/\sqrt{6} \end{array} \right) \Rightarrow  \sigma_1=\sqrt{3} %]]></script>
+<p>[\left( \begin{array}{ccc} 0&amp; 1\  1&amp; 1\   1&amp; 0 \end{array} \right) \left( \begin{array}{ccc} 1/\sqrt{2} \ 1/\sqrt{2} \end{array} \right) = \sigma_1 \left( \begin{array}{ccc} 1/\sqrt{6} \ 2/\sqrt{6} \ 1/\sqrt{6} \end{array} \right) \Rightarrow  \sigma_1=\sqrt{3}]</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\left( \begin{array}{ccc} 0& 1\\  1& 1\\   1& 0 \end{array} \right) \left( \begin{array}{ccc} -1/\sqrt{2} \\ 1/\sqrt{2} \end{array} \right) = \sigma_2 \left( \begin{array}{ccc} 1/\sqrt{2} \\ 0 \\ -1/\sqrt{2} \end{array} \right) \Rightarrow  \sigma_2=1 %]]></script>
+<p>[\left( \begin{array}{ccc} 0&amp; 1\  1&amp; 1\   1&amp; 0 \end{array} \right) \left( \begin{array}{ccc} -1/\sqrt{2} \ 1/\sqrt{2} \end{array} \right) = \sigma_2 \left( \begin{array}{ccc} 1/\sqrt{2} \ 0 \ -1/\sqrt{2} \end{array} \right) \Rightarrow  \sigma_2=1]</p>
 
 <ul>
   <li>最终得到A的奇异值分解为</li>
 </ul>
 
-<script type="math/tex; mode=display">% <![CDATA[
-A=U\Sigma V^T = \left( \begin{array}{ccc} 1/\sqrt{6} & 1/\sqrt{2} & 1/\sqrt{3} \\ 2/\sqrt{6} & 0 & -1/\sqrt{3}\\ 1/\sqrt{6} & -1/\sqrt{2} & 1/\sqrt{3} \end{array} \right) \left( \begin{array}{ccc} \sqrt{3} & 0 \\  0 & 1\\ 0 & 0 \end{array} \right) \left( \begin{array}{ccc} 1/\sqrt{2}  & 1/\sqrt{2}  \\ -1/\sqrt{2}  & 1/\sqrt{2}  \end{array} \right) %]]></script>
+<p>[A=U\Sigma V^T = \left( \begin{array}{ccc} 1/\sqrt{6} &amp; 1/\sqrt{2} &amp; 1/\sqrt{3} \ 2/\sqrt{6} &amp; 0 &amp; -1/\sqrt{3}\ 1/\sqrt{6} &amp; -1/\sqrt{2} &amp; 1/\sqrt{3} \end{array} \right) \left( \begin{array}{ccc} \sqrt{3} &amp; 0 \  0 &amp; 1\ 0 &amp; 0 \end{array} \right) \left( \begin{array}{ccc} 1/\sqrt{2}  &amp; 1/\sqrt{2}  \ -1/\sqrt{2}  &amp; 1/\sqrt{2}  \end{array} \right)]</p>
 
 <h1 id="奇异值分解用于压缩">奇异值分解用于压缩</h1>
 <ul>
   <li>首先，对于奇异值分解$ A = U\Sigma V^T $，我们也可以写成如下形式，我们假设奇异值大小顺序排列，即$\sigma_1 \geq \sigma_2 \geq…\geq \sigma_n&gt;0$，并且其中每一项的$uv^T$都是秩为1的(m*n)矩阵。</li>
 </ul>
 
-<script type="math/tex; mode=display">A = \sigma_1u_1v_1^T + \sigma_2u_2v_2^T + ... + \sigma_nu_nv_n^T</script>
+<p>[A = \sigma_1u_1v_1^T + \sigma_2u_2v_2^T + … + \sigma_nu_nv_n^T]</p>
 
 <ul>
   <li>对于如下一幅图像，像素（矩阵尺度）为<code class="highlighter-rouge">450*333</code></li>

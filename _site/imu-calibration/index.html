@@ -22,17 +22,23 @@
 	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
 	<!-- Styles -->
 	<link rel="stylesheet" href="/assets/css/main.css">
-    <!--将该代码放入博客模板的head中即可-->
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        processEscapes: true
-        }
-    });
-    </script>
-    <!--latex数学显示公式-->
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
+<!-- mathjax config similar to math.stackexchange --> 
+<script type="text/x-mathjax-config"> 
+MathJax.Hub.Config({ 
+    jax: ["input/TeX", "output/HTML-CSS"], 
+    tex2jax: { 
+        inlineMath: [ ['$', '$'] ], 
+        displayMath: [ ['$$', '$$']], 
+        processEscapes: true, 
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
+    messageStyle: "none", 
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
+}); 
+</script>
+
+
 </head>
 
 <body>
@@ -68,17 +74,17 @@
 </div>
 <p>在这个坐标系中，重力加速度为</p>
 
-<p><script type="math/tex">g^G = (0,0,-9.81)^T</script>。</p>
+<p>\(g^G = (0,0,-9.81)^T\)。</p>
 
 <p>此时，<strong>假设IMU坐标系就是ENU坐标系</strong>，则$R_{IB}=I$，静止时有（其中$a_{m}$是测量值）：</p>
 
-<script type="math/tex; mode=display">a = 0</script>
+<p>[a = 0]</p>
 
-<script type="math/tex; mode=display">a_{m} = -g</script>
+<p>[a_{m} = -g]</p>
 
 <p>所以，不静止时：（此处对a和g符号不做区分标记，因为假设body系与Global系一样）</p>
 
-<script type="math/tex; mode=display">a_{m} = a - g</script>
+<p>[a_{m} = a - g]</p>
 
 <blockquote>
   <p>由上可知，其实在物体做自由落体时imu测量的加速度才是0，静止时反而是$-g$，这个是由加速度计的测量原理决定的。</p>
@@ -86,7 +92,7 @@
 
 <p>上面讲的是在IMU坐标系也是ENU坐标系时的情况（此时位置无关，只关乎姿态）。大多数实际应用中，<strong>IMU坐标系（Body）一般是与ENU坐标系有一个姿态的变化</strong>的。此时，得到的理论测量值为：</p>
 
-<script type="math/tex; mode=display">a_{m}^{B} = R_{BG} (a^{G} - g^{G})</script>
+<p>[a_{m}^{B} = R_{BG} (a^{G} - g^{G})]</p>
 
 <blockquote>
   <p>此处$R_{BG}$是将Global坐标转换到Body坐标姿态的旋转矩阵。此处可以看出，global坐标系的位置与body坐标系的位置与在两个系下测量的加速度大小无关。但是，与姿态有关。</p>
@@ -95,7 +101,7 @@
 <h2 id="陀螺仪">陀螺仪</h2>
 <p>相比较于加速度计，陀螺仪相对简单。如果不考虑误差，则</p>
 
-<script type="math/tex; mode=display">w_{m}^{B} = w^{B}</script>
+<p>[w_{m}^{B} = w^{B}]</p>
 
 <blockquote>
   <p>我们会发现此处并没有向加速度计一样，将global坐标系下的角速度转换到陀螺仪的测量值，而是直接使用body系下的角速度。这是因为旋转叠加时（比如四元数和旋转矩阵表示姿态时），全局姿态是直接乘以body系下的更新量的就可以得到新的全局姿态的。</p>
@@ -111,32 +117,32 @@
 <h3 id="欧拉法">欧拉法</h3>
 <p>欧拉法，是直接使用$k$时刻的测量值$a,w$来积分。</p>
 
-<script type="math/tex; mode=display">\mathbf{p}_{w b_{k+1}}=\mathbf{p}_{w b_{k}}+\mathbf{v}_{k}^{w} \Delta t+\frac{1}{2} \mathbf{a} \Delta t^{2}</script>
+<p>[\mathbf{p}<em>{w b</em>{k+1}}=\mathbf{p}<em>{w b</em>{k}}+\mathbf{v}_{k}^{w} \Delta t+\frac{1}{2} \mathbf{a} \Delta t^{2}]</p>
 
-<script type="math/tex; mode=display">\mathbf{v}_{k+1}^{w}=\mathbf{v}_{k}^{w}+\mathbf{a} \Delta t</script>
+<p>[\mathbf{v}<em>{k+1}^{w}=\mathbf{v}</em>{k}^{w}+\mathbf{a} \Delta t]</p>
 
-<script type="math/tex; mode=display">\mathbf{q}_{w b_{k+1}}=\mathbf{q}_{w b_{k}} \otimes\left[\begin{array}{c}{1} \\ {\frac{1}{2} \omega \delta t}\end{array}\right]</script>
+<p>[\mathbf{q}<em>{w b</em>{k+1}}=\mathbf{q}<em>{w b</em>{k}} \otimes\left[\begin{array}{c}{1} \ {\frac{1}{2} \omega \delta t}\end{array}\right]]</p>
 
 <p>其中</p>
 
-<script type="math/tex; mode=display">\mathbf{a} = \mathbf{q}_{w b_{k}} \mathbf{a}^{b_{k}} - \mathbf{g}^{w}</script>
+<p>[\mathbf{a} = \mathbf{q}<em>{w b</em>{k}} \mathbf{a}^{b_{k}} - \mathbf{g}^{w}]</p>
 
-<script type="math/tex; mode=display">\boldsymbol{\omega} = \boldsymbol{\omega}^{b_{k}}</script>
+<p>[\boldsymbol{\omega} = \boldsymbol{\omega}^{b_{k}}]</p>
 
 <h3 id="中值法">中值法</h3>
 <p>中值法，使用两个相邻时刻$k$到$k+1$的位姿是用两个时刻的测量值$a,w$的平均值来离散积分。</p>
 
-<script type="math/tex; mode=display">\mathbf{p}_{w b_{k+1}}=\mathbf{p}_{w b_{k}}+\mathbf{v}_{k}^{w} \Delta t+\frac{1}{2} \mathbf{a} \Delta t^{2}</script>
+<p>[\mathbf{p}<em>{w b</em>{k+1}}=\mathbf{p}<em>{w b</em>{k}}+\mathbf{v}_{k}^{w} \Delta t+\frac{1}{2} \mathbf{a} \Delta t^{2}]</p>
 
-<script type="math/tex; mode=display">\mathbf{v}_{k+1}^{w}=\mathbf{v}_{k}^{w}+\mathbf{a} \Delta t</script>
+<p>[\mathbf{v}<em>{k+1}^{w}=\mathbf{v}</em>{k}^{w}+\mathbf{a} \Delta t]</p>
 
-<script type="math/tex; mode=display">\mathbf{q}_{w b_{k+1}}=\mathbf{q}_{w b_{k}} \otimes\left[\begin{array}{c}{1} \\ {\frac{1}{2} \omega \delta t}\end{array}\right]</script>
+<p>[\mathbf{q}<em>{w b</em>{k+1}}=\mathbf{q}<em>{w b</em>{k}} \otimes\left[\begin{array}{c}{1} \ {\frac{1}{2} \omega \delta t}\end{array}\right]]</p>
 
 <p>其中</p>
 
-<script type="math/tex; mode=display">\mathbf{a} = \frac{1}{2} \left(\mathbf{q}_{w b_{k}} \mathbf{a}^{b_{k}} + \mathbf{q}_{w b_{k+1}} \mathbf{a}^{b_{k+1}} \right) - \mathbf{g}^{w}</script>
+<p>[\mathbf{a} = \frac{1}{2} \left(\mathbf{q}<em>{w b</em>{k}} \mathbf{a}^{b_{k}} + \mathbf{q}<em>{w b</em>{k+1}} \mathbf{a}^{b_{k+1}} \right) - \mathbf{g}^{w}]</p>
 
-<script type="math/tex; mode=display">\boldsymbol{\omega} = \frac{1}{2} \left(\boldsymbol{\omega}^{b_{k}} + \boldsymbol{\omega}^{b_{k+1}} \right)</script>
+<p>[\boldsymbol{\omega} = \frac{1}{2} \left(\boldsymbol{\omega}^{b_{k}} + \boldsymbol{\omega}^{b_{k+1}} \right)]</p>
 
 <h3 id="代码">代码</h3>
 
@@ -202,19 +208,19 @@
   <li>四元数的形式：</li>
 </ul>
 
-<script type="math/tex; mode=display">\mathbf{q}_{w b^{\prime}}=\mathbf{q}_{w b} \otimes\left[\begin{array}{c}{1} \\ {\frac{1}{2} \boldsymbol{\omega} \Delta t}\end{array}\right]</script>
+<p>[\mathbf{q}<em>{w b^{\prime}}=\mathbf{q}</em>{w b} \otimes\left[\begin{array}{c}{1} \ {\frac{1}{2} \boldsymbol{\omega} \Delta t}\end{array}\right]]</p>
 
 <ul>
   <li>$SO3$形式：</li>
 </ul>
 
-<script type="math/tex; mode=display">\mathbf{R}_{w b^{\prime}}=\mathbf{R}_{w b} \exp (\boldsymbol{\omega} \cdot \Delta t)</script>
+<p>[\mathbf{R}<em>{w b^{\prime}}=\mathbf{R}</em>{w b} \exp (\boldsymbol{\omega} \cdot \Delta t)]</p>
 
 <ul>
   <li>欧拉角形式：</li>
 </ul>
 
-<script type="math/tex; mode=display">\vartheta w b^{\prime}=\vartheta_{w b}+E_{w b} \cdot \omega \Delta t</script>
+<p>[\vartheta w b^{\prime}=\vartheta_{w b}+E_{w b} \cdot \omega \Delta t]</p>
 
 <blockquote>
   <p>我们可以发现，这三种方法，<strong>对于全局姿态的变化</strong>，旋转矩阵与四元数都是直接使用imu的测量（也就是局部角速度）进行更新的。只有在欧拉角的形式里，$E_{w b}$表示将IMU body坐标系下的角速度转化成欧拉角速度。此处可以推导出$E_{w b}$，这个是三种方法中唯一一个需要转换的地方。<strong>原因的话，我觉得这是因为累加与累乘的区别，欧拉角不支持乘法。如果使用角度来表示旋转矩阵与四元数，此时对角度的更新也得使用加法（原来角度加上角速度与时间的积即为新的角度），但是四元数与旋转矩阵本身是只支持乘法的，它们是直接乘以局部扰动即可</strong>。</p>
@@ -237,13 +243,11 @@
 
 <p>欧拉角速度到body角速度：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned} \boldsymbol{\omega} &=R(\psi) R(\theta)\left\{\begin{array}{c}{0} \\ {0} \\ {\frac{d \phi}{d t}}\end{array}\right\}+R(\psi)\left\{\begin{array}{c}{0} \\ {\frac{d \theta}{d t}} \\ {0}\end{array}\right\}+\left\{\begin{array}{c}{\frac{d \psi}{d t}} \\ {0} \\ {0}\end{array}\right\} \\ &=\left[\begin{array}{ccc}{1} & {0} & {-\sin \theta} \\ {0} & {\cos \psi} & {\sin \psi \cos \theta} \\ {0} & {-\sin \psi} & {\cos \psi \cos \theta}\end{array}\right]\left\{\begin{array}{l}{\frac{d \psi}{d t}} \\ {\frac{d \psi}{d t}} \\ {\frac{d \phi}{d t}}\end{array}\right\} \end{aligned} %]]></script>
+<p>[\begin{aligned} \boldsymbol{\omega} &amp;=R(\psi) R(\theta)\left{\begin{array}{c}{0} \ {0} \ {\frac{d \phi}{d t}}\end{array}\right}+R(\psi)\left{\begin{array}{c}{0} \ {\frac{d \theta}{d t}} \ {0}\end{array}\right}+\left{\begin{array}{c}{\frac{d \psi}{d t}} \ {0} \ {0}\end{array}\right} \ &amp;=\left[\begin{array}{ccc}{1} &amp; {0} &amp; {-\sin \theta} \ {0} &amp; {\cos \psi} &amp; {\sin \psi \cos \theta} \ {0} &amp; {-\sin \psi} &amp; {\cos \psi \cos \theta}\end{array}\right]\left{\begin{array}{l}{\frac{d \psi}{d t}} \ {\frac{d \psi}{d t}} \ {\frac{d \phi}{d t}}\end{array}\right} \end{aligned}]</p>
 
 <p>上面取逆就得到，如下body到欧拉角的变换：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\frac{d \boldsymbol{\vartheta}}{d t}=\left[\begin{array}{ccc}{1} & {\sin \psi \tan \theta} & {\cos \psi \tan \theta} \\ {0} & {\cos \psi} & {-\sin \psi} \\ {0} & {\sin \psi / \cos \theta} & {\cos \psi / \cos \theta}\end{array}\right] \vec{\omega} %]]></script>
+<p>[\frac{d \boldsymbol{\vartheta}}{d t}=\left[\begin{array}{ccc}{1} &amp; {\sin \psi \tan \theta} &amp; {\cos \psi \tan \theta} \ {0} &amp; {\cos \psi} &amp; {-\sin \psi} \ {0} &amp; {\sin \psi / \cos \theta} &amp; {\cos \psi / \cos \theta}\end{array}\right] \vec{\omega}]</p>
 
 <h1 id="误差与标定">误差与标定</h1>
 <p>加速度计和陀螺仪的误差可以分为确定性误差与随机误差。</p>
@@ -269,8 +273,7 @@
 
 <p>轴间误差使得本来x轴的分量会对测量到的y轴与z轴的分量有影响。将其与scale误差相结合，会得到如下的测量与实际的对应关系。</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\left[\begin{array}{l}{a_{m x}} \\ {a_{m y}} \\ {a_{m z}}\end{array}\right]=\left[\begin{array}{lll}{s_{x x}} & {m_{x y}} & {m_{x z}} \\ {m_{y x}} & {s_{y y}} & {m_{y z}} \\ {m_{z x}} & {m_{z y}} & {s_{z z}}\end{array}\right]\left[\begin{array}{l}{a_{x}} \\ {a_{y}} \\ {a_{z}}\end{array}\right] %]]></script>
+<p>[\left[\begin{array}{l}{a_{m x}} \ {a_{m y}} \ {a_{m z}}\end{array}\right]=\left[\begin{array}{lll}{s_{x x}} &amp; {m_{x y}} &amp; {m_{x z}} \ {m_{y x}} &amp; {s_{y y}} &amp; {m_{y z}} \ {m_{z x}} &amp; {m_{z y}} &amp; {s_{z z}}\end{array}\right]\left[\begin{array}{l}{a_{x}} \ {a_{y}} \ {a_{z}}\end{array}\right]]</p>
 
 <h3 id="其他确定性误差">其他确定性误差</h3>
 <p>bias与scale的误差是会受温度影响的，并且在运行中也许也会改变。</p>
@@ -285,9 +288,9 @@
 
 <h3 id="3个轴都是正交时">3个轴都是正交时</h3>
 
-<script type="math/tex; mode=display">bias =  \frac{l_{f}^{up} + l_{f}^{down}}{2}</script>
+<p>[bias =  \frac{l_{f}^{up} + l_{f}^{down}}{2}]</p>
 
-<script type="math/tex; mode=display">scale = \frac{l_{f}^{up} - l_{f}^{down}}{2*g}</script>
+<p>[scale = \frac{l_{f}^{up} - l_{f}^{down}}{2*g}]</p>
 
 <blockquote>
   <p>其中，$l$为加速度计某个轴的测量值，$g$为当地的重力加速度。</p>
@@ -297,17 +300,15 @@
 
 <p>此时实际加速度和测量值之间的关系为：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\left[\begin{array}{l}{l_{a x}} \\ {l_{a y}} \\ {l_{a z}}\end{array}\right]=\left[\begin{array}{lll}{s_{x x}} & {m_{x y}} & {m_{x z}} \\ {m_{y x}} & {s_{y y}} & {m_{y z}} \\ {m_{z x}} & {m_{z y}} & {s_{z z}}\end{array}\right]\left[\begin{array}{l}{a_{x}} \\ {a_{y}} \\ {a_{z}}\end{array}\right]+\left[\begin{array}{l}{b_{a x}} \\ {b_{a y}} \\ {b_{a z}}\end{array}\right] %]]></script>
+<p>[\left[\begin{array}{l}{l_{a x}} \ {l_{a y}} \ {l_{a z}}\end{array}\right]=\left[\begin{array}{lll}{s_{x x}} &amp; {m_{x y}} &amp; {m_{x z}} \ {m_{y x}} &amp; {s_{y y}} &amp; {m_{y z}} \ {m_{z x}} &amp; {m_{z y}} &amp; {s_{z z}}\end{array}\right]\left[\begin{array}{l}{a_{x}} \ {a_{y}} \ {a_{z}}\end{array}\right]+\left[\begin{array}{l}{b_{a x}} \ {b_{a y}} \ {b_{a z}}\end{array}\right]]</p>
 
 <p>水平静止放置6面的时候，加速度的理论值为：</p>
 
-<script type="math/tex; mode=display">a_{1}=\left[\begin{array}{l}{g} \\ {0} \\ {0}\end{array}\right], a_{2}=\left[\begin{array}{c}{-g} \\ {0} \\ {0}\end{array}\right], a_{3}=\left[\begin{array}{l}{0} \\ {g} \\ {0}\end{array}\right], a_{4}=\left[\begin{array}{c}{0} \\ {-g} \\ {0}\end{array}\right], a_{5}=\left[\begin{array}{l}{0} \\ {0} \\ {g}\end{array}\right], a_{6}=\left[\begin{array}{c}{0} \\ {0} \\ {-g}\end{array}\right]</script>
+<p>[a_{1}=\left[\begin{array}{l}{g} \ {0} \ {0}\end{array}\right], a_{2}=\left[\begin{array}{c}{-g} \ {0} \ {0}\end{array}\right], a_{3}=\left[\begin{array}{l}{0} \ {g} \ {0}\end{array}\right], a_{4}=\left[\begin{array}{c}{0} \ {-g} \ {0}\end{array}\right], a_{5}=\left[\begin{array}{l}{0} \ {0} \ {g}\end{array}\right], a_{6}=\left[\begin{array}{c}{0} \ {0} \ {-g}\end{array}\right]]</p>
 
 <p>对应的测量值矩阵L:</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\mathbf{L}=\left[\begin{array}{llllll}{\mathbf{l}_{1}} & {\mathbf{l}_{2}} & {\mathbf{l}_{3}} & {\mathbf{l}_{4}} & {\mathbf{l}_{5}} & {\mathbf{l}_{6}}\end{array}\right] %]]></script>
+<p>[\mathbf{L}=\left[\begin{array}{llllll}{\mathbf{l}<em>{1}} &amp; {\mathbf{l}</em>{2}} &amp; {\mathbf{l}<em>{3}} &amp; {\mathbf{l}</em>{4}} &amp; {\mathbf{l}<em>{5}} &amp; {\mathbf{l}</em>{6}}\end{array}\right]]</p>
 
 <p>利用最小二乘就能够把12个变量求出来。</p>
 
@@ -317,14 +318,13 @@
 <h3 id="高斯白噪声">高斯白噪声</h3>
 <p>IMU数据连续时间上受到一个均值为0，方差为$\sigma$，各时刻之间相互独立的高斯过程$n(t)$:</p>
 
-<script type="math/tex; mode=display">\begin{array}{l}{E[n(t)] \equiv 0} \\ {E\left[n\left(t_{1}\right) n\left(t_{2}\right)\right]=\sigma^{2} \delta\left(t_{1}-t_{2}\right)}\end{array}</script>
+<p>[\begin{array}{l}{E[n(t)] \equiv 0} \ {E\left[n\left(t_{1}\right) n\left(t_{2}\right)\right]=\sigma^{2} \delta\left(t_{1}-t_{2}\right)}\end{array}]</p>
 
 <p>其中$\delta()$表示狄拉克函数。</p>
 
 <p>不过需要说明的是，实际上，IMU传感器获取的数据为离散采样，离散和连续高斯白噪声的方差之间存在如下转换关系：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned} n_{d}[k] & \triangleq n\left(t_{0}+\Delta t\right) \simeq \frac{1}{\Delta t} \int_{t_{0}}^{t_{0}+\Delta t} n(\tau) d t \\ E\left(n_{d}[k]^{2}\right) &=E\left(\frac{1}{\Delta t^{2}} \int_{t_{0}}^{t_{0}+\Delta t} \int_{t_{0}}^{t_{0}+\Delta t} n(\tau) n(t) d \tau d t\right) \\ &=E\left(\frac{\sigma^{2}}{\Delta t^{2}} \int_{t_{0}}^{t_{0}+\Delta t} \int_{t_{0}}^{t_{0}+\Delta t} \delta(t-\tau) d \tau d t\right) \\ &=E\left(\frac{\sigma^{2}}{\Delta t}\right) \end{aligned} %]]></script>
+<p>[\begin{aligned} n_{d}[k] &amp; \triangleq n\left(t_{0}+\Delta t\right) \simeq \frac{1}{\Delta t} \int_{t_{0}}^{t_{0}+\Delta t} n(\tau) d t \ E\left(n_{d}[k]^{2}\right) &amp;=E\left(\frac{1}{\Delta t^{2}} \int_{t_{0}}^{t_{0}+\Delta t} \int_{t_{0}}^{t_{0}+\Delta t} n(\tau) n(t) d \tau d t\right) \ &amp;=E\left(\frac{\sigma^{2}}{\Delta t^{2}} \int_{t_{0}}^{t_{0}+\Delta t} \int_{t_{0}}^{t_{0}+\Delta t} \delta(t-\tau) d \tau d t\right) \ &amp;=E\left(\frac{\sigma^{2}}{\Delta t}\right) \end{aligned}]</p>
 
 <blockquote>
   <p>即离散的序列的方差比连续的方差大$\Delta t$倍（传感器的采样时间）。</p>
@@ -333,14 +333,13 @@
 <h3 id="bias随机游走">bias随机游走</h3>
 <p>通常使用维纳过程来建模bias随时间连续变化的过程，离散时间下称之为随机游走。</p>
 
-<script type="math/tex; mode=display">\dot{b}(t)=n(t)=\sigma_{b} w(t)</script>
+<p>[\dot{b}(t)=n(t)=\sigma_{b} w(t)]</p>
 
 <p>bias的变化的导数是其中$w$是方差为1的白噪声。</p>
 
 <p>同样，离散和连续之间的转换为：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned} b_{d}[k] \triangleq & b\left(t_{0}\right)+\int_{t_{0}}^{t_{0}+\Delta t} n(t) d t \\ E\left(\left(b_{d}[k]-b_{d}[k-1]\right)^{2}\right) &=E\left(\int_{t_{0}+\Delta t}^{t_{0}+\Delta t} \int_{t_{0}}^{t_{0}+\Delta t} n(t) n(\tau) d \tau d t\right) \\ &=E\left(\sigma_{b}^{2} \int_{t_{0}}^{t_{0}+\Delta t} \int_{t_{0}}^{t_{0}+\Delta t} \delta(t-\tau) d \tau d t\right) \\ &=E\left(\sigma_{b}^{2} \Delta t\right) \end{aligned} %]]></script>
+<p>[\begin{aligned} b_{d}[k] \triangleq &amp; b\left(t_{0}\right)+\int_{t_{0}}^{t_{0}+\Delta t} n(t) d t \ E\left(\left(b_{d}[k]-b_{d}[k-1]\right)^{2}\right) &amp;=E\left(\int_{t_{0}+\Delta t}^{t_{0}+\Delta t} \int_{t_{0}}^{t_{0}+\Delta t} n(t) n(\tau) d \tau d t\right) \ &amp;=E\left(\sigma_{b}^{2} \int_{t_{0}}^{t_{0}+\Delta t} \int_{t_{0}}^{t_{0}+\Delta t} \delta(t-\tau) d \tau d t\right) \ &amp;=E\left(\sigma_{b}^{2} \Delta t\right) \end{aligned}]</p>
 
 <blockquote>
   <p>bias随机游走的噪声方差离散的序列比连续的大$\Delta t$倍（传感器的采样时间）。</p>
@@ -417,19 +416,19 @@
   <li>加速度计</li>
 </ul>
 
-<script type="math/tex; mode=display">\mathbf{a}_{m}^{B}=\mathbf{S}_{a} \mathbf{R}_{B G}\left(\mathbf{a}^{G}-\mathbf{g}^{G}\right)+\mathbf{n}_{a}+\mathbf{b}_{a}</script>
+<p>[\mathbf{a}<em>{m}^{B}=\mathbf{S}</em>{a} \mathbf{R}<em>{B G}\left(\mathbf{a}^{G}-\mathbf{g}^{G}\right)+\mathbf{n}</em>{a}+\mathbf{b}_{a}]</p>
 
 <ul>
   <li>陀螺仪</li>
 </ul>
 
-<script type="math/tex; mode=display">\boldsymbol{\omega}_{m}^{B}=\mathbf{S}_{g} \boldsymbol{\omega}^{B}+\mathbf{n}_{g}+\mathbf{b}_{g}</script>
+<p>[\boldsymbol{\omega}<em>{m}^{B}=\mathbf{S}</em>{g} \boldsymbol{\omega}^{B}+\mathbf{n}<em>{g}+\mathbf{b}</em>{g}]</p>
 
 <ul>
   <li>低端传感器，可能会出现加速度影响陀螺仪的值的情况，也就是下面的第二项：</li>
 </ul>
 
-<script type="math/tex; mode=display">\boldsymbol{\omega}_{m}^{B}=\mathbf{S}_{g} \boldsymbol{\omega}^{B}+\mathbf{s}_{g a} \mathbf{a}^{B}+\mathbf{n}_{g}+\mathbf{b}_{g}</script>
+<p>[\boldsymbol{\omega}<em>{m}^{B}=\mathbf{S}</em>{g} \boldsymbol{\omega}^{B}+\mathbf{s}<em>{g a} \mathbf{a}^{B}+\mathbf{n}</em>{g}+\mathbf{b}_{g}]</p>
 
 <h1 id="参考资料">参考资料</h1>
 <ul>

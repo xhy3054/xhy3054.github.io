@@ -22,17 +22,23 @@
 	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
 	<!-- Styles -->
 	<link rel="stylesheet" href="/assets/css/main.css">
-    <!--将该代码放入博客模板的head中即可-->
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        processEscapes: true
-        }
-    });
-    </script>
-    <!--latex数学显示公式-->
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
+<!-- mathjax config similar to math.stackexchange --> 
+<script type="text/x-mathjax-config"> 
+MathJax.Hub.Config({ 
+    jax: ["input/TeX", "output/HTML-CSS"], 
+    tex2jax: { 
+        inlineMath: [ ['$', '$'] ], 
+        displayMath: [ ['$$', '$$']], 
+        processEscapes: true, 
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
+    messageStyle: "none", 
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
+}); 
+</script>
+
+
 </head>
 
 <body>
@@ -88,17 +94,13 @@
 <h2 id="旋转矩阵">旋转矩阵</h2>
 <p>其实在计算坐标变换时，我们使用最多的表示旋转的方式是其实旋转矩阵。三维空间中的旋转矩阵是<strong>3×3</strong>的矩阵，将欧拉角变换为旋转矩阵的计算方式如下：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{array}{rlr}{R(\alpha, \beta, \gamma)} & {=R_{z}(\alpha) R_{y}(\beta) R_{x}(\gamma)=} \\ {} & {\left(\begin{array}{cc}{\cos \alpha \cos \beta} & {\cos \alpha \sin \beta \sin \gamma-\sin \alpha \cos \gamma} & {\cos \alpha \sin \beta \cos \gamma+\sin \alpha \sin \gamma} \\ {\sin \alpha \cos \beta} & {\sin \alpha \sin \beta \sin \gamma+\cos \alpha \cos \gamma} & {\sin \alpha \sin \beta \cos \gamma-\cos \alpha \sin \gamma} \\ {-\sin \beta} & {\cos \beta \sin \gamma} & {\cos \beta \cos \gamma}\end{array}\right)}\end{array} %]]></script>
+<p>[\begin{array}{rlr}{R(\alpha, \beta, \gamma)} &amp; {=R_{z}(\alpha) R_{y}(\beta) R_{x}(\gamma)=} \ {} &amp; {\left(\begin{array}{cc}{\cos \alpha \cos \beta} &amp; {\cos \alpha \sin \beta \sin \gamma-\sin \alpha \cos \gamma} &amp; {\cos \alpha \sin \beta \cos \gamma+\sin \alpha \sin \gamma} \ {\sin \alpha \cos \beta} &amp; {\sin \alpha \sin \beta \sin \gamma+\cos \alpha \cos \gamma} &amp; {\sin \alpha \sin \beta \cos \gamma-\cos \alpha \sin \gamma} \ {-\sin \beta} &amp; {\cos \beta \sin \gamma} &amp; {\cos \beta \cos \gamma}\end{array}\right)}\end{array}]</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-R_{z}(\alpha)=\left(\begin{array}{ccc}{\cos \alpha} & {-\sin \alpha} & {0} \\ {\sin \alpha} & {\cos \alpha} & {0} \\ {0} & {0} & {1}\end{array}\right) %]]></script>
+<p>[R_{z}(\alpha)=\left(\begin{array}{ccc}{\cos \alpha} &amp; {-\sin \alpha} &amp; {0} \ {\sin \alpha} &amp; {\cos \alpha} &amp; {0} \ {0} &amp; {0} &amp; {1}\end{array}\right)]</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-R_{y}(\beta)=\left(\begin{array}{ccc}{\cos \beta} & {0} & {\sin \beta} \\ {0} & {1} & {0} \\ {-\sin \beta} & {0} & {\cos \beta}\end{array}\right) %]]></script>
+<p>[R_{y}(\beta)=\left(\begin{array}{ccc}{\cos \beta} &amp; {0} &amp; {\sin \beta} \ {0} &amp; {1} &amp; {0} \ {-\sin \beta} &amp; {0} &amp; {\cos \beta}\end{array}\right)]</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-R_{x}(\gamma)=\left(\begin{array}{ccc}{1} & {0} & {0} \\ {0} & {\cos \gamma} & {-\sin \gamma} \\ {0} & {\sin \gamma} & {\cos \gamma}\end{array}\right) %]]></script>
+<p>[R_{x}(\gamma)=\left(\begin{array}{ccc}{1} &amp; {0} &amp; {0} \ {0} &amp; {\cos \gamma} &amp; {-\sin \gamma} \ {0} &amp; {\sin \gamma} &amp; {\cos \gamma}\end{array}\right)]</p>
 
 <p>其中，$\alpha$、$\beta$、$\gamma$分别是欧拉角的yaw、pitch和roll角。上述结果是三个旋转矩阵（三个角度上的旋转）连续相乘的结果。</p>
 
@@ -134,21 +136,21 @@ R_{x}(\gamma)=\left(\begin{array}{ccc}{1} & {0} & {0} \\ {0} & {\cos \gamma} & {
 
 <p>四元数使用复数的形式来表示旋转</p>
 
-<script type="math/tex; mode=display">\boldsymbol{q}=q_{0}+q_{1} i+q_{2} j+q_{3} k</script>
+<p>[\boldsymbol{q}=q_{0}+q_{1} i+q_{2} j+q_{3} k]</p>
 
 <p>其中$i,j,k$是四元数的三个虚部。这三个虚部满足关系式：</p>
 
-<script type="math/tex; mode=display">\left\{\begin{array}{l}{i^{2}=j^{2}=k^{2}=-1} \\ {i j=k, j i=-k} \\ {j k=i, k j=-i} \\ {k i=j, i k=-j}\end{array}\right.</script>
+<p>[\left{\begin{array}{l}{i^{2}=j^{2}=k^{2}=-1} \ {i j=k, j i=-k} \ {j k=i, k j=-i} \ {k i=j, i k=-j}\end{array}\right.]</p>
 
 <p>所以，也可以使用一个标量与一个向量来表示四元数：</p>
 
-<script type="math/tex; mode=display">\boldsymbol{q}=[s, \boldsymbol{v}], \quad s=q_{0} \in \mathbb{R}, \boldsymbol{v}=\left[q_{1}, q_{2}, q_{3}\right]^{T} \in \mathbb{R}^{3}</script>
+<p>[\boldsymbol{q}=[s, \boldsymbol{v}], \quad s=q_{0} \in \mathbb{R}, \boldsymbol{v}=\left[q_{1}, q_{2}, q_{3}\right]^{T} \in \mathbb{R}^{3}]</p>
 
 <blockquote>
   <p>同时，我们一般使用<strong>单位四元数</strong>来表示三维空间中任意一个旋转。对于绕单位向量$\boldsymbol{n}=\left[n_{x}, n_{y}, n_{z}\right]^{T}$进行了角度为$\theta$的旋转，这个旋转的四元数形式为：</p>
 </blockquote>
 
-<script type="math/tex; mode=display">\boldsymbol{q}=\left[\cos \frac{\theta}{2}, n_{x} \sin \frac{\theta}{2}, n_{y} \sin \frac{\theta}{2}, n_{z} \sin \frac{\theta}{2}\right]^{T}</script>
+<p>[\boldsymbol{q}=\left[\cos \frac{\theta}{2}, n_{x} \sin \frac{\theta}{2}, n_{y} \sin \frac{\theta}{2}, n_{z} \sin \frac{\theta}{2}\right]^{T}]</p>
 
 <blockquote>
   <p>此处需要说明的是，对于旋转的角度$\theta$，我们将其加上$2 \pi$，得到的四元数$q$会变为$-q$，所以，四元数有一个性质，<strong>任意旋转可以使用两个互为相反数的四元数来表示。</strong>并且从上面这个公式，我们也可以看出，<strong>使用单位四元数可以表示任意一个旋转</strong>。</p>
@@ -156,11 +158,11 @@ R_{x}(\gamma)=\left(\begin{array}{ccc}{1} & {0} & {0} \\ {0} & {\cos \gamma} & {
 
 <p>并且，对于一个旋转角度为0的旋转，表示它的四元数是：</p>
 
-<script type="math/tex; mode=display">\boldsymbol{q}_{0}=[ \pm 1,0,0,0]^{T}</script>
+<p>[\boldsymbol{q}_{0}=[ \pm 1,0,0,0]^{T}]</p>
 
 <p>反之，从四元数中恢复出轴角可以使用如下：</p>
 
-<script type="math/tex; mode=display">\left\{\begin{array}{l}{\theta=2 \arccos q_{0}} \\ {\left[n_{x}, n_{y}, n_{z}\right]^{T}=\left[q_{1}, q_{2}, q_{3}\right]^{T} / \sin \frac{\theta}{2}}\end{array}\right.</script>
+<p>[\left{\begin{array}{l}{\theta=2 \arccos q_{0}} \ {\left[n_{x}, n_{y}, n_{z}\right]^{T}=\left[q_{1}, q_{2}, q_{3}\right]^{T} / \sin \frac{\theta}{2}}\end{array}\right.]</p>
 
 <blockquote>
   <p>之所以四元数会这么受欢迎（虽然它很不直观），是因为它有一些神奇的性质。</p>
@@ -170,15 +172,15 @@ R_{x}(\gamma)=\left(\begin{array}{ccc}{1} & {0} & {0} \\ {0} & {\cos \gamma} & {
 
 <p>第一个，我们使用四元数对一个三维点$\boldsymbol{p}=[x, y, z] \in \mathbb{R}^{3}$进行旋转变换（旋转由一个轴角$\boldsymbol{n}, \theta$指定）。此时，首先将三维空间点用一个虚四元数来描述：</p>
 
-<script type="math/tex; mode=display">\boldsymbol{p}=[0, x, y, z]=[0, \boldsymbol{v}]</script>
+<p>[\boldsymbol{p}=[0, x, y, z]=[0, \boldsymbol{v}]]</p>
 
 <p>这相当于<strong>我们把四元数的三个虚部与空间中的三个轴相对应</strong>。然后用四元数$q$来表示这个旋转：</p>
 
-<script type="math/tex; mode=display">\boldsymbol{q}=\left[\cos \frac{\theta}{2}, \boldsymbol{n} \sin \frac{\theta}{2}\right]</script>
+<p>[\boldsymbol{q}=\left[\cos \frac{\theta}{2}, \boldsymbol{n} \sin \frac{\theta}{2}\right]]</p>
 
 <p>那么旋转后的点$p^{\prime}$可以表示为如下的乘积：</p>
 
-<script type="math/tex; mode=display">\boldsymbol{p}^{\prime}=\boldsymbol{q} \boldsymbol{p} \boldsymbol{q}^{-1}</script>
+<p>[\boldsymbol{p}^{\prime}=\boldsymbol{q} \boldsymbol{p} \boldsymbol{q}^{-1}]</p>
 
 <blockquote>
   <p>最后的计算结果的实部一定为0，所以是纯虚四元数表示一个空间点位置。</p>
@@ -187,19 +189,17 @@ R_{x}(\gamma)=\left(\begin{array}{ccc}{1} & {0} & {0} \\ {0} & {\cos \gamma} & {
 <h3 id="四元数的神奇2乘法">四元数的神奇2(乘法)</h3>
 <p>首先四元数的复数形式是：</p>
 
-<script type="math/tex; mode=display">\boldsymbol{q}=q_{0}+q_{1} i+q_{2} j+q_{3} k</script>
+<p>[\boldsymbol{q}=q_{0}+q_{1} i+q_{2} j+q_{3} k]</p>
 
 <p>对于两个四元数</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\mathbf{q}_{1}=\left(\begin{array}{llll}{a_{1}} & {b_{1}} & {c_{1}} & {d_{1}}\end{array}\right)^{T} %]]></script>
+<p>[\mathbf{q}<em>{1}=\left(\begin{array}{llll}{a</em>{1}} &amp; {b_{1}} &amp; {c_{1}} &amp; {d_{1}}\end{array}\right)^{T}]</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\mathbf{q}_{2}=\left(\begin{array}{llll}{a_{2}} & {b_{2}} & {c_{2}} & {d_{2}}\end{array}\right)^{T} %]]></script>
+<p>[\mathbf{q}<em>{2}=\left(\begin{array}{llll}{a</em>{2}} &amp; {b_{2}} &amp; {c_{2}} &amp; {d_{2}}\end{array}\right)^{T}]</p>
 
 <p>他们的乘积为（不可交换）就是两个复数想成的结果：</p>
 
-<script type="math/tex; mode=display">\mathbf{q}_{1} \mathbf{q}_{2}=\left(\begin{array}{c}{a_{1} a_{2}-b_{1} b_{2}-c_{1} c_{2}-d_{1} d_{2}} \\ {a_{1} b_{2}+b_{1} a_{2}+c_{1} d_{2}-d_{1} c_{2}} \\ {a_{1} c_{2}-b_{1} d_{2}+c_{1} a_{2}+d_{1} b_{2}} \\ {a_{1} d_{2}+b_{1} c_{2}-c_{1} b_{2}+d_{1} a_{2}}\end{array}\right)</script>
+<p>[\mathbf{q}<em>{1} \mathbf{q}</em>{2}=\left(\begin{array}{c}{a_{1} a_{2}-b_{1} b_{2}-c_{1} c_{2}-d_{1} d_{2}} \ {a_{1} b_{2}+b_{1} a_{2}+c_{1} d_{2}-d_{1} c_{2}} \ {a_{1} c_{2}-b_{1} d_{2}+c_{1} a_{2}+d_{1} b_{2}} \ {a_{1} d_{2}+b_{1} c_{2}-c_{1} b_{2}+d_{1} a_{2}}\end{array}\right)]</p>
 
 <blockquote>
   <p>之所以介绍，四元数的乘法，是因为，对于两次旋转的叠加，是可以直接使用四元数的乘法实现。</p>
@@ -210,16 +210,15 @@ R_{x}(\gamma)=\left(\begin{array}{ccc}{1} & {0} & {0} \\ {0} & {\cos \gamma} & {
 <h3 id="四元数相对时间的导数">四元数相对时间的导数</h3>
 <p>首先，先介绍一个四元数关于轴角的表示（上面也有讲过）：</p>
 
-<script type="math/tex; mode=display">\boldsymbol{q}=\left[\cos \frac{\theta}{2}, \boldsymbol{n} \sin \frac{\theta}{2}\right]</script>
+<p>[\boldsymbol{q}=\left[\cos \frac{\theta}{2}, \boldsymbol{n} \sin \frac{\theta}{2}\right]]</p>
 
 <p>所以这样，在角度接近0时（时间变化很小时近似角度为0），四元数近似为$[1,  \Delta \phi_{\mathcal{L}} ]$。</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned} \dot{\mathbf{q}} & \triangleq \lim _{\Delta t \rightarrow 0} \frac{\mathbf{q}(t+\Delta t)-\mathbf{q}(t)}{\Delta t} \\ &=\lim _{\Delta t \rightarrow 0} \frac{\mathbf{q} \otimes \Delta \mathbf{q}_{\mathcal{L}}-\mathbf{q}}{\Delta t} \\ &=\lim _{\Delta t \rightarrow 0} \frac{\mathbf{q} \otimes\left(\left[\begin{array}{c}{1} \\ {\Delta \boldsymbol{\phi}_{\mathcal{L}} / 2}\end{array}\right]-\left[\begin{array}{l}{1} \\ {\mathbf{0}}\end{array}\right]\right)}{\Delta t} \\ &=\lim _{\Delta t \rightarrow 0} \frac{\mathbf{q}(t+\Delta t)-\mathbf{q}(t)}{\Delta t} \\=& \frac{1}{2} \mathbf{q} \otimes\left[\begin{array}{c}{0} \\ {\boldsymbol{\omega}_{\mathcal{L}}}\end{array}\right] \end{aligned} %]]></script>
+<p>[\begin{aligned} \dot{\mathbf{q}} &amp; \triangleq \lim <em>{\Delta t \rightarrow 0} \frac{\mathbf{q}(t+\Delta t)-\mathbf{q}(t)}{\Delta t} \ &amp;=\lim _{\Delta t \rightarrow 0} \frac{\mathbf{q} \otimes \Delta \mathbf{q}</em>{\mathcal{L}}-\mathbf{q}}{\Delta t} \ &amp;=\lim <em>{\Delta t \rightarrow 0} \frac{\mathbf{q} \otimes\left(\left[\begin{array}{c}{1} \ {\Delta \boldsymbol{\phi}</em>{\mathcal{L}} / 2}\end{array}\right]-\left[\begin{array}{l}{1} \ {\mathbf{0}}\end{array}\right]\right)}{\Delta t} \ &amp;=\lim <em>{\Delta t \rightarrow 0} \frac{\mathbf{q}(t+\Delta t)-\mathbf{q}(t)}{\Delta t} \=&amp; \frac{1}{2} \mathbf{q} \otimes\left[\begin{array}{c}{0} \ {\boldsymbol{\omega}</em>{\mathcal{L}}}\end{array}\right] \end{aligned}]</p>
 
 <p>上式中：</p>
 
-<script type="math/tex; mode=display">\omega_{\mathcal{L}}(t) \triangleq \frac{d \phi_{\mathcal{L}}(t)}{d t} \triangleq \lim _{\Delta t \rightarrow 0} \frac{\Delta \phi_{\mathcal{L}}}{\Delta t}</script>
+<p>[\omega_{\mathcal{L}}(t) \triangleq \frac{d \phi_{\mathcal{L}}(t)}{d t} \triangleq \lim <em>{\Delta t \rightarrow 0} \frac{\Delta \phi</em>{\mathcal{L}}}{\Delta t}]</p>
 
 <p>是旋转向量对时间的导数，可以理解为角速度向量</p>
 <h2 id="使用eigen库">使用Eigen库</h2>

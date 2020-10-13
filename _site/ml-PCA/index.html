@@ -22,17 +22,23 @@
 	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
 	<!-- Styles -->
 	<link rel="stylesheet" href="/assets/css/main.css">
-    <!--将该代码放入博客模板的head中即可-->
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        processEscapes: true
-        }
-    });
-    </script>
-    <!--latex数学显示公式-->
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
+<!-- mathjax config similar to math.stackexchange --> 
+<script type="text/x-mathjax-config"> 
+MathJax.Hub.Config({ 
+    jax: ["input/TeX", "output/HTML-CSS"], 
+    tex2jax: { 
+        inlineMath: [ ['$', '$'] ], 
+        displayMath: [ ['$$', '$$']], 
+        processEscapes: true, 
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
+    messageStyle: "none", 
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
+}); 
+</script>
+
+
 </head>
 
 <body>
@@ -101,7 +107,7 @@
   <li>将计算出来的n个经验均值放入一个向量u，这个向量维度是<code class="highlighter-rouge">n*1</code></li>
 </ul>
 
-<script type="math/tex; mode=display">\mathbf{u[j]} = \frac{1}{m}\sum_{i=1}^{m}\mathbf{X[i,j]}</script>
+<p>[\mathbf{u[j]} = \frac{1}{m}\sum_{i=1}^{m}\mathbf{X[i,j]}]</p>
 
 <h2 id="23-计算离均值的偏差矩阵">2.3 计算离均值的偏差矩阵</h2>
 <p>我们计算均值的原因是我们想把数据搬移到原点附近，让原点处于这些数据的中心，这样可以使得均方误差最小。所以这一步要做的就是：</p>
@@ -112,7 +118,7 @@
 
 <p>上述操作可以使用如下方式完成</p>
 
-<script type="math/tex; mode=display">\mathbf{B} = \mathbf{X} - \mathbf{h}\mathbf{u^{T}}</script>
+<p>[\mathbf{B} = \mathbf{X} - \mathbf{h}\mathbf{u^{T}}]</p>
 
 <p>其中，h是一个<code class="highlighter-rouge">m*1</code>的列向量，并且值为全1。</p>
 
@@ -121,7 +127,7 @@
   <li>这一步是计算B矩阵的协方差矩阵C，C矩阵的维度会是<code class="highlighter-rouge">n*n</code>。可以使用下式实现</li>
 </ul>
 
-<script type="math/tex; mode=display">\mathbf{C} = \frac{1}{m-1} \mathbf{B^{*}} \cdot \mathbf{B}</script>
+<p>[\mathbf{C} = \frac{1}{m-1} \mathbf{B^{*}} \cdot \mathbf{B}]</p>
 
 <p>上式中<code class="highlighter-rouge">*</code>是共轭转置运算符。不过由于一般B中包含的都是实数，所以在大部分情况下这个操作相当于一个转置运算符。</p>
 
@@ -134,7 +140,7 @@
 
 <p>一般对于一个矩阵C(维度为<code class="highlighter-rouge">n*n</code>)，会存在n个特征向量(每个维度都是n)，与n个特征值，每个特征值对应一个特征向量。它们之间的关系如下：</p>
 
-<script type="math/tex; mode=display">\mathbf{V^{-1}} \mathbf{C} \mathbf{V} = \mathbf{D} 　也可以写成　 \mathbf{C} = \mathbf{V} \mathbf{D} \mathbf{V^{-1}}</script>
+<p>[\mathbf{V^{-1}} \mathbf{C} \mathbf{V} = \mathbf{D} 　也可以写成　 \mathbf{C} = \mathbf{V} \mathbf{D} \mathbf{V^{-1}}]</p>
 
 <p>其中，</p>
 <ul>

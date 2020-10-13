@@ -1,4 +1,4 @@
-I"T<p>在<a href="https://xhy3054.github.io/camerca-module/">相机成像的几何描述</a>这篇文章中我们讨论了如何将一个点从世界坐标映射到像素坐标，不过那是比较理想的成像情况。现实世界中的相机在成像时还会受到透镜畸变的影响。</p>
+I"0<p>在<a href="https://xhy3054.github.io/camerca-module/">相机成像的几何描述</a>这篇文章中我们讨论了如何将一个点从世界坐标映射到像素坐标，不过那是比较理想的成像情况。现实世界中的相机在成像时还会受到透镜畸变的影响。</p>
 
 <blockquote>
   <p>需要说明的是，下面的畸变模型都是基于<strong>针孔模型</strong>(一般的相机)得到的结果。而如果遇到一些特殊的相机，比如说鱼眼相机，它的投影模型会与针孔模型有些不同，它是投影在球面而不是平面上的。这样下面的畸变模型就不管用了。因此对于不同的相机，我们要使用不同的投影模型来建立畸变模型。</p>
@@ -29,7 +29,7 @@
   <li>一般径向畸变对于二维平面上一个坐标(x,y)（如上图畸变最小的点为坐标原点，一般在图像中心，r是点到原点的距离）的影响可以使用如下公式表述：</li>
 </ul>
 
-<script type="math/tex; mode=display">x_{distorted} = x( 1 + k_1 r^2 + k_2 r^4 + k_3 r^6)　 \\ y_{distorted} = y( 1 + k_1 r^2 + k_2 r^4 + k_3 r^6)</script>
+\[x_{distorted} = x( 1 + k_1 r^2 + k_2 r^4 + k_3 r^6)　 \\ y_{distorted} = y( 1 + k_1 r^2 + k_2 r^4 + k_3 r^6)\]
 
 <blockquote>
   <p>无论是桶形畸变还是枕形畸变，由于他们都是随着与中心之间的距离增加而增加，因此可以使用一个<strong>多项式函数</strong>来描述畸变前后的像素坐标变化。这个公式中，对于畸变较小的图像中心区域，畸变主要是$k_1$在起作用；而对于畸变较大的边缘区域，主要是$k_2$在起作用。一般的普通摄像头用这两个系数就已经可以很好地纠正径向畸变了。但是对于一部分畸变很大的摄像头，比如说鱼眼镜头等，还需要加入$k_3$畸变项才能比较好的表述畸变情况。</p>
@@ -48,7 +48,7 @@
   <li>一般切向畸变对于二维平面上的坐标(x,y)的影响可以使用如下公式进行表述：</li>
 </ul>
 
-<script type="math/tex; mode=display">x_{distorted} = x + [ 2p_1xy + p_2(r^2+2x^2)]  \\ y_{distorted} = y + [ p_1(r^2+ 2y^2)+ 2p_2xy]</script>
+\[x_{distorted} = x + [ 2p_1xy + p_2(r^2+2x^2)]  \\ y_{distorted} = y + [ p_1(r^2+ 2y^2)+ 2p_2xy]\]
 
 <h2 id="加入畸变的成像理想情况下">加入畸变的成像(理想情况下)</h2>
 <ul>
@@ -66,13 +66,13 @@
   </li>
 </ul>
 
-<script type="math/tex; mode=display">x_{distorted} = x( 1 + k_1 r^2 + k_2 r^4 + k_3 r^6) + [ 2p_1xy + p_2(r^2+2x^2)]  \\ y_{distorted} = y( 1 + k_1 r^2 + k_2 r^4 + k_3 r^6) + [ p_1(r^2+ 2y^2)+ 2p_2xy]</script>
+\[x_{distorted} = x( 1 + k_1 r^2 + k_2 r^4 + k_3 r^6) + [ 2p_1xy + p_2(r^2+2x^2)]  \\ y_{distorted} = y( 1 + k_1 r^2 + k_2 r^4 + k_3 r^6) + [ p_1(r^2+ 2y^2)+ 2p_2xy]\]
 
 <ul>
   <li>最后一步，利用内参K，将归一化相机坐标转换成<strong>像素坐标</strong>： $ P_{uv} = KP_{distorted} $</li>
 </ul>
 
-<script type="math/tex; mode=display">u = f_x x_{distorted} + c_x \\ v = f_y y_{distorted} + c_y</script>
+\[u = f_x x_{distorted} + c_x \\ v = f_y y_{distorted} + c_y\]
 
 <blockquote>
   <p>此处之所以将畸变放在内参前面作用，是因为上面已经说过了这个畸变模型假设的原点是图像中心，也就是未经过内参作用时符合。</p>
@@ -97,17 +97,17 @@
 
 <p>对于一个具有N个格点的棋盘，假设我们拍摄K的角度的照片，则可以得到$2NK$个方程，如果我们想要求解出相机参数，则需要满足方程数量大于参数数量：（下面中K个角度有K组外参）</p>
 
-<script type="math/tex; mode=display">2NK >= 4 + 6K + 5</script>
+\[2NK &gt;= 4 + 6K + 5\]
 
 <blockquote>
   <p>此处需要说明的是，按照上述理解，只要一个棋盘上点足够多那不就一个视角就够了吗？这么做其实是不好的，因为在某个视角下，如果我们知道了其中一个格子的四个端点，那我们只需要继续延伸就可以得到其他的格点，那些多余的格点其实是不可以提供额外信息的，因次一个角度最好只利用四个点。这样上面的方程就可以变为</p>
 </blockquote>
 
-<script type="math/tex; mode=display">8K >= 4+6K+5</script>
+\[8K &gt;= 4+6K+5\]
 
 <p>即</p>
 
-<script type="math/tex; mode=display">2K >= 9</script>
+\[2K &gt;= 9\]
 
 <blockquote>
   <p>理论上是这样，但是实际上当然是角度越多，可利用的路标点越多越好。</p>

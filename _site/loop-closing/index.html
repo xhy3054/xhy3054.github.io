@@ -22,17 +22,23 @@
 	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
 	<!-- Styles -->
 	<link rel="stylesheet" href="/assets/css/main.css">
-    <!--将该代码放入博客模板的head中即可-->
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        processEscapes: true
-        }
-    });
-    </script>
-    <!--latex数学显示公式-->
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
+<!-- mathjax config similar to math.stackexchange --> 
+<script type="text/x-mathjax-config"> 
+MathJax.Hub.Config({ 
+    jax: ["input/TeX", "output/HTML-CSS"], 
+    tex2jax: { 
+        inlineMath: [ ['$', '$'] ], 
+        displayMath: [ ['$$', '$$']], 
+        processEscapes: true, 
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
+    messageStyle: "none", 
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
+}); 
+</script>
+
+
 </head>
 
 <body>
@@ -122,9 +128,11 @@
 
 <h2 id="需要注意的问题">需要注意的问题</h2>
 <h3 id="相似性评分的处理">相似性评分的处理</h3>
-<p>使用词袋模型，对于任意两张图片我们都可以给出一个相似性评分，但是有些环境本身就很相似，比如每间办公室中的桌椅可能款式一样，使得任意两幅图像之间的相似度都挺高的。考虑这种情况，我们通常会取一个<strong>先验相似度</strong> <script type="math/tex">s\left(\boldsymbol{v}_{t}, \boldsymbol{v}_{t-\Delta t}\right)</script>，它表示某一时刻关键帧图像与上一时刻关键帧的相似性。然后其他的分之都参照这个值进行归一化：</p>
+<p>使用词袋模型，对于任意两张图片我们都可以给出一个相似性评分，但是有些环境本身就很相似，比如每间办公室中的桌椅可能款式一样，使得任意两幅图像之间的相似度都挺高的。考虑这种情况，我们通常会取一个<strong>先验相似度</strong> $s\left(\boldsymbol{v}<em>{t}, \boldsymbol{v}</em>{t-\Delta t}\right)$，它表示某一时刻关键帧图像与上一时刻关键帧的相似性。然后其他的分之都参照这个值进行归一化：</p>
 
-<script type="math/tex; mode=display">s\left(\boldsymbol{v}_{t}, \boldsymbol{v}_{t_{j}}\right)^{\prime}=s\left(\boldsymbol{v}_{t}, \boldsymbol{v}_{t_{j}}\right) / s\left(\boldsymbol{v}_{t}, \boldsymbol{v}_{t-\Delta t}\right)</script>
+<p>$
+s\left(\boldsymbol{v}<em>{t}, \boldsymbol{v}</em>{t_{j}}\right)^{\prime}=s\left(\boldsymbol{v}<em>{t}, \boldsymbol{v}</em>{t_{j}}\right) / s\left(\boldsymbol{v}<em>{t}, \boldsymbol{v}</em>{t-\Delta t}\right)
+$</p>
 
 <blockquote>
   <p>一般我们会假设，如果当前帧与之前某关键帧的相似度超过当前帧与上一个关键帧相似度的$3$倍，我们才会认为可能存在回环。这样处理可以<strong>避免引入绝对的相似性阈值</strong>。</p>

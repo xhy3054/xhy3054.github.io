@@ -22,17 +22,23 @@
 	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
 	<!-- Styles -->
 	<link rel="stylesheet" href="/assets/css/main.css">
-    <!--将该代码放入博客模板的head中即可-->
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        processEscapes: true
-        }
-    });
-    </script>
-    <!--latex数学显示公式-->
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
+<!-- mathjax config similar to math.stackexchange --> 
+<script type="text/x-mathjax-config"> 
+MathJax.Hub.Config({ 
+    jax: ["input/TeX", "output/HTML-CSS"], 
+    tex2jax: { 
+        inlineMath: [ ['$', '$'] ], 
+        displayMath: [ ['$$', '$$']], 
+        processEscapes: true, 
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
+    messageStyle: "none", 
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
+}); 
+</script>
+
+
 </head>
 
 <body>
@@ -84,31 +90,26 @@
 <ul>
   <li>
     <p>欧式变换: 6个自由度，长度、夹角、体积不变
-<script type="math/tex">% <![CDATA[
-\left[ {\begin{array}{*{20}{c}} \mathbf{R} & \mathbf{t} \\ {\mathbf{0}^T} & 1 \end{array}} \right] %]]></script></p>
+\(\left[ {\begin{array}{*{20}{c}} \mathbf{R} &amp; \mathbf{t} \\ {\mathbf{0}^T} &amp; 1 \end{array}} \right]\)</p>
   </li>
   <li>
     <p>相似变换: 7个自由度， 体积比不变
-<script type="math/tex">% <![CDATA[
-\left[ {\begin{array}{*{20}{c}} \mathbf{sR} & \mathbf{t} \\ {\mathbf{0}^T} & 1 \end{array}} \right] %]]></script></p>
+\(\left[ {\begin{array}{*{20}{c}} \mathbf{sR} &amp; \mathbf{t} \\ {\mathbf{0}^T} &amp; 1 \end{array}} \right]\)</p>
   </li>
   <li>
     <p>仿射变换: 12个自由度，平行性、体积比不变
-<script type="math/tex">% <![CDATA[
-\left[ {\begin{array}{*{20}{c}} \mathbf{A} & \mathbf{t} \\ {\mathbf{0}^T} & 1 \end{array}} \right] %]]></script></p>
+\(\left[ {\begin{array}{*{20}{c}} \mathbf{A} &amp; \mathbf{t} \\ {\mathbf{0}^T} &amp; 1 \end{array}} \right]\)</p>
   </li>
   <li>
     <p>射影变换: 15个自由度，接触平面的相交与相切不变
-<script type="math/tex">% <![CDATA[
-\left[ {\begin{array}{*{20}{c}} \mathbf{A} & \mathbf{t} \\ {\mathbf{a}^T} & \mathbf{v} \end{array}} \right] %]]></script></p>
+\(\left[ {\begin{array}{*{20}{c}} \mathbf{A} &amp; \mathbf{t} \\ {\mathbf{a}^T} &amp; \mathbf{v} \end{array}} \right]\)</p>
   </li>
 </ul>
 
 <h1 id="单应变换">单应变换</h1>
 <p>如下面公式，实际上单应变换实现的是两个平面之间的映射关系。(意思是<strong>只要是从一个平面到另一个平面的映射都可以用单应矩阵表示</strong>)</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-s \begin{bmatrix} x^{'} \\ y^{'} \\ 1 \end{bmatrix} = H \begin{bmatrix} x \\ y \\ 1 \end{bmatrix} = \begin{bmatrix} h_{11} & h_{12} & h_{13} \\ h_{21} & h_{22} & h_{23} \\ h_{31} & h_{32} & h_{33} \end{bmatrix} \begin{bmatrix} x \\ y \\ 1 \end{bmatrix} %]]></script>
+<p>[s \begin{bmatrix} x^{‘} \ y^{‘} \ 1 \end{bmatrix} = H \begin{bmatrix} x \ y \ 1 \end{bmatrix} = \begin{bmatrix} h_{11} &amp; h_{12} &amp; h_{13} \ h_{21} &amp; h_{22} &amp; h_{23} \ h_{31} &amp; h_{32} &amp; h_{33} \end{bmatrix} \begin{bmatrix} x \ y \ 1 \end{bmatrix}]</p>
 
 <p>单应矩阵的维度是<code class="highlighter-rouge">3*3</code>，却只有8个自由度，这是因为齐次坐标的<strong>尺度等价性</strong>。一般求出的单应矩阵会进行归一化，要求为$h_{33} = 1$或$h_{11}^2 + h_{12}^2 + h_{13}^2 + h_{21}^2 + h_{22}^2 + h_{23}^2 + h_{31}^2 + h_{32}^2 + h_{33}^2 = 1$</p>
 
@@ -130,17 +131,17 @@ s \begin{bmatrix} x^{'} \\ y^{'} \\ 1 \end{bmatrix} = H \begin{bmatrix} x \\ y \
 
 <p>这个功能与使用基础矩阵对相机的位姿进行估计是类似的。首先：</p>
 
-<script type="math/tex; mode=display">Z_1p_{uv1} = KP_w \\ Z_2p_{uv2} = K(RP_w + t) 　\tag{1}</script>
+<p>[Z_1p_{uv1} = KP_w \ Z_2p_{uv2} = K(RP_w + t) 　\tag{1}]</p>
 
 <p>其中K是相机内参，R与t是相机的位姿变换，$P_w$是一个空间点在第一个相机坐标系下的坐标。Z是空间点到相机光心的距离，$p_{uv}$是空间点在两个位置的相机的像素平面上的像素坐标。</p>
 
 <p>我们假设有一个参照物平面，平面方程如下：</p>
 
-<script type="math/tex; mode=display">n^{T} P_w　+ d = 0 　\tag{2}</script>
+<p>[n^{T} P_w　+ d = 0 　\tag{2}]</p>
 
 <p>稍加整理可得：</p>
 
-<script type="math/tex; mode=display">-\frac{n^{T}P_w}{d} = 1 \tag{3}</script>
+<p>[-\frac{n^{T}P_w}{d} = 1 \tag{3}]</p>
 
 <p>所以，由公式1我们可以得到：</p>
 
@@ -155,7 +156,7 @@ p_{uv2} &amp;= K(RP_w + t)/Z_2 <br />
 
 <p>如上，上述得到了第一个相机平面上的点到第二个相机平面上的点的映射变换，这部分可以使用下式表示(s是一个齐次坐标的归一系数，为了数学等式的成立)：</p>
 
-<script type="math/tex; mode=display">sp_{uv2} = Hp_{uv1} \\ H = K(R + t \cdot -\frac{n^{T}}{d}) K^{-1}</script>
+<p>[sp_{uv2} = Hp_{uv1} \ H = K(R + t \cdot -\frac{n^{T}}{d}) K^{-1}]</p>
 
 <blockquote>
   <p>我们发现这个单应矩阵H的定义与旋转、平移、还有平面的参数有关。</p>

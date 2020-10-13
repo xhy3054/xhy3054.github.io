@@ -22,17 +22,23 @@
 	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
 	<!-- Styles -->
 	<link rel="stylesheet" href="/assets/css/main.css">
-    <!--将该代码放入博客模板的head中即可-->
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        processEscapes: true
-        }
-    });
-    </script>
-    <!--latex数学显示公式-->
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
+<!-- mathjax config similar to math.stackexchange --> 
+<script type="text/x-mathjax-config"> 
+MathJax.Hub.Config({ 
+    jax: ["input/TeX", "output/HTML-CSS"], 
+    tex2jax: { 
+        inlineMath: [ ['$', '$'] ], 
+        displayMath: [ ['$$', '$$']], 
+        processEscapes: true, 
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
+    messageStyle: "none", 
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
+}); 
+</script>
+
+
 </head>
 
 <body>
@@ -170,13 +176,11 @@
 <img src="/assets/img/self-supervised/s2.jpg" />
 </div>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\operatorname{dist}(f(R(A)), f(C(A)))<\operatorname{dist}(f(R(A)), f(G(B))) %]]></script>
+<p>[\operatorname{dist}(f(R(A)), f(C(A)))&lt;\operatorname{dist}(f(R(A)), f(G(B)))]</p>
 
 <p>看到这里，有经验的同学可能会想到Triplet Loss，事实上我认为这两者确实蛮相似的，唯一的区别可能是这里的负样本不是一对，而是很多对，也即，在满足上式的同时，对于图片A和数据库中的其他图片，我们都希望其满足此距离关系：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\operatorname{dist}(f(R(A)), f(C(X)))<\operatorname{dist}(f(R(A)), f(G(X))), \quad X \in R^{H \times W} %]]></script>
+<p>[\operatorname{dist}(f(R(A)), f(C(X)))&lt;\operatorname{dist}(f(R(A)), f(G(X))), \quad X \in R^{H \times W}]</p>
 
 <p>大家思考一下，实际上最终的目标是，希望每一张图片及其变换后的图片所产生的特征形成一个cluster，在我们假设类内方差小于类间方差的情况下，这一点是可以保证的。</p>
 

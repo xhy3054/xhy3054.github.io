@@ -22,17 +22,23 @@
 	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
 	<!-- Styles -->
 	<link rel="stylesheet" href="/assets/css/main.css">
-    <!--将该代码放入博客模板的head中即可-->
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        processEscapes: true
-        }
-    });
-    </script>
-    <!--latex数学显示公式-->
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
+<!-- mathjax config similar to math.stackexchange --> 
+<script type="text/x-mathjax-config"> 
+MathJax.Hub.Config({ 
+    jax: ["input/TeX", "output/HTML-CSS"], 
+    tex2jax: { 
+        inlineMath: [ ['$', '$'] ], 
+        displayMath: [ ['$$', '$$']], 
+        processEscapes: true, 
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
+    messageStyle: "none", 
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
+}); 
+</script>
+
+
 </head>
 
 <body>
@@ -111,19 +117,19 @@
   </li>
 </ol>
 
-<script type="math/tex; mode=display">p(1 + (1-p) + (1-p)^2 + ... + (1-p)^{n-1}) > \eta</script>
+<p>[p(1 + (1-p) + (1-p)^2 + … + (1-p)^{n-1}) &gt; \eta]</p>
 
 <p>即</p>
 
-<script type="math/tex; mode=display">1 - (1-p)^n > \eta</script>
+<p>[1 - (1-p)^n &gt; \eta]</p>
 
 <p>即</p>
 
-<script type="math/tex; mode=display">n > \frac{log(1 - \eta)}{log(1-p)}</script>
+<p>[n &gt; \frac{log(1 - \eta)}{log(1-p)}]</p>
 
 <p>此处，如果这个数据集合中的内点率为$\delta$时，则(下式中m为最小子集数据的个数)</p>
 
-<script type="math/tex; mode=display">p \approx {\delta}^m</script>
+<p>[p \approx {\delta}^m]</p>
 
 <blockquote>
   <p>需要说明的是此处$\delta$可能并不是已知的，此时可以有两个选择，第一是令其值为最坏情况下的$\delta$，第二是先令其值为非常低的一个值，然后每次迭代后，将其值换为之前验证的模型中最大的那个内点率值（因为最好的模型验证的内点率肯定是最高的）。</p>
@@ -132,8 +138,7 @@
 <h3 id="第二种方式的一种更简单的求解">第二种方式的一种更简单的求解</h3>
 <p>其实上面第二种方式还有一种更简单的表示形式，那就是直接计算没有一次最小采样全部是内点的概率，当它小于$1- \eta$时，终止；即：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-(1-{\delta}^m)^n < 1-\eta %]]></script>
+<p>[(1-{\delta}^m)^n &lt; 1-\eta]</p>
 
 <blockquote>
   <p>上面公式中$\delta$表示当前最好模型的内点率，$m$表示最小采样个数，$n$表示当前的迭代次数，只有在当前迭代次数下这个公式满足的情况下，才会终止。此处的这种形式比上面计算迭代次数的形式要好理解一些。</p>

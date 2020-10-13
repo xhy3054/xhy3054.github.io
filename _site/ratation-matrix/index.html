@@ -22,17 +22,23 @@
 	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
 	<!-- Styles -->
 	<link rel="stylesheet" href="/assets/css/main.css">
-    <!--将该代码放入博客模板的head中即可-->
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        processEscapes: true
-        }
-    });
-    </script>
-    <!--latex数学显示公式-->
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
+<!-- mathjax config similar to math.stackexchange --> 
+<script type="text/x-mathjax-config"> 
+MathJax.Hub.Config({ 
+    jax: ["input/TeX", "output/HTML-CSS"], 
+    tex2jax: { 
+        inlineMath: [ ['$', '$'] ], 
+        displayMath: [ ['$$', '$$']], 
+        processEscapes: true, 
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
+    messageStyle: "none", 
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
+}); 
+</script>
+
+
 </head>
 
 <body>
@@ -63,7 +69,7 @@
       <h2 id="正交矩阵">正交矩阵</h2>
 <p>正交矩阵的定义如下：如果</p>
 
-<script type="math/tex; mode=display">AA^T = E</script>
+<p>[AA^T = E]</p>
 
 <p>其中E为单位矩阵，则称n阶实矩阵A为正交矩阵。</p>
 
@@ -84,21 +90,29 @@
 <h2 id="向量与坐标">向量与坐标</h2>
 <p>对于三维空间中的任意一个向量$a$，它在一组基$\left(e_{1}, e_{2}, e_{3}\right)$下的表示如下：</p>
 
-<script type="math/tex; mode=display">\boldsymbol{a}=\left[\boldsymbol{e}_{1}, \boldsymbol{e}_{2}, \boldsymbol{e}_{3}\right]\left[\begin{array}{c}{a_{1}} \\ {a_{2}} \\ {a_{3}}\end{array}\right]=a_{1} e_{1}+a_{2} \boldsymbol{e}_{2}+a_{3} \boldsymbol{e}_{3}</script>
+<p>[\boldsymbol{a}=\left[\boldsymbol{e}<em>{1}, \boldsymbol{e}</em>{2}, \boldsymbol{e}<em>{3}\right]\left[\begin{array}{c}{a</em>{1}} \ {a_{2}} \ {a_{3}}\end{array}\right]=a_{1} e_{1}+a_{2} \boldsymbol{e}<em>{2}+a</em>{3} \boldsymbol{e}_{3}]</p>
 
 <p>两个向量$a,b$的内积可以写成：</p>
 
-<script type="math/tex; mode=display">a \cdot b=a^{\mathrm{T}} b=\sum_{i=1}^{3} a_{i} b_{i}=|\boldsymbol{a}||\boldsymbol{b}| \cos \langle\boldsymbol{a}, \boldsymbol{b}\rangle</script>
+<table>
+  <tbody>
+    <tr>
+      <td>[a \cdot b=a^{\mathrm{T}} b=\sum_{i=1}^{3} a_{i} b_{i}=</td>
+      <td>\boldsymbol{a}</td>
+      <td> </td>
+      <td>\boldsymbol{b}</td>
+      <td>\cos \langle\boldsymbol{a}, \boldsymbol{b}\rangle]</td>
+    </tr>
+  </tbody>
+</table>
 
 <p>外积写成：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\boldsymbol{a} \times \boldsymbol{b}=\left\|\begin{array}{ccc}{\boldsymbol{e}_{1}} & {\boldsymbol{e}_{2}} & {\boldsymbol{e}_{3}} \\ {a_{1}} & {a_{2}} & {a_{3}} \\ {b_{1}} & {b_{2}} & {b_{3}}\end{array}\right\|=\left[\begin{array}{cc}{a_{2} b_{3}-a_{3} b_{2}} \\ {a_{3} b_{1}-a_{1} b_{3}} \\ {a_{1} b_{2}-a_{2} b_{1}}\end{array}\right]=\left[\begin{array}{ccc}{0} & {-a_{3}} & {a_{2}} \\ {a_{3}} & {0} & {-a_{1}} \\ {-a_{2}} & {a_{1}} & {0}\end{array}\right] \boldsymbol{b} \triangleq \boldsymbol{a}^{\wedge} \boldsymbol{b} %]]></script>
+<p>[\boldsymbol{a} \times \boldsymbol{b}=\left|\begin{array}{ccc}{\boldsymbol{e}<em>{1}} &amp; {\boldsymbol{e}</em>{2}} &amp; {\boldsymbol{e}<em>{3}} \ {a</em>{1}} &amp; {a_{2}} &amp; {a_{3}} \ {b_{1}} &amp; {b_{2}} &amp; {b_{3}}\end{array}\right|=\left[\begin{array}{cc}{a_{2} b_{3}-a_{3} b_{2}} \ {a_{3} b_{1}-a_{1} b_{3}} \ {a_{1} b_{2}-a_{2} b_{1}}\end{array}\right]=\left[\begin{array}{ccc}{0} &amp; {-a_{3}} &amp; {a_{2}} \ {a_{3}} &amp; {0} &amp; {-a_{1}} \ {-a_{2}} &amp; {a_{1}} &amp; {0}\end{array}\right] \boldsymbol{b} \triangleq \boldsymbol{a}^{\wedge} \boldsymbol{b}]</p>
 
 <p>其中$\boldsymbol{a}^{\wedge}$是向量$a$对应的反对称矩阵：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\boldsymbol{a}^{\wedge}=\left[\begin{array}{ccc}{0} & {-a_{3}} & {a_{2}} \\ {a_{3}} & {0} & {-a_{1}} \\ {-a_{2}} & {a_{1}} & {0}\end{array}\right] %]]></script>
+<p>[\boldsymbol{a}^{\wedge}=\left[\begin{array}{ccc}{0} &amp; {-a_{3}} &amp; {a_{2}} \ {a_{3}} &amp; {0} &amp; {-a_{1}} \ {-a_{2}} &amp; {a_{1}} &amp; {0}\end{array}\right]]</p>
 
 <h2 id="旋转矩阵是正交矩阵的证明">旋转矩阵(是正交矩阵的证明)</h2>
 <p>旋转矩阵，对应了一种变换，在三维空间中，这种变换可以看成将空间中物体绕一条轴旋转一定角度。很容易发现，这是一种正交矩阵。</p>
@@ -114,14 +128,13 @@
   </li>
 </ul>
 
-<script type="math/tex; mode=display">\left[e_{1}, e_{2}, e_{3}\right]\left[\begin{array}{l}{a_{1}} \\ {a_{2}} \\ {a_{3}}\end{array}\right]=\left[e_{1}^{\prime}, e_{2}^{\prime}, e_{3}^{\prime}\right]\left[\begin{array}{c}{a_{1}^{\prime}} \\ {a_{2}^{\prime}} \\ {a_{3}^{\prime}}\end{array}\right]</script>
+<p>[\left[e_{1}, e_{2}, e_{3}\right]\left[\begin{array}{l}{a_{1}} \ {a_{2}} \ {a_{3}}\end{array}\right]=\left[e_{1}^{\prime}, e_{2}^{\prime}, e_{3}^{\prime}\right]\left[\begin{array}{c}{a_{1}^{\prime}} \ {a_{2}^{\prime}} \ {a_{3}^{\prime}}\end{array}\right]]</p>
 
 <ul>
   <li>上述公式左右同时左乘$\left[\begin{array}{c}{e_{1}^{\mathrm{T}}} \ {e_{2}^{\mathrm{T}}} \ {e_{3}^{\mathrm{T}}}\end{array}\right]$，我们会得到如下公式，其中$R$是这次旋转变换对向量$\left[a_{1}^{\prime}, a_{2}^{\prime}, a_{3}^{\prime}\right]^{\mathrm{T}}$的变换矩阵。</li>
 </ul>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\left[\begin{array}{c}{a_{1}} \\ {a_{2}} \\ {a_{3}}\end{array}\right]=\left[\begin{array}{ccc}{e_{1}^{\mathrm{T}} e_{1}^{\prime}} & {e_{1}^{\mathrm{T}} e_{2}^{\prime}} & {e_{1}^{\mathrm{T}} e_{3}^{\prime}} \\ {e_{2}^{\mathrm{T}} \boldsymbol{e}_{1}^{\prime}} & {\boldsymbol{e}_{2}^{\mathrm{T}} \boldsymbol{e}_{2}^{\prime}} & {\boldsymbol{e}_{2}^{\mathrm{T}} \boldsymbol{e}_{3}^{\prime}} \\ {\boldsymbol{e}_{3}^{\mathrm{T}} \boldsymbol{e}_{1}^{\prime}} & {\boldsymbol{e}_{3}^{\mathrm{T}} \boldsymbol{e}_{2}^{\prime}} & {\boldsymbol{e}_{3}^{\mathrm{T}} \boldsymbol{e}_{3}^{\prime}}\end{array}\right]\left[\begin{array}{c}{a_{1}^{\prime}} \\ {a_{2}^{\prime}} \\ {a_{3}^{\prime}}\end{array}\right] = \boldsymbol{R} a^{\prime} %]]></script>
+<p>[\left[\begin{array}{c}{a_{1}} \ {a_{2}} \ {a_{3}}\end{array}\right]=\left[\begin{array}{ccc}{e_{1}^{\mathrm{T}} e_{1}^{\prime}} &amp; {e_{1}^{\mathrm{T}} e_{2}^{\prime}} &amp; {e_{1}^{\mathrm{T}} e_{3}^{\prime}} \ {e_{2}^{\mathrm{T}} \boldsymbol{e}<em>{1}^{\prime}} &amp; {\boldsymbol{e}</em>{2}^{\mathrm{T}} \boldsymbol{e}<em>{2}^{\prime}} &amp; {\boldsymbol{e}</em>{2}^{\mathrm{T}} \boldsymbol{e}<em>{3}^{\prime}} \ {\boldsymbol{e}</em>{3}^{\mathrm{T}} \boldsymbol{e}<em>{1}^{\prime}} &amp; {\boldsymbol{e}</em>{3}^{\mathrm{T}} \boldsymbol{e}<em>{2}^{\prime}} &amp; {\boldsymbol{e}</em>{3}^{\mathrm{T}} \boldsymbol{e}<em>{3}^{\prime}}\end{array}\right]\left[\begin{array}{c}{a</em>{1}^{\prime}} \ {a_{2}^{\prime}} \ {a_{3}^{\prime}}\end{array}\right] = \boldsymbol{R} a^{\prime}]</p>
 
 <p>此处，矩阵$R$<strong>由两组基之间的内积</strong>组成，刻画了前后同一个向量经过一次旋转变换的坐标变换关系。因此，这个$R$就是一个旋转矩阵（只有两个正交基不变，它就不变）。这个矩阵按列看，是第二组基向量在第一组中的坐标表示，按行看，是第一组基向量在第二组中的坐标表示。它们肯定是相互正交的。</p>
 
@@ -138,8 +151,7 @@
 
 <p>此处需要把$()^{\land}$运算符转换成叉乘。我们知道，对于任意${\bf v,u} \in \mathbb{R}^3$，总有${\bf v}^{\land}{\bf v \times u}$。于是：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned} &(\mathbf{R} \mathbf{v})^{\wedge}=\mathbf{R} \mathbf{v}^{\wedge} \mathbf{R}^{T} \\ \Leftrightarrow &(\mathbf{R} \mathbf{v})^{\wedge} \mathbf{R}=\mathbf{R} \mathbf{v}^{\wedge} \\ \Leftrightarrow & \forall \mathbf{u} \in \mathbb{R}^{3},(\mathbf{R} \mathbf{v})^{\wedge} \mathbf{R} \mathbf{u}=\mathbf{R} \mathbf{v}^{\wedge} \mathbf{u} \\ \Leftrightarrow & \forall \mathbf{u} \in \mathbb{R}^{3},(\mathbf{R} \mathbf{v}) \times(\mathbf{R} \mathbf{u})=\mathbf{R}(\mathbf{v} \times \mathbf{u}) \end{aligned} %]]></script>
+<p>[\begin{aligned} &amp;(\mathbf{R} \mathbf{v})^{\wedge}=\mathbf{R} \mathbf{v}^{\wedge} \mathbf{R}^{T} \ \Leftrightarrow &amp;(\mathbf{R} \mathbf{v})^{\wedge} \mathbf{R}=\mathbf{R} \mathbf{v}^{\wedge} \ \Leftrightarrow &amp; \forall \mathbf{u} \in \mathbb{R}^{3},(\mathbf{R} \mathbf{v})^{\wedge} \mathbf{R} \mathbf{u}=\mathbf{R} \mathbf{v}^{\wedge} \mathbf{u} \ \Leftrightarrow &amp; \forall \mathbf{u} \in \mathbb{R}^{3},(\mathbf{R} \mathbf{v}) \times(\mathbf{R} \mathbf{u})=\mathbf{R}(\mathbf{v} \times \mathbf{u}) \end{aligned}]</p>
 
 <p>所以上面是一直等价的（倒数第二个式子到最后一个式子等价，因为矩阵乘法满足结合律），我们只需要证明最后一个式子即可，最后一个式子通过利用向量叉乘的旋转变换不变性（参照<a href="https://en.wikipedia.org/wiki/Cross_product#Algebraic_properties">Wikipedia</a>）。</p>
 
@@ -173,14 +185,13 @@
   </li>
 </ul>
 
-<script type="math/tex; mode=display">\ln \left(\mathbf{R} \exp \left(\phi^{\wedge}\right)\right)^{\vee}=\ln (\mathbf{R})^{\vee}+\mathbf{J}_{r}^{-1} \boldsymbol{\phi}</script>
+<p>[\ln \left(\mathbf{R} \exp \left(\phi^{\wedge}\right)\right)^{\vee}=\ln (\mathbf{R})^{\vee}+\mathbf{J}_{r}^{-1} \boldsymbol{\phi}]</p>
 
 <ul>
   <li>BCH公式</li>
 </ul>
 
-<script type="math/tex; mode=display">% <![CDATA[
-R_1 R_2 = \textbf{exp}({\phi_1}^{\wedge})\textbf{exp}({\phi_2}^{\wedge}) \approx \begin{equation} \begin{cases} \textbf{exp}(( J_l(\phi_2)^{-1} \phi_1 + \phi_2    )^{\wedge})  & \textbf{if  } \phi_1 \textbf{ is small}\\ \textbf{exp}(( J_r(\phi_1)^{-1} \phi_2+ \phi_1    )^{\wedge})   & \textbf{if  } \phi_2 \textbf{ is small} \end{cases} \end{equation} %]]></script>
+<p>[R_1 R_2 = \textbf{exp}({\phi_1}^{\wedge})\textbf{exp}({\phi_2}^{\wedge}) \approx \begin{equation} \begin{cases} \textbf{exp}(( J_l(\phi_2)^{-1} \phi_1 + \phi_2    )^{\wedge})  &amp; \textbf{if  } \phi_1 \textbf{ is small}\ \textbf{exp}(( J_r(\phi_1)^{-1} \phi_2+ \phi_1    )^{\wedge})   &amp; \textbf{if  } \phi_2 \textbf{ is small} \end{cases} \end{equation}]</p>
 
 
     </div>

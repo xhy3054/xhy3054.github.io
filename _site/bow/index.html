@@ -22,17 +22,23 @@
 	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
 	<!-- Styles -->
 	<link rel="stylesheet" href="/assets/css/main.css">
-    <!--将该代码放入博客模板的head中即可-->
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        processEscapes: true
-        }
-    });
-    </script>
-    <!--latex数学显示公式-->
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
+<!-- mathjax config similar to math.stackexchange --> 
+<script type="text/x-mathjax-config"> 
+MathJax.Hub.Config({ 
+    jax: ["input/TeX", "output/HTML-CSS"], 
+    tex2jax: { 
+        inlineMath: [ ['$', '$'] ], 
+        displayMath: [ ['$$', '$$']], 
+        processEscapes: true, 
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
+    messageStyle: "none", 
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
+}); 
+</script>
+
+
 </head>
 
 <body>
@@ -134,19 +140,27 @@
 
 <p>这种方法在建立字典时就可以统计出$IDF$的值，比如某个叶子节点$w_{i}$中的特征数量相对于所有特征数量的比例，就是次叶子节点的$IDF$值。假设所有特征数量为$n$，$w_{i}$中的特征数量为$n_{i}$，那么该单词的$IDF$为：</p>
 
-<script type="math/tex; mode=display">\operatorname{IDF}_{i}=\log \frac{n}{n_{i}}</script>
+<p>$
+\operatorname{IDF}<em>{i}=\log \frac{n}{n</em>{i}}
+$</p>
 
 <p>此外，$TF$部分是指某个特征在单个图像中出现的频率。假设图像$A$中，单词$w_{i}$出现了$n_{i}$次，而一共出现的单词次数为$n$，那么$TF$为：</p>
 
-<script type="math/tex; mode=display">\mathrm{TF}_{i}=\frac{n_{i}}{n}</script>
+<p>$
+\mathrm{TF}<em>{i}=\frac{n</em>{i}}{n}
+$</p>
 
 <p>最后，对于单词$w_{i}$在这幅图像中的权重等于$TF$与$IDF$的乘积：</p>
 
-<script type="math/tex; mode=display">\eta_{i}=\mathrm{TF}_{i} \times \operatorname{IDF}_{i}</script>
+<p>$
+\eta_{i}=\mathrm{TF}<em>{i} \times \operatorname{IDF}</em>{i}
+$</p>
 
 <p>在考虑权重之后，对于某个图像$A$，它的特征点可对应到许多个单词，组成它的$Bag-of-Words$：</p>
 
-<script type="math/tex; mode=display">A=\left\{\left(w_{1}, \eta_{1}\right),\left(w_{2}, \eta_{2}\right), \ldots,\left(w_{N}, \eta_{N}\right)\right\} \triangleq v_{A}</script>
+<p>$
+A=\left{\left(w_{1}, \eta_{1}\right),\left(w_{2}, \eta_{2}\right), \ldots,\left(w_{N}, \eta_{N}\right)\right} \triangleq v_{A}
+$</p>
 
 <blockquote>
   <p>由于一般字典会比较大，一副图像中包含的单词种类有限，因此$v_{A}$中会存在大量的零。不过通过词袋向量我们还是可以描述一个图像，只不过这个词袋向量是稀疏的。</p>
@@ -155,7 +169,9 @@
 <h3 id="相似性对量">相似性对量</h3>
 <p>接下来便是如何表示两个词袋向量之间的差异，这个问题其实可以使用很多种方法，在$DBoW$库中如果不指定会默认是$L_{1}$范数形式：</p>
 
-<script type="math/tex; mode=display">s\left(\boldsymbol{v}_{A}-\boldsymbol{v}_{B}\right)=2 \sum_{i=1}^{N}\left|\boldsymbol{v}_{A i}\right|+\left|\boldsymbol{v}_{B i}\right|-\left|\boldsymbol{v}_{A i}-\boldsymbol{v}_{B i}\right|</script>
+<p>$
+s\left(\boldsymbol{v}<em>{A}-\boldsymbol{v}</em>{B}\right)=2 \sum_{i=1}^{N}\left|\boldsymbol{v}<em>{A i}\right|+\left|\boldsymbol{v}</em>{B i}\right|-\left|\boldsymbol{v}<em>{A i}-\boldsymbol{v}</em>{B i}\right|
+$</p>
 
 <h2 id="代码实例">代码实例</h2>
 <p>下面代码都是基于$DBoW3$库，这时一个$cmake$工程，直接默认方式编译安装即可，使用$cmake$使用它时与其他库一样。，$github$地址是<code class="highlighter-rouge">https://github.com/rmsalinas/DBow3</code></p>

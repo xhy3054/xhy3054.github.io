@@ -45,6 +45,10 @@ analytics:
 paginate: 9
 paginate_path: /page:num/
 
+## Mathjax
+mathjax: true # false (default), true
+mathjax_autoNumber: true # false (default), true
+
 # Build settings
 markdown: kramdown
 plugins:

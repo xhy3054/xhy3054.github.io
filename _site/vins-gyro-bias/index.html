@@ -22,17 +22,23 @@
 	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
 	<!-- Styles -->
 	<link rel="stylesheet" href="/assets/css/main.css">
-    <!--将该代码放入博客模板的head中即可-->
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        processEscapes: true
-        }
-    });
-    </script>
-    <!--latex数学显示公式-->
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
+<!-- mathjax config similar to math.stackexchange --> 
+<script type="text/x-mathjax-config"> 
+MathJax.Hub.Config({ 
+    jax: ["input/TeX", "output/HTML-CSS"], 
+    tex2jax: { 
+        inlineMath: [ ['$', '$'] ], 
+        displayMath: [ ['$$', '$$']], 
+        processEscapes: true, 
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
+    messageStyle: "none", 
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
+}); 
+</script>
+
+
 </head>
 
 <body>
@@ -63,7 +69,7 @@
       <p>vins是一个很好的开源工作，最近一直在熟悉它，其中大部分的内容之前已经或多多少提到过了，这篇博客主要讲一讲vins初始化中的视觉与imu联合初始化工作。</p>
 
 <blockquote>
-  <p>注意：<script type="math/tex">T_{WI}</script>指的是从I系到W系的变换矩阵。</p>
+  <p>注意：\(T_{WI}\)指的是从I系到W系的变换矩阵。</p>
 </blockquote>
 
 <h1 id="陀螺仪偏置标定问题">陀螺仪偏置标定问题</h1>
@@ -71,45 +77,45 @@
   <p>这个工作主要是在<code class="highlighter-rouge">vins/vins_estimator/src/initial/initial_aligment.cpp</code>文件中的<code class="highlighter-rouge">solveGyroscopeBias</code>函数中实现的。此处之所以只对陀螺仪的bias进行标定，而不对加速度计的bias进行标定，原因是视觉sfm恢复出来的角度变换不受尺度影响，比较稳定准确。而sfm恢复出来的位移信息收到尺度影响，不似角度可以直接对齐。</p>
 </blockquote>
 
-<p>对于窗口中连续两帧图像$b_{k}$和$b_{k+1}$，之前已经通过视觉sfm得到了两帧相对于滑窗第一帧的旋转<script type="math/tex">\mathbf{q}_{c_{0} b_{k}}</script>和<script type="math/tex">\mathbf{q}_{c_{0} b_{k+1}}</script>，此时之前通过IMU预积分得到这两帧旋转的预积分<script type="math/tex">\hat{\gamma}_{b_k b_{k+1}}</script>（先前不带bias的预积分）。</p>
+<p>对于窗口中连续两帧图像$b_{k}$和$b_{k+1}$，之前已经通过视觉sfm得到了两帧相对于滑窗第一帧的旋转\(\mathbf{q}_{c_{0} b_{k}}\)和\(\mathbf{q}_{c_{0} b_{k+1}}\)，此时之前通过IMU预积分得到这两帧旋转的预积分\(\hat{\gamma}_{b_k b_{k+1}}\)（先前不带bias的预积分）。</p>
 
 <p>此时，我们可以建立约束方程，最小化代价函数，如下：</p>
 
-<script type="math/tex; mode=display">\arg \min _{\delta \mathbf{b}^{g}} \sum_{k \in B}\left\|2\left\lfloor\mathbf{q}_{c_{0} b_{k+1}}^{-1} \otimes \mathbf{q}_{c_{0} b_{k}} \otimes {\gamma}_{b_k b_{k+1}}\right\rfloor_{x y z}\right\|^{2}</script>
+<p>[\arg \min <em>{\delta \mathbf{b}^{g}} \sum</em>{k \in B}\left|2\left\lfloor\mathbf{q}<em>{c</em>{0} b_{k+1}}^{-1} \otimes \mathbf{q}<em>{c</em>{0} b_{k}} \otimes {\gamma}<em>{b_k b</em>{k+1}}\right\rfloor_{x y z}\right|^{2}]</p>
 
 <blockquote>
-  <p>其中<script type="math/tex">{\gamma}_{b_k b_{k+1}}</script>表示的是算上陀螺仪bias的预积分值。</p>
+  <p>其中\({\gamma}_{b_k b_{k+1}}\)表示的是算上陀螺仪bias的预积分值。</p>
 </blockquote>
 
-<script type="math/tex; mode=display">\gamma_{b_k b_{k+1}} \approx \hat{\gamma}_{b_k b_{k+1}} \otimes\left[\begin{array}{c}{1} \\ {\frac{1}{2} J_{b_{g}}^{\gamma} \delta b_{g}}\end{array}\right]</script>
+<p>[\gamma_{b_k b_{k+1}} \approx \hat{\gamma}<em>{b_k b</em>{k+1}} \otimes\left[\begin{array}{c}{1} \ {\frac{1}{2} J_{b_{g}}^{\gamma} \delta b_{g}}\end{array}\right]]</p>
 
 <h2 id="具体方法">具体方法</h2>
 <p>在上述问题的求解时，最理想的情况如下（其中等式右边的四元数代表的是旋转不变的四元数）：</p>
 
-<script type="math/tex; mode=display">\mathbf{q}_{c_{0} b_{k+1}}^{-1} \otimes \mathbf{q}_{c_{0} b_{k}} \otimes {\gamma}_{b_k b_{k+1}} = \left[\begin{array}{l}{1} \\ {0}\end{array}\right]</script>
+<p>[\mathbf{q}<em>{c</em>{0} b_{k+1}}^{-1} \otimes \mathbf{q}<em>{c</em>{0} b_{k}} \otimes {\gamma}<em>{b_k b</em>{k+1}} = \left[\begin{array}{l}{1} \ {0}\end{array}\right]]</p>
 
 <p>对上式进行变换可以得到</p>
 
-<script type="math/tex; mode=display">{\gamma}_{b_k b_{k+1}} = \mathbf{q}_{c_{0} b_{k}}^{-1} \otimes \mathbf{q}_{c_{0} b_{k+1}} \otimes \left[\begin{array}{l}{1} \\ {0}\end{array}\right]</script>
+<p>[{\gamma}<em>{b_k b</em>{k+1}} = \mathbf{q}<em>{c</em>{0} b_{k}}^{-1} \otimes \mathbf{q}<em>{c</em>{0} b_{k+1}} \otimes \left[\begin{array}{l}{1} \ {0}\end{array}\right]]</p>
 
-<p>将<script type="math/tex">\delta b_{g}</script>带入上式可以得到</p>
+<p>将\(\delta b_{g}\)带入上式可以得到</p>
 
-<script type="math/tex; mode=display">\hat{\gamma}_{b_k b_{k+1}} \otimes\left[\begin{array}{c}{1} \\ {\frac{1}{2} J_{b_{g}}^{\gamma} \delta b_{g}}\end{array}\right] = \mathbf{q}_{c_{0} b_{k}}^{-1} \otimes \mathbf{q}_{c_{0} b_{k+1}} \otimes \left[\begin{array}{l}{1} \\ {0}\end{array}\right]</script>
+<p>[\hat{\gamma}<em>{b_k b</em>{k+1}} \otimes\left[\begin{array}{c}{1} \ {\frac{1}{2} J_{b_{g}}^{\gamma} \delta b_{g}}\end{array}\right] = \mathbf{q}<em>{c</em>{0} b_{k}}^{-1} \otimes \mathbf{q}<em>{c</em>{0} b_{k+1}} \otimes \left[\begin{array}{l}{1} \ {0}\end{array}\right]]</p>
 
 <p>只考虑上式虚部，我们可以得到(其中$vec$代表取虚部)</p>
 
-<script type="math/tex; mode=display">J_{b_{g}}^{\gamma} \delta b_{g}=2\left({\hat{\gamma}_{b_k b_{k+1}}}^{-1} \otimes \mathbf{q}_{c_{0} b_{k}}^{-1} \otimes \mathbf{q}_{c_{0} b_{k+1}}\right)_{v e c}</script>
+<p>[J_{b_{g}}^{\gamma} \delta b_{g}=2\left({\hat{\gamma}<em>{b_k b</em>{k+1}}}^{-1} \otimes \mathbf{q}<em>{c</em>{0} b_{k}}^{-1} \otimes \mathbf{q}<em>{c</em>{0} b_{k+1}}\right)_{v e c}]</p>
 
-<p>对于上式，我们想要做的是求解出<script type="math/tex">\delta b_{g}</script>的大小，此时我们可以使用如下办法：</p>
+<p>对于上式，我们想要做的是求解出\(\delta b_{g}\)的大小，此时我们可以使用如下办法：</p>
 
 <ul>
-  <li>等式两侧同时乘以<script type="math/tex">J_{b_{g}}^{\gamma T}</script>（在使用cholesky分解求解矩阵，获取使目标函数达到最小的解时，需要将系数矩阵变为正定。），即得到</li>
+  <li>等式两侧同时乘以\(J_{b_{g}}^{\gamma T}\)（在使用cholesky分解求解矩阵，获取使目标函数达到最小的解时，需要将系数矩阵变为正定。），即得到</li>
 </ul>
 
-<script type="math/tex; mode=display">J_{b_{g}}^{\gamma T} J_{b_{g}}^{\gamma} \delta b_{g}=2 J_{b_{g}}^{\gamma T} \left({\hat{\gamma}_{b_k b_{k+1}}}^{-1} \otimes \mathbf{q}_{c_{0} b_{k}}^{-1} \otimes \mathbf{q}_{c_{0} b_{k+1}}\right)_{v e c}</script>
+<p>[J_{b_{g}}^{\gamma T} J_{b_{g}}^{\gamma} \delta b_{g}=2 J_{b_{g}}^{\gamma T} \left({\hat{\gamma}<em>{b_k b</em>{k+1}}}^{-1} \otimes \mathbf{q}<em>{c</em>{0} b_{k}}^{-1} \otimes \mathbf{q}<em>{c</em>{0} b_{k+1}}\right)_{v e c}]</p>
 
 <ul>
-  <li>使用LDLT分解即可求得 <script type="math/tex">\delta b_{g}</script></li>
+  <li>使用LDLT分解即可求得 \(\delta b_{g}\)</li>
 </ul>
 
 <h2 id="vins中代码实现">vins中代码实现</h2>

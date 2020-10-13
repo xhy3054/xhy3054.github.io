@@ -22,17 +22,23 @@
 	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
 	<!-- Styles -->
 	<link rel="stylesheet" href="/assets/css/main.css">
-    <!--将该代码放入博客模板的head中即可-->
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        processEscapes: true
-        }
-    });
-    </script>
-    <!--latex数学显示公式-->
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
+<!-- mathjax config similar to math.stackexchange --> 
+<script type="text/x-mathjax-config"> 
+MathJax.Hub.Config({ 
+    jax: ["input/TeX", "output/HTML-CSS"], 
+    tex2jax: { 
+        inlineMath: [ ['$', '$'] ], 
+        displayMath: [ ['$$', '$$']], 
+        processEscapes: true, 
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
+    messageStyle: "none", 
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
+}); 
+</script>
+
+
 </head>
 
 <body>
@@ -108,19 +114,27 @@
   <li>SAD(Sum of Absolute Difference)。取两个小块的差的绝对值之和（这个结果越大，说明越不匹配，越接近0，块的相似度越高）：</li>
 </ul>
 
-<script type="math/tex; mode=display">S(\boldsymbol{A}, \boldsymbol{B})_{S A D}=\sum_{i, j}|\boldsymbol{A}(i, j)-\boldsymbol{B}(i, j)|</script>
+<table>
+  <tbody>
+    <tr>
+      <td>[S(\boldsymbol{A}, \boldsymbol{B})<em>{S A D}=\sum</em>{i, j}</td>
+      <td>\boldsymbol{A}(i, j)-\boldsymbol{B}(i, j)</td>
+      <td>]</td>
+    </tr>
+  </tbody>
+</table>
 
 <ul>
   <li>SSD(Sum of Squared Distance)。即取两个小块的差的平方和（这个结果越大，说明越不匹配，越接近0，块的相似度越高）：</li>
 </ul>
 
-<script type="math/tex; mode=display">S(\boldsymbol{A}, \boldsymbol{B})_{S S D}=\sum_{i, j}(\boldsymbol{A}(i, j)-\boldsymbol{B}(i, j))^{2}</script>
+<p>[S(\boldsymbol{A}, \boldsymbol{B})<em>{S S D}=\sum</em>{i, j}(\boldsymbol{A}(i, j)-\boldsymbol{B}(i, j))^{2}]</p>
 
 <ul>
   <li>NCC(Normalized Cross Correlation)。即计算两个小块的归一化互相关（这个结果越大，说明相似度越高，0时代表完全不相关）：</li>
 </ul>
 
-<script type="math/tex; mode=display">S(\boldsymbol{A}, \boldsymbol{B})_{N C C}=\frac{\sum_{i, j} \boldsymbol{A}(i, j) \boldsymbol{B}(i, j)}{\sqrt{\sum_{i, j} \boldsymbol{A}(i, j)^{2} \sum_{i, j} \boldsymbol{B}(i, j)^{2}}}</script>
+<p>[S(\boldsymbol{A}, \boldsymbol{B})<em>{N C C}=\frac{\sum</em>{i, j} \boldsymbol{A}(i, j) \boldsymbol{B}(i, j)}{\sqrt{\sum_{i, j} \boldsymbol{A}(i, j)^{2} \sum_{i, j} \boldsymbol{B}(i, j)^{2}}}]</p>
 
 <blockquote>
   <p>上述三种方法是比较常见的三种方法，现实中我们使用的方法可能要更复杂一点，比如在$svo$中使用的是$ZMSSD$对$8 \times 8$的矩形$patch$计算相似性，与此同时，通常我们在计算小块的差异之前，还需要做一些预处理操作，比如去均值（减小亮度影响）、根据参考帧与当前帧间的运动首先将块进行对应的仿射变换再进行匹配等。</p>

@@ -22,17 +22,23 @@
 	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
 	<!-- Styles -->
 	<link rel="stylesheet" href="/assets/css/main.css">
-    <!--将该代码放入博客模板的head中即可-->
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        processEscapes: true
-        }
-    });
-    </script>
-    <!--latex数学显示公式-->
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
+<!-- mathjax config similar to math.stackexchange --> 
+<script type="text/x-mathjax-config"> 
+MathJax.Hub.Config({ 
+    jax: ["input/TeX", "output/HTML-CSS"], 
+    tex2jax: { 
+        inlineMath: [ ['$', '$'] ], 
+        displayMath: [ ['$$', '$$']], 
+        processEscapes: true, 
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
+    messageStyle: "none", 
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
+}); 
+</script>
+
+
 </head>
 
 <body>
@@ -105,7 +111,7 @@
 <h3 id="21-地心地固坐标系">2.1 地心地固坐标系</h3>
 
 <h4 id="211-地心地固直角坐标系">2.1.1 地心地固直角坐标系</h4>
-<p>地心地固直角坐标系以地心<script type="math/tex">O</script>为坐标原点，Z轴与地球自传轴重合并指向北极（协议北极），X轴指向参考子午面（通常是英国伦敦处的格林尼治子午面）与地球赤道的一个交点，而X,Y,Z三轴一起构成右手直角坐标系。</p>
+<p>地心地固直角坐标系以地心\(O\)为坐标原点，Z轴与地球自传轴重合并指向北极（协议北极），X轴指向参考子午面（通常是英国伦敦处的格林尼治子午面）与地球赤道的一个交点，而X,Y,Z三轴一起构成右手直角坐标系。</p>
 
 <h4 id="212大地坐标系">2.1.2大地坐标系</h4>
 <p>大地坐标系也叫经纬高坐标系。三个坐标分别表示经度、纬度、高度信息。</p>
