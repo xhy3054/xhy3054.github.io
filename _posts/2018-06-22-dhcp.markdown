@@ -55,3 +55,7 @@ tags: [计算机网络]
 4. 利用 DNS 协议获得`www.google.com`的 IP ;
 5. 将数据包依次通过互联网的五层架构发送出去，并接收返回数据屏幕显示，完成一次网络通信。
 ![surf]({{site.baseurl}}/assets/img/dhcp/surf.jpg)
+
+# 参考文献
+
+- http://www.ruanyifeng.com/blog/2012/06/internet_protocol_suite_part_ii.html

@@ -187,3 +187,7 @@ TCP 数据包与 UDP 数据包一样内嵌在 IP 数据包的 Data 部分。 TCP
 4. 链路层为网络层的数据包添加包头（MAC地址等信息），组装成 以太网数据包的格式，向下给到物理层;
 5. 物理层将以太网数据包转换成0和1电信号，发出去。
 
+# 参考文献
+
+- 阮一峰老师的博客http://www.ruanyifeng.com/blog/2012/05/internet_protocol_suite_part_i.html
+
