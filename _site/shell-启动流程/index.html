@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/wheel.jpg alt="shell启动流程">
       </div>
       <div class="post_description">
-        <p class="post_meta">2018, Apr 25</p>
+        <p class="post_meta">2018, Apr 26</p>
         <h1 class="post_title">shell启动流程</h1>
       </div>
     </header> <!-- End Header -->
@@ -74,9 +74,9 @@ MathJax.Hub.Config({
 
 <p>shell是一种应用程序，它提供了用户交互界面，并且在这个交互界面上人们可以访问内核服务。shell大致分为两类，命令行界面的shell(<strong>CLI-Shell</strong>)和图形界面的shell(<strong>GUI-Shell</strong>)。<strong>CLI-Shell</strong>最典型的就是linux的bash与windows的cmd，<strong>GUI-Shell</strong>包括我们常用的windows与linux的图形用户界面软件。</p>
 
-<p>我会写出来的肯定是<strong>CLI-Shell</strong>,以我的这个Ubuntu为例，可以通过<code class="highlighter-rouge">cat /etc/shells</code>查看现有的shell种类：</p>
+<p>我会写出来的肯定是<strong>CLI-Shell</strong>,以我的这个Ubuntu为例，可以通过<code class="language-plaintext highlighter-rouge">cat /etc/shells</code>查看现有的shell种类：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># /etc/shells: valid login shells
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># /etc/shells: valid login shells
 /bin/sh
 /bin/dash
 /bin/bash
@@ -88,37 +88,37 @@ MathJax.Hub.Config({
 <h2 id="shell的运行模式">shell的运行模式</h2>
 <h3 id="交互式shell与非交互式shell">交互式shell与非交互式shell</h3>
 
-<p>这个很简单，直接按照字面理解便可以想清楚。交互式shell就是terminal。非交互式shell就是<code class="highlighter-rouge">shell script</code>。</p>
+<p>这个很简单，直接按照字面理解便可以想清楚。交互式shell就是terminal。非交互式shell就是<code class="language-plaintext highlighter-rouge">shell script</code>。</p>
 
 <p>检验：</p>
 
 <ol>
-  <li>命令行输入<code class="highlighter-rouge">echo $-</code>
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> xhy@ubuntu:~$ echo $-
+  <li>命令行输入<code class="language-plaintext highlighter-rouge">echo $-</code>
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> xhy@ubuntu:~$ echo $-
  himBH #代表是交互式shell
 </code></pre></div>    </div>
     <hr />
   </li>
-  <li>在一个shell脚本中写入<code class="highlighter-rouge">echo $-</code>,然后运行这个脚本
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> xhy@ubuntu:~$ ./test.sh
+  <li>在一个shell脚本中写入<code class="language-plaintext highlighter-rouge">echo $-</code>,然后运行这个脚本
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> xhy@ubuntu:~$ ./test.sh
  hB #代表是非交互式shell
 </code></pre></div>    </div>
   </li>
 </ol>
 
 <h3 id="登录shell与非登录shell">登录shell与非登录shell</h3>
-<p>其实我们平时用到的都是非登录shell，比如在Linux桌面里<code class="highlighter-rouge">Ctrl+Alt+T</code>打开的bash终端，就是非登录的shell，包括你在这个终端里进行用户切换，比如说切换到root账户，其实还是非登录shell。那什么时候才是登录shell呢？</p>
+<p>其实我们平时用到的都是非登录shell，比如在Linux桌面里<code class="language-plaintext highlighter-rouge">Ctrl+Alt+T</code>打开的bash终端，就是非登录的shell，包括你在这个终端里进行用户切换，比如说切换到root账户，其实还是非登录shell。那什么时候才是登录shell呢？</p>
 
-<p>很简单，判断是登录shell，还是非登录shell是通过启动bash时的命令选项决定的。<code class="highlighter-rouge">Ctrl+Alt+T</code>其实就是执行了一个<code class="highlighter-rouge">bash</code>命令，没有参数，默认是非登录shell。而登录shell在启动时执行的是<code class="highlighter-rouge">bash -login</code>。</p>
+<p>很简单，判断是登录shell，还是非登录shell是通过启动bash时的命令选项决定的。<code class="language-plaintext highlighter-rouge">Ctrl+Alt+T</code>其实就是执行了一个<code class="language-plaintext highlighter-rouge">bash</code>命令，没有参数，默认是非登录shell。而登录shell在启动时执行的是<code class="language-plaintext highlighter-rouge">bash -login</code>。</p>
 
-<p>怎么判断是登录shell还是非登录shell呢？首先<code class="highlighter-rouge">Ctrl+Alt+T</code>打开bash终端，通过下面两个办法检验非登录shell的结果；再在bash终端里输入<code class="highlighter-rouge">bash -login</code>进入登录shell，再试一次。查看区别。</p>
+<p>怎么判断是登录shell还是非登录shell呢？首先<code class="language-plaintext highlighter-rouge">Ctrl+Alt+T</code>打开bash终端，通过下面两个办法检验非登录shell的结果；再在bash终端里输入<code class="language-plaintext highlighter-rouge">bash -login</code>进入登录shell，再试一次。查看区别。</p>
 
 <ol>
   <li>
-    <p>可以通过<code class="highlighter-rouge">echo $0</code>命令查看</p>
+    <p>可以通过<code class="language-plaintext highlighter-rouge">echo $0</code>命令查看</p>
   </li>
   <li>
-    <p><code class="highlighter-rouge">logout</code>命令可以退出登录shell，不能退出登录shell，<code class="highlighter-rouge">exit</code>命令都可以退出</p>
+    <p><code class="language-plaintext highlighter-rouge">logout</code>命令可以退出登录shell，不能退出登录shell，<code class="language-plaintext highlighter-rouge">exit</code>命令都可以退出</p>
   </li>
 </ol>
 
@@ -127,7 +127,7 @@ MathJax.Hub.Config({
 </blockquote>
 
 <h2 id="shell启动时的脚本读取情况">shell启动时的脚本读取情况</h2>
-<p>其实在Linux系统启动时（开机）以图形模式登录时是以<code class="highlighter-rouge">bash -login</code>模式的。随后我们打开终端的都是<code class="highlighter-rouge">bash</code>模式。</p>
+<p>其实在Linux系统启动时（开机）以图形模式登录时是以<code class="language-plaintext highlighter-rouge">bash -login</code>模式的。随后我们打开终端的都是<code class="language-plaintext highlighter-rouge">bash</code>模式。</p>
 
 <p><strong>登录shell</strong>在启动时会进行如下初始化读取操作：</p>
 
@@ -165,9 +165,9 @@ MathJax.Hub.Config({
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=shell启动流程&url=http://localhost:4000/shell-%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/shell-%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/shell-%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=shell启动流程&url=/shell-%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/shell-%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/shell-%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -210,6 +210,10 @@ MathJax.Hub.Config({
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -227,10 +231,6 @@ MathJax.Hub.Config({
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

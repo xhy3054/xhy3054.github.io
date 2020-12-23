@@ -1,4 +1,4 @@
-I"5<p>之前有仔细介绍过非线性优化，其中二阶梯度的方法有高斯牛顿法、LM算法、dogleg算法等。前段时间仔细研究了dogleg算法的实现步骤，今天抽出时间总结一下。</p>
+I".5<p>之前有仔细介绍过非线性优化，其中二阶梯度的方法有高斯牛顿法、LM算法、dogleg算法等。前段时间仔细研究了dogleg算法的实现步骤，今天抽出时间总结一下。</p>
 
 <blockquote>
   <p>dogleg属于二阶梯度法，为了解决高斯牛顿法在使用一阶导数平方近似计算hessian矩阵时可能不准确的问题，它结合了高斯牛顿法与最速下降法，通过定义近似半径来限制近似的可执行范围。本质上与LM算法类似，不过实现细节大有不同。</p>
@@ -63,7 +63,7 @@
 
 \[h_{dl}=\left\{\begin{array}{ll}{\tau h_{sd},} &amp; {0 \leq \tau \leq 1} \\ {h_{sd}+(\tau-1)\left(h_{gn}-h_{sd}\right),} &amp; {1 \leq \tau \leq 2}\end{array}\right.\]
 
-<p>其中比较关键的是变量\(\tau\)的确定，我直接贴出代码(其中<code class="highlighter-rouge">delta_</code>是信赖区域的半径大小)</p>
+<p>其中比较关键的是变量\(\tau\)的确定，我直接贴出代码(其中<code class="language-plaintext highlighter-rouge">delta_</code>是信赖区域的半径大小)</p>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>            <span class="kt">double</span> <span class="n">tau</span><span class="p">;</span>
             <span class="k">if</span><span class="p">(</span><span class="n">H_gn</span><span class="p">.</span><span class="n">norm</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">delta_</span><span class="p">)</span>

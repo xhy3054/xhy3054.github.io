@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/minion8.jpg alt="线性判别分析(LDA)">
       </div>
       <div class="post_description">
-        <p class="post_meta">2019, Jan 02</p>
+        <p class="post_meta">2019, Jan 03</p>
         <h1 class="post_title">线性判别分析(LDA)</h1>
       </div>
     </header> <!-- End Header -->
@@ -133,7 +133,7 @@ MathJax.Hub.Config({
 <p>其中：</p>
 <ul>
   <li>x为非零向量</li>
-  <li>A为<code class="highlighter-rouge">n*n</code>的Hermitan矩阵(共轭转置等于自身的矩阵)，即$A^H = A$，只要A为实矩阵，并且满足$ A^T=A $,即为一个Hermitan矩阵。</li>
+  <li>A为<code class="language-plaintext highlighter-rouge">n*n</code>的Hermitan矩阵(共轭转置等于自身的矩阵)，即$A^H = A$，只要A为实矩阵，并且满足$ A^T=A $,即为一个Hermitan矩阵。</li>
 </ul>
 
 <p>瑞利商$R(A,x)$有一个非常重要的性质，即它的最大值等于矩阵A最大的特征值（此时x为对应的特征向量），而最小值等于矩阵A的最小的特征值，也就满足</p>
@@ -152,7 +152,7 @@ MathJax.Hub.Config({
 <p>其中：</p>
 <ul>
   <li>x为非零向量</li>
-  <li>而A,B为<code class="highlighter-rouge">n*n</code>的Hermitan矩阵。B为正定矩阵。</li>
+  <li>而A,B为<code class="language-plaintext highlighter-rouge">n*n</code>的Hermitan矩阵。B为正定矩阵。</li>
 </ul>
 
 <p>另$x = B^{-1/2}x’ $,此处分母可以转换成：</p>
@@ -183,7 +183,7 @@ MathJax.Hub.Config({
   <li>$\mu_i$为第i类样本的均值向量，$\Sigma_i$为第i类样本的协方差矩阵。</li>
 </ul>
 
-<p>此时为多类向低维度空间的投影，我们假设投影到的低维度空间的维度为d，对应的基向量为$(w_1,w_2,…w_d)$，基向量组成的投影矩阵为W，它是一个<code class="highlighter-rouge">n*d</code>的矩阵(d==1为二分类情况)。</p>
+<p>此时为多类向低维度空间的投影，我们假设投影到的低维度空间的维度为d，对应的基向量为$(w_1,w_2,…w_d)$，基向量组成的投影矩阵为W，它是一个<code class="language-plaintext highlighter-rouge">n*d</code>的矩阵(d==1为二分类情况)。</p>
 
 <p>此时优化目标是：</p>
 
@@ -239,9 +239,9 @@ MathJax.Hub.Config({
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=线性判别分析(LDA)&url=http://localhost:4000/ml-LDA/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/ml-LDA/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/ml-LDA/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=线性判别分析(LDA)&url=/ml-LDA/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/ml-LDA/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/ml-LDA/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -284,6 +284,10 @@ MathJax.Hub.Config({
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -301,10 +305,6 @@ MathJax.Hub.Config({
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

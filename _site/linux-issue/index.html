@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/sword/sword2.jpg alt="linux常用--数据流重定向、管道、组合键、权限、查找等">
       </div>
       <div class="post_description">
-        <p class="post_meta">2019, Mar 29</p>
+        <p class="post_meta">2019, Mar 30</p>
         <h1 class="post_title">linux常用--数据流重定向、管道、组合键、权限、查找等</h1>
       </div>
     </header> <!-- End Header -->
@@ -68,33 +68,16 @@ MathJax.Hub.Config({
     <div class="entry_content">
       <p>在学习linux的内容中，存在很多重要有趣有用的小知识，但是这些小知识很繁琐，每一个都写一片博客是不可能的，篇幅太短，所以这篇博客就来将这些小知识来一个大杂烩。</p>
 <ol>
-  <li>
-    <p><a href="#数据流重定向">数据流重定向</a></p>
-  </li>
-  <li>
-    <p><a href="#管道命令-pipe">管道命令-pipe</a></p>
-  </li>
-  <li>
-    <p><a href="#回车与换行的区别">回车与换行的区别</a></p>
-  </li>
-  <li>
-    <p><a href="#常用组合键">常用组合键</a></p>
-  </li>
-  <li>
-    <p><a href="#bash环境中的特殊字符">bash环境中的特殊字符</a></p>
-  </li>
-  <li>
-    <p><a href="#通配符">通配符</a></p>
-  </li>
-  <li>
-    <p><a href="#修改文件权限">修改文件权限</a></p>
-  </li>
-  <li>
-    <p><a href="#搜索字符串">在linux文件系统中搜索字符串</a></p>
-  </li>
-  <li>
-    <p><a href="#搜索文件">在Linux文件系统中搜索</a></p>
-  </li>
+  <li><a href="#数据流重定向">数据流重定向</a></li>
+  <li><a href="#管道命令-pipe">管道命令-pipe</a></li>
+  <li><a href="#回车与换行的区别">回车与换行的区别</a></li>
+  <li><a href="#常用组合键">常用组合键</a></li>
+  <li><a href="#bash环境中的特殊字符">bash环境中的特殊字符</a></li>
+  <li><a href="#通配符">通配符</a></li>
+  <li><a href="#修改文件权限">修改文件权限</a></li>
+  <li><a href="#搜索字符串">在linux文件系统中搜索字符串</a></li>
+  <li><a href="#搜索文件">在Linux文件系统中搜索</a></li>
+  <li><a href="#linux中备份操作tar">linux中备份操作tar</a></li>
 </ol>
 
 <h2 id="数据流重定向">数据流重定向</h2>
@@ -113,16 +96,16 @@ MathJax.Hub.Config({
 <p><strong>数据流重定向</strong>要做的就是重新定向这三个缓冲区绑定的字符流设备。重定向方法形式如下</p>
 <ol>
   <li>
-    <p>标准输入(stdin): 代码为0，使用<code class="highlighter-rouge">&lt;</code>或<code class="highlighter-rouge">&lt;&lt;</code>;</p>
+    <p>标准输入(stdin): 代码为0，使用<code class="language-plaintext highlighter-rouge">&lt;</code>或<code class="language-plaintext highlighter-rouge">&lt;&lt;</code>;</p>
   </li>
   <li>
-    <p>标准输出(stdout): 代码为1，使用<code class="highlighter-rouge">&gt;</code>或<code class="highlighter-rouge">&gt;&gt;</code>;</p>
+    <p>标准输出(stdout): 代码为1，使用<code class="language-plaintext highlighter-rouge">&gt;</code>或<code class="language-plaintext highlighter-rouge">&gt;&gt;</code>;</p>
   </li>
   <li>
-    <p>标准错误输出(stderr): 代码为2，使用<code class="highlighter-rouge">2&gt;</code>或<code class="highlighter-rouge">2&gt;&gt;</code>;</p>
+    <p>标准错误输出(stderr): 代码为2，使用<code class="language-plaintext highlighter-rouge">2&gt;</code>或<code class="language-plaintext highlighter-rouge">2&gt;&gt;</code>;</p>
   </li>
   <li>
-    <p><code class="highlighter-rouge">&gt;</code>与<code class="highlighter-rouge">&gt;&gt;</code>的区别是：前者是覆盖输入，后者是累加输入；</p>
+    <p><code class="language-plaintext highlighter-rouge">&gt;</code>与<code class="language-plaintext highlighter-rouge">&gt;&gt;</code>的区别是：前者是覆盖输入，后者是累加输入；</p>
   </li>
 </ol>
 
@@ -134,20 +117,20 @@ CloudMusic
 ls_result
 </code></pre></div></div>
 
-<h2 id="命令执行的连接符号--">命令执行的连接符号<code class="highlighter-rouge">; &amp;&amp; ||</code></h2>
+<h2 id="命令执行的连接符号--">命令执行的连接符号<code class="language-plaintext highlighter-rouge">; &amp;&amp; ||</code></h2>
 <ul>
   <li>
-    <p><code class="highlighter-rouge">cmd1; cmd2</code>: 顺序执行cmd1与cmd2</p>
+    <p><code class="language-plaintext highlighter-rouge">cmd1; cmd2</code>: 顺序执行cmd1与cmd2</p>
   </li>
-  <li><code class="highlighter-rouge">cmd1 &amp;&amp; cmd2</code>:
+  <li><code class="language-plaintext highlighter-rouge">cmd1 &amp;&amp; cmd2</code>:
     <ul>
-      <li>若cmd1执行完毕且正确执行(<code class="highlighter-rouge">$?=0</code>指令回传值为0)，则开始执行cmd2；</li>
+      <li>若cmd1执行完毕且正确执行(<code class="language-plaintext highlighter-rouge">$?=0</code>指令回传值为0)，则开始执行cmd2；</li>
       <li>若cmd1执行完毕且错误执行(指令回传值不为0)，则cmd2不执行；</li>
     </ul>
   </li>
-  <li><code class="highlighter-rouge">cmd1 || cmd2</code>:
+  <li><code class="language-plaintext highlighter-rouge">cmd1 || cmd2</code>:
     <ul>
-      <li>若cmd1执行完毕且正确执行(<code class="highlighter-rouge">$?=0</code>指令回传值为0)，则cmd2不执行；</li>
+      <li>若cmd1执行完毕且正确执行(<code class="language-plaintext highlighter-rouge">$?=0</code>指令回传值为0)，则cmd2不执行；</li>
       <li>若cmd1执行完毕且错误执行(指令回传值不为0)，则开始执行cmd2；</li>
     </ul>
   </li>
@@ -161,7 +144,7 @@ ls_result
 <p>关于管道命令，可以总结如下几点：</p>
 <ol>
   <li>
-    <p>管道命令用<code class="highlighter-rouge">|</code>来连接命令，实现将前一个命令的stdout变成后一个命令的stdin；</p>
+    <p>管道命令用<code class="language-plaintext highlighter-rouge">|</code>来连接命令，实现将前一个命令的stdout变成后一个命令的stdin；</p>
   </li>
   <li>
     <p>管道命令默认是对stdout起作用，对于stderr不起作用</p>
@@ -182,16 +165,16 @@ drwxrwxr-x 10 xhy xhy 4096 3月  20 15:33 book_note/
 </code></pre></div></div>
 
 <blockquote>
-  <p>其实管道命令涉及到了数据流重定向的功能。如果想让stderr可以被管道命令使用，需要使用数据流重定向，将<code class="highlighter-rouge">2&gt;</code>变成<code class="highlighter-rouge">1&gt;</code></p>
+  <p>其实管道命令涉及到了数据流重定向的功能。如果想让stderr可以被管道命令使用，需要使用数据流重定向，将<code class="language-plaintext highlighter-rouge">2&gt;</code>变成<code class="language-plaintext highlighter-rouge">1&gt;</code></p>
 </blockquote>
 
 <h2 id="回车与换行的区别">回车与换行的区别</h2>
 <ol>
   <li>
-    <p><code class="highlighter-rouge">\r</code>:   回车，打印效果是将输出重定位到<strong>本行</strong>的开头</p>
+    <p><code class="language-plaintext highlighter-rouge">\r</code>:   回车，打印效果是将输出重定位到<strong>本行</strong>的开头</p>
   </li>
   <li>
-    <p><code class="highlighter-rouge">\n</code>:   换行，打印效果是将输出重定位到<strong>下一行</strong>的开头</p>
+    <p><code class="language-plaintext highlighter-rouge">\n</code>:   换行，打印效果是将输出重定位到<strong>下一行</strong>的开头</p>
   </li>
 </ol>
 
@@ -213,7 +196,7 @@ drwxrwxr-x 10 xhy xhy 4096 3月  20 15:33 book_note/
 <h2 id="修改文件权限">修改文件权限</h2>
 <p>语法：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chmod [-cfvR] [--help] [--version] mode file
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chmod [-cfvR] [--help] [--version] mode file
 </code></pre></div></div>
 
 <p>参数说明：</p>
@@ -241,7 +224,7 @@ drwxrwxr-x 10 xhy xhy 4096 3月  20 15:33 book_note/
 
 <p>$mode$是设置权限，用字符串来表示，格式如下：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[ugoa...][[+-=][rwxX]...][,...]
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[ugoa...][[+-=][rwxX]...][,...]
 </code></pre></div></div>
 
 <p>其中：</p>
@@ -254,20 +237,20 @@ drwxrwxr-x 10 xhy xhy 4096 3月  20 15:33 book_note/
 <h3 id="实例">实例</h3>
 <ul>
   <li>将文件$file1.txt$设为所有人皆可读取 :
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  chmod ugo+r file1.txt
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  chmod ugo+r file1.txt
   chmod a+r file1.txt
 </code></pre></div>    </div>
   </li>
   <li>将文件 file1.txt 与 file2.txt 设为该文件拥有者，与其所属同一个群体者可写入，但其他以外的人则不可写入 :
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  chmod ug+w,o-w file1.txt file2.txt
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  chmod ug+w,o-w file1.txt file2.txt
 </code></pre></div>    </div>
   </li>
   <li>将目前目录下的所有文件与子目录皆设为任何人可读取 :
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  chmod -R a+r *
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  chmod -R a+r *
 </code></pre></div>    </div>
   </li>
   <li>也可以使用数字来表示权限（r=4，w=2，x=1），下面两组作用相同
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  chmod 777 file
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  chmod 777 file
   chmod a=rwx file
 
   chmod ug=rwx,o=x file
@@ -277,18 +260,56 @@ drwxrwxr-x 10 xhy xhy 4096 3月  20 15:33 book_note/
 </ul>
 
 <h2 id="搜索字符串">搜索字符串</h2>
-<p>在linux的文件系统中搜索字符串一般使用<code class="highlighter-rouge">grep</code>命令，下面这个命令是在当前目录下的所有文件中递归搜索字符串<code class="highlighter-rouge">string</code>:</p>
+<p>在linux的文件系统中搜索字符串一般使用<code class="language-plaintext highlighter-rouge">grep</code>命令，下面这个命令是在当前目录下的所有文件中递归搜索字符串<code class="language-plaintext highlighter-rouge">string</code>:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>grep -r string ./
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>grep -r string ./
 </code></pre></div></div>
 
 <h2 id="搜索文件">搜索文件</h2>
-<p>在linux的文件系统中搜索文件一般使用<code class="highlighter-rouge">find</code>命令，下面这个命令是在当前目录下搜索<code class="highlighter-rouge">2019-03-30-linux-issue.markdown</code>这个文件</p>
+<p>在linux的文件系统中搜索文件一般使用<code class="language-plaintext highlighter-rouge">find</code>命令，下面这个命令是在当前目录下搜索<code class="language-plaintext highlighter-rouge">2019-03-30-linux-issue.markdown</code>这个文件</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find ./ -name 2019-03-30-linux-issue.markdown
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find ./ -name 2019-03-30-linux-issue.markdown
+</code></pre></div></div>
+
+<h2 id="linux中备份操作tar">linux中备份操作tar</h2>
+
+<blockquote>
+  <p>Linux的tar命令用于建立和还原备份文件。这个命令其实是很复杂的，，，所以此处仅仅列出常用的。</p>
+</blockquote>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">###### tar格式（该格式仅仅打包，不压缩）######</span>
+<span class="c"># 打包</span>
+<span class="nb">tar</span> <span class="nt">-cvf</span> <span class="o">[</span>目标文件名].tar <span class="o">[</span>原文件名/目录名]
+<span class="c"># 解包</span>
+<span class="nb">tar</span> <span class="nt">-xvf</span> <span class="o">[</span>原文件名].tar
+<span class="c"># c参数代表create（创建），x参数代表extract（解包），v参数代表verbose（详细信息），f参数代表filename（文件名），所以f后必须接文件名。</span>
+
+<span class="c">###### tar.gz格式（打包加压缩） ######</span>
+<span class="c"># 打包并压缩</span>
+<span class="nb">tar</span> <span class="nt">-zcvf</span> <span class="o">[</span>目标文件名].tar.gz <span class="o">[</span>原文件名/目录名]
+<span class="c"># 解压并解包</span>
+<span class="nb">tar</span> <span class="nt">-zxvf</span> <span class="o">[</span>原文件名].tar.gz
+<span class="c"># z代表用gzip算法来压缩/解压。</span>
+
+<span class="c">###### tar.bz2格式（打包并压缩） ######</span>
+<span class="c"># 打包并压缩</span>
+<span class="nb">tar</span> <span class="nt">-jcvf</span> <span class="o">[</span>目标文件名].tar.bz2 <span class="o">[</span>原文件名/目录名]
+<span class="c"># 解压并解包</span>
+<span class="nb">tar</span> <span class="nt">-jxvf</span> <span class="o">[</span>原文件名].tar.bz2
+<span class="c"># 小写j代表使用bzip2算法来压缩、解压。</span>
+
+<span class="c">###### tar.xz格式（打包并压缩） ######</span>
+<span class="c"># 打包并压缩</span>
+<span class="nb">tar</span> <span class="nt">-Jcvf</span> <span class="o">[</span>目标文件名].tar.xz <span class="o">[</span>原文件名/目录名]
+<span class="c"># 打包并解压</span>
+<span class="nb">tar</span> <span class="nt">-Jxvf</span> <span class="o">[</span>原文件名].tar.xz
+<span class="c"># 大写J代表用xz算法来压缩/解压。</span>
+
+<span class="c">###### 其他tar.z jar 7z等格式使用了再找吧。</span>
 </code></pre></div></div>
 
 <h1 id="参考资料">参考资料</h1>
+
 <ul>
   <li>[1] 《鸟哥的linux私房菜》；</li>
 </ul>
@@ -300,9 +321,9 @@ drwxrwxr-x 10 xhy xhy 4096 3月  20 15:33 book_note/
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=linux常用--数据流重定向、管道、组合键、权限、查找等&url=http://localhost:4000/linux-issue/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/linux-issue/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/linux-issue/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=linux常用--数据流重定向、管道、组合键、权限、查找等&url=/linux-issue/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/linux-issue/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/linux-issue/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -345,6 +366,10 @@ drwxrwxr-x 10 xhy xhy 4096 3月  20 15:33 book_note/
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -362,10 +387,6 @@ drwxrwxr-x 10 xhy xhy 4096 3月  20 15:33 book_note/
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

@@ -1,10 +1,10 @@
+---
 layout: post
 title: SLAM中的可观性问题分析
 date: 2020-12-17 10:07:24.000000000 +09:00
 img:  one-piece/one-piece28.jpg # Add image post (optional)
 tag: [数学]
-
-
+---
 
 # 1 数学基础
 

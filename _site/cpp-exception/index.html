@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/cute7.jpg alt="c++中的异常处理">
       </div>
       <div class="post_description">
-        <p class="post_meta">2018, Nov 02</p>
+        <p class="post_meta">2018, Nov 03</p>
         <h1 class="post_title">c++中的异常处理</h1>
       </div>
     </header> <!-- End Header -->
@@ -72,14 +72,14 @@ MathJax.Hub.Config({
 <p>讲到异常，这里就要说明一下，什么是异常？<strong>在c++中，异常就是指异常对象</strong>。而异常对象是异常类的实例化，<strong>异常类是我们定义的用来表示程序错误信息的数据抽象</strong>。下图便是标准库异常类的继承体系。
 <img src="/assets/img/exception/exception.jpg" alt="exception" /></p>
 
-<p>由上图我们可以看到，异常类的继承体系中基类是<code class="highlighter-rouge">exception</code>类。整个关系可以看成是按照层次关系组织的，层次越低，表示的异常情况就越特殊。</p>
+<p>由上图我们可以看到，异常类的继承体系中基类是<code class="language-plaintext highlighter-rouge">exception</code>类。整个关系可以看成是按照层次关系组织的，层次越低，表示的异常情况就越特殊。</p>
 
 <p>一般情况下，每个异常类都定义的有：</p>
 <ol>
   <li>拷贝构造函数；</li>
   <li>拷贝赋值运算符；</li>
   <li>虚析构函数；</li>
-  <li>一个名叫<code class="highlighter-rouge">what</code>的虚成员函数。没有参数，返回一个<code class="highlighter-rouge">const char*</code>的指针指向一个以<code class="highlighter-rouge">null</code>结尾的字符数组，并且确保不会抛出任何异常。</li>
+  <li>一个名叫<code class="language-plaintext highlighter-rouge">what</code>的虚成员函数。没有参数，返回一个<code class="language-plaintext highlighter-rouge">const char*</code>的指针指向一个以<code class="language-plaintext highlighter-rouge">null</code>结尾的字符数组，并且确保不会抛出任何异常。</li>
 </ol>
 
 <h2 id="函数try语句块">函数try语句块</h2>
@@ -96,10 +96,10 @@ MathJax.Hub.Config({
 <h3 id="抛出异常throw">抛出异常（throw）</h3>
 <p><strong>抛出异常一般指的是抛出一个异常对象</strong>。一般使用如下语句进行异常的抛出。</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>throw exception1;	//其中，exception1是一个异常对象。
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>throw exception1;	//其中，exception1是一个异常对象。
 </code></pre></div></div>
 
-<p>这样的形式特别像<code class="highlighter-rouge">return</code>语句。它们的作用机理也会有些许相似，都提供一个待接收的对象。</p>
+<p>这样的形式特别像<code class="language-plaintext highlighter-rouge">return</code>语句。它们的作用机理也会有些许相似，都提供一个待接收的对象。</p>
 
 <h3 id="捕获异常catch">捕获异常（catch）</h3>
 <p><strong>捕获异常也是指捕获一个异常对象</strong>。捕获的过程也就是<strong>参数匹配</strong>的过程。一般捕获异常使用如下形式进行：</p>
@@ -120,7 +120,7 @@ MathJax.Hub.Config({
 </ul>
 
 <blockquote>
-  <p>栈展开过程沿着嵌套函数的调用链不断查找，直到找到了与异常匹配的catch子句为止；或者也可能一直没找到匹配的catch语句，则退出主函数后查找过程终止。（如果找不到匹配的catch时，程序会调用标准库函数<code class="highlighter-rouge">terminate</code>终止程序）</p>
+  <p>栈展开过程沿着嵌套函数的调用链不断查找，直到找到了与异常匹配的catch子句为止；或者也可能一直没找到匹配的catch语句，则退出主函数后查找过程终止。（如果找不到匹配的catch时，程序会调用标准库函数<code class="language-plaintext highlighter-rouge">terminate</code>终止程序）</p>
 </blockquote>
 
 <h3 id="异常捕获中的参数匹配规则">异常捕获中的参数匹配规则</h3>
@@ -147,9 +147,9 @@ MathJax.Hub.Config({
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=c++中的异常处理&url=http://localhost:4000/cpp-exception/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/cpp-exception/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/cpp-exception/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=c++中的异常处理&url=/cpp-exception/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/cpp-exception/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/cpp-exception/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -192,6 +192,10 @@ MathJax.Hub.Config({
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -209,10 +213,6 @@ MathJax.Hub.Config({
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

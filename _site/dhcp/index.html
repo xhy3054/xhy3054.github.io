@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/net.jpg alt="DHCP 实现动态 IP 上网简析">
       </div>
       <div class="post_description">
-        <p class="post_meta">2018, Jun 21</p>
+        <p class="post_meta">2018, Jun 22</p>
         <h1 class="post_title">DHCP 实现动态 IP 上网简析</h1>
       </div>
     </header> <!-- End Header -->
@@ -70,7 +70,7 @@ MathJax.Hub.Config({
 
 <p>计算机之间的通信是建立在五层架构上的，一台计算机要想实现与互联网中另外一台台计算机之间的通信，计算机至少需要知道下面四个参数：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>*本机的IP地址
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>*本机的IP地址
 *子网掩码
 *网关的IP地址
 *DNS服务器的IP地址
@@ -103,24 +103,30 @@ MathJax.Hub.Config({
 
 <p>其中协议规定：</p>
 <ol>
-  <li>最前面的以太网标头，设置发出方（本机）的 MAC 地址和接收方（DHCP服务器）的 MAC 地址。前者是本地网卡的 MAC 地址，后者此时尚不知，就填入一个广播地址：<code class="highlighter-rouge">FF-FF-FF-FF-FF-FF</code>。</li>
-  <li>接下来的 IP 标头，设置发出方的 IP 地址与接收方的 IP 地址。这是，这些都还不知道，于是发出方的 IP 地址设置为<code class="highlighter-rouge">0.0.0.0</code>，接收方的 IP 地址设置为<code class="highlighter-rouge">255.255.255.255</code>。</li>
+  <li>最前面的以太网标头，设置发出方（本机）的 MAC 地址和接收方（DHCP服务器）的 MAC 地址。前者是本地网卡的 MAC 地址，后者此时尚不知，就填入一个广播地址：<code class="language-plaintext highlighter-rouge">FF-FF-FF-FF-FF-FF</code>。</li>
+  <li>接下来的 IP 标头，设置发出方的 IP 地址与接收方的 IP 地址。这是，这些都还不知道，于是发出方的 IP 地址设置为<code class="language-plaintext highlighter-rouge">0.0.0.0</code>，接收方的 IP 地址设置为<code class="language-plaintext highlighter-rouge">255.255.255.255</code>。</li>
   <li>最后的 UDP 标头，设置发出方的端口和接收方的端口。这一部分 DHCP 协议规定好的是，发出方是68端口，接收方是67端口。</li>
 </ol>
 
-<p>数据包构造完成后便可以发出了。这是是以太网广播发送，同一个子网络的每台计算机都会收到这个包。因为接收方地址为<code class="highlighter-rouge">FF-FF-FF-FF-FF-FF</code>，看不出是发给谁的，于是每台收到此包的计算机还必须再分析这个包的 IP 地址。当看到发出方为<code class="highlighter-rouge">0.0.0.0</code>，接收方为<code class="highlighter-rouge">255.255.255.255</code>时， DHCP 服务器便知道是发给自己的包，而其他计算机会丢弃这个包。</p>
+<p>数据包构造完成后便可以发出了。这是是以太网广播发送，同一个子网络的每台计算机都会收到这个包。因为接收方地址为<code class="language-plaintext highlighter-rouge">FF-FF-FF-FF-FF-FF</code>，看不出是发给谁的，于是每台收到此包的计算机还必须再分析这个包的 IP 地址。当看到发出方为<code class="language-plaintext highlighter-rouge">0.0.0.0</code>，接收方为<code class="language-plaintext highlighter-rouge">255.255.255.255</code>时， DHCP 服务器便知道是发给自己的包，而其他计算机会丢弃这个包。</p>
 
-<p>然后，DHCP 服务器读出这个包，履行自己的职能，分配好一个 IP 地址，并发送一个 DHCP 响应包。这个响应包的相关设置类似，以太网标头为双方 MAC 地址， IP 标头 发送方为 DHCP 服务器 IP 地址，接收方为<code class="highlighter-rouge">255.255.255.255</code>。 UDP 端口为 67 （发出方）和 68 （接收方），<strong>分配给请求项的 IP 地址和本网路的具体参数</strong>包含在数据部分。</p>
+<p>然后，DHCP 服务器读出这个包，履行自己的职能，分配好一个 IP 地址，并发送一个 DHCP 响应包。这个响应包的相关设置类似，以太网标头为双方 MAC 地址， IP 标头 发送方为 DHCP 服务器 IP 地址，接收方为<code class="language-plaintext highlighter-rouge">255.255.255.255</code>。 UDP 端口为 67 （发出方）和 68 （接收方），<strong>分配给请求项的 IP 地址和本网路的具体参数</strong>包含在数据部分。</p>
 
 <h3 id="动态上网全流程总结">动态上网全流程总结</h3>
 <ol>
   <li>电脑开机，接上网线，连入网络;</li>
   <li>利用 DHCP 协议动态获取本机 IP 与本网络参数（子网掩码、网关IP、DNS的IP等）;</li>
-  <li>打开浏览器，输入<code class="highlighter-rouge">www.google.com</code>并回车;</li>
-  <li>利用 DNS 协议获得<code class="highlighter-rouge">www.google.com</code>的 IP ;</li>
+  <li>打开浏览器，输入<code class="language-plaintext highlighter-rouge">www.google.com</code>并回车;</li>
+  <li>利用 DNS 协议获得<code class="language-plaintext highlighter-rouge">www.google.com</code>的 IP ;</li>
   <li>将数据包依次通过互联网的五层架构发送出去，并接收返回数据屏幕显示，完成一次网络通信。
 <img src="/assets/img/dhcp/surf.jpg" alt="surf" /></li>
 </ol>
+
+<h1 id="参考文献">参考文献</h1>
+
+<ul>
+  <li>http://www.ruanyifeng.com/blog/2012/06/internet_protocol_suite_part_ii.html</li>
+</ul>
 
     </div>
     
@@ -128,9 +134,9 @@ MathJax.Hub.Config({
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=DHCP 实现动态 IP 上网简析&url=http://localhost:4000/dhcp/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/dhcp/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/dhcp/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=DHCP 实现动态 IP 上网简析&url=/dhcp/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/dhcp/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/dhcp/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -173,6 +179,10 @@ MathJax.Hub.Config({
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -190,10 +200,6 @@ MathJax.Hub.Config({
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

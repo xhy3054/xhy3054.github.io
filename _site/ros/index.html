@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/one-piece/one-piece4.jpg alt="ros操作系统入门">
       </div>
       <div class="post_description">
-        <p class="post_meta">2019, May 24</p>
+        <p class="post_meta">2019, May 25</p>
         <h1 class="post_title">ros操作系统入门</h1>
       </div>
     </header> <!-- End Header -->
@@ -86,9 +86,9 @@ MathJax.Hub.Config({
 <p>安装完毕记得照着教程初始化$rosdep$、设置环境、安装一些用于构建包的依赖。</p>
 
 <h2 id="ros的环境管理">ros的环境管理</h2>
-<p>在$ros$安装完毕后，我们会将<code class="highlighter-rouge">source /opt/ros/kinetic/etc/ros</code>写入到<code class="highlighter-rouge">~/.bashrc</code>中，这样每次打开终端，会自动设置$ros$相关的环境变量。</p>
+<p>在$ros$安装完毕后，我们会将<code class="language-plaintext highlighter-rouge">source /opt/ros/kinetic/etc/ros</code>写入到<code class="language-plaintext highlighter-rouge">~/.bashrc</code>中，这样每次打开终端，会自动设置$ros$相关的环境变量。</p>
 
-<p>同时，通常除了系统的环境变量外，我们基于$ros$的开发通常会存在于一个工作空间中，在这个工作空间中我们也会新建一些包，此时我们也会需要导入这个工作空间的环境变量，使用<code class="highlighter-rouge">source ws/devel/setup.bash</code>。</p>
+<p>同时，通常除了系统的环境变量外，我们基于$ros$的开发通常会存在于一个工作空间中，在这个工作空间中我们也会新建一些包，此时我们也会需要导入这个工作空间的环境变量，使用<code class="language-plaintext highlighter-rouge">source ws/devel/setup.bash</code>。</p>
 
 <h2 id="ros文件系统">ros文件系统</h2>
 <p>ros文件系统主要指的是在硬盘上ROS源代码的组织形式。主要有包（package）、元包（meta package）、工作空间（workspace）等概念。</p>
@@ -99,7 +99,7 @@ MathJax.Hub.Config({
 </blockquote>
 
 <ul>
-  <li>创建一个名叫<code class="highlighter-rouge">catkin_ws</code>的工作空间
+  <li>创建一个名叫<code class="language-plaintext highlighter-rouge">catkin_ws</code>的工作空间
     <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir</span> <span class="nt">-p</span> ~/catkin_ws/src
 <span class="nb">cd</span> ~/catkin_ws
 catkin_make
@@ -119,20 +119,20 @@ catkin_make
 </blockquote>
 
 <ul>
-  <li>在工作空间中创建包<code class="highlighter-rouge">new_package</code>，依赖于包<code class="highlighter-rouge">depend_p1</code>与<code class="highlighter-rouge">depend_p2</code>
+  <li>在工作空间中创建包<code class="language-plaintext highlighter-rouge">new_package</code>，依赖于包<code class="language-plaintext highlighter-rouge">depend_p1</code>与<code class="language-plaintext highlighter-rouge">depend_p2</code>
     <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/catkin_ws/src
 catkin_create_pkg new_package depend_p1 depend_p2 
 </code></pre></div>    </div>
     <hr />
   </li>
   <li>
-    <p>查看一个包的直接依赖<code class="highlighter-rouge">rospack depends1 new_packsge</code></p>
+    <p>查看一个包的直接依赖<code class="language-plaintext highlighter-rouge">rospack depends1 new_packsge</code></p>
   </li>
   <li>
-    <p>查看一个包的所有依赖（包括直接与间接）<code class="highlighter-rouge">rospack depends new_package</code></p>
+    <p>查看一个包的所有依赖（包括直接与间接）<code class="language-plaintext highlighter-rouge">rospack depends new_package</code></p>
   </li>
   <li>编译包，直接编译整个工作空间就可以了
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ~/catkin_ws
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ~/catkin_ws
 catkin_make
 </code></pre></div>    </div>
     <hr />
@@ -146,22 +146,22 @@ catkin_make
 <h3 id="常用命令">常用命令</h3>
 <ul>
   <li>
-    <p>查找ros包<code class="highlighter-rouge">roscpp</code>:<code class="highlighter-rouge">rospack find roscpp</code></p>
+    <p>查找ros包<code class="language-plaintext highlighter-rouge">roscpp</code>:<code class="language-plaintext highlighter-rouge">rospack find roscpp</code></p>
   </li>
   <li>
-    <p>进入ros文件系统的某个目录下：<code class="highlighter-rouge">roscd 包名称/子目录</code></p>
+    <p>进入ros文件系统的某个目录下：<code class="language-plaintext highlighter-rouge">roscd 包名称/子目录</code></p>
   </li>
   <li>
-    <p>查看ros包的保存路径：<code class="highlighter-rouge">echo $ROS_PACKAGE_PATH</code>，结果应该为ros系统目录下的包路径与你当前的工作空间的ros包路径，比如：<code class="highlighter-rouge">/home/xhy/catkin_ws/src:/opt/ros/kinetic/share</code></p>
+    <p>查看ros包的保存路径：<code class="language-plaintext highlighter-rouge">echo $ROS_PACKAGE_PATH</code>，结果应该为ros系统目录下的包路径与你当前的工作空间的ros包路径，比如：<code class="language-plaintext highlighter-rouge">/home/xhy/catkin_ws/src:/opt/ros/kinetic/share</code></p>
   </li>
   <li>
-    <p>罗列ros文件系统某个目录：<code class="highlighter-rouge">rosls 包名称/子目录</code></p>
+    <p>罗列ros文件系统某个目录：<code class="language-plaintext highlighter-rouge">rosls 包名称/子目录</code></p>
   </li>
   <li>
-    <p>ros命令行工具支持<code class="highlighter-rouge">tab</code>自动补全功能</p>
+    <p>ros命令行工具支持<code class="language-plaintext highlighter-rouge">tab</code>自动补全功能</p>
   </li>
   <li>
-    <p>使用<code class="highlighter-rouge">rosed</code>快速编辑指定文件(默认编辑器是vim)：<code class="highlighter-rouge">rosed [package_name] [filename]</code>,例如<code class="highlighter-rouge">rosed roscpp Logger.msg</code></p>
+    <p>使用<code class="language-plaintext highlighter-rouge">rosed</code>快速编辑指定文件(默认编辑器是vim)：<code class="language-plaintext highlighter-rouge">rosed [package_name] [filename]</code>,例如<code class="language-plaintext highlighter-rouge">rosed roscpp Logger.msg</code></p>
   </li>
 </ul>
 
@@ -175,28 +175,28 @@ catkin_make
 
 <p>主节点使用XML远程过程调用（XMLRPC，XML-Remote Procedure Call）3与节点进行通信。XMLRPC是一种基于HTTP的协议，主节点不与连接到主节点的节点保持连接。换句话说，节点只有在需要注册自己的信息或向其他节点发送请求信息时才能访问主节点并获取信息。通常情况下，不检查彼此的连接状态。由于这些特点，ROS可用于非常大而复杂的环境。XMLRPC也非常轻便，支持多种编程语言，使其非常适合支持各种硬件和语言的ROS。</p>
 
-<p>当启动ROS时，主节点将获取用户设置的<code class="highlighter-rouge">ROS_MASTER_URI</code>变量中列出的URI地址和端口。除非另外设置，默认情况下，URI地址使用当前的本地IP，端口使用11311。</p>
+<p>当启动ROS时，主节点将获取用户设置的<code class="language-plaintext highlighter-rouge">ROS_MASTER_URI</code>变量中列出的URI地址和端口。除非另外设置，默认情况下，URI地址使用当前的本地IP，端口使用11311。</p>
 
 <h3 id="普通节点">普通节点</h3>
 <p>节点（node）是指在ROS中运行的最小处理器单元。可以把它看作一个可执行程序。在ROS中，建议为一个目的创建一个节点，建议设计时注重可重用性。例如，在移动机器人的情况下，为了驱动机器人，将每个程序细分化。也就是说，使用传感器驱动、传感器数据转换、障碍物判断、电机驱动、编码器输入和导航等多个细分节点。</p>
 
 <p>节点在运行的同时，向主节点注册节点的名称，并且还注册发布者（publisher）、订阅者（subscriber）、服务服务器（service server）、服务客户端（service client）的名称，且注册消息形式、URI地址和端口。基于这些信息，每个节点可以使用话题和服务与其他节点交换消息。</p>
 
-<p>节点使用XMLRPC与主站进行通信，并使用TCP/IP通信系列的XMLRPC或TCPROS进行节点之间的通信。节点之间的连接请求和响应使用XMLRPC，而消息通信使用TCPROS，因为它是节点和节点之间的直接通信，与主节点无关。URI地址和端口则使用存储于运行当前节点的计算机上的名为<code class="highlighter-rouge">ROS_HOSTNAME</code>的环境变量作为URI地址，并将端口设置为任意的固有值。</p>
+<p>节点使用XMLRPC与主站进行通信，并使用TCP/IP通信系列的XMLRPC或TCPROS进行节点之间的通信。节点之间的连接请求和响应使用XMLRPC，而消息通信使用TCPROS，因为它是节点和节点之间的直接通信，与主节点无关。URI地址和端口则使用存储于运行当前节点的计算机上的名为<code class="language-plaintext highlighter-rouge">ROS_HOSTNAME</code>的环境变量作为URI地址，并将端口设置为任意的固有值。</p>
 
-<p>ros节点是整个机器人控制系统的一个功能单元，运行起来一个ros节点，即运行一个ros程序包中的一个可执行文件。例如<code class="highlighter-rouge">rosrun turtlesim turtle_teleop_key</code></p>
+<p>ros节点是整个机器人控制系统的一个功能单元，运行起来一个ros节点，即运行一个ros程序包中的一个可执行文件。例如<code class="language-plaintext highlighter-rouge">rosrun turtlesim turtle_teleop_key</code></p>
 
 <blockquote>
-  <p>ros系统在启动之前，首先需要运行<code class="highlighter-rouge">rosore</code>，我们可以将node看做ros操作系统上的应用软件。</p>
+  <p>ros系统在启动之前，首先需要运行<code class="language-plaintext highlighter-rouge">rosore</code>，我们可以将node看做ros操作系统上的应用软件。</p>
 </blockquote>
 
 <h3 id="roslaunch">roslaunch</h3>
-<p>使用<code class="highlighter-rouge">rosrun</code>每次只能启动一个节点，我们可以使用<code class="highlighter-rouge">roslaunch</code>来启动定义在$launch$文件中的多个节点。</p>
+<p>使用<code class="language-plaintext highlighter-rouge">rosrun</code>每次只能启动一个节点，我们可以使用<code class="language-plaintext highlighter-rouge">roslaunch</code>来启动定义在$launch$文件中的多个节点。</p>
 
-<p>用法：<code class="highlighter-rouge">roslaunch [package] [filename.launch]</code></p>
+<p>用法：<code class="language-plaintext highlighter-rouge">roslaunch [package] [filename.launch]</code></p>
 
 <p>launch文件语法解析，运行如下launch文件会启动两个节点</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;launch&gt;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;launch&gt;
 
   &lt;group ns="turtlesim1"&gt;
     &lt;node pkg="turtlesim" name="sim" type="turtlesim_node"/&gt;
@@ -231,7 +231,7 @@ catkin_make
 <p>ros话题是ros中不同节点之间的一种通信方式，一个节点在一个话题上发布消息，另一个节点订阅该话题以接收该消息。</p>
 
 <p>我们通常使用rostopic来进行话题的相关操作</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rostopic -h
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rostopic -h
 rostopic is a command-line tool for printing information about ROS Topics.
 
 Commands:
@@ -257,7 +257,7 @@ Type rostopic &lt;command&gt; -h for more detailed usage, e.g. 'rostopic echo -h
 <h3 id="ros的服务">ros的服务</h3>
 <p>服务（service）是ros提供的一种同步双向消息通信。其中服务客户端请求对应于特定目的任务的服务，而服务服务器则负责服务响应。</p>
 
-<p>使用<code class="highlighter-rouge">rosservice</code>可以轻松使用ros客户端、服务器框架提供的服务。</p>
+<p>使用<code class="language-plaintext highlighter-rouge">rosservice</code>可以轻松使用ros客户端、服务器框架提供的服务。</p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rosservice list         输出可用服务的信息
 rosservice call         调用带参数的服务
 rosservice <span class="nb">type         </span>输出服务类型
@@ -296,7 +296,7 @@ rosservice find         依据类型寻找服务find services by service <span c
 </blockquote>
 
 <h2 id="ros中的参数">ros中的参数</h2>
-<p>ros中还存在参数服务器（由主节点维护），上面存储一些服务的参数设置，参数可以看作是节点中使用的全局变量。可以使用<code class="highlighter-rouge">rosparam</code>进行如下操作</p>
+<p>ros中还存在参数服务器（由主节点维护），上面存储一些服务的参数设置，参数可以看作是节点中使用的全局变量。可以使用<code class="language-plaintext highlighter-rouge">rosparam</code>进行如下操作</p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rosparam <span class="nb">set            </span>设置参数
 rosparam get            获取参数
 rosparam load           从文件读取参数
@@ -346,9 +346,9 @@ rosparam list           列出参数名
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=ros操作系统入门&url=http://localhost:4000/ros/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/ros/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/ros/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=ros操作系统入门&url=/ros/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/ros/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/ros/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -391,6 +391,10 @@ rosparam list           列出参数名
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -408,10 +412,6 @@ rosparam list           列出参数名
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

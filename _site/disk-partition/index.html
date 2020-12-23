@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/minion2.jpg alt="磁盘分区问题解析">
       </div>
       <div class="post_description">
-        <p class="post_meta">2018, Dec 01</p>
+        <p class="post_meta">2018, Dec 02</p>
         <h1 class="post_title">磁盘分区问题解析</h1>
       </div>
     </header> <!-- End Header -->
@@ -109,7 +109,7 @@ MathJax.Hub.Config({
 <img src="/assets/img/mbr_gpt/mbr_extend.png" />
 </div>
 
-<p>在这个例子中，磁盘第一个扇区上的分区表我们只使用了前两组分区记录表，第一个是主分区，第二个是扩展分区。通常每组分区记录中会有一个字节是存储分区类型值的，可以在此指定为扩展分区。然后扩展分区会在自己的区域再次进行分区划分，图中的<code class="highlighter-rouge">L1~L5</code>是扩展分区上划分出来的五个<strong>逻辑分区</strong>。</p>
+<p>在这个例子中，磁盘第一个扇区上的分区表我们只使用了前两组分区记录表，第一个是主分区，第二个是扩展分区。通常每组分区记录中会有一个字节是存储分区类型值的，可以在此指定为扩展分区。然后扩展分区会在自己的区域再次进行分区划分，图中的<code class="language-plaintext highlighter-rouge">L1~L5</code>是扩展分区上划分出来的五个<strong>逻辑分区</strong>。</p>
 
 <blockquote>
   <p>其实<strong>扩展分区本质</strong>上并不是一个分区，它是一个指向下一个分区的指针，这种指针结构最后会形成一个单向链表。具体扩展分区形式比较复杂，以后我完全弄懂了再补充，如今先按照上图中的方式理解。</p>
@@ -125,7 +125,7 @@ MathJax.Hub.Config({
 </ul>
 
 <blockquote>
-  <p>每个<strong>物理磁盘</strong>文件的文件名为<code class="highlighter-rouge">/dev/sd[a~p]</code>的格式，而每个磁盘上的<strong>分区文件</strong>的文件名（拿<code class="highlighter-rouge">/dev/sda</code>磁盘文件举例）被命名成<code class="highlighter-rouge">/dev/sda[1~128]</code>，mbr分区表中<code class="highlighter-rouge">/dev/sda[1~4]</code>是主分区或扩展分区，剩下的是逻辑分区。</p>
+  <p>每个<strong>物理磁盘</strong>文件的文件名为<code class="language-plaintext highlighter-rouge">/dev/sd[a~p]</code>的格式，而每个磁盘上的<strong>分区文件</strong>的文件名（拿<code class="language-plaintext highlighter-rouge">/dev/sda</code>磁盘文件举例）被命名成<code class="language-plaintext highlighter-rouge">/dev/sda[1~128]</code>，mbr分区表中<code class="language-plaintext highlighter-rouge">/dev/sda[1~4]</code>是主分区或扩展分区，剩下的是逻辑分区。</p>
 </blockquote>
 
 <h1 id="gpt分区格式">GPT分区格式</h1>
@@ -161,19 +161,19 @@ MathJax.Hub.Config({
   <li>
     <p>LBA2~LBA33(实际记录分区信息的地方)</p>
 
-    <p>这32个区块，每个记录了四组分区信息(512字节)，所以默认一共可以记录128组分区信息，每组分区信息使用128字节存储。这128字节的空间中有除去记录标识符之类的信息外，使用64位来记录分区开始/结束的扇区号码。所以可以寻址的空间是<code class="highlighter-rouge">2^64 * 512字节</code>也就是 $ 2^33 $TB的空间。</p>
+    <p>这32个区块，每个记录了四组分区信息(512字节)，所以默认一共可以记录128组分区信息，每组分区信息使用128字节存储。这128字节的空间中有除去记录标识符之类的信息外，使用64位来记录分区开始/结束的扇区号码。所以可以寻址的空间是<code class="language-plaintext highlighter-rouge">2^64 * 512字节</code>也就是 $ 2^33 $TB的空间。</p>
   </li>
 </ul>
 
 <h1 id="linux界面分区软件gparted">linux界面分区软件gparted</h1>
 <p>启动软件</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo gparted
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo gparted
 </code></pre></div></div>
 
 <p>如果没有安装，需要先安装</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt install gparted
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt install gparted
 </code></pre></div></div>
 
 <p>运行后如下界面</p>
@@ -181,10 +181,10 @@ MathJax.Hub.Config({
 <img src="/assets/img/mbr_gpt/gparted.png" />
 </div>
 
-<p>这是我虚拟机的分区情况，首先有一个主分区<code class="highlighter-rouge">/dev/sda1</code>，挂载在<code class="highlighter-rouge">/</code>目录下，与一个扩展分区<code class="highlighter-rouge">/dev/sda2</code>，扩展分区只分了一个逻辑分区<code class="highlighter-rouge">/dev/sda5</code>作为内存的交换分区。</p>
+<p>这是我虚拟机的分区情况，首先有一个主分区<code class="language-plaintext highlighter-rouge">/dev/sda1</code>，挂载在<code class="language-plaintext highlighter-rouge">/</code>目录下，与一个扩展分区<code class="language-plaintext highlighter-rouge">/dev/sda2</code>，扩展分区只分了一个逻辑分区<code class="language-plaintext highlighter-rouge">/dev/sda5</code>作为内存的交换分区。</p>
 
 <ul>
-  <li>交换分区一般并没有挂载，可以在觉得内存不足时再进行挂载。如下使用<code class="highlighter-rouge">free</code>命令查看内存是否挂载
+  <li>交换分区一般并没有挂载，可以在觉得内存不足时再进行挂载。如下使用<code class="language-plaintext highlighter-rouge">free</code>命令查看内存是否挂载
     <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xhy@ubuntu:~<span class="nv">$ </span>free
             total        used        free      shared  buff/cache   available
 Mem:        2017308      894012      362524       24756      760772      892696
@@ -192,7 +192,7 @@ Swap:             0           0           0
 </code></pre></div>    </div>
     <hr />
   </li>
-  <li>如上，显示交换分区并没有挂载，可以使用<code class="highlighter-rouge">swapon</code>命令进行挂载
+  <li>如上，显示交换分区并没有挂载，可以使用<code class="language-plaintext highlighter-rouge">swapon</code>命令进行挂载
     <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xhy@ubuntu:~<span class="nv">$ </span><span class="nb">sudo </span>swapon /dev/sda5 
 <span class="o">[</span><span class="nb">sudo</span><span class="o">]</span> xhy 的密码： 
 xhy@ubuntu:~<span class="nv">$ </span>free
@@ -204,12 +204,12 @@ Swap:       2046972           0     2046972
     <p>如上，挂载成功。</p>
   </li>
   <li>
-    <p>每一次都手动挂载如果不耐烦，可以设置自动挂载，在文件<code class="highlighter-rouge">/etc/fstab</code>最后一行添加<code class="highlighter-rouge">/dev/sda5 swap swap defaults 0 0</code>即可。</p>
+    <p>每一次都手动挂载如果不耐烦，可以设置自动挂载，在文件<code class="language-plaintext highlighter-rouge">/etc/fstab</code>最后一行添加<code class="language-plaintext highlighter-rouge">/dev/sda5 swap swap defaults 0 0</code>即可。</p>
   </li>
   <li>
-    <p>然后先使用<code class="highlighter-rouge">swapoff /dev/sda5</code>即可将前面的挂载的交换分区卸载。然后<code class="highlighter-rouge">swapon -a</code>执行一下，不用重启即可自动挂载。</p>
+    <p>然后先使用<code class="language-plaintext highlighter-rouge">swapoff /dev/sda5</code>即可将前面的挂载的交换分区卸载。然后<code class="language-plaintext highlighter-rouge">swapon -a</code>执行一下，不用重启即可自动挂载。</p>
   </li>
-  <li>最后使用<code class="highlighter-rouge">swapon -s</code>查看交换分区挂载情况
+  <li>最后使用<code class="language-plaintext highlighter-rouge">swapon -s</code>查看交换分区挂载情况
     <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xhy@ubuntu:~<span class="nv">$ </span>swapon <span class="nt">-s</span>
 Filename				Type		Size	Used	Priority
 /dev/sda5                              	partition	2046972	0	<span class="nt">-2</span>
@@ -224,7 +224,7 @@ Filename				Type		Size	Used	Priority
 
 <h1 id="分区命令行">分区命令行</h1>
 <ul>
-  <li><code class="highlighter-rouge">lsblk</code>列出计算机硬盘与分区情况
+  <li><code class="language-plaintext highlighter-rouge">lsblk</code>列出计算机硬盘与分区情况
     <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xhy@ubuntu:~<span class="nv">$ </span>lsblk
 NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
 sr0     11:0    1 1024M  0 rom 
@@ -235,15 +235,15 @@ sda      8:0    0   50G  0 disk
 </code></pre></div>    </div>
     <hr />
   </li>
-  <li><code class="highlighter-rouge">blkid</code>查看一个分区的文件系统，UUId等</li>
-  <li>使用<code class="highlighter-rouge">parted</code>可以列出磁盘的分区表类型与分区信息（其实它的功能十分强大），也可以使用这个命令来进行磁盘分区操作（两种分区表格式都支持）。</li>
+  <li><code class="language-plaintext highlighter-rouge">blkid</code>查看一个分区的文件系统，UUId等</li>
+  <li>使用<code class="language-plaintext highlighter-rouge">parted</code>可以列出磁盘的分区表类型与分区信息（其实它的功能十分强大），也可以使用这个命令来进行磁盘分区操作（两种分区表格式都支持）。</li>
 </ul>
 <div style="text-align: center">
 <img src="/assets/img/mbr_gpt/parted-blkid.png" />
 </div>
 
 <ul>
-  <li>分区操作命令<code class="highlighter-rouge">gdisk</code>与<code class="highlighter-rouge">fdisk</code>（前一个针对gpt分区表的磁盘，后一个针对mbr分区表的磁盘），
+  <li>分区操作命令<code class="language-plaintext highlighter-rouge">gdisk</code>与<code class="language-plaintext highlighter-rouge">fdisk</code>（前一个针对gpt分区表的磁盘，后一个针对mbr分区表的磁盘），
     <h1 id="参考资料">参考资料</h1>
   </li>
   <li>[1] 鸟哥的linux私房菜（第四版）</li>
@@ -258,9 +258,9 @@ sda      8:0    0   50G  0 disk
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=磁盘分区问题解析&url=http://localhost:4000/disk-partition/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/disk-partition/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/disk-partition/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=磁盘分区问题解析&url=/disk-partition/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/disk-partition/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/disk-partition/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -303,6 +303,10 @@ sda      8:0    0   50G  0 disk
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -320,10 +324,6 @@ sda      8:0    0   50G  0 disk
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

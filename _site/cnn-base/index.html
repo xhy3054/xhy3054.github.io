@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/rabbit.jpg alt="CNN基础回顾">
       </div>
       <div class="post_description">
-        <p class="post_meta">2018, Jun 19</p>
+        <p class="post_meta">2018, Jun 20</p>
         <h1 class="post_title">CNN基础回顾</h1>
       </div>
     </header> <!-- End Header -->
@@ -73,11 +73,11 @@ MathJax.Hub.Config({
 
 <p>卷积神经网络（Convolutional neural network，CNN），听名字就可以猜到，没错，这是一种特殊的神经网络。至于它特殊在哪？下面我们慢慢来说。</p>
 
-<p>首先，由神经网络的结构图我们可以发现，神经网络中每个节点都与相邻层上的所有节点有一条权重连接。比如上图，输入层3个节点，隐藏层1、2各有4个节点，输出层1个节点，所以这个神经网络总共有<code class="highlighter-rouge">12+16+4=32</code>个权重。若是扩大神经网络比如输入层为<code class="highlighter-rouge">100×100</code>图片，下一层为<code class="highlighter-rouge">50×50</code>大小，则仅仅这一层便有<code class="highlighter-rouge">100×100×50×50=25000000</code>个权重！多的可怕！如此大的数据量，使用神经网络来做图像的分析处理，计算量不敢想象，基本不现实。</p>
+<p>首先，由神经网络的结构图我们可以发现，神经网络中每个节点都与相邻层上的所有节点有一条权重连接。比如上图，输入层3个节点，隐藏层1、2各有4个节点，输出层1个节点，所以这个神经网络总共有<code class="language-plaintext highlighter-rouge">12+16+4=32</code>个权重。若是扩大神经网络比如输入层为<code class="language-plaintext highlighter-rouge">100×100</code>图片，下一层为<code class="language-plaintext highlighter-rouge">50×50</code>大小，则仅仅这一层便有<code class="language-plaintext highlighter-rouge">100×100×50×50=25000000</code>个权重！多的可怕！如此大的数据量，使用神经网络来做图像的分析处理，计算量不敢想象，基本不现实。</p>
 
 <p>为了<strong><em>削减计算量</em></strong>，后来有人提出了卷积神经网络。卷积神经网络对于数据的处理模式与图像处理中对一幅图像加滤波器的操作是一样的。主要有以下两个特点：</p>
 <ol>
-  <li><strong>局部关联</strong>：每个点的取值只与上一层中附近的点关联，比如<code class="highlighter-rouge">3×3</code>的卷积核表示此点取值只与周围8个点还有自身加起来9个点的取值有关，而传统神经网络中每个点的取值是与上一层所有的点关联的。</li>
+  <li><strong>局部关联</strong>：每个点的取值只与上一层中附近的点关联，比如<code class="language-plaintext highlighter-rouge">3×3</code>的卷积核表示此点取值只与周围8个点还有自身加起来9个点的取值有关，而传统神经网络中每个点的取值是与上一层所有的点关联的。</li>
   <li><strong>权值共享</strong>：我们都知道，cnn主要是用来提取特征的，而一般提取同样的特征需要的卷积核是相同的，即对每个点的取值进行计算时使用相同的卷积核。</li>
 </ol>
 
@@ -93,7 +93,7 @@ MathJax.Hub.Config({
 
 <p>一个典型的CNN结构如下：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>input layer +[n×(卷积层+Relu)+pooling层]*m+（全连接层+Relu）*k +全连接层
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>input layer +[n×(卷积层+Relu)+pooling层]*m+（全连接层+Relu）*k +全连接层
 </code></pre></div></div>
 
 <h3 id="数据输入层input-layer">数据输入层（input layer）</h3>
@@ -188,15 +188,21 @@ MathJax.Hub.Config({
 <h3 id="总结">总结</h3>
 <p>一般也有一种说法是cnn主要负责提取图像的特征，至于分类器可以与前部分网络分开来看。但是实际应用时cnn的参数与分类器的参数最好是一起训练确定的。原因是cnn提取的特征是没有明确的物理含义的，这样分类器类型的选取就会变得很纠结。确定分类器类型后，将他们一起训练得到参数其实有助于实现，使得cnn提取的特征适合此种分类器进行分类操作。</p>
 
+<h1 id="参考文献">参考文献</h1>
+
+<ul>
+  <li>https://www.cnblogs.com/skyfsm/p/6790245.html</li>
+</ul>
+
     </div>
     
     <div class="post_wrapper">
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=CNN基础回顾&url=http://localhost:4000/cnn-base/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/cnn-base/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/cnn-base/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=CNN基础回顾&url=/cnn-base/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/cnn-base/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/cnn-base/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -239,6 +245,10 @@ MathJax.Hub.Config({
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -256,10 +266,6 @@ MathJax.Hub.Config({
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

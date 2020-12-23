@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/pier.jpg alt="ResNet论文笔记">
       </div>
       <div class="post_description">
-        <p class="post_meta">2018, Jun 24</p>
+        <p class="post_meta">2018, Jun 25</p>
         <h1 class="post_title">ResNet论文笔记</h1>
       </div>
     </header> <!-- End Header -->
@@ -78,12 +78,12 @@ MathJax.Hub.Config({
 <p>ResNet为了解决cnn网络层数增加，学习能力反而下降的问题，提出了一种 residual 结构。
 <img src="/assets/img/resnet/residual.png" alt="residual" /></p>
 
-<p>如上图，增加了一个恒等映射（identity mapping），将原始需要学习的函数<code class="highlighter-rouge">H(X)</code>转换成<code class="highlighter-rouge">F(x)+x</code>。作者认为对残差<code class="highlighter-rouge">F(x)</code>做优化会比直接对<code class="highlighter-rouge">H(x)</code>做优化要简单很多。这个公式的实现是通过上图的<code class="highlighter-rouge">shortcut connections</code>，这并不会增加额外参数和计算复杂性。</p>
+<p>如上图，增加了一个恒等映射（identity mapping），将原始需要学习的函数<code class="language-plaintext highlighter-rouge">H(X)</code>转换成<code class="language-plaintext highlighter-rouge">F(x)+x</code>。作者认为对残差<code class="language-plaintext highlighter-rouge">F(x)</code>做优化会比直接对<code class="language-plaintext highlighter-rouge">H(x)</code>做优化要简单很多。这个公式的实现是通过上图的<code class="language-plaintext highlighter-rouge">shortcut connections</code>，这并不会增加额外参数和计算复杂性。</p>
 
-<p>其中，<code class="highlighter-rouge">H(x) = y = F(x)+x</code>,<code class="highlighter-rouge">F(x)</code>为要学习的残差映射。但是，我们都知道输入与输出的维度很有可能会发生变化，因此<code class="highlighter-rouge">shortcut</code>的方式，需要认真考虑。针对深度增加的情况，论文中提出了两种解决方法：</p>
+<p>其中，<code class="language-plaintext highlighter-rouge">H(x) = y = F(x)+x</code>,<code class="language-plaintext highlighter-rouge">F(x)</code>为要学习的残差映射。但是，我们都知道输入与输出的维度很有可能会发生变化，因此<code class="language-plaintext highlighter-rouge">shortcut</code>的方式，需要认真考虑。针对深度增加的情况，论文中提出了两种解决方法：</p>
 <ol>
   <li>zero_padding:依然是恒等映射，对于增加的层填充0,这样不会有额外的参数;</li>
-  <li>projection:采用<code class="highlighter-rouge">1×1</code>卷积核来增加维度。</li>
+  <li>projection:采用<code class="language-plaintext highlighter-rouge">1×1</code>卷积核来增加维度。</li>
 </ol>
 
 <h2 id="实际效果">实际效果</h2>
@@ -101,14 +101,14 @@ MathJax.Hub.Config({
 
 <p><img src="/assets/img/resnet/newres.png" alt="newres" /></p>
 
-<p>使用<code class="highlighter-rouge">1×1</code>卷积核来分别进行降维与升维，使得<code class="highlighter-rouge">3×3</code>卷积核工作在较低维度，大大减少参数数量，作者基于此又提出了 ResNet 的50、101、152层网络。</p>
+<p>使用<code class="language-plaintext highlighter-rouge">1×1</code>卷积核来分别进行降维与升维，使得<code class="language-plaintext highlighter-rouge">3×3</code>卷积核工作在较低维度，大大减少参数数量，作者基于此又提出了 ResNet 的50、101、152层网络。</p>
 
 <h2 id="resnet原理探讨">ResNet原理探讨</h2>
 <p>纵观全文，作者在引入新的结构时几乎没有进行原理上的分析，用到最多的词反而是：实验结果表明。ResNet是不可解释的吗？其实不然，下面就将尝试进行解释。</p>
 
 <p>深层网络会出现梯度消失的问题，进而导致退化现象的产生。梯度消失的出现主要是由神经网络的求解方式—梯度下降法导致的，在进行梯度链式求导时，由于每一层梯度求导的值都会很小，当层数很深依次链式求导时，就会出现梯度消失。</p>
 
-<p>而残差网络中，会有一条identity分支。<code class="highlighter-rouge">H(x) = F(x) + x</code>在反向传播求导(此处是对x求导)时，会得到<code class="highlighter-rouge">(1 + F'(x)) d H(x)</code>，此式可以保证与<code class="highlighter-rouge">d H(x)</code>保持在一个数量级，从而有效的减小了梯度消失。</p>
+<p>而残差网络中，会有一条identity分支。<code class="language-plaintext highlighter-rouge">H(x) = F(x) + x</code>在反向传播求导(此处是对x求导)时，会得到<code class="language-plaintext highlighter-rouge">(1 + F'(x)) d H(x)</code>，此式可以保证与<code class="language-plaintext highlighter-rouge">d H(x)</code>保持在一个数量级，从而有效的减小了梯度消失。</p>
 
 <p>另外，有一篇论文认为残差网络就是大量的不同长度的神经网络组成的组合函数，从而可以有效缓解梯度消失。</p>
 
@@ -118,9 +118,9 @@ MathJax.Hub.Config({
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=ResNet论文笔记&url=http://localhost:4000/resnet/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/resnet/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/resnet/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=ResNet论文笔记&url=/resnet/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/resnet/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/resnet/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -163,6 +163,10 @@ MathJax.Hub.Config({
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -180,10 +184,6 @@ MathJax.Hub.Config({
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

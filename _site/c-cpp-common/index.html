@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/town1.jpg alt="c语言和ｃ++语言中的几个常识问题">
       </div>
       <div class="post_description">
-        <p class="post_meta">2018, Sep 14</p>
+        <p class="post_meta">2018, Sep 15</p>
         <h1 class="post_title">c语言和ｃ++语言中的几个常识问题</h1>
       </div>
     </header> <!-- End Header -->
@@ -69,21 +69,21 @@ MathJax.Hub.Config({
       <p>在我刚上大学那会儿，学了ｃ语言与c++。当时肯定是没学好哈哈，记得我好长一段时间都认为c++语言就是ｃ语言多了面向对象的部分（这个有可能是因为谭浩强的两本书实在太像了）。这段时间一直在总结c语言和c++语言学习，c++语言确实脱胎于c语言，但是有些地方确实还是会有细微的差别的。已经写了几篇博客了，今天这应该是最后一篇，讲的是一些ｃ语言和c++的几个常识问题．比如关键字struct与关键字class等。这个是收尾工作，所以内容十分平，我写的轻松，看起来也轻松。（因为内容实在是少，而且很简单）</p>
 
 <h1 id="c语言与c文件的后缀名问题">c语言与c++文件的后缀名问题</h1>
-<p>这个问题在ｃ语言中会遇到的比较少，但是C++中可能会遇到比较多，比如我就曾经遇到过后缀名是<code class="highlighter-rouge">.cc</code>的文件，当时是有些困惑的，后来搞清楚了就好了．这里就来讲清楚这个．</p>
+<p>这个问题在ｃ语言中会遇到的比较少，但是C++中可能会遇到比较多，比如我就曾经遇到过后缀名是<code class="language-plaintext highlighter-rouge">.cc</code>的文件，当时是有些困惑的，后来搞清楚了就好了．这里就来讲清楚这个．</p>
 
 <p>ｃ语言中的后缀名：</p>
 <ol>
-  <li>源文件：<code class="highlighter-rouge">.c</code>;</li>
-  <li>头文件：<code class="highlighter-rouge">.h</code>;</li>
+  <li>源文件：<code class="language-plaintext highlighter-rouge">.c</code>;</li>
+  <li>头文件：<code class="language-plaintext highlighter-rouge">.h</code>;</li>
 </ol>
 
 <p>c++中的后缀名：</p>
 <ol>
-  <li>源文件：<code class="highlighter-rouge">.cpp</code>、<code class="highlighter-rouge">.cc</code>、<code class="highlighter-rouge">cxx</code>、<code class="highlighter-rouge">.C</code>、<code class="highlighter-rouge">.c++</code>;</li>
-  <li>头文件：<code class="highlighter-rouge">.hpp</code>、<code class="highlighter-rouge">.h</code>、<code class="highlighter-rouge">.hxx</code>;</li>
+  <li>源文件：<code class="language-plaintext highlighter-rouge">.cpp</code>、<code class="language-plaintext highlighter-rouge">.cc</code>、<code class="language-plaintext highlighter-rouge">cxx</code>、<code class="language-plaintext highlighter-rouge">.C</code>、<code class="language-plaintext highlighter-rouge">.c++</code>;</li>
+  <li>头文件：<code class="language-plaintext highlighter-rouge">.hpp</code>、<code class="language-plaintext highlighter-rouge">.h</code>、<code class="language-plaintext highlighter-rouge">.hxx</code>;</li>
 </ol>
 
-<p>由上我们看到ｃ语言的后缀名比较固定，没什么好说的，但是c++的后缀名似乎版本比较多样。这个其实没什么大不了的，就是一个标注，给人给机器看的，让我们知道它是哪种语言。但是我们也看到了c++那么多版本也不是说所有版本在所有平台上都是可以的，有的平台不区分大小写（windows），所以<code class="highlighter-rouge">.C</code>就不能用在该平台上，有的平台不支持<code class="highlighter-rouge">+</code>号做后缀，<code class="highlighter-rouge">.c++</code>就不能用，下面就列出各个平台支持的c++源文件后缀名版本：</p>
+<p>由上我们看到ｃ语言的后缀名比较固定，没什么好说的，但是c++的后缀名似乎版本比较多样。这个其实没什么大不了的，就是一个标注，给人给机器看的，让我们知道它是哪种语言。但是我们也看到了c++那么多版本也不是说所有版本在所有平台上都是可以的，有的平台不区分大小写（windows），所以<code class="language-plaintext highlighter-rouge">.C</code>就不能用在该平台上，有的平台不支持<code class="language-plaintext highlighter-rouge">+</code>号做后缀，<code class="language-plaintext highlighter-rouge">.c++</code>就不能用，下面就列出各个平台支持的c++源文件后缀名版本：</p>
 
 <ol>
   <li>
@@ -110,14 +110,14 @@ MathJax.Hub.Config({
 </ol>
 
 <h1 id="c中的size_t与size_type">c++中的size_t与size_type</h1>
-<p>首先，必须得说，<code class="highlighter-rouge">size_t</code>与<code class="highlighter-rouge">size_type</code>没有本质的区别，都是被标准定义为一种<code class="highlighter-rouge">unsigned int</code>类型。但使用时有一点区别需要注意：</p>
+<p>首先，必须得说，<code class="language-plaintext highlighter-rouge">size_t</code>与<code class="language-plaintext highlighter-rouge">size_type</code>没有本质的区别，都是被标准定义为一种<code class="language-plaintext highlighter-rouge">unsigned int</code>类型。但使用时有一点区别需要注意：</p>
 <ol>
-  <li><code class="highlighter-rouge">size_t</code>类型是容器无关的，定义在全局名称空间中；</li>
-  <li><code class="highlighter-rouge">size_type</code>类型是容器概念，没有容器不能使用；</li>
+  <li><code class="language-plaintext highlighter-rouge">size_t</code>类型是容器无关的，定义在全局名称空间中；</li>
+  <li><code class="language-plaintext highlighter-rouge">size_type</code>类型是容器概念，没有容器不能使用；</li>
 </ol>
 
 <blockquote>
-  <p><code class="highlighter-rouge">size_t</code>定义在cstddef头文件中,该文件是C标准库的头文件stddef.h的C++版本.它是一个与机器相关的unsigned类型,其大小足以保证存储内存中对象的大小。size_t与size_type的引入增强了程序在不同平台上的可移植性。经测试发现，在32位系统中size_t是4字节的，而在64位系统中，size_t是8字节的，这样利用该类型可以增强程序的可移植性。理论上，它可以存储任何类型数组的最大大小。size_t类型通常用于循环，数组索引，大小的存储和地址运算。size_t可以存储一个指针，但有一个更好的选择uintptr_t。</p>
+  <p><code class="language-plaintext highlighter-rouge">size_t</code>定义在cstddef头文件中,该文件是C标准库的头文件stddef.h的C++版本.它是一个与机器相关的unsigned类型,其大小足以保证存储内存中对象的大小。size_t与size_type的引入增强了程序在不同平台上的可移植性。经测试发现，在32位系统中size_t是4字节的，而在64位系统中，size_t是8字节的，这样利用该类型可以增强程序的可移植性。理论上，它可以存储任何类型数组的最大大小。size_t类型通常用于循环，数组索引，大小的存储和地址运算。size_t可以存储一个指针，但有一个更好的选择uintptr_t。</p>
 </blockquote>
 
 <h1 id="c语言与c中关键字struct的区别">c语言与c++中关键字struct的区别</h1>
@@ -131,7 +131,7 @@ MathJax.Hub.Config({
     <span class="kt">float</span> <span class="n">c</span><span class="p">;</span>
 <span class="p">}</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
 </code></pre></div></div>
-<p>如上，<code class="highlighter-rouge">struct{int a;char b;float c;}</code>是一种结构体类型，上述代码中声明a为这种类型的变量，y为包含10个这种类型变量的数组。不过会有人发现这样声明是不是太麻烦，确实有些麻烦，所以可以为这种结构体类型设置<strong>标签</strong>。如下：</p>
+<p>如上，<code class="language-plaintext highlighter-rouge">struct{int a;char b;float c;}</code>是一种结构体类型，上述代码中声明a为这种类型的变量，y为包含10个这种类型变量的数组。不过会有人发现这样声明是不是太麻烦，确实有些麻烦，所以可以为这种结构体类型设置<strong>标签</strong>。如下：</p>
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="n">A</span><span class="p">{</span>
     <span class="kt">int</span> <span class="n">a</span><span class="p">;</span>
     <span class="kt">char</span> <span class="n">b</span><span class="p">;</span>
@@ -139,7 +139,7 @@ MathJax.Hub.Config({
 <span class="p">};</span>
 <span class="k">struct</span> <span class="n">A</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
 </code></pre></div></div>
-<p>如上，可以起到一样的作用，其中<code class="highlighter-rouge">A</code>为该结构体的标签。也有很多人喜欢下面的用法：</p>
+<p>如上，可以起到一样的作用，其中<code class="language-plaintext highlighter-rouge">A</code>为该结构体的标签。也有很多人喜欢下面的用法：</p>
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
     <span class="kt">int</span> <span class="n">a</span><span class="p">;</span>
     <span class="kt">char</span> <span class="n">b</span><span class="p">;</span>
@@ -166,12 +166,12 @@ MathJax.Hub.Config({
     <p>我们都知道在类中，成员是有访问属性的，分别是<strong>public</strong>与<strong>private</strong>。这两个关键字唯一的区别就是，使用struct关键字时，如果没有访问说明符，那么成员默认是<strong>public</strong>的；而使用class关键字时，如果没有访问说明符，那么成员默认是<strong>private</strong>的。</p>
   </li>
   <li>
-    <p>在定义派生类时，如果没有提供派生访问说明符，则使用<code class="highlighter-rouge">struct</code>关键字定义的派生类默认是公有继承，<code class="highlighter-rouge">class</code>关键字定义的派生类默认是私有继承。</p>
+    <p>在定义派生类时，如果没有提供派生访问说明符，则使用<code class="language-plaintext highlighter-rouge">struct</code>关键字定义的派生类默认是公有继承，<code class="language-plaintext highlighter-rouge">class</code>关键字定义的派生类默认是私有继承。</p>
   </li>
 </ol>
 
 <blockquote>
-  <p>关键字class还可以用在模板定义时修饰类型参数，相当于<code class="highlighter-rouge">typename</code>。</p>
+  <p>关键字class还可以用在模板定义时修饰类型参数，相当于<code class="language-plaintext highlighter-rouge">typename</code>。</p>
 </blockquote>
 
 <h1 id="参考资料">参考资料</h1>
@@ -185,9 +185,9 @@ MathJax.Hub.Config({
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=c语言和ｃ++语言中的几个常识问题&url=http://localhost:4000/c-cpp-common/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/c-cpp-common/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/c-cpp-common/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=c语言和ｃ++语言中的几个常识问题&url=/c-cpp-common/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/c-cpp-common/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/c-cpp-common/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -230,6 +230,10 @@ MathJax.Hub.Config({
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -247,10 +251,6 @@ MathJax.Hub.Config({
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

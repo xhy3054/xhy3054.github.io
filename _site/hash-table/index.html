@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/game3.jpeg alt="哈希表的原理与实现">
       </div>
       <div class="post_description">
-        <p class="post_meta">2019, Jan 14</p>
+        <p class="post_meta">2019, Jan 15</p>
         <h1 class="post_title">哈希表的原理与实现</h1>
       </div>
     </header> <!-- End Header -->
@@ -84,7 +84,7 @@ MathJax.Hub.Config({
 </blockquote>
 
 <h1 id="哈希表与搜索">哈希表与搜索</h1>
-<p>哈希表被广泛应用于<strong>搜索</strong>。设定集合A为搜索对象，集合B为存储位置。可以通过hash函数将搜索对象与存储位置对应起来。这样我们只需要一次hash计算，就可以找到对象存储的位置。这就是C++中的<code class="highlighter-rouge">unordered_map</code>(map对应的是红黑树)与python中的<code class="highlighter-rouge">dict</code>的原理。</p>
+<p>哈希表被广泛应用于<strong>搜索</strong>。设定集合A为搜索对象，集合B为存储位置。可以通过hash函数将搜索对象与存储位置对应起来。这样我们只需要一次hash计算，就可以找到对象存储的位置。这就是C++中的<code class="language-plaintext highlighter-rouge">unordered_map</code>(map对应的是红黑树)与python中的<code class="language-plaintext highlighter-rouge">dict</code>的原理。</p>
 
 <h2 id="哈希表的实现">哈希表的实现</h2>
 <p>实现的话，一般很常见的是使用一个数组来存储对象，然后通过对键值进行hash计算来确定对象在数组中的存储的下标，由于数组可以根据数组下标进行随机存取（random access，算法复杂度为1），所以搜索操作将取决于hash函数的复杂程度。</p>
@@ -109,7 +109,7 @@ MathJax.Hub.Config({
 </code></pre></div></div>
 <hr />
 
-<p>hash函数的计算是通过将key中的每个字母的ACII值相加然后求除以1007的余数，得到一个在<code class="highlighter-rouge">0~1006</code>之间的index值。我们建立一个1007大小的数组用于存储指向每个记录的指针。一般HASHSIZE被选择为质数，以便hash值可以分布的更加均匀。下图是hash搜索的一个示例，输入”Vamei”得到在数组index为498的地方存储着一个指针指向“Vamei”的记录。</p>
+<p>hash函数的计算是通过将key中的每个字母的ACII值相加然后求除以1007的余数，得到一个在<code class="language-plaintext highlighter-rouge">0~1006</code>之间的index值。我们建立一个1007大小的数组用于存储指向每个记录的指针。一般HASHSIZE被选择为质数，以便hash值可以分布的更加均匀。下图是hash搜索的一个示例，输入”Vamei”得到在数组index为498的地方存储着一个指针指向“Vamei”的记录。</p>
 <div style="text-align: center">
 <img src="/assets/img/hash/hash1.png" />
 </div>
@@ -135,14 +135,14 @@ MathJax.Hub.Config({
 <img src="/assets/img/hash/hash3.png" />
 </div>
 <blockquote>
-  <p>closed hashing的关键在于如何找到下一个位置。上面的做法是<code class="highlighter-rouge">index+1</code>。但是也可以是其他的方法。当我们在搜索的时候，首先依据hash函数找到初始index，通过比对key值，如果不是想要的记录，就不断的找下一个位置，直到找到想要的记录。</p>
+  <p>closed hashing的关键在于如何找到下一个位置。上面的做法是<code class="language-plaintext highlighter-rouge">index+1</code>。但是也可以是其他的方法。当我们在搜索的时候，首先依据hash函数找到初始index，通过比对key值，如果不是想要的记录，就不断的找下一个位置，直到找到想要的记录。</p>
 </blockquote>
 
 <blockquote>
   <p>如果HASHSIZE太小，会导致hash碰撞太多，此时会极大地影响查找效率。我们需要增大HASHSIZE，并将原来的记录放入新的比较大的数组中，这样的操作叫做<strong>rehashing</strong>。</p>
 </blockquote>
 
-<p>c语言实现见我的github里c语言学习文件夹<code class="highlighter-rouge">c_learn/hash_table</code></p>
+<p>c语言实现见我的github里c语言学习文件夹<code class="language-plaintext highlighter-rouge">c_learn/hash_table</code></p>
 
 <h1 id="参考资料">参考资料</h1>
 <ul>
@@ -157,9 +157,9 @@ MathJax.Hub.Config({
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=哈希表的原理与实现&url=http://localhost:4000/hash-table/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/hash-table/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/hash-table/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=哈希表的原理与实现&url=/hash-table/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/hash-table/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/hash-table/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -202,6 +202,10 @@ MathJax.Hub.Config({
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -219,10 +223,6 @@ MathJax.Hub.Config({
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

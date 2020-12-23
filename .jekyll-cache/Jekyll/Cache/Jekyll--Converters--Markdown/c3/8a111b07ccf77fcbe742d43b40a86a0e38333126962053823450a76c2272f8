@@ -1,8 +1,8 @@
-I"2<h2 id="whats-ssh">what’s SSH</h2>
+I"b <h2 id="whats-ssh">what’s SSH</h2>
 <p>通俗来讲，<strong>SSH</strong>是一种网络协议，主要用于远程登陆。由于这种登陆中信息是加密的，所以即使被中途拦截，也不会泄露密码。</p>
 
 <h2 id="ssh基本用法">SSH基本用法</h2>
-<p><strong>username</strong>为你登陆的远程主机用户名（若本地用户名与远程用户名一致，可省略<code class="highlighter-rouge">username@</code>），<strong>host</strong>为你登陆的远程主机ip，此命令默认使用远程主机的<strong>22</strong>端口进行登陆。</p>
+<p><strong>username</strong>为你登陆的远程主机用户名（若本地用户名与远程用户名一致，可省略<code class="language-plaintext highlighter-rouge">username@</code>），<strong>host</strong>为你登陆的远程主机ip，此命令默认使用远程主机的<strong>22</strong>端口进行登陆。</p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>ssh username@host
 </code></pre></div></div>
 
@@ -18,7 +18,7 @@
   <p>用户将自己的公钥存储在远程主机上,在登陆时,远程主机会向用户发送一段随机字符串，用户用自己的私钥加密后，再发回来。远程主机用事先储存的公钥进行解密，如果成功，就证明用户是可信的，直接允许登录shell，不再要求密码。</p>
 </blockquote>
 
-<p>因此,用户首先需要提供自己的公钥,可以进入目录<code class="highlighter-rouge">~/.ssh</code>查看一下,<code class="highlighter-rouge">id_rsa.pub</code>为私钥,<code class="highlighter-rouge">id_rsa</code>为公钥。如果没有,可以用如下方式生成:</p>
+<p>因此,用户首先需要提供自己的公钥,可以进入目录<code class="language-plaintext highlighter-rouge">~/.ssh</code>查看一下,<code class="language-plaintext highlighter-rouge">id_rsa.pub</code>为私钥,<code class="language-plaintext highlighter-rouge">id_rsa</code>为公钥。如果没有,可以用如下方式生成:</p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>ssh-keygen
 </code></pre></div></div>
 
@@ -26,8 +26,8 @@
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>ssh-copy-id username@host
 </code></pre></div></div>
 
-<p>正常情况至此应该已经大公告成,如果没有,请查看远程主机的<code class="highlighter-rouge">/etc/ssh/sshd_config</code>文件,将下面几行的注释取消</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>　　RSAAuthentication yes
+<p>正常情况至此应该已经大公告成,如果没有,请查看远程主机的<code class="language-plaintext highlighter-rouge">/etc/ssh/sshd_config</code>文件,将下面几行的注释取消</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>　　RSAAuthentication yes
 　　PubkeyAuthentication yes
 　　AuthorizedKeysFile .ssh/authorized_keys
 </code></pre></div></div>
@@ -39,16 +39,16 @@
 <p>大功告成!</p>
 
 <h2 id="本机与远程主机之间文件传输">本机与远程主机之间文件传输</h2>
-<p>由本机往远程主机路径<code class="highlighter-rouge">~/picture/</code>传输文件<strong>a</strong></p>
+<p>由本机往远程主机路径<code class="language-plaintext highlighter-rouge">~/picture/</code>传输文件<strong>a</strong></p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>scp a username@host:~/picture/
 </code></pre></div></div>
 
-<p>由远程主机往本机路径<code class="highlighter-rouge">~/picture/</code>传输文件<strong>b</strong>(本机<strong>localhost</strong>可以由<code class="highlighter-rouge">ifconfig</code>命令查看)</p>
+<p>由远程主机往本机路径<code class="language-plaintext highlighter-rouge">~/picture/</code>传输文件<strong>b</strong>(本机<strong>localhost</strong>可以由<code class="language-plaintext highlighter-rouge">ifconfig</code>命令查看)</p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>scp b localusername@localhost:~/picture/
 </code></pre></div></div>
 
-<h2 id="配置config便捷登录">配置<code class="highlighter-rouge">config</code>便捷登录</h2>
-<p>在目录<code class="highlighter-rouge">~/.ssh/</code>下新建<code class="highlighter-rouge">config</code>文件，输入如下信息</p>
+<h2 id="配置config便捷登录">配置<code class="language-plaintext highlighter-rouge">config</code>便捷登录</h2>
+<p>在目录<code class="language-plaintext highlighter-rouge">~/.ssh/</code>下新建<code class="language-plaintext highlighter-rouge">config</code>文件，输入如下信息</p>
 <div class="language-config highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Host</span> <span class="n">s1</span>
 <span class="n">HostName</span> <span class="m">10</span>.<span class="m">20</span>.<span class="m">41</span>.<span class="m">20</span>
 <span class="n">User</span> <span class="n">xhy</span>
@@ -59,12 +59,12 @@
 <span class="n">User</span> <span class="n">xhy</span>
 <span class="n">Port</span> <span class="m">25000</span>
 </code></pre></div></div>
-<p>则再使用<code class="highlighter-rouge">ssh</code>命令登录服务器s1时只需要输入<code class="highlighter-rouge">ssh s1</code>即可。</p>
+<p>则再使用<code class="language-plaintext highlighter-rouge">ssh</code>命令登录服务器s1时只需要输入<code class="language-plaintext highlighter-rouge">ssh s1</code>即可。</p>
 
 <h2 id="工具安装">工具安装</h2>
 <p>一般我们都是使用ssh连接服务器，而服务器一般都会预装了ssh服务，所以以上操作不会出现问题，但是也有偶尔我们是想要使用ssh连接任意两台主机，此时也许会出现</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>connect to host xxx.xxx.xxx.xxx port 22:Connection refused
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>connect to host xxx.xxx.xxx.xxx port 22:Connection refused
 </code></pre></div></div>
 
 <p>这有可能是因为目前ubuntu主机一般都是默认安装了<strong>openssh-client</strong>，但是没有安装<strong>openssh-server</strong>，可以使用如下命令解决</p>
@@ -95,7 +95,7 @@
 <p>可以设想，如果攻击者插在用户与远程主机之间（比如在公共的wifi区域），用伪造的公钥，获取用户的登录密码。再用这个密码登录远程主机，那么SSH的安全机制就荡然无存了。这种风险就是著名的”中间人攻击”（Man-in-the-middle attack）。</p>
 
 <p>其实到目前为止并没有有效阻止“中间人攻击的方法”，因此在用户尝试登陆远程主机时，SSH会做出如下提示（非免密登录）：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ ssh user@host
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ ssh user@host
 
 　　The authenticity of host 'host (12.18.429.21)' can't be established.
 

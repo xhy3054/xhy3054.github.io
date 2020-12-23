@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/sword/sword3.jpg alt="备忘vim编辑器">
       </div>
       <div class="post_description">
-        <p class="post_meta">2019, Mar 29</p>
+        <p class="post_meta">2019, Mar 30</p>
         <h1 class="post_title">备忘vim编辑器</h1>
       </div>
     </header> <!-- End Header -->
@@ -120,7 +120,7 @@ MathJax.Hub.Config({
 </div>
 
 <h2 id="多文件编辑1">多文件编辑1</h2>
-<p>通过<code class="highlighter-rouge">vim file1 file2</code>打开两个文件，并且在其中一个文件拷贝到粘贴板上的文本可以在另一个文件中使用。</p>
+<p>通过<code class="language-plaintext highlighter-rouge">vim file1 file2</code>打开两个文件，并且在其中一个文件拷贝到粘贴板上的文本可以在另一个文件中使用。</p>
 <div style="text-align: center">
 <img src="/assets/img/vim/multifiles.PNG" />
 </div>
@@ -132,13 +132,13 @@ MathJax.Hub.Config({
 
 <ul>
   <li>
-    <p>通过<code class="highlighter-rouge">tabedit file2</code>打开第二个文件</p>
+    <p>通过<code class="language-plaintext highlighter-rouge">tabedit file2</code>打开第二个文件</p>
   </li>
   <li>
-    <p>通过<code class="highlighter-rouge">tabn</code>切换到下一个文件</p>
+    <p>通过<code class="language-plaintext highlighter-rouge">tabn</code>切换到下一个文件</p>
   </li>
   <li>
-    <p>通过<code class="highlighter-rouge">tabp</code>切换到上一个文件</p>
+    <p>通过<code class="language-plaintext highlighter-rouge">tabp</code>切换到上一个文件</p>
   </li>
   <li>
     <p>这种模式下多文件间剪切板是共用的</p>
@@ -152,8 +152,8 @@ MathJax.Hub.Config({
 </div>
 
 <h2 id="我的vim常用设置">我的vim常用设置</h2>
-<p>在<code class="highlighter-rouge">/etc/vim/vimrc</code>（个人账户的设置是<code class="highlighter-rouge">~/.vimrc</code>配置文件，默认不存在，需要自己手动创建）中，我们可以对vim这个编辑器进行一些常用的设置。</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>set showmatch       " Show matching brackets.
+<p>在<code class="language-plaintext highlighter-rouge">/etc/vim/vimrc</code>（个人账户的设置是<code class="language-plaintext highlighter-rouge">~/.vimrc</code>配置文件，默认不存在，需要自己手动创建）中，我们可以对vim这个编辑器进行一些常用的设置。</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>set showmatch       " Show matching brackets.
 set hlsearch        " heighlight the search result
 set incsearch       " auto jump to search result
 set autoread        " auto check the file whether be changed by other editor
@@ -171,8 +171,8 @@ set expandtab       " if new editor's tab's length is not equal,convert the tab 
   <li>
     <p>编码问题</p>
     <ul>
-      <li>linux系统默认支持的语系数据：这与<code class="highlighter-rouge">/etc/locale.conf</code>有关</li>
-      <li>终端接口(bash)的语系：与<code class="highlighter-rouge">LANG</code>、<code class="highlighter-rouge">LC_ALL</code>几个环境变量有关</li>
+      <li>linux系统默认支持的语系数据：这与<code class="language-plaintext highlighter-rouge">/etc/locale.conf</code>有关</li>
+      <li>终端接口(bash)的语系：与<code class="language-plaintext highlighter-rouge">LANG</code>、<code class="language-plaintext highlighter-rouge">LC_ALL</code>几个环境变量有关</li>
       <li>文件的编码方式</li>
       <li>打开文件的软件的接口的编码方式</li>
     </ul>
@@ -191,9 +191,9 @@ set expandtab       " if new editor's tab's length is not equal,convert the tab 
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=备忘vim编辑器&url=http://localhost:4000/vim/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/vim/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/vim/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=备忘vim编辑器&url=/vim/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/vim/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/vim/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -236,6 +236,10 @@ set expandtab       " if new editor's tab's length is not equal,convert the tab 
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -253,10 +257,6 @@ set expandtab       " if new editor's tab's length is not equal,convert the tab 
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

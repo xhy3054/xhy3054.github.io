@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/inception.jpg alt="Inception概念解析">
       </div>
       <div class="post_description">
-        <p class="post_meta">2018, Jun 19</p>
+        <p class="post_meta">2018, Jun 20</p>
         <h1 class="post_title">Inception概念解析</h1>
       </div>
     </header> <!-- End Header -->
@@ -87,7 +87,7 @@ MathJax.Hub.Config({
 <p>如图，在<strong>3×3、5×5</strong>的卷积核之前，使用<strong>1×1</strong>卷积核进行降维，大大减少了参数量。</p>
 
 <ul>
-  <li>1×1卷积核降维原理：比如100×100×3的图片，直接3×3卷积核卷积共进行<code class="highlighter-rouge">a=100×100×3×3×3</code>此运算。而使用1×1卷积核首先进行<code class="highlighter-rouge">b=100×100×3</code>次运算，然后再与3×3卷积核卷积进行<code class="highlighter-rouge">c=100×100×3×3</code>次运算,明显<code class="highlighter-rouge">a&gt;b+c</code>（计算运算量时只考虑了乘法数量）。</li>
+  <li>1×1卷积核降维原理：比如100×100×3的图片，直接3×3卷积核卷积共进行<code class="language-plaintext highlighter-rouge">a=100×100×3×3×3</code>此运算。而使用1×1卷积核首先进行<code class="language-plaintext highlighter-rouge">b=100×100×3</code>次运算，然后再与3×3卷积核卷积进行<code class="language-plaintext highlighter-rouge">c=100×100×3×3</code>次运算,明显<code class="language-plaintext highlighter-rouge">a&gt;b+c</code>（计算运算量时只考虑了乘法数量）。</li>
 </ul>
 
 <h3 id="inception_v2">Inception_v2</h3>
@@ -100,9 +100,9 @@ MathJax.Hub.Config({
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=Inception概念解析&url=http://localhost:4000/Inception/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/Inception/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/Inception/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=Inception概念解析&url=/Inception/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/Inception/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/Inception/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -145,6 +145,10 @@ MathJax.Hub.Config({
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -162,10 +166,6 @@ MathJax.Hub.Config({
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

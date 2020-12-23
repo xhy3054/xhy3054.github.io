@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/software.jpg alt="编译工具讨论－－make与cmake">
       </div>
       <div class="post_description">
-        <p class="post_meta">2018, May 11</p>
+        <p class="post_meta">2018, May 12</p>
         <h1 class="post_title">编译工具讨论－－make与cmake</h1>
       </div>
     </header> <!-- End Header -->
@@ -76,42 +76,42 @@ MathJax.Hub.Config({
 
 <ol>
   <li>预处理阶段：进行预处理器处理（用实际值替代#define、读入#include指令包含的头文件等）；</li>
-  <li>编译阶段：将<code class="highlighter-rouge">.c</code>文件转换成<code class="highlighter-rouge">.s</code>文件，即将ｃ语言代码转换成汇编语言代码；</li>
-  <li>汇编阶段：将<code class="highlighter-rouge">.s</code>文件转换成<code class="highlighter-rouge">.o</code>文件，即将汇编语言代码转换成机器语言指令；</li>
+  <li>编译阶段：将<code class="language-plaintext highlighter-rouge">.c</code>文件转换成<code class="language-plaintext highlighter-rouge">.s</code>文件，即将ｃ语言代码转换成汇编语言代码；</li>
+  <li>汇编阶段：将<code class="language-plaintext highlighter-rouge">.s</code>文件转换成<code class="language-plaintext highlighter-rouge">.o</code>文件，即将汇编语言代码转换成机器语言指令；</li>
   <li>链接阶段：最后将各个目标文件由链接器捆绑起来形成单一完整的可执行文件，链接器同时也会引入标准c函数库中任何被该程序用到的函数。</li>
 </ol>
 
 <p>我在网上看到一张图，对于整个编译流程归纳的特别详细：
 <img src="/assets/img/make/make.png" alt="make" /></p>
 
-<p>假设生成可执行文件<code class="highlighter-rouge">excute</code>在当前目录下，我们可以通过如下shell命令将<code class="highlighter-rouge">excute</code>载入内存执行。</p>
+<p>假设生成可执行文件<code class="language-plaintext highlighter-rouge">excute</code>在当前目录下，我们可以通过如下shell命令将<code class="language-plaintext highlighter-rouge">excute</code>载入内存执行。</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./excute
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./excute
 </code></pre></div></div>
 
 <p>一般情况下，当输入一条命令，shell会检测第一个单词是不是一个内置的shell命令，如果不是就会把它当成一个可执行文件的名字，并加载运行这个可执行文件。</p>
 
 <h3 id="gcc编译方式bash">gcc编译方式（bash）</h3>
-<p>编译<code class="highlighter-rouge">main.c</code>、<code class="highlighter-rouge">1.c</code>、<code class="highlighter-rouge">1.h</code>，生成可执行文件<code class="highlighter-rouge">excute</code></p>
+<p>编译<code class="language-plaintext highlighter-rouge">main.c</code>、<code class="language-plaintext highlighter-rouge">1.c</code>、<code class="language-plaintext highlighter-rouge">1.h</code>，生成可执行文件<code class="language-plaintext highlighter-rouge">excute</code></p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcc -o excute main.c 1.c 1.h 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcc -o excute main.c 1.c 1.h 
 </code></pre></div></div>
 
-<p>注1：如果不<code class="highlighter-rouge">-o</code>指定生成<code class="highlighter-rouge">excute</code>，将默认生成<code class="highlighter-rouge">a.out</code>。</p>
+<p>注1：如果不<code class="language-plaintext highlighter-rouge">-o</code>指定生成<code class="language-plaintext highlighter-rouge">excute</code>，将默认生成<code class="language-plaintext highlighter-rouge">a.out</code>。</p>
 
-<p>注2：如果源文件不止一个，第二步产生的<code class="highlighter-rouge">.o</code>文件将会保留，以待重新编译只编译改动过的代码。</p>
+<p>注2：如果源文件不止一个，第二步产生的<code class="language-plaintext highlighter-rouge">.o</code>文件将会保留，以待重新编译只编译改动过的代码。</p>
 
 <h2 id="make与cmake">make与cmake</h2>
 
-<p>由上，我们知道了整个编译过程，但是如果一个项目很大，使用上述方式输入命令，似乎就很不灵活了。于是产生了<strong>make</strong>工具，它是一个自动化编译工具，规定好编译规则（<strong>Makefile</strong>），一条命令<code class="highlighter-rouge">make</code>，便能将整个工程编译完毕。</p>
+<p>由上，我们知道了整个编译过程，但是如果一个项目很大，使用上述方式输入命令，似乎就很不灵活了。于是产生了<strong>make</strong>工具，它是一个自动化编译工具，规定好编译规则（<strong>Makefile</strong>），一条命令<code class="language-plaintext highlighter-rouge">make</code>，便能将整个工程编译完毕。</p>
 
 <p>对于一个合格的程序员来说，编写Makefile是必备技能。</p>
 
-<p>但是对于一个很大的项目，自己编写Makefile无疑是一件及其吃力的事情。于是又出现了<strong>cmake</strong>，它可以读入所有源文件后，自动生成Makefile文件。当然，cmake也有自己的规则文件（<strong>CmakeLists.txt</strong>）。不过比较而言，编写<code class="highlighter-rouge">CmakeLists.txt</code>却是简单多了。</p>
+<p>但是对于一个很大的项目，自己编写Makefile无疑是一件及其吃力的事情。于是又出现了<strong>cmake</strong>，它可以读入所有源文件后，自动生成Makefile文件。当然，cmake也有自己的规则文件（<strong>CmakeLists.txt</strong>）。不过比较而言，编写<code class="language-plaintext highlighter-rouge">CmakeLists.txt</code>却是简单多了。</p>
 
-<p>一般只需要输入<code class="highlighter-rouge">cmake</code>，整个项目会自动编译完成。cmake时大体流程如下：</p>
+<p>一般只需要输入<code class="language-plaintext highlighter-rouge">cmake</code>，整个项目会自动编译完成。cmake时大体流程如下：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>`cmake(CmakeLists.txt) --&gt; Makefile`
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>`cmake(CmakeLists.txt) --&gt; Makefile`
 
 `make(Makefile) --&gt; 编译完成`
 </code></pre></div></div>
@@ -120,15 +120,15 @@ MathJax.Hub.Config({
 
 <h3 id="make选项">make选项</h3>
 
-<p>我们也会经常看到<code class="highlighter-rouge">make install</code>、<code class="highlighter-rouge">make distribute</code>等形式，这些都是什么意思呢？</p>
+<p>我们也会经常看到<code class="language-plaintext highlighter-rouge">make install</code>、<code class="language-plaintext highlighter-rouge">make distribute</code>等形式，这些都是什么意思呢？</p>
 
-<p><code class="highlighter-rouge">make install</code>:有些程序需要源码安装，<strong>make install</strong>在编译完程序源码后，会接着往系统写入一些配置，完成程序安装。</p>
+<p><code class="language-plaintext highlighter-rouge">make install</code>:有些程序需要源码安装，<strong>make install</strong>在编译完程序源码后，会接着往系统写入一些配置，完成程序安装。</p>
 
-<p><code class="highlighter-rouge">make distribute</code>:感觉应该是使当前项目可以被外部项目依赖？</p>
+<p><code class="language-plaintext highlighter-rouge">make distribute</code>:感觉应该是使当前项目可以被外部项目依赖？</p>
 
 <h3 id="大工程-make-编译流程">大工程 make 编译流程</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./configure
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./configure
 make
 make install
 </code></pre></div></div>
@@ -171,9 +171,9 @@ make install
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=编译工具讨论－－make与cmake&url=http://localhost:4000/make/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/make/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/make/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=编译工具讨论－－make与cmake&url=/make/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/make/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/make/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -216,6 +216,10 @@ make install
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -233,10 +237,6 @@ make install
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

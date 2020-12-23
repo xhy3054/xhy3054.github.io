@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/reef.jpg alt="c语言和ｃ++语言中函数参数的传递">
       </div>
       <div class="post_description">
-        <p class="post_meta">2018, Sep 08</p>
+        <p class="post_meta">2018, Sep 09</p>
         <h1 class="post_title">c语言和ｃ++语言中函数参数的传递</h1>
       </div>
     </header> <!-- End Header -->
@@ -119,7 +119,7 @@ MathJax.Hub.Config({
 </code></pre></div></div>
 <hr />
 
-<p>如上例，在调用<code class="highlighter-rouge">reset</code>函数时，使用实参初始化形参实际相当于<code class="highlighter-rouge">int j=42; int &amp;i=j;</code>因为形参为一个引用，并且被绑定到变量<code class="highlighter-rouge">j</code>上，因此可以通过<code class="highlighter-rouge">i</code>对变量<code class="highlighter-rouge">j</code>的值进行修改。这样就可以替代指针的部分作用了，而且更简单。　</p>
+<p>如上例，在调用<code class="language-plaintext highlighter-rouge">reset</code>函数时，使用实参初始化形参实际相当于<code class="language-plaintext highlighter-rouge">int j=42; int &amp;i=j;</code>因为形参为一个引用，并且被绑定到变量<code class="language-plaintext highlighter-rouge">j</code>上，因此可以通过<code class="language-plaintext highlighter-rouge">i</code>对变量<code class="language-plaintext highlighter-rouge">j</code>的值进行修改。这样就可以替代指针的部分作用了，而且更简单。　</p>
 
 <p>同时，使用传引用调用还有其他一些好处：</p>
 <ol>
@@ -135,10 +135,10 @@ MathJax.Hub.Config({
 
 <ol>
   <li>
-    <p>如上<code class="highlighter-rouge">int &amp;i</code>类型的形参在传入实参时只能是变量，不能是字面值常量，因为其不能用字面值常量初始化；</p>
+    <p>如上<code class="language-plaintext highlighter-rouge">int &amp;i</code>类型的形参在传入实参时只能是变量，不能是字面值常量，因为其不能用字面值常量初始化；</p>
   </li>
   <li>
-    <p>如果想要使得函数实参可以传入字面值常量，形参需要改成<code class="highlighter-rouge">const int &amp;i</code>形式，底层const的引用类型可以使用字面值常量初始化，一般只要不会对参数进行修改，就将其设置成底层const的引用；</p>
+    <p>如果想要使得函数实参可以传入字面值常量，形参需要改成<code class="language-plaintext highlighter-rouge">const int &amp;i</code>形式，底层const的引用类型可以使用字面值常量初始化，一般只要不会对参数进行修改，就将其设置成底层const的引用；</p>
   </li>
 </ol>
 
@@ -165,9 +165,9 @@ MathJax.Hub.Config({
 </code></pre></div></div>
 <hr />
 
-<p>如上，是主函数的带参数形式，此时在将源文件编译生成可执行文件后，运行时可以带参数。举个例子，比如编译生成的可执行文件叫做<code class="highlighter-rouge">main_arg</code>，则可以输入如下命令执行：</p>
+<p>如上，是主函数的带参数形式，此时在将源文件编译生成可执行文件后，运行时可以带参数。举个例子，比如编译生成的可执行文件叫做<code class="language-plaintext highlighter-rouge">main_arg</code>，则可以输入如下命令执行：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./main_arg -o -d data0 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./main_arg -o -d data0 
 </code></pre></div></div>
 
 <p>输出如下结果</p>
@@ -182,36 +182,36 @@ xhy@ubuntu:~/cpp_learn/6/ch06<span class="nv">$ </span>
 </code></pre></div></div>
 <hr />
 
-<p>如上可以知道，其中第一个参数<code class="highlighter-rouge">int　argc</code>为命令行中字符串的数量，后面<code class="highlighter-rouge">char *argv[]</code>为一个数组，数组元素为一个指向<code class="highlighter-rouge">char *</code>类型的指针，指向一个ｃ风格的字符串。最后一个指针之后的元素值保证为０（因此不需要argc其实也能确定是否读完了参数）。</p>
+<p>如上可以知道，其中第一个参数<code class="language-plaintext highlighter-rouge">int　argc</code>为命令行中字符串的数量，后面<code class="language-plaintext highlighter-rouge">char *argv[]</code>为一个数组，数组元素为一个指向<code class="language-plaintext highlighter-rouge">char *</code>类型的指针，指向一个ｃ风格的字符串。最后一个指针之后的元素值保证为０（因此不需要argc其实也能确定是否读完了参数）。</p>
 
 <p>在这里了要科普一下（引用也一样）：</p>
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="o">*</span><span class="n">matrix</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>	<span class="c1">//10个指针组成的数组</span>
 <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">matrix</span><span class="p">)[</span><span class="mi">10</span><span class="p">]</span>	<span class="c1">//一个指向含有十个整数的数组的指针</span>
 </code></pre></div></div>
-<p>这两种书写形式含义是不一样的。其中<code class="highlighter-rouge">*</code>优先级小于<code class="highlighter-rouge">[]</code>，对于<code class="highlighter-rouge">int (*matrix)[10]</code>可以按如下顺序来理解该声明的含义：</p>
+<p>这两种书写形式含义是不一样的。其中<code class="language-plaintext highlighter-rouge">*</code>优先级小于<code class="language-plaintext highlighter-rouge">[]</code>，对于<code class="language-plaintext highlighter-rouge">int (*matrix)[10]</code>可以按如下顺序来理解该声明的含义：</p>
 <ol>
   <li>
-    <p><code class="highlighter-rouge">*matrix</code>表示对变量<code class="highlighter-rouge">matrix</code>进行解引用操作；</p>
+    <p><code class="language-plaintext highlighter-rouge">*matrix</code>表示对变量<code class="language-plaintext highlighter-rouge">matrix</code>进行解引用操作；</p>
   </li>
   <li>
-    <p><code class="highlighter-rouge">(*matrix)[10]</code>表示解引用后将得到一个大小为１０的数组；</p>
+    <p><code class="language-plaintext highlighter-rouge">(*matrix)[10]</code>表示解引用后将得到一个大小为１０的数组；</p>
   </li>
   <li>
-    <p><code class="highlighter-rouge">int (*matrix)[10]</code>表示数组中的元素是int类型。</p>
+    <p><code class="language-plaintext highlighter-rouge">int (*matrix)[10]</code>表示数组中的元素是int类型。</p>
   </li>
 </ol>
 
-<p>同理，对于<code class="highlighter-rouge">int *matrix[10]</code>可以按如下顺序来理解该声明的含义：</p>
+<p>同理，对于<code class="language-plaintext highlighter-rouge">int *matrix[10]</code>可以按如下顺序来理解该声明的含义：</p>
 
 <ol>
   <li>
-    <p><code class="highlighter-rouge">matrix[10]</code>表示matrix是一个大小为１０的数组；</p>
+    <p><code class="language-plaintext highlighter-rouge">matrix[10]</code>表示matrix是一个大小为１０的数组；</p>
   </li>
   <li>
-    <p><code class="highlighter-rouge">*matrix[10]</code>表示数组元素是指针类型；</p>
+    <p><code class="language-plaintext highlighter-rouge">*matrix[10]</code>表示数组元素是指针类型；</p>
   </li>
   <li>
-    <p><code class="highlighter-rouge">int *matrix[10]</code>表示数组元素时候int的指针类型。</p>
+    <p><code class="language-plaintext highlighter-rouge">int *matrix[10]</code>表示数组元素时候int的指针类型。</p>
   </li>
 </ol>
 
@@ -234,9 +234,9 @@ xhy@ubuntu:~/cpp_learn/6/ch06<span class="nv">$ </span>
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=c语言和ｃ++语言中函数参数的传递&url=http://localhost:4000/c-cpp-argu-passing/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/c-cpp-argu-passing/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/c-cpp-argu-passing/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=c语言和ｃ++语言中函数参数的传递&url=/c-cpp-argu-passing/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/c-cpp-argu-passing/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/c-cpp-argu-passing/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -279,6 +279,10 @@ xhy@ubuntu:~/cpp_learn/6/ch06<span class="nv">$ </span>
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -296,10 +300,6 @@ xhy@ubuntu:~/cpp_learn/6/ch06<span class="nv">$ </span>
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

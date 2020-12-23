@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/cartoon2.jpg alt="c++中类的拷贝控制操作">
       </div>
       <div class="post_description">
-        <p class="post_meta">2018, Oct 15</p>
+        <p class="post_meta">2018, Oct 16</p>
         <h1 class="post_title">c++中类的拷贝控制操作</h1>
       </div>
     </header> <!-- End Header -->
@@ -81,17 +81,17 @@ MathJax.Hub.Config({
 
 <p>以上这３个成员，如果在一个类中未自己定义时，编译器会为这个类自动生成默认的版本。三个成员共同构成了一个类基本的的拷贝控制与资源管理操作。</p>
 
-<h2 id="default-与-delete-的使用"><code class="highlighter-rouge">=default</code> 与 <code class="highlighter-rouge">=delete</code> 的使用</h2>
-<p>我们可以通过将拷贝控制成员定义为<code class="highlighter-rouge">=default</code>来<strong>显式</strong>地要求编译器生成合成版本的。</p>
+<h2 id="default-与-delete-的使用"><code class="language-plaintext highlighter-rouge">=default</code> 与 <code class="language-plaintext highlighter-rouge">=delete</code> 的使用</h2>
+<p>我们可以通过将拷贝控制成员定义为<code class="language-plaintext highlighter-rouge">=default</code>来<strong>显式</strong>地要求编译器生成合成版本的。</p>
 
-<p>在c++11标准以后我们可以通过将拷贝构造函数与拷贝赋值运算符定义为<code class="highlighter-rouge">=delete</code>来<strong>组织拷贝的发生</strong>。<code class="highlighter-rouge">=delete</code>告诉编译器，我们不希望定义这些成员。例如，<code class="highlighter-rouge">iostream</code>类阻止了拷贝操作。<strong>析构函数不能是<code class="highlighter-rouge">=delete</code>的</strong>，如果我们用<code class="highlighter-rouge">=delete</code>将一个类的析构函数定义为删除的，则我们不能定义该类型的变量（但是可以动态分配内存），也不能释放指向该类型动态分配对象的指针。</p>
+<p>在c++11标准以后我们可以通过将拷贝构造函数与拷贝赋值运算符定义为<code class="language-plaintext highlighter-rouge">=delete</code>来<strong>组织拷贝的发生</strong>。<code class="language-plaintext highlighter-rouge">=delete</code>告诉编译器，我们不希望定义这些成员。例如，<code class="language-plaintext highlighter-rouge">iostream</code>类阻止了拷贝操作。<strong>析构函数不能是<code class="language-plaintext highlighter-rouge">=delete</code>的</strong>，如果我们用<code class="language-plaintext highlighter-rouge">=delete</code>将一个类的析构函数定义为删除的，则我们不能定义该类型的变量（但是可以动态分配内存），也不能释放指向该类型动态分配对象的指针。</p>
 
 <h2 id="拷贝构造函数">拷贝构造函数</h2>
 <p>拷贝构造函数也是一种构造函数。我们知道，不同版本的构造函数的区别在于参数列表的不同。<strong>拷贝构造函数的第一个参数一定是自身类类型的引用</strong>，任何额外参数都有默认值。</p>
 
-<p>如果一个类未定义自己的拷贝构造函数，则编译器会为其自动生成一个，自动生成的拷贝构造函数就是将类中的每一个数据成员进行简单的拷贝构造。如果不希望自己的类有拷贝构造函数操作，必须显式将拷贝构造函数声明成<code class="highlighter-rouge">=delete</code>来指出我们希望将它定义成删除的，比如<code class="highlighter-rouge">iostream</code>类就阻止了拷贝操作来避免多个对象写入或者读取相同的IO操作。</p>
+<p>如果一个类未定义自己的拷贝构造函数，则编译器会为其自动生成一个，自动生成的拷贝构造函数就是将类中的每一个数据成员进行简单的拷贝构造。如果不希望自己的类有拷贝构造函数操作，必须显式将拷贝构造函数声明成<code class="language-plaintext highlighter-rouge">=delete</code>来指出我们希望将它定义成删除的，比如<code class="language-plaintext highlighter-rouge">iostream</code>类就阻止了拷贝操作来避免多个对象写入或者读取相同的IO操作。</p>
 
-<p>此处编写一个简陋的<code class="highlighter-rouge">HasPtr</code>类为例实现<strong>深拷贝</strong>，比较直观有代码感受：</p>
+<p>此处编写一个简陋的<code class="language-plaintext highlighter-rouge">HasPtr</code>类为例实现<strong>深拷贝</strong>，比较直观有代码感受：</p>
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">HasPtr</span>
 <span class="p">{</span>
 <span class="nl">public:</span>
@@ -108,14 +108,14 @@ MathJax.Hub.Config({
 </code></pre></div></div>
 <hr />
 
-<p>如上，这个类有两个版本的构造函数，其中第一个是普通构造函数（可以没有参数，也可以有一个<code class="highlighter-rouge">string&amp;</code>类型），第二个是拷贝构造函数（参数是自身类型的引用）。</p>
+<p>如上，这个类有两个版本的构造函数，其中第一个是普通构造函数（可以没有参数，也可以有一个<code class="language-plaintext highlighter-rouge">string&amp;</code>类型），第二个是拷贝构造函数（参数是自身类型的引用）。</p>
 
 <blockquote>
   <p>注意：拷贝构造函数的第一个参数之所以是引用类型，是因为在<strong>函数调用过程中，具有非引用类型的参数要进行拷贝初始化</strong>。如果拷贝构造函数的参数不是引用类型的话，则会对拷贝构造函数的形参进行拷贝初始化，会再一次调用拷贝构造函数，再对这个拷贝构造函数的形参进行拷贝初始化….如此往复，无限循环。</p>
 </blockquote>
 
 <h2 id="拷贝赋值运算符">拷贝赋值运算符</h2>
-<p>拷贝赋值运算符其实就是重载了<code class="highlighter-rouge">=</code>，如果类未定义自己的拷贝赋值运算符，编译器会为它合成一个，合成的拷贝赋值运算符也就是简单的对类的每个数据成员进行简单的拷贝赋值。如果不希望自己的类有拷贝构造函数操作，必须显式将拷贝构造函数声明成<code class="highlighter-rouge">=delete</code>来指出我们希望将它定义成删除的，比如<code class="highlighter-rouge">iostream</code>类就阻止了拷贝操作来避免多个对象写入或者读取相同的IO操作。继续上一个<code class="highlighter-rouge">HasPtr</code>，为其添加拷贝赋值运算符；</p>
+<p>拷贝赋值运算符其实就是重载了<code class="language-plaintext highlighter-rouge">=</code>，如果类未定义自己的拷贝赋值运算符，编译器会为它合成一个，合成的拷贝赋值运算符也就是简单的对类的每个数据成员进行简单的拷贝赋值。如果不希望自己的类有拷贝构造函数操作，必须显式将拷贝构造函数声明成<code class="language-plaintext highlighter-rouge">=delete</code>来指出我们希望将它定义成删除的，比如<code class="language-plaintext highlighter-rouge">iostream</code>类就阻止了拷贝操作来避免多个对象写入或者读取相同的IO操作。继续上一个<code class="language-plaintext highlighter-rouge">HasPtr</code>，为其添加拷贝赋值运算符；</p>
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">HasPtr</span>
 <span class="p">{</span>
 <span class="nl">public:</span>
@@ -196,7 +196,7 @@ MathJax.Hub.Config({
 #include &lt;vector&gt;
 #include &lt;initializer_list&gt;
 </span>
-<span class="k">struct</span> <span class="n">X</span>
+<span class="k">struct</span> <span class="nc">X</span>
 <span class="p">{</span>
 	<span class="n">X</span><span class="p">()</span> <span class="p">{</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"X()"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span> <span class="p">}</span>
 	<span class="n">X</span><span class="p">(</span><span class="k">const</span> <span class="n">X</span><span class="o">&amp;</span><span class="p">)</span> <span class="p">{</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"X(const X&amp;)"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span> <span class="p">}</span>
@@ -247,10 +247,10 @@ X&amp; <span class="nv">operator</span><span class="o">=(</span>const X&amp;<spa
     <p>在函数调用时，<strong>不是引用类型的形参都是采用拷贝构造函数</strong>进行形参的初始化的，引用类型的形参直接绑定到实参上。</p>
   </li>
   <li>
-    <p>在<code class="highlighter-rouge">vector</code>进行<code class="highlighter-rouge">reserve</code>函数进行空间分配时，只是分配了空间，并没有在分配的空间上进行初始化操作。</p>
+    <p>在<code class="language-plaintext highlighter-rouge">vector</code>进行<code class="language-plaintext highlighter-rouge">reserve</code>函数进行空间分配时，只是分配了空间，并没有在分配的空间上进行初始化操作。</p>
   </li>
   <li>
-    <p>在<code class="highlighter-rouge">vector</code>进行<code class="highlighter-rouge">push_back</code>操作时，使用拷贝初始化函数对新增元素进行初始化操作；</p>
+    <p>在<code class="language-plaintext highlighter-rouge">vector</code>进行<code class="language-plaintext highlighter-rouge">push_back</code>操作时，使用拷贝初始化函数对新增元素进行初始化操作；</p>
   </li>
   <li>
     <p>在一个函数作用域结束时，会将此<strong>作用域中的自动变量</strong>一一析构（包括形参）。</p>
@@ -269,9 +269,9 @@ X&amp; <span class="nv">operator</span><span class="o">=(</span>const X&amp;<spa
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=c++中类的拷贝控制操作&url=http://localhost:4000/cpp-class-construct-destruct/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/cpp-class-construct-destruct/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/cpp-class-construct-destruct/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=c++中类的拷贝控制操作&url=/cpp-class-construct-destruct/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/cpp-class-construct-destruct/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/cpp-class-construct-destruct/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -314,6 +314,10 @@ X&amp; <span class="nv">operator</span><span class="o">=(</span>const X&amp;<spa
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -331,10 +335,6 @@ X&amp; <span class="nv">operator</span><span class="o">=(</span>const X&amp;<spa
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

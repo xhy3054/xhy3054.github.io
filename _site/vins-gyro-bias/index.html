@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/one-piece/one-piece13.jpg alt="vins初始化中的陀螺仪偏置标定">
       </div>
       <div class="post_description">
-        <p class="post_meta">2019, Aug 22</p>
+        <p class="post_meta">2019, Aug 23</p>
         <h1 class="post_title">vins初始化中的陀螺仪偏置标定</h1>
       </div>
     </header> <!-- End Header -->
@@ -74,7 +74,7 @@ MathJax.Hub.Config({
 
 <h1 id="陀螺仪偏置标定问题">陀螺仪偏置标定问题</h1>
 <blockquote>
-  <p>这个工作主要是在<code class="highlighter-rouge">vins/vins_estimator/src/initial/initial_aligment.cpp</code>文件中的<code class="highlighter-rouge">solveGyroscopeBias</code>函数中实现的。此处之所以只对陀螺仪的bias进行标定，而不对加速度计的bias进行标定，原因是视觉sfm恢复出来的角度变换不受尺度影响，比较稳定准确。而sfm恢复出来的位移信息收到尺度影响，不似角度可以直接对齐。</p>
+  <p>这个工作主要是在<code class="language-plaintext highlighter-rouge">vins/vins_estimator/src/initial/initial_aligment.cpp</code>文件中的<code class="language-plaintext highlighter-rouge">solveGyroscopeBias</code>函数中实现的。此处之所以只对陀螺仪的bias进行标定，而不对加速度计的bias进行标定，原因是视觉sfm恢复出来的角度变换不受尺度影响，比较稳定准确。而sfm恢复出来的位移信息收到尺度影响，不似角度可以直接对齐。</p>
 </blockquote>
 
 <p>对于窗口中连续两帧图像$b_{k}$和$b_{k+1}$，之前已经通过视觉sfm得到了两帧相对于滑窗第一帧的旋转\(\mathbf{q}_{c_{0} b_{k}}\)和\(\mathbf{q}_{c_{0} b_{k+1}}\)，此时之前通过IMU预积分得到这两帧旋转的预积分\(\hat{\gamma}_{b_k b_{k+1}}\)（先前不带bias的预积分）。</p>
@@ -151,7 +151,7 @@ MathJax.Hub.Config({
         <span class="c1">//R_ij = (R^c0_bk)^-1 * (R^c0_bk+1) 转换为四元数 q_ij = (q^c0_bk)^-1 * (q^c0_bk+1)</span>
         <span class="n">Eigen</span><span class="o">::</span><span class="n">Quaterniond</span> <span class="n">q_ij</span><span class="p">(</span><span class="n">frame_i</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">R</span><span class="p">.</span><span class="n">transpose</span><span class="p">()</span> <span class="o">*</span> <span class="n">frame_j</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">R</span><span class="p">);</span>
         <span class="c1">//tmp_A = J_j_bw 雅可比 ，之前的预积分是没有算上陀螺仪bias的</span>
-        <span class="n">tmp_A</span> <span class="o">=</span> <span class="n">frame_j</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">pre_integration</span><span class="o">-&gt;</span><span class="n">jacobian</span><span class="p">.</span><span class="k">template</span> <span class="n">block</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="o">&gt;</span><span class="p">(</span><span class="n">O_R</span><span class="p">,</span> <span class="n">O_BG</span><span class="p">);</span>
+        <span class="n">tmp_A</span> <span class="o">=</span> <span class="n">frame_j</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">pre_integration</span><span class="o">-&gt;</span><span class="n">jacobian</span><span class="p">.</span><span class="k">template</span> <span class="n">block</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">&gt;(</span><span class="n">O_R</span><span class="p">,</span> <span class="n">O_BG</span><span class="p">);</span>
         <span class="c1">//tmp_b = 2 * (r^bk_bk+1)^-1 * (q^c0_bk)^-1 * (q^c0_bk+1)</span>
         <span class="c1">//      = 2 * (r^bk_bk+1)^-1 * q_ij</span>
         <span class="n">tmp_b</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">frame_j</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">pre_integration</span><span class="o">-&gt;</span><span class="n">delta_q</span><span class="p">.</span><span class="n">inverse</span><span class="p">()</span> <span class="o">*</span> <span class="n">q_ij</span><span class="p">).</span><span class="n">vec</span><span class="p">();</span>
@@ -191,9 +191,9 @@ MathJax.Hub.Config({
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=vins初始化中的陀螺仪偏置标定&url=http://localhost:4000/vins-gyro-bias/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/vins-gyro-bias/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/vins-gyro-bias/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=vins初始化中的陀螺仪偏置标定&url=/vins-gyro-bias/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/vins-gyro-bias/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/vins-gyro-bias/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -236,6 +236,10 @@ MathJax.Hub.Config({
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -253,10 +257,6 @@ MathJax.Hub.Config({
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

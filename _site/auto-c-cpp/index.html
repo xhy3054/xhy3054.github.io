@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/lavender2.jpg alt="c语言与c++语言中关键字auto的使用">
       </div>
       <div class="post_description">
-        <p class="post_meta">2018, Aug 25</p>
+        <p class="post_meta">2018, Aug 26</p>
         <h1 class="post_title">c语言与c++语言中关键字auto的使用</h1>
       </div>
     </header> <!-- End Header -->
@@ -107,14 +107,14 @@ MathJax.Hub.Config({
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
 <span class="k">auto</span> <span class="n">b</span> <span class="o">=</span> <span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="c1">//代表ｖ的第一个元素</span>
 </code></pre></div></div>
-<p>其中auto就相当于<code class="highlighter-rouge">vector&lt;int&gt;::iterator</code>，明显省事了很多，而且迭代器的类型实在难记。类似的还有string和vector的size_type成员到底是什么类型一样等。</p>
+<p>其中auto就相当于<code class="language-plaintext highlighter-rouge">vector&lt;int&gt;::iterator</code>，明显省事了很多，而且迭代器的类型实在难记。类似的还有string和vector的size_type成员到底是什么类型一样等。</p>
 
 <h3 id="题外话-decltype">题外话 decltype</h3>
 <p>在c++还有一个与auto功能类似的符号，就是decltype。</p>
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">ci</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 <span class="k">decltype</span><span class="p">(</span><span class="n">ci</span><span class="p">)</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 </code></pre></div></div>
-<p>上述代码中<code class="highlighter-rouge">decltype(ci)</code>返回变量ci的类型，并将ｘ声明为这种类型。</p>
+<p>上述代码中<code class="language-plaintext highlighter-rouge">decltype(ci)</code>返回变量ci的类型，并将ｘ声明为这种类型。</p>
 
 <h1 id="参考资料">参考资料</h1>
 <ul>
@@ -128,9 +128,9 @@ MathJax.Hub.Config({
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=c语言与c++语言中关键字auto的使用&url=http://localhost:4000/auto-c-cpp/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/auto-c-cpp/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/auto-c-cpp/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=c语言与c++语言中关键字auto的使用&url=/auto-c-cpp/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/auto-c-cpp/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/auto-c-cpp/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -173,6 +173,10 @@ MathJax.Hub.Config({
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -190,10 +194,6 @@ MathJax.Hub.Config({
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

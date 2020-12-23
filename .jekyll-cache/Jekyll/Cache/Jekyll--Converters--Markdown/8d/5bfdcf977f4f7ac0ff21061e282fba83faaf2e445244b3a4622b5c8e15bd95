@@ -1,8 +1,8 @@
-I"_<p>不用说，这三个关键字大家都很熟悉，今天我主要是重新温习一遍，理清一遍。</p>
+I"r<p>不用说，这三个关键字大家都很熟悉，今天我主要是重新温习一遍，理清一遍。</p>
 <h1 id="访问权限关键字无继承关系时">访问权限关键字（无继承关系时）</h1>
 <ul>
   <li>
-    <p>public: 这个关键字代表对外界开放，用户可以通过一个对象直接进行其<code class="highlighter-rouge">public</code>成员的访问操作；</p>
+    <p>public: 这个关键字代表对外界开放，用户可以通过一个对象直接进行其<code class="language-plaintext highlighter-rouge">public</code>成员的访问操作；</p>
   </li>
   <li>
     <p>protected: 这个关键字代表只对自己的派生类开放，对与普通用户不开放；</p>

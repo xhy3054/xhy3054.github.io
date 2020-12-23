@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/grassland.jpg alt="c语言和ｃ++语言中的类型转换">
       </div>
       <div class="post_description">
-        <p class="post_meta">2018, Sep 07</p>
+        <p class="post_meta">2018, Sep 08</p>
         <h1 class="post_title">c语言和ｃ++语言中的类型转换</h1>
       </div>
     </header> <!-- End Header -->
@@ -89,28 +89,28 @@ MathJax.Hub.Config({
 
 <ol>
   <li>
-    <p>首先会进行整形提升，如果运算对象双方是<code class="highlighter-rouge">bool、char、signed char、unsigned char、short、与unsigned short</code>等可以不损失精度的放入int类型中，它们就会提升为int类型。如果它们中有不能用int类型无损存储的，比如<code class="highlighter-rouge">unsigned int、long</code>等类型，则会将较小的一方提升为精度较高一方的类型。</p>
+    <p>首先会进行整形提升，如果运算对象双方是<code class="language-plaintext highlighter-rouge">bool、char、signed char、unsigned char、short、与unsigned short</code>等可以不损失精度的放入int类型中，它们就会提升为int类型。如果它们中有不能用int类型无损存储的，比如<code class="language-plaintext highlighter-rouge">unsigned int、long</code>等类型，则会将较小的一方提升为精度较高一方的类型。</p>
   </li>
   <li>
     <p>如果运算对象双方一个为无符号类型，一个为有符号类型，并且无符号类型不小于有符号类型，则将带符号的运算对象转换成无符号的。</p>
   </li>
   <li>
-    <p>如果带符号类型大于无符号类型，则结果需要依赖机器。如果此带符号类型可以无损存储此无符号类型，则将无符号类型转换成带符号类型。否则，结果反之。比如两个运算对象分别是<code class="highlighter-rouge">long</code>与<code class="highlighter-rouge">unsigned int</code>类型，则怎么转换就需要依赖机器中<code class="highlighter-rouge">long</code>类型占用空间是否比<code class="highlighter-rouge">int</code>多。</p>
+    <p>如果带符号类型大于无符号类型，则结果需要依赖机器。如果此带符号类型可以无损存储此无符号类型，则将无符号类型转换成带符号类型。否则，结果反之。比如两个运算对象分别是<code class="language-plaintext highlighter-rouge">long</code>与<code class="language-plaintext highlighter-rouge">unsigned int</code>类型，则怎么转换就需要依赖机器中<code class="language-plaintext highlighter-rouge">long</code>类型占用空间是否比<code class="language-plaintext highlighter-rouge">int</code>多。</p>
   </li>
 </ol>
 
-<p>总结：表达式求值在根据<code class="highlighter-rouge">double&gt;float&gt;int</code>之类的隐式类型转换后求出来的值在<strong>赋值时</strong>还会再进行一次隐式类型转换。例如：<code class="highlighter-rouge">int c=5; char d='0'; char a = c + d;</code></p>
+<p>总结：表达式求值在根据<code class="language-plaintext highlighter-rouge">double&gt;float&gt;int</code>之类的隐式类型转换后求出来的值在<strong>赋值时</strong>还会再进行一次隐式类型转换。例如：<code class="language-plaintext highlighter-rouge">int c=5; char d='0'; char a = c + d;</code></p>
 
 <h2 id="其他隐式类型转换">其他隐式类型转换</h2>
 <ol>
   <li>
-    <p>数组名转成指针：例如<code class="highlighter-rouge">int a[10]; int *p=a;</code>中将数组名转成指针，但是当数组被用作<code class="highlighter-rouge">decltype</code>关键字的参数或者作为取地址符（&amp;）、<code class="highlighter-rouge">sizeof</code>以及<code class="highlighter-rouge">typeid</code>等运算符的运算对象时，上述转换不会发生；</p>
+    <p>数组名转成指针：例如<code class="language-plaintext highlighter-rouge">int a[10]; int *p=a;</code>中将数组名转成指针，但是当数组被用作<code class="language-plaintext highlighter-rouge">decltype</code>关键字的参数或者作为取地址符（&amp;）、<code class="language-plaintext highlighter-rouge">sizeof</code>以及<code class="language-plaintext highlighter-rouge">typeid</code>等运算符的运算对象时，上述转换不会发生；</p>
   </li>
   <li>
-    <p>指针的转换：比如，第一、常量正数值０或者字面值常量nullptr能转换成任意指针类型；第二、指向任意非常量的指针能转换成<code class="highlighter-rouge">void *</code>；第三、指向任意对象的指针能转换成<code class="highlighter-rouge">const void*</code>;</p>
+    <p>指针的转换：比如，第一、常量正数值０或者字面值常量nullptr能转换成任意指针类型；第二、指向任意非常量的指针能转换成<code class="language-plaintext highlighter-rouge">void *</code>；第三、指向任意对象的指针能转换成<code class="language-plaintext highlighter-rouge">const void*</code>;</p>
   </li>
   <li>
-    <p>转成<code class="highlighter-rouge">bool</code>类型（通常在判断表达式中）；</p>
+    <p>转成<code class="language-plaintext highlighter-rouge">bool</code>类型（通常在判断表达式中）；</p>
   </li>
   <li>
     <p>转换成常量：允许将非常量类型赋值给常量；</p>
@@ -200,9 +200,9 @@ MathJax.Hub.Config({
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=c语言和ｃ++语言中的类型转换&url=http://localhost:4000/c-cpp-type-convert/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/c-cpp-type-convert/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/c-cpp-type-convert/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=c语言和ｃ++语言中的类型转换&url=/c-cpp-type-convert/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/c-cpp-type-convert/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/c-cpp-type-convert/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -245,6 +245,10 @@ MathJax.Hub.Config({
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -262,10 +266,6 @@ MathJax.Hub.Config({
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/cute3.jpg alt="c++中const与constexpr关键字">
       </div>
       <div class="post_description">
-        <p class="post_meta">2018, Oct 19</p>
+        <p class="post_meta">2018, Oct 20</p>
         <h1 class="post_title">c++中const与constexpr关键字</h1>
       </div>
     </header> <!-- End Header -->
@@ -69,7 +69,7 @@ MathJax.Hub.Config({
       <p>本文主要讨论const变量与constexpr变量的初始化时刻与constexpr函数的编译期计算问题。<a href="http://senlinzhan.github.io/2015/05/01/%E8%B0%88%E8%B0%88C-%E7%9A%84%E7%BC%96%E8%AF%91%E5%99%A8%E8%AE%A1%E7%AE%97/">转载</a></p>
 
 <h1 id="const变量的初始化时刻">const变量的初始化时刻</h1>
-<p><code class="highlighter-rouge">const</code>修饰变量，表示这个变量是不可修改的，因此const变量必须初始化，一经初始化就不可修改。</p>
+<p><code class="language-plaintext highlighter-rouge">const</code>修饰变量，表示这个变量是不可修改的，因此const变量必须初始化，一经初始化就不可修改。</p>
 <ol>
   <li>
     <p>如果const变量的初始化值是在编译时就可以确定，则在编译时初始化；</p>
@@ -126,7 +126,7 @@ MathJax.Hub.Config({
 <h2 id="constexpr变量">constexpr变量</h2>
 <p>const变量的值可以在编译时或运行时确定，与const相比，constexpr的限制更多，因为<strong>constexpr变量的值必须在编译时就能确定</strong>。</p>
 
-<p>在一些场合之下，变量的值要求是编译期就必须确定的，constexpr变量正好满足要求。比如数组的大小、<code class="highlighter-rouge">std::array</code>的大小、<code class="highlighter-rouge">std::bitset</code>的大小等。</p>
+<p>在一些场合之下，变量的值要求是编译期就必须确定的，constexpr变量正好满足要求。比如数组的大小、<code class="language-plaintext highlighter-rouge">std::array</code>的大小、<code class="language-plaintext highlighter-rouge">std::bitset</code>的大小等。</p>
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">constexpr</span> <span class="k">auto</span> <span class="n">SIZE</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
 <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">SIZE</span><span class="o">&gt;</span> <span class="n">arr</span><span class="p">;</span>
 </code></pre></div></div>
@@ -188,9 +188,9 @@ MathJax.Hub.Config({
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=c++中const与constexpr关键字&url=http://localhost:4000/cpp-const-constexpr/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/cpp-const-constexpr/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/cpp-const-constexpr/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=c++中const与constexpr关键字&url=/cpp-const-constexpr/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/cpp-const-constexpr/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/cpp-const-constexpr/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -233,6 +233,10 @@ MathJax.Hub.Config({
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -250,10 +254,6 @@ MathJax.Hub.Config({
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

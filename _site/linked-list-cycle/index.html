@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/sword/sword4.jpg alt="带环链表问题">
       </div>
       <div class="post_description">
-        <p class="post_meta">2019, Apr 01</p>
+        <p class="post_meta">2019, Apr 02</p>
         <h1 class="post_title">带环链表问题</h1>
       </div>
     </header> <!-- End Header -->
@@ -90,15 +90,15 @@ MathJax.Hub.Config({
 <p>首先明确一点事实：<strong>只有有环，fast与slow总会相遇</strong>。</p>
 
 <ul>
-  <li>当相遇时，slow走了<code class="highlighter-rouge">l1+l2</code>，fast走了<code class="highlighter-rouge">2(l1+l2)</code>，并且fast比slow多走了n个环的长度；
+  <li>当相遇时，slow走了<code class="language-plaintext highlighter-rouge">l1+l2</code>，fast走了<code class="language-plaintext highlighter-rouge">2(l1+l2)</code>，并且fast比slow多走了n个环的长度；
     <ul>
-      <li>即<code class="highlighter-rouge">l1+l2 = ns</code></li>
+      <li>即<code class="language-plaintext highlighter-rouge">l1+l2 = ns</code></li>
     </ul>
   </li>
 </ul>
 
 <blockquote>
-  <p>由上面推导可知，l2从0开始，每次加1，直到<code class="highlighter-rouge">l1+l2</code>是s的整数倍数时，slow与fast第一次相遇。</p>
+  <p>由上面推导可知，l2从0开始，每次加1，直到<code class="language-plaintext highlighter-rouge">l1+l2</code>是s的整数倍数时，slow与fast第一次相遇。</p>
 </blockquote>
 
 <h2 id="问题二-判断链表有没有环如果有返回环的长度">问题二: 判断链表有没有环，如果有，返回环的长度</h2>
@@ -114,7 +114,7 @@ MathJax.Hub.Config({
 <ul>
   <li>在fast与slow第一次相遇时，从新定义一个前进节点slow2从头出发，slow从当前位置出发，则slow与slow2相遇的节点就是环的入口节点。
     <ul>
-      <li><code class="highlighter-rouge">l1+l2+l1 = ns + l1</code></li>
+      <li><code class="language-plaintext highlighter-rouge">l1+l2+l1 = ns + l1</code></li>
     </ul>
   </li>
 </ul>
@@ -128,9 +128,9 @@ MathJax.Hub.Config({
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=带环链表问题&url=http://localhost:4000/linked-list-cycle/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/linked-list-cycle/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/linked-list-cycle/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=带环链表问题&url=/linked-list-cycle/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/linked-list-cycle/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/linked-list-cycle/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -173,6 +173,10 @@ MathJax.Hub.Config({
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -190,10 +194,6 @@ MathJax.Hub.Config({
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/one-piece/one-piece25.jpg alt="双目相机模型与标定">
       </div>
       <div class="post_description">
-        <p class="post_meta">2020, Aug 07</p>
+        <p class="post_meta">2020, Aug 08</p>
         <h1 class="post_title">双目相机模型与标定</h1>
       </div>
     </header> <!-- End Header -->
@@ -107,7 +107,7 @@ MathJax.Hub.Config({
 <h3 id="知道内参">知道内参</h3>
 
 <blockquote>
-  <p>对于一个已经标定的双目相机（已知内参、畸变参数等），在opencv中可以使用<code class="highlighter-rouge">cv:StereoRectify</code>来完成双目矫正矩阵的获得（不只是矫正矩阵，还有两个相机之间的位姿变换，视差到深度的4*4映射矩阵等）；</p>
+  <p>对于一个已经标定的双目相机（已知内参、畸变参数等），在opencv中可以使用<code class="language-plaintext highlighter-rouge">cv:StereoRectify</code>来完成双目矫正矩阵的获得（不只是矫正矩阵，还有两个相机之间的位姿变换，视差到深度的4*4映射矩阵等）；</p>
 </blockquote>
 
 <p>这种方法也称为(Bouguet)方法，需要先分别对两个相机进行标定，分别得出两个相机的内参数矩阵，然后再进行立体标定，进行立体图像的矫正。具体可以去opencv官网查看，函数介绍比较清晰。</p>
@@ -115,7 +115,7 @@ MathJax.Hub.Config({
 <h3 id="不知道内参">不知道内参</h3>
 
 <blockquote>
-  <p>对于一个没有标定的双目相机，可以使用opencv中<code class="highlighter-rouge">cv::stereoRectifyUncalibrated</code>函数来获得双目的矫正矩阵H1和H2，分别使用这两个矩阵对图像做单应变换，即可矫正图像。</p>
+  <p>对于一个没有标定的双目相机，可以使用opencv中<code class="language-plaintext highlighter-rouge">cv::stereoRectifyUncalibrated</code>函数来获得双目的矫正矩阵H1和H2，分别使用这两个矩阵对图像做单应变换，即可矫正图像。</p>
 </blockquote>
 
 <p>这种方法也叫非标定方法也称为（Hartley)方法，有时候我们不知道相机的内参矩阵，而且也不用知道内参数具体是多少，因为我们仅关心如何得到两幅图像的稠密匹配，或者两幅图像之间的视差图或者深度图就足够了。因为不知道相机的内参数，所以只能借助对极约束来解决问题了，通过计算两幅图像的基础矩阵F，然后利用对极约束条件中对极线为平行且行对准，可以很好的实现目标。</p>
@@ -124,9 +124,9 @@ MathJax.Hub.Config({
 <img src="/assets/img/stereo/stereo_rectify1.PNG" width="780" height="350" />
 </div>
 
-<p>第三个参数是本质矩阵可以通过<code class="highlighter-rouge">cv::findFundamentalMat</code>获得，需要说明一点，该函数的前两个参数<code class="highlighter-rouge">Mat&amp; points1, Mat&amp; points2</code>与<code class="highlighter-rouge">cv::findFundamentalMat</code>的前两个参数并不是相同的数据结构。它们虽然可以是同一个匹配点集，但是他们的数据结构是完全不同的！<code class="highlighter-rouge">cv::findFundamentalMat</code>中传入的匹配点集要求是2xN或者Nx2的矩阵，但是<code class="highlighter-rouge">cv::stereoRectifyUncalibrated</code>中要求传入的匹配点集必须是1x2N或者2Nx1的矩阵！在很多文档中都说他们的参数是一样的，这其实是一个天大的错误，如果用计算F的匹配点集直接传给图像矫正函数，程序将直接崩溃。正确的做法是利用cv::Mat的构造函数，直接从vector<Point2f>构造一个cv::Mat传入。</Point2f></p>
+<p>第三个参数是本质矩阵可以通过<code class="language-plaintext highlighter-rouge">cv::findFundamentalMat</code>获得，需要说明一点，该函数的前两个参数<code class="language-plaintext highlighter-rouge">Mat&amp; points1, Mat&amp; points2</code>与<code class="language-plaintext highlighter-rouge">cv::findFundamentalMat</code>的前两个参数并不是相同的数据结构。它们虽然可以是同一个匹配点集，但是他们的数据结构是完全不同的！<code class="language-plaintext highlighter-rouge">cv::findFundamentalMat</code>中传入的匹配点集要求是2xN或者Nx2的矩阵，但是<code class="language-plaintext highlighter-rouge">cv::stereoRectifyUncalibrated</code>中要求传入的匹配点集必须是1x2N或者2Nx1的矩阵！在很多文档中都说他们的参数是一样的，这其实是一个天大的错误，如果用计算F的匹配点集直接传给图像矫正函数，程序将直接崩溃。正确的做法是利用cv::Mat的构造函数，直接从vector<Point2f>构造一个cv::Mat传入。</Point2f></p>
 
-<p><code class="highlighter-rouge">cv::stereoRectifyUncalibrated</code>函数默认原始图像是没有径向畸变的，因此在矫正图像之前，最好先对原始图像做径向矫正。另外需要注意的一点，函数返回的单应变换矩阵H1和H2都是double类型，也即CV_64F类型，若不是该类型的矩阵，与之相乘会报错。</p>
+<p><code class="language-plaintext highlighter-rouge">cv::stereoRectifyUncalibrated</code>函数默认原始图像是没有径向畸变的，因此在矫正图像之前，最好先对原始图像做径向矫正。另外需要注意的一点，函数返回的单应变换矩阵H1和H2都是double类型，也即CV_64F类型，若不是该类型的矩阵，与之相乘会报错。</p>
 
 <h3 id="生成映射矩阵">生成映射矩阵</h3>
 
@@ -172,9 +172,9 @@ MathJax.Hub.Config({
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=双目相机模型与标定&url=http://localhost:4000/stereo-vision/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/stereo-vision/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/stereo-vision/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=双目相机模型与标定&url=/stereo-vision/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/stereo-vision/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/stereo-vision/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -217,6 +217,10 @@ MathJax.Hub.Config({
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -234,10 +238,6 @@ MathJax.Hub.Config({
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

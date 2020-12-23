@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/AWK.jpg alt="简单理解应用AWK">
       </div>
       <div class="post_description">
-        <p class="post_meta">2018, Apr 21</p>
+        <p class="post_meta">2018, Apr 22</p>
         <h1 class="post_title">简单理解应用AWK</h1>
       </div>
     </header> <!-- End Header -->
@@ -81,7 +81,7 @@ MathJax.Hub.Config({
 <h2 id="awk的内置变量">AWK的内置变量</h2>
 <ul>
   <li>$0：当前记录，这个变量存放了当前整行的内容。</li>
-  <li>$1~$n：当前记录的第n个域的内容。（由FS进行分隔）</li>
+  <li>$n：当前记录的第n个域的内容。（由FS进行分隔）</li>
   <li>FS：域分隔符”。其默认值为“空白字符”，即空格和制表符。FS可以替换为其它字符，从而改变域分隔符。</li>
   <li>NF：当前记录中的域个数，也就是总列数。</li>
   <li>NR：已经读出的记录的条数，也就是行号，如果多个文件的话，这个变量会一直累计。</li>
@@ -93,9 +93,9 @@ MathJax.Hub.Config({
 </ul>
 
 <h2 id="awk作为一个命令用"><strong><em>AWK：</em></strong>作为一个命令用</h2>
-<p>假设有一段文本<code class="highlighter-rouge">test.log</code>，文本内容如下：</p>
+<p>假设有一段文本<code class="language-plaintext highlighter-rouge">test.log</code>，文本内容如下：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Proto    Recv-Q   Send-Q   Local-Address      Foreign-Address        State
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Proto    Recv-Q   Send-Q   Local-Address      Foreign-Address        State
 tcp      0        0        0.0.0.0:3306       0.0.0.0:*              LISTEN
 tcp      0        0        0.0.0.0:80         0.0.0.0:*              LISTEN
 tcp      0        0        127.0.0.1:9000     0.0.0.0:*              LISTEN
@@ -116,17 +116,17 @@ tcp      0        0        coolshell.cn:80    117.136.20.85:50025    FIN_WAIT2
 tcp      0        0        :::22              :::*                   LISTEN
 </code></pre></div></div>
 
-<p>输入命令<code class="highlighter-rouge">awk '$3&gt;0 || NR==1 {print $0}' test.log &gt; record.log</code>,查看<code class="highlighter-rouge">record.log</code>中输出如下：</p>
+<p>输入命令<code class="language-plaintext highlighter-rouge">awk '$3&gt;0 || NR==1 {print $0}' test.log &gt; record.log</code>,查看<code class="language-plaintext highlighter-rouge">record.log</code>中输出如下：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Proto Recv-Q Send-Q Local-Address          Foreign-Address             State
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Proto Recv-Q Send-Q Local-Address          Foreign-Address             State
 tcp        0   4166 coolshell.cn:80        61.148.242.38:30901         ESTABLISHED
 tcp        0      1 coolshell.cn:80        124.152.181.209:26825       FIN_WAIT1
 tcp        0      1 coolshell.cn:80        208.115.113.92:50601        LAST_ACK
 </code></pre></div></div>
 
-<p>输入命令<code class="highlighter-rouge">awk '$6 ~ /TIME_WAIT|State/ {printf"%02d %10s %30s %20s \n",NR,$1,$4,$6}' test.log &gt; record.log</code>，查看<code class="highlighter-rouge">record.log</code>中输出如下：</p>
+<p>输入命令<code class="language-plaintext highlighter-rouge">awk '$6 ~ /TIME_WAIT|State/ {printf"%02d %10s %30s %20s \n",NR,$1,$4,$6}' test.log &gt; record.log</code>，查看<code class="language-plaintext highlighter-rouge">record.log</code>中输出如下：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>01      Proto                  Local-Address                State 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>01      Proto                  Local-Address                State 
 05        tcp                coolshell.cn:80            TIME_WAIT 
 11        tcp                coolshell.cn:80            TIME_WAIT 
 15        tcp                coolshell.cn:80            TIME_WAIT 
@@ -134,52 +134,52 @@ tcp        0      1 coolshell.cn:80        208.115.113.92:50601        LAST_ACK
 
 <p>如上我们可以发现，是如下模式：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    pattern { action }
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    pattern { action }
 </code></pre></div></div>
 
-<p>上面是AWK的基础命令模式，AWK将对输入的文本进行逐记录（行）处理，在遇到符合<code class="highlighter-rouge">pattern</code>的记录时，执行<code class="highlighter-rouge">action</code>。所以，如果有10行符合pattern，则action会执行10次。</p>
+<p>上面是AWK的基础命令模式，AWK将对输入的文本进行逐记录（行）处理，在遇到符合<code class="language-plaintext highlighter-rouge">pattern</code>的记录时，执行<code class="language-plaintext highlighter-rouge">action</code>。所以，如果有10行符合pattern，则action会执行10次。</p>
 
 <h2 id="awk脚本编写"><strong><em>AWK：</em></strong>脚本编写</h2>
 
-<p>有<code class="highlighter-rouge">score.log</code>，内容如下：</p>
+<p>有<code class="language-plaintext highlighter-rouge">score.log</code>，内容如下：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Marry   2143 78 84 77
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Marry   2143 78 84 77
 Jack    2321 66 78 45
 Tom     2122 48 77 71
 Mike    2537 87 97 95
 Bob     2415 40 57 62
 </code></pre></div></div>
 
-<p>编写一个后缀名为<code class="highlighter-rouge">.awk</code>的脚本，内容如下：</p>
+<p>编写一个后缀名为<code class="language-plaintext highlighter-rouge">.awk</code>的脚本，内容如下：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/bin/awk -f</span>
-<span class="c1">#运行前</span>
-<span class="kr">BEGIN</span> <span class="p">{</span>
-    <span class="nx">math</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="nx">english</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="nx">computer</span> <span class="o">=</span> <span class="mi">0</span>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#!/bin/awk -f
+#运行前
+BEGIN {
+    math = 0
+    english = 0
+    computer = 0
  
-    <span class="k">printf</span> <span class="s2">"NAME    NO.   MATH  ENGLISH  COMPUTER   TOTAL\n"</span>
-    <span class="k">printf</span> <span class="s2">"---------------------------------------------\n"</span>
-<span class="p">}</span>
-<span class="c1">#运行中</span>
-<span class="p">{</span>
-    <span class="nx">math</span><span class="o">+=</span><span class="nv">$3</span>
-    <span class="nx">english</span><span class="o">+=</span><span class="nv">$4</span>
-    <span class="nx">computer</span><span class="o">+=</span><span class="nv">$5</span>
-    <span class="k">printf</span> <span class="s2">"%-6s %-6s %4d %8d %8d %8d\n"</span><span class="p">,</span> <span class="nv">$1</span><span class="p">,</span> <span class="nv">$2</span><span class="p">,</span> <span class="nv">$3</span><span class="p">,</span><span class="nv">$4</span><span class="p">,</span><span class="nv">$5</span><span class="p">,</span> <span class="nv">$3</span><span class="o">+</span><span class="nv">$4</span><span class="o">+</span><span class="nv">$5</span>
-<span class="p">}</span>
-<span class="c1">#运行后</span>
-<span class="kr">END</span> <span class="p">{</span>
-    <span class="k">printf</span> <span class="s2">"---------------------------------------------\n"</span>
-    <span class="k">printf</span> <span class="s2">"  TOTAL:%10d %8d %8d \n"</span><span class="p">,</span> <span class="nx">math</span><span class="p">,</span> <span class="nx">english</span><span class="p">,</span> <span class="nx">computer</span>
-    <span class="k">printf</span> <span class="s2">"AVERAGE:%10.2f %8.2f %8.2f\n"</span><span class="p">,</span> <span class="nx">math</span><span class="o">/</span><span class="kc">NR</span><span class="p">,</span> <span class="nx">english</span><span class="o">/</span><span class="kc">NR</span><span class="p">,</span> <span class="nx">computer</span><span class="o">/</span><span class="kc">NR</span>
-<span class="p">}</span>
+    printf "NAME    NO.   MATH  ENGLISH  COMPUTER   TOTAL\n"
+    printf "---------------------------------------------\n"
+}
+#运行中
+{
+    math+=$3
+    english+=$4
+    computer+=$5
+    printf "%-6s %-6s %4d %8d %8d %8d\n", $1, $2, $3,$4,$5, $3+$4+$5
+}
+#运行后
+END {
+    printf "---------------------------------------------\n"
+    printf "  TOTAL:%10d %8d %8d \n", math, english, computer
+    printf "AVERAGE:%10.2f %8.2f %8.2f\n", math/NR, english/NR, computer/NR
+}
 </code></pre></div></div>
 
-<p>在终端输入<code class="highlighter-rouge">awk -f score.awk score.txt</code>，输出结果如下：</p>
+<p>在终端输入<code class="language-plaintext highlighter-rouge">awk -f score.awk score.txt</code>，输出结果如下：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NAME    NO.   MATH  ENGLISH  COMPUTER   TOTAL
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NAME    NO.   MATH  ENGLISH  COMPUTER   TOTAL
 ---------------------------------------------
 Marry  2143     78       84       77      239
 Jack   2321     66       78       45      189
@@ -191,7 +191,7 @@ Bob    2415     40       57       62      159
 AVERAGE:     63.80    78.60    70.00
 </code></pre></div></div>
 
-<p>如上便是AWK的脚本方式，如果想要将脚本嵌入shell中，只需要把AWK代码放入<code class="highlighter-rouge">''</code>中便可以了，而且这样做不需要<code class="highlighter-rouge">-f</code>参数。方式：<code class="highlighter-rouge">awk '代码'</code></p>
+<p>如上便是AWK的脚本方式，如果想要将脚本嵌入shell中，只需要把AWK代码放入<code class="language-plaintext highlighter-rouge">''</code>中便可以了，而且这样做不需要<code class="language-plaintext highlighter-rouge">-f</code>参数。方式：<code class="language-plaintext highlighter-rouge">awk '代码'</code></p>
 
 <h3 id="awk脚本的流程控制">AWK脚本的流程控制</h3>
 
@@ -263,9 +263,9 @@ AVERAGE:     63.80    78.60    70.00
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=简单理解应用AWK&url=http://localhost:4000/AWK-script/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/AWK-script/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/AWK-script/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=简单理解应用AWK&url=/AWK-script/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/AWK-script/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/AWK-script/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -308,6 +308,10 @@ AVERAGE:     63.80    78.60    70.00
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -325,10 +329,6 @@ AVERAGE:     63.80    78.60    70.00
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/sword/sword6.jpg alt="排序算法总结">
       </div>
       <div class="post_description">
-        <p class="post_meta">2019, Apr 14</p>
+        <p class="post_meta">2019, Apr 15</p>
         <h1 class="post_title">排序算法总结</h1>
       </div>
     </header> <!-- End Header -->
@@ -88,7 +88,7 @@ MathJax.Hub.Config({
 <hr />
 
 <blockquote>
-  <p>复杂度分析：重复<code class="highlighter-rouge">n-1</code>次循环，每次循环比较平均<code class="highlighter-rouge">n/2</code>步，因此时间复杂度是<code class="highlighter-rouge">o(n^2)</code>，空间复杂度是<code class="highlighter-rouge">o(n)</code></p>
+  <p>复杂度分析：重复<code class="language-plaintext highlighter-rouge">n-1</code>次循环，每次循环比较平均<code class="language-plaintext highlighter-rouge">n/2</code>步，因此时间复杂度是<code class="language-plaintext highlighter-rouge">o(n^2)</code>，空间复杂度是<code class="language-plaintext highlighter-rouge">o(n)</code></p>
 </blockquote>
 
 <h2 id="插入排序insertion-sort">插入排序(Insertion sort)</h2>
@@ -96,7 +96,7 @@ MathJax.Hub.Config({
   <p>原理：循环n-1次，每次将当前的(从1开始)数插入到前面已经排序完毕序列中合适的位置。</p>
 </blockquote>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>void insert_sort(vector&lt;int&gt; &amp;nums){
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>void insert_sort(vector&lt;int&gt; &amp;nums){
     for(int i=1; i&lt;nums.size(); ++i){
         for(int j=i; j&gt;0 &amp;&amp; nums[j]&lt;nums[j-1]; --j){
             int temp = nums[j];
@@ -109,7 +109,7 @@ MathJax.Hub.Config({
 <hr />
 
 <blockquote>
-  <p>复杂度分析: 重复<code class="highlighter-rouge">n-1</code>次循环，每次循环平均<code class="highlighter-rouge">n/4</code>步，因此时间复杂度是<code class="highlighter-rouge">o(n^2)</code>,空间复杂度是<code class="highlighter-rouge">o(n)</code></p>
+  <p>复杂度分析: 重复<code class="language-plaintext highlighter-rouge">n-1</code>次循环，每次循环平均<code class="language-plaintext highlighter-rouge">n/4</code>步，因此时间复杂度是<code class="language-plaintext highlighter-rouge">o(n^2)</code>,空间复杂度是<code class="language-plaintext highlighter-rouge">o(n)</code></p>
 </blockquote>
 
 <h2 id="选择排序selection-sort">选择排序(selection sort)</h2>
@@ -117,7 +117,7 @@ MathJax.Hub.Config({
   <p>原理: 每次从乱序数组中找处最大(小)的那个值，将其放在当前乱序数组的头部，最终使得数组有序</p>
 </blockquote>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>void selection_sort(vector&lt;int&gt; &amp;nums){
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>void selection_sort(vector&lt;int&gt; &amp;nums){
     for(int i=0; i&lt;nums.size()-1; ++i){
         int min=i;
         for(int j=i+1; j&lt;nums.size(); ++j){
@@ -132,7 +132,7 @@ MathJax.Hub.Config({
 <hr />
 
 <blockquote>
-  <p>复杂度分析: 重复<code class="highlighter-rouge">n-1</code>次循环，每次循环平均<code class="highlighter-rouge">n/2</code>步，因此时间复杂度是<code class="highlighter-rouge">o(n^2)</code>，空间复杂度是<code class="highlighter-rouge">o(n)</code></p>
+  <p>复杂度分析: 重复<code class="language-plaintext highlighter-rouge">n-1</code>次循环，每次循环平均<code class="language-plaintext highlighter-rouge">n/2</code>步，因此时间复杂度是<code class="language-plaintext highlighter-rouge">o(n^2)</code>，空间复杂度是<code class="language-plaintext highlighter-rouge">o(n)</code></p>
 </blockquote>
 
 <h2 id="希尔排序shell-sort">希尔排序(shell sort)</h2>
@@ -146,27 +146,27 @@ MathJax.Hub.Config({
 
 <ul>
   <li>
-    <p>对于一组数<code class="highlighter-rouge">13 14 94 33 82 25 59 94 65 23 45 27 73 25 39 10</code></p>
+    <p>对于一组数<code class="language-plaintext highlighter-rouge">13 14 94 33 82 25 59 94 65 23 45 27 73 25 39 10</code></p>
   </li>
   <li>首先设置步长为5，则这组数可以如下表示，一共将数据分成了5组
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>13 14 94 33 82
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>13 14 94 33 82
 25 59 94 65 23
 45 27 73 25 39
 10
 </code></pre></div>    </div>
   </li>
   <li>然后对于每组(列)进行插入排序，得到
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>13 14 94 33 82
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>13 14 94 33 82
 25 59 94 65 23
 45 27 73 25 39
 10
 </code></pre></div>    </div>
   </li>
   <li>
-    <p>上述数组现在变为<code class="highlighter-rouge">10 14 73 25 23 13 27 94 33 39 25 59 94 65 82 45</code></p>
+    <p>上述数组现在变为<code class="language-plaintext highlighter-rouge">10 14 73 25 23 13 27 94 33 39 25 59 94 65 82 45</code></p>
   </li>
   <li>此时设置步长为3,将数据分成了3组
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10 14 73
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10 14 73
 25 23 13
 27 94 33
 39 25 59
@@ -175,7 +175,7 @@ MathJax.Hub.Config({
 </code></pre></div>    </div>
   </li>
   <li>对上述每组(列)进行插入排序，得到
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10 14 13
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10 14 13
 25 23 33
 27 25 59
 39 65 73
@@ -210,7 +210,7 @@ MathJax.Hub.Config({
 <hr />
 
 <blockquote>
-  <p>复杂度分析：希尔排序的复杂度与步长选择有很大关系，最坏情况为<code class="highlighter-rouge">o(n^2)</code>，最好复杂度为<code class="highlighter-rouge">o(n(logn)^2)</code>，目前已知最好步长序列是(1,5,19,41,109,…)</p>
+  <p>复杂度分析：希尔排序的复杂度与步长选择有很大关系，最坏情况为<code class="language-plaintext highlighter-rouge">o(n^2)</code>，最好复杂度为<code class="language-plaintext highlighter-rouge">o(n(logn)^2)</code>，目前已知最好步长序列是(1,5,19,41,109,…)</p>
 </blockquote>
 
 <h2 id="归并排序merge-sort">归并排序(merge sort)</h2>
@@ -267,7 +267,7 @@ MathJax.Hub.Config({
 <hr />
 
 <blockquote>
-  <p>评价：归并排序是稳定排序，它也是一种十分高效的排序。每次合并操作的平均时间复杂度是<code class="highlighter-rouge">o(n)</code>，而完全二叉树的深度是<code class="highlighter-rouge">log_2(n)</code>，所以总的时间复杂度是<code class="highlighter-rouge">o(nlogn)</code>。归并排序的最好、最坏、平均时间复杂度都是<code class="highlighter-rouge">o(nlogn)</code></p>
+  <p>评价：归并排序是稳定排序，它也是一种十分高效的排序。每次合并操作的平均时间复杂度是<code class="language-plaintext highlighter-rouge">o(n)</code>，而完全二叉树的深度是<code class="language-plaintext highlighter-rouge">log_2(n)</code>，所以总的时间复杂度是<code class="language-plaintext highlighter-rouge">o(nlogn)</code>。归并排序的最好、最坏、平均时间复杂度都是<code class="language-plaintext highlighter-rouge">o(nlogn)</code></p>
 </blockquote>
 
 <h2 id="快速排序quick-sort">快速排序(quick sort)</h2>
@@ -297,7 +297,7 @@ MathJax.Hub.Config({
 <hr />
 
 <blockquote>
-  <p>评价：快速排序是不稳定排序，平均时间复杂度是<code class="highlighter-rouge">o(nlogn)</code>，上面这种解法不需要辅助空间。</p>
+  <p>评价：快速排序是不稳定排序，平均时间复杂度是<code class="language-plaintext highlighter-rouge">o(nlogn)</code>，上面这种解法不需要辅助空间。</p>
 </blockquote>
 
 <h2 id="堆排序heap-sort">堆排序(heap sort)</h2>
@@ -307,8 +307,8 @@ MathJax.Hub.Config({
 </div>
 <p>上述性质的完全二叉树可以直接存储在一个数组中，只要数组中元素满足如下两个条件：</p>
 <ol>
-  <li><strong>大顶堆</strong> : <code class="highlighter-rouge">arr[i] &gt;= arr[2i+1] &amp;&amp; arr[i] &gt;= arr[2i+2]</code></li>
-  <li><strong>小顶堆</strong> : <code class="highlighter-rouge">arr[i] &lt;= arr[2i+1] &amp;&amp; arr[i] &lt;= arr[2i+2]</code></li>
+  <li><strong>大顶堆</strong> : <code class="language-plaintext highlighter-rouge">arr[i] &gt;= arr[2i+1] &amp;&amp; arr[i] &gt;= arr[2i+2]</code></li>
+  <li><strong>小顶堆</strong> : <code class="language-plaintext highlighter-rouge">arr[i] &lt;= arr[2i+1] &amp;&amp; arr[i] &lt;= arr[2i+2]</code></li>
 </ol>
 <div style="text-align: center">
 <img src="/assets/img/sort/heap1.png" width="600" height="120" />
@@ -352,7 +352,7 @@ MathJax.Hub.Config({
 <hr />
 
 <blockquote>
-  <p>评价：堆排序是不稳定排序，堆执行一次调整需要<code class="highlighter-rouge">o(logn)</code>时间，在排序过程中需要遍历所有元素执行堆调整，所以最终时间复杂度是<code class="highlighter-rouge">o(nlogn)</code>。</p>
+  <p>评价：堆排序是不稳定排序，堆执行一次调整需要<code class="language-plaintext highlighter-rouge">o(logn)</code>时间，在排序过程中需要遍历所有元素执行堆调整，所以最终时间复杂度是<code class="language-plaintext highlighter-rouge">o(nlogn)</code>。</p>
 </blockquote>
 
 <h1 id="稳定排序与不稳定排序">稳定排序与不稳定排序</h1>
@@ -387,9 +387,9 @@ MathJax.Hub.Config({
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=排序算法总结&url=http://localhost:4000/sort/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/sort/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/sort/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=排序算法总结&url=/sort/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/sort/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/sort/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -432,6 +432,10 @@ MathJax.Hub.Config({
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -449,10 +453,6 @@ MathJax.Hub.Config({
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

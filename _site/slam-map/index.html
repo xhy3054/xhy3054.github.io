@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/one-piece/one-piece3.jpg alt="视觉slam中的一种单目稠密建图方法">
       </div>
       <div class="post_description">
-        <p class="post_meta">2019, May 16</p>
+        <p class="post_meta">2019, May 17</p>
         <h1 class="post_title">视觉slam中的一种单目稠密建图方法</h1>
       </div>
     </header> <!-- End Header -->
@@ -98,7 +98,7 @@ MathJax.Hub.Config({
 
 <ol>
   <li>
-    <p>在种子$p(x,y)$的深度延长线上，构造两个三维点$P_{1}$与$P_{2}$，这两个三维点来源自同一个像素，只是确定它们的深度不同。在深度滤波器中一般是设置为<code class="highlighter-rouge">P1(x,y,z-n*sigma)</code>与<code class="highlighter-rouge">P2(x,y,z+n*sigma)</code>，其中$z$是种子的初始深度，$sigma$是深度的方差，$n$可以调节成不同的值，比如$1,2,3…$等，一般取$3$。</p>
+    <p>在种子$p(x,y)$的深度延长线上，构造两个三维点$P_{1}$与$P_{2}$，这两个三维点来源自同一个像素，只是确定它们的深度不同。在深度滤波器中一般是设置为<code class="language-plaintext highlighter-rouge">P1(x,y,z-n*sigma)</code>与<code class="language-plaintext highlighter-rouge">P2(x,y,z+n*sigma)</code>，其中$z$是种子的初始深度，$sigma$是深度的方差，$n$可以调节成不同的值，比如$1,2,3…$等，一般取$3$。</p>
   </li>
   <li>
     <p>将$P_{1}$与$P_{2}$利用帧间位姿，投影到当前帧，投影点为$u_{1}$与$u_{2}$，连接$u_{1}$与$u_{2}$就是我们所要的极线（此处是一个线段）</p>
@@ -185,9 +185,9 @@ MathJax.Hub.Config({
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=视觉slam中的一种单目稠密建图方法&url=http://localhost:4000/slam-map/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/slam-map/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/slam-map/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=视觉slam中的一种单目稠密建图方法&url=/slam-map/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/slam-map/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/slam-map/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -230,6 +230,10 @@ MathJax.Hub.Config({
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -247,10 +251,6 @@ MathJax.Hub.Config({
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/one-piece/one-piece23.jpg alt="机器学习中的常见函数总结（备忘）">
       </div>
       <div class="post_description">
-        <p class="post_meta">2020, Jun 01</p>
+        <p class="post_meta">2020, Jun 02</p>
         <h1 class="post_title">机器学习中的常见函数总结（备忘）</h1>
       </div>
     </header> <!-- End Header -->
@@ -85,14 +85,14 @@ MathJax.Hub.Config({
 <p>Softmax的做法：</p>
 <ol>
   <li>
-    <p>首先将每个维度的值转换为非负数，做法：<code class="highlighter-rouge">v[i] = exp(v[i])</code></p>
+    <p>首先将每个维度的值转换为非负数，做法：<code class="language-plaintext highlighter-rouge">v[i] = exp(v[i])</code></p>
   </li>
   <li>
-    <p>将非负数的值限定到0和1之间，并似的所有值和为1.做法：<code class="highlighter-rouge">v[i] = v[i]/(v[1]+v[2]+...+v[k])</code>;</p>
+    <p>将非负数的值限定到0和1之间，并似的所有值和为1.做法：<code class="language-plaintext highlighter-rouge">v[i] = v[i]/(v[1]+v[2]+...+v[k])</code>;</p>
   </li>
 </ol>
 
-<p>总结：<code class="highlighter-rouge">v[i] = exp(v[i]) / {exp(v[1]) + exp(v[2]) + ... + exp(v[k])}</code></p>
+<p>总结：<code class="language-plaintext highlighter-rouge">v[i] = exp(v[i]) / {exp(v[1]) + exp(v[2]) + ... + exp(v[k])}</code></p>
 
 <h2 id="triplet_loss">Triplet_loss</h2>
 
@@ -115,7 +115,7 @@ MathJax.Hub.Config({
 
 <h3 id="原理">原理</h3>
 
-<p>输入是一个三元组<code class="highlighter-rouge">&lt;a, p, n&gt;</code>，其中</p>
+<p>输入是一个三元组<code class="language-plaintext highlighter-rouge">&lt;a, p, n&gt;</code>，其中</p>
 
 <ul>
   <li>a：anchor 原点</li>
@@ -127,7 +127,7 @@ MathJax.Hub.Config({
 
 <p>[L = max(d(a,p) - d(a,n) + margin, 0)]</p>
 
-<p>最小化L，则<code class="highlighter-rouge">d(a,p)-&gt;0，d(a,n)-&gt;margin</code></p>
+<p>最小化L，则<code class="language-plaintext highlighter-rouge">d(a,p)-&gt;0，d(a,n)-&gt;margin</code></p>
 
     </div>
     
@@ -135,9 +135,9 @@ MathJax.Hub.Config({
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=机器学习中的常见函数总结（备忘）&url=http://localhost:4000/matchine-learning/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/matchine-learning/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/matchine-learning/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=机器学习中的常见函数总结（备忘）&url=/matchine-learning/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/matchine-learning/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/matchine-learning/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -180,6 +180,10 @@ MathJax.Hub.Config({
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -197,10 +201,6 @@ MathJax.Hub.Config({
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/one-piece/one-piece14.jpg alt="vins初始化中的尺度、重力、速度的初始化">
       </div>
       <div class="post_description">
-        <p class="post_meta">2019, Aug 24</p>
+        <p class="post_meta">2019, Aug 25</p>
         <h1 class="post_title">vins初始化中的尺度、重力、速度的初始化</h1>
       </div>
     </header> <!-- End Header -->
@@ -113,7 +113,7 @@ MathJax.Hub.Config({
 <p>在vins中，作者是通过每两帧构建上面的一个约束，然后组合起来构建整个sfm范围内的约束，进行LDLT求解即可得到\(\mathcal{X}_{I}\)</p>
 
 <blockquote>
-  <p>代码实现在<code class="highlighter-rouge">vins_estimator/src/initial/initial_aligment.cpp</code>的<code class="highlighter-rouge">LinearAlignment</code>函数中。</p>
+  <p>代码实现在<code class="language-plaintext highlighter-rouge">vins_estimator/src/initial/initial_aligment.cpp</code>的<code class="language-plaintext highlighter-rouge">LinearAlignment</code>函数中。</p>
 </blockquote>
 
 <h2 id="重力细化">重力细化</h2>
@@ -153,7 +153,7 @@ MathJax.Hub.Config({
 <p>由于这个修正是基于原本的初始的重力向量进行的修正，因此原本的重力向量越准确，得到的效果也就越好，因此可以多迭代修正几次（vins中4次）</p>
 
 <blockquote>
-  <p>修正代码实现在<code class="highlighter-rouge">vins_estimator/src/initial/initial_aligment.cpp</code>的<code class="highlighter-rouge">RefineGravity</code>函数中。</p>
+  <p>修正代码实现在<code class="language-plaintext highlighter-rouge">vins_estimator/src/initial/initial_aligment.cpp</code>的<code class="language-plaintext highlighter-rouge">RefineGravity</code>函数中。</p>
 </blockquote>
 
 <h2 id="与世界坐标系对齐">与世界坐标系对齐</h2>
@@ -208,9 +208,9 @@ MathJax.Hub.Config({
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=vins初始化中的尺度、重力、速度的初始化&url=http://localhost:4000/vins-scale-gravity-velo/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/vins-scale-gravity-velo/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/vins-scale-gravity-velo/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=vins初始化中的尺度、重力、速度的初始化&url=/vins-scale-gravity-velo/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/vins-scale-gravity-velo/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/vins-scale-gravity-velo/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -253,6 +253,10 @@ MathJax.Hub.Config({
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -270,10 +274,6 @@ MathJax.Hub.Config({
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

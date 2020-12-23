@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/pearl.jpg alt="shell脚本快速入门">
       </div>
       <div class="post_description">
-        <p class="post_meta">2018, Apr 19</p>
+        <p class="post_meta">2018, Apr 20</p>
         <h1 class="post_title">shell脚本快速入门</h1>
       </div>
     </header> <!-- End Header -->
@@ -72,14 +72,14 @@ MathJax.Hub.Config({
 <h3 id="示例">示例</h3>
 <p>看个例子吧：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/sh</span>
-<span class="nb">cd</span> ~
-<span class="nb">mkdir </span>shell_tut
-<span class="nb">cd </span>shell_tut
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#!/bin/sh
+cd ~
+mkdir shell_tut
+cd shell_tut
 
-<span class="k">for</span> <span class="o">((</span><span class="nv">i</span><span class="o">=</span>0<span class="p">;</span> i&lt;10<span class="p">;</span> i++<span class="o">))</span><span class="p">;</span> <span class="k">do
-	</span><span class="nb">touch </span>test_<span class="nv">$i</span>.txt
-<span class="k">done</span>
+for ((i=0; i&lt;10; i++)); do
+	touch test_$i.txt
+done
 </code></pre></div></div>
 
 <h3 id="示例解释">示例解释</h3>
@@ -132,7 +132,7 @@ MathJax.Hub.Config({
 
 <p>在CentOS里，/bin/sh是一个指向/bin/bash的符号链接:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@centosraw ~]# ls -l /bin/*sh
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@centosraw ~]# ls -l /bin/*sh
 -rwxr-xr-x. 1 root root 903272 Feb 22 05:09 /bin/bash
 -rwxr-xr-x. 1 root root 106216 Oct 17  2012 /bin/dash
 lrwxrwxrwx. 1 root root      4 Mar 22 10:22 /bin/sh -&gt; bash
@@ -140,7 +140,7 @@ lrwxrwxrwx. 1 root root      4 Mar 22 10:22 /bin/sh -&gt; bash
 
 <p>但在Mac OS上不是，/bin/sh和/bin/bash是两个不同的文件，尽管它们的大小只相差100字节左右:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>iMac:~ wuxiao$ ls -l /bin/*sh
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>iMac:~ wuxiao$ ls -l /bin/*sh
 -r-xr-xr-x  1 root  wheel  1371648  6 Nov 16:52 /bin/bash
 -rwxr-xr-x  2 root  wheel   772992  6 Nov 16:52 /bin/csh
 -r-xr-xr-x  1 root  wheel  2180736  6 Nov 16:52 /bin/ksh
@@ -156,15 +156,15 @@ lrwxrwxrwx. 1 root root      4 Mar 22 10:22 /bin/sh -&gt; bash
 
 <p>如下是一个PHP Shell Script示例（假设文件名叫test.php）：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#!/usr/bin/php
-<span class="cp">&lt;?php</span>
-<span class="k">for</span> <span class="p">(</span><span class="nv">$i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span>
-        <span class="k">echo</span> <span class="nv">$i</span> <span class="o">.</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#!/usr/bin/php
+&lt;?php
+for ($i=0; $i &lt; 10; $i++)
+        echo $i . "\n";
 </code></pre></div></div>
 
 <p>执行：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/usr/bin/php test.php 或者：
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/usr/bin/php test.php 或者：
 
 chmod +x test.php
 ./test.php
@@ -196,8 +196,8 @@ chmod +x test.php
 
 <p>输入一些代码，第一行一般是这样：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
-<span class="c">#!/usr/bin/php</span>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#!/bin/bash
+#!/usr/bin/php
 </code></pre></div></div>
 
 <p>“#!”是一个约定的标记，它告诉系统这个脚本需要什么解释器来执行。</p>
@@ -206,7 +206,7 @@ chmod +x test.php
 <p>运行Shell脚本有两种方法：</p>
 <h4 id="作为可执行程序">作为可执行程序</h4>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chmod +x test.sh
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chmod +x test.sh
 ./test.sh
 </code></pre></div></div>
 
@@ -219,7 +219,7 @@ chmod +x test.php
 <h4 id="作为解释器参数">作为解释器参数</h4>
 <p>这种运行方式是，直接运行解释器，其参数就是shell脚本的文件名，如：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/bin/sh test.sh
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/bin/sh test.sh
 /bin/php test.php
 </code></pre></div></div>
 
@@ -229,27 +229,27 @@ chmod +x test.php
 <h3 id="定义变量">定义变量</h3>
 <p>定义变量时，变量名不加美元符号（$），如：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>your_name="qinjx"
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>your_name="qinjx"
 </code></pre></div></div>
 
 <p>注意，变量名和等号之间不能有空格，这可能和你熟悉的所有编程语言都不一样。</p>
 
 <p>除了显式地直接赋值，还可以用语句给变量赋值，如：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>for file in `ls /etc`
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>for file in `ls /etc`
 </code></pre></div></div>
 
 <h3 id="使用变量">使用变量</h3>
 <p>使用一个定义过的变量，只要在变量名前面加美元符号即可，如：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>your_name="qinjx"
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>your_name="qinjx"
 echo $your_name
 echo ${your_name}
 </code></pre></div></div>
 
 <p>变量名外面的花括号是可选的，加不加都行，加花括号是为了帮助解释器识别变量的边界，比如下面这种情况：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>for skill in Ada Coffe Action Java; do
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>for skill in Ada Coffe Action Java; do
 	echo "I am good at ${skill}Script"
 done
 </code></pre></div></div>
@@ -261,7 +261,7 @@ done
 <h3 id="重定义变量">重定义变量</h3>
 <p>已定义的变量，可以被重新定义，如：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>your_name="qinjx"
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>your_name="qinjx"
 echo $your_name
 
 your_name="alibaba"
@@ -279,7 +279,7 @@ echo $your_name
 <h4 id="linux-shell-变量的基本运算">Linux shell 变量的基本运算</h4>
 <p>数值作为常规变量直接赋值给变量，并且以字符串形式保存。</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>a=7
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>a=7
 b=8
 let c=a+b
 echo d=$[a+b]
@@ -292,7 +292,7 @@ echo e=$((a+b))
 <h3 id="多行注释">多行注释</h3>
 <p>sh里没有多行注释，只能每一行加一个#号。就像这样：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#--------------------------------------------
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#--------------------------------------------
 # 这是一个自动打ipa的脚本，基于webfrogs的ipa-build书写：https://github.com/webfrogs/xcode_shell/blob/master/ipa-build
 
 # 功能：自动为etao ios app打包，产出物为14个渠道的ipa包
@@ -315,7 +315,7 @@ echo e=$((a+b))
 
 <h3 id="单引号">单引号</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>str='this is a string'
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>str='this is a string'
 </code></pre></div></div>
 
 <p>单引号字符串的限制：</p>
@@ -327,7 +327,7 @@ echo e=$((a+b))
 
 <h3 id="双引号">双引号</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>your_name='qinjx'
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>your_name='qinjx'
 str="Hello, I know your are \"$your_name\"! \n"
 </code></pre></div></div>
 
@@ -339,7 +339,7 @@ str="Hello, I know your are \"$your_name\"! \n"
 <h3 id="字符串操作">字符串操作</h3>
 <h4 id="拼接字符串">拼接字符串</h4>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>your_name="qinjx"
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>your_name="qinjx"
 greeting="hello, "$your_name" !"
 greeting_1="hello, ${your_name} !"
 
@@ -348,19 +348,19 @@ echo $greeting $greeting_1
 
 <h4 id="获取字符串长度">获取字符串长度：</h4>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>string="abcd"
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>string="abcd"
 echo ${#string} #输出：4
 </code></pre></div></div>
 
 <h4 id="提取子字符串">提取子字符串</h4>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>string="alibaba is a great company"
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>string="alibaba is a great company"
 echo ${string:1:4} #输出：liba
 </code></pre></div></div>
 
 <h4 id="查找子字符串">查找子字符串</h4>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>string="alibaba is a great company"
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>string="alibaba is a great company"
 echo `expr index "$string" is`#输出：3，这个语句的意思是：找出字母i在这名话中的位置，要在linux下运行，mac下会报错
 </code></pre></div></div>
 
@@ -376,20 +376,20 @@ echo `expr index "$string" is`#输出：3，这个语句的意思是：找出字
 <h2 id="流程控制">流程控制</h2>
 <p>和Java、PHP等语言不一样，sh的流程控制不可为空，如：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
-<span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s2">"q"</span><span class="p">]))</span> <span class="p">{</span>
-	<span class="nx">search</span><span class="p">(</span><span class="nx">q</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="k">else</span> <span class="p">{</span>
-	<span class="c1">//do nothing</span>
-<span class="p">}</span>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;?php
+if (isset($_GET["q"])) {
+	search(q);
+}
+else {
+	//do nothing
+}
 </code></pre></div></div>
 
 <p>在sh/bash里可不能这么写，如果else分支没有语句执行，就不要写这个else。</p>
 
 <p>还要注意，sh里的if [ $foo -eq 0 ]，这个方括号跟Java/PHP里if后面的圆括号大不相同，它是一个可执行程序（和ls, grep一样），想不到吧？在CentOS上，它在/usr/bin目录下：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ll /usr/bin/[
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ll /usr/bin/[
 -rwxr-xr-x. 1 root root 33408 6月  22 2012 /usr/bin/[
 </code></pre></div></div>
 
@@ -398,7 +398,7 @@ echo `expr index "$string" is`#输出：3，这个语句的意思是：找出字
 <h3 id="if-else">if else</h3>
 <h4 id="if">if</h4>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>if condition
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>if condition
 then
 	command1 
 	command2
@@ -409,13 +409,13 @@ fi
 
 <p>写成一行（适用于终端命令提示符）：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>if `ps -ef | grep ssh`;  then echo hello; fi
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>if `ps -ef | grep ssh`;  then echo hello; fi
 </code></pre></div></div>
 
 <p>末尾的fi就是if倒过来拼写，后面还会遇到类似的</p>
 
 <h4 id="if-else-1">if else</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>if condition
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>if condition
 then
 	command1 
 	command2
@@ -428,7 +428,7 @@ fi
 
 <h4 id="if-else-if-else">if else-if else</h4>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>if condition1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>if condition1
 then
 	command1
 elif condition2
@@ -442,7 +442,7 @@ fi
 <h4 id="for">for</h4>
 <p>在开篇的示例里演示过了：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>for var in item1 item2 ... itemN
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>for var in item1 item2 ... itemN
 do
 	command1
 	command2
@@ -453,12 +453,12 @@ done
 
 <p>写成一行：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>for var in item1 item2 ... itemN; do command1; command2… done;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>for var in item1 item2 ... itemN; do command1; command2… done;
 </code></pre></div></div>
 
 <h4 id="c风格的for">C风格的for</h4>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>for (( EXP1; EXP2; EXP3 ))
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>for (( EXP1; EXP2; EXP3 ))
 do
 	command1
 	command2
@@ -467,7 +467,7 @@ done
 </code></pre></div></div>
 
 <h4 id="while">while</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>while condition
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>while condition
 do
 	command
 done
@@ -475,7 +475,7 @@ done
 
 <h4 id="无限循环">无限循环</h4>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>while :
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>while :
 do
 	command
 done
@@ -483,7 +483,7 @@ done
 
 <p>或者</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>while true
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>while true
 do
 	command
 done
@@ -491,12 +491,12 @@ done
 
 <p>或者</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>for (( ; ; ))
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>for (( ; ; ))
 </code></pre></div></div>
 
 <h4 id="until">until</h4>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>until condition
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>until condition
 do
 	command
 done
@@ -504,7 +504,7 @@ done
 
 <h3 id="case">case</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>case "${opt}" in
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>case "${opt}" in
 	"Install-Puppet-Server" )
 		install_master $1
 		exit
@@ -542,7 +542,7 @@ esac
 <h2 id="文件包含">文件包含</h2>
 <p>可以使用source和.关键字，如：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>source ./function.sh
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>source ./function.sh
 . ./function.sh
 </code></pre></div></div>
 
@@ -550,17 +550,17 @@ esac
 
 <p>包含一个文件和执行一个文件一样，也要写这个文件的路径，不能光写文件名，比如上述例子中:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>. ./function.sh
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>. ./function.sh
 </code></pre></div></div>
 
 <p>不可以写作：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>. function.sh
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>. function.sh
 </code></pre></div></div>
 
 <p>如果function.sh是用户传入的参数，如何获得它的绝对路径呢？方法是：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>real_path=`readlink -f $1`#$1是用户输入的参数，如function.sh
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>real_path=`readlink -f $1`#$1是用户输入的参数，如function.sh
 . $real_path
 </code></pre></div></div>
 
@@ -606,9 +606,9 @@ esac
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=shell脚本快速入门&url=http://localhost:4000/shell-script/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/shell-script/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/shell-script/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=shell脚本快速入门&url=/shell-script/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/shell-script/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/shell-script/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -651,6 +651,10 @@ esac
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -668,10 +672,6 @@ esac
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

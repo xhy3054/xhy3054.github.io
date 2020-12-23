@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/cute8.jpg alt="c++中关于命名空间中成员的使用">
       </div>
       <div class="post_description">
-        <p class="post_meta">2018, Nov 06</p>
+        <p class="post_meta">2018, Nov 07</p>
         <h1 class="post_title">c++中关于命名空间中成员的使用</h1>
       </div>
     </header> <!-- End Header -->
@@ -71,7 +71,7 @@ MathJax.Hub.Config({
 <p><strong>命名空间</strong>就是为了防止命名冲突而出现的，每个库都可以拥有自己的命名空间，每个命名空间是一个作用域。然后如何使用一个特定命名空间里的成员，就是本文主要要讲的内容，不过我只挑了一些我认为需要记录下来的，因为有很多常识性的规则实在没有多说的必要。</p>
 
 <h1 id="using声明">using声明</h1>
-<p>一条<code class="highlighter-rouge">using</code>声明语句一次只引入命名空间的一个成员。例如最常见的<code class="highlighter-rouge">using std::cout</code>就是使用using声明将std命名空间中的标准输出对象<code class="highlighter-rouge">cout</code>引入<strong>当前作用域</strong>。其实就是在当前作用域声明了有<code class="highlighter-rouge">cout</code>这个对象，并且说明它定义在命名空间<code class="highlighter-rouge">std</code>里。因此如果当前作用域中已经有一个同名的对象，将会<strong>报错</strong>。</p>
+<p>一条<code class="language-plaintext highlighter-rouge">using</code>声明语句一次只引入命名空间的一个成员。例如最常见的<code class="language-plaintext highlighter-rouge">using std::cout</code>就是使用using声明将std命名空间中的标准输出对象<code class="language-plaintext highlighter-rouge">cout</code>引入<strong>当前作用域</strong>。其实就是在当前作用域声明了有<code class="language-plaintext highlighter-rouge">cout</code>这个对象，并且说明它定义在命名空间<code class="language-plaintext highlighter-rouge">std</code>里。因此如果当前作用域中已经有一个同名的对象，将会<strong>报错</strong>。</p>
 
 <p>需要注意的是using声明<strong>引入的是一个名字</strong>，所以在在引入一个<strong>函数</strong>时比较特殊。如下：</p>
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="n">ns</span><span class="o">::</span><span class="n">print</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>	<span class="c1">//错误：只能引入一个名字，不能指定形参列表</span>
@@ -87,7 +87,7 @@ MathJax.Hub.Config({
 </ol>
 
 <h1 id="using指示">using指示</h1>
-<p><code class="highlighter-rouge">using</code>指示是将某个命名空间中的所有内容都变得有效。但是有一点需要注意，那就是using指示是对<strong>最近的外层作用域</strong>有效。如下</p>
+<p><code class="language-plaintext highlighter-rouge">using</code>指示是将某个命名空间中的所有内容都变得有效。但是有一点需要注意，那就是using指示是对<strong>最近的外层作用域</strong>有效。如下</p>
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// namespace A and function f are defined at global scope</span>
 <span class="c1">//定义在全局作用域</span>
 <span class="k">namespace</span> <span class="n">A</span> <span class="p">{</span>
@@ -138,11 +138,11 @@ MathJax.Hub.Config({
 </blockquote>
 
 <h1 id="实参相关与类类型形参的函数查找">实参相关与类类型形参的函数查找</h1>
-<p>如果不用using指示与using声明，通常我们在使用一个命名空间中的成员时，需要使用作用域限定符<code class="highlighter-rouge">::</code>指明出处，但是有一点例外，那就是在使用函数时。</p>
+<p>如果不用using指示与using声明，通常我们在使用一个命名空间中的成员时，需要使用作用域限定符<code class="language-plaintext highlighter-rouge">::</code>指明出处，但是有一点例外，那就是在使用函数时。</p>
 
 <ol>
   <li>
-    <p>当我们调用一个函数，并且此函数的实参传递一个类类型的对象是，<strong>除了在常规作用域进行函数查找外，还会查找实参类所属的命名空间</strong>（比如<code class="highlighter-rouge">std::cout&lt;&lt;"helio"</code>中对于重载的输出运算符函数并没有指定作用域，但是依然找到了，便是根据实参cout）。</p>
+    <p>当我们调用一个函数，并且此函数的实参传递一个类类型的对象是，<strong>除了在常规作用域进行函数查找外，还会查找实参类所属的命名空间</strong>（比如<code class="language-plaintext highlighter-rouge">std::cout&lt;&lt;"helio"</code>中对于重载的输出运算符函数并没有指定作用域，但是依然找到了，便是根据实参cout）。</p>
   </li>
   <li>
     <p>如果形参是一个基类，传入的实参是该基类的一个派生类，则除了在常规作用域与实参类所属的命名空间中进行函数的查找外，还会在<strong>基类的作用域中</strong>进行该函数的查找。如下：</p>
@@ -185,9 +185,9 @@ MathJax.Hub.Config({
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=c++中关于命名空间中成员的使用&url=http://localhost:4000/cpp-namespace-use/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/cpp-namespace-use/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/cpp-namespace-use/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=c++中关于命名空间中成员的使用&url=/cpp-namespace-use/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/cpp-namespace-use/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/cpp-namespace-use/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -230,6 +230,10 @@ MathJax.Hub.Config({
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -247,10 +251,6 @@ MathJax.Hub.Config({
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

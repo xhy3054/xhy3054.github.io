@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/one-piece/one-piece12.jpg alt="IMU预积分">
       </div>
       <div class="post_description">
-        <p class="post_meta">2019, Jul 30</p>
+        <p class="post_meta">2019, Jul 31</p>
         <h1 class="post_title">IMU预积分</h1>
       </div>
     </header> <!-- End Header -->
@@ -150,7 +150,7 @@ MathJax.Hub.Config({
 
 <p>[\begin{aligned} \mathbf{b}<em>{k+1}^{a} &amp;=\mathbf{b}</em>{k}^{a} \ \mathbf{b}<em>{k+1}^{g} &amp;=\mathbf{b}</em>{k}^{g} \end{aligned}]</p>
 
-<p>在vins中，这部分的代码如下（<code class="highlighter-rouge">vins_estimator</code>模块中<code class="highlighter-rouge">factor</code>文件夹下的头文件<code class="highlighter-rouge">integration_base.h</code>中的<code class="highlighter-rouge">midPointIntegration</code>函数）：</p>
+<p>在vins中，这部分的代码如下（<code class="language-plaintext highlighter-rouge">vins_estimator</code>模块中<code class="language-plaintext highlighter-rouge">factor</code>文件夹下的头文件<code class="language-plaintext highlighter-rouge">integration_base.h</code>中的<code class="language-plaintext highlighter-rouge">midPointIntegration</code>函数）：</p>
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="c1">//此处预积分也就是在相邻两帧之间的相对积分，得到的是相对的位姿变换</span>
 
         <span class="c1">//ROS_INFO("midpoint integration"); 加速度中值测量前一个测量</span>
@@ -185,9 +185,9 @@ MathJax.Hub.Config({
 </blockquote>
 
 <h1 id="vins中预积分的实现">vins中预积分的实现</h1>
-<p>vins中的预积分功能，主要是在<code class="highlighter-rouge">vins_estimator</code>模块中<code class="highlighter-rouge">factor</code>文件夹下的头文件<code class="highlighter-rouge">integration_base.h</code>中实现。</p>
+<p>vins中的预积分功能，主要是在<code class="language-plaintext highlighter-rouge">vins_estimator</code>模块中<code class="language-plaintext highlighter-rouge">factor</code>文件夹下的头文件<code class="language-plaintext highlighter-rouge">integration_base.h</code>中实现。</p>
 
-<p>在vins程序代码中，对于每两帧图像之间都会使用一个<code class="highlighter-rouge">integrationBase</code>对象维护此两帧之间的预积分。其中主要有以下几个值得注意的地方：</p>
+<p>在vins程序代码中，对于每两帧图像之间都会使用一个<code class="language-plaintext highlighter-rouge">integrationBase</code>对象维护此两帧之间的预积分。其中主要有以下几个值得注意的地方：</p>
 
 <ol>
   <li>
@@ -217,9 +217,9 @@ MathJax.Hub.Config({
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=IMU预积分&url=http://localhost:4000/pre-integration/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/pre-integration/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/pre-integration/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=IMU预积分&url=/pre-integration/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/pre-integration/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/pre-integration/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -262,6 +262,10 @@ MathJax.Hub.Config({
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -279,10 +283,6 @@ MathJax.Hub.Config({
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

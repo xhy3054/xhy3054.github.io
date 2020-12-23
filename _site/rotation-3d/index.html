@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/one-piece/one-piece6.jpg alt="三维中间中旋转的表示方式--欧拉角、旋转矩阵、旋转向量、四元数">
       </div>
       <div class="post_description">
-        <p class="post_meta">2019, Jun 18</p>
+        <p class="post_meta">2019, Jun 19</p>
         <h1 class="post_title">三维中间中旋转的表示方式--欧拉角、旋转矩阵、旋转向量、四元数</h1>
       </div>
     </header> <!-- End Header -->
@@ -69,7 +69,10 @@ MathJax.Hub.Config({
       <p>三维空间中的旋转有很多种表示方式，欧拉角，旋转矩阵，旋转向量，四元数。由于在slam与机器人中会大量用到这方面的知识，所以在这里将此方面的知识总结一下，方便以后查阅。</p>
 
 <h2 id="欧拉角euler-angle">欧拉角（Euler Angle）</h2>
-<p>在上面这些表示方式中，我们最容易理解的就是欧拉角了。这种表示方式在飞行器中使用的很多。</p>
+<blockquote>
+  <p>欧拉角可以使用滑翔翼飞行器控制来理解，比如对于下面这张图，一般假设红色轴为z轴，则z轴表示空间的第三维，则去掉这一维度表示飞行器在一个二维平面上；蓝色轴为x轴，也是<strong>飞行器的朝向</strong>，因此绕此轴转动就像是飞行器在做翻滚动作，因此叫翻滚角（roll）；绿色轴为y轴，绕这个轴转动其实就是飞机开始准备向上飞或者向下飞了，因此叫俯仰角（pitch）；同理，绕红色轴也就是z轴转动代表飞机开始调整自身在二维平面上的朝向了，因此叫偏航角（yaw）。</p>
+</blockquote>
+
 <div style="text-align: center">
 <img src="/assets/img/rotation/euler_angle.png" />
 </div>
@@ -83,13 +86,13 @@ MathJax.Hub.Config({
 <p>欧拉角的优点是非常直观，但是会有以下几个缺点：</p>
 
 <ol>
-  <li>
-    <p>欧拉角表示方式不唯一。由上面分析知道当yaw、pitch、roll的顺序变换后，会有不同的组合可以达到同样的效果。</p>
-  </li>
-  <li>
-    <p>万向锁问题。</p>
-  </li>
+  <li>欧拉角表示方式不唯一。由上面分析知道当yaw、pitch、roll的顺序变换后，会有不同的组合可以达到同样的效果。</li>
+  <li>万向锁问题。</li>
 </ol>
+
+<blockquote>
+  <p>万向锁问题：因为<strong>飞行器的朝向即为x轴的方向</strong>，所以欧拉角三个轴是一直在变的。比如在yaw-pitch-roll这种顺序的欧拉角姿态调整中，在中间pitch俯仰角度调整为90度时，当前的x轴会与初始的z轴重合，即接下来进行roll的角度调整时其实与第一次yaw角度调整是在同一个轴（初始的z轴）上进行的，这使得系统平白丢失了一个自由度（进行了三次旋转，但是其实两次旋转就可以完成）。</p>
+</blockquote>
 
 <h2 id="旋转矩阵">旋转矩阵</h2>
 <p>其实在计算坐标变换时，我们使用最多的表示旋转的方式是其实旋转矩阵。三维空间中的旋转矩阵是<strong>3×3</strong>的矩阵，将欧拉角变换为旋转矩阵的计算方式如下：</p>
@@ -246,9 +249,9 @@ MathJax.Hub.Config({
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=三维中间中旋转的表示方式--欧拉角、旋转矩阵、旋转向量、四元数&url=http://localhost:4000/rotation-3d/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/rotation-3d/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/rotation-3d/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=三维中间中旋转的表示方式--欧拉角、旋转矩阵、旋转向量、四元数&url=/rotation-3d/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/rotation-3d/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/rotation-3d/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -291,6 +294,10 @@ MathJax.Hub.Config({
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -308,10 +315,6 @@ MathJax.Hub.Config({
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

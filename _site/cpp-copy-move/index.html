@@ -60,13 +60,13 @@ MathJax.Hub.Config({
         <img src=/assets/img/cute4.jpg alt="c++中的移动操作">
       </div>
       <div class="post_description">
-        <p class="post_meta">2018, Oct 26</p>
+        <p class="post_meta">2018, Oct 27</p>
         <h1 class="post_title">c++中的移动操作</h1>
       </div>
     </header> <!-- End Header -->
 
     <div class="entry_content">
-      <p>在此需要强调一点，c++中的移动操作不是指标准库函数<code class="highlighter-rouge">move</code>，它仅仅只是一个辅助移动操作顺利进行的标准库函数而已，功能十分单一。</p>
+      <p>在此需要强调一点，c++中的移动操作不是指标准库函数<code class="language-plaintext highlighter-rouge">move</code>，它仅仅只是一个辅助移动操作顺利进行的标准库函数而已，功能十分单一。</p>
 
 <h1 id="对象的移动">对象的移动</h1>
 <p>本文我们讲的移动是指对象的移动操作，与拷贝操作相对等的一种操作。</p>
@@ -78,7 +78,7 @@ MathJax.Hub.Config({
 <p>也是因为上述拷贝与移动操作的差别，有一些特殊的对象（IO类对象、unique_ptr类对象等）<strong>只支持移动操作而不支持拷贝操作</strong>，比如标准输入输出对象cout与cin，这是因为输入/输出缓冲区只有一个，不可能有多个对象都管理它。</p>
 
 <h2 id="移动构造函数与移动赋值运算符">移动构造函数与移动赋值运算符</h2>
-<p>相比于移动构造函数与移动赋值运算符，我们更熟悉的可能是拷贝构造函数与拷贝赋值运算符。其实二者函数名完全一样，不一样的是<strong>参数形式从左值引用换成了右值引用</strong>。也因此，一般移动操作都会搭配标准库函数<code class="highlighter-rouge">std::move()</code>使用，这个函数负责<strong>显式地将一个左值转换为对应的右值类型</strong>，它<strong>返回的是一个右值类型的值</strong>。关于右值引用与<code class="highlighter-rouge">std::move()</code>的使用我在<a href="https://xhy3054.github.io/reference-cpp/">c++中的引用</a>这篇博客中有更系统的提到。</p>
+<p>相比于移动构造函数与移动赋值运算符，我们更熟悉的可能是拷贝构造函数与拷贝赋值运算符。其实二者函数名完全一样，不一样的是<strong>参数形式从左值引用换成了右值引用</strong>。也因此，一般移动操作都会搭配标准库函数<code class="language-plaintext highlighter-rouge">std::move()</code>使用，这个函数负责<strong>显式地将一个左值转换为对应的右值类型</strong>，它<strong>返回的是一个右值类型的值</strong>。关于右值引用与<code class="language-plaintext highlighter-rouge">std::move()</code>的使用我在<a href="https://xhy3054.github.io/reference-cpp/">c++中的引用</a>这篇博客中有更系统的提到。</p>
 
 <p>如下是对一个对象同时定义拷贝与移动操作：</p>
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
@@ -148,9 +148,9 @@ MathJax.Hub.Config({
 </code></pre></div></div>
 <hr />
 
-<p>我们会发现我们<strong>将移动操作声明成<code class="highlighter-rouge">noexcept</code></strong>，这个是因为移动操作通常只是<strong>窃取</strong>资源，本身并不分配资源，所以通常不会抛出任何异常。我们提前告诉编译器，可以使编译器可能会为了检测异常做一些额外的工作。</p>
+<p>我们会发现我们<strong>将移动操作声明成<code class="language-plaintext highlighter-rouge">noexcept</code></strong>，这个是因为移动操作通常只是<strong>窃取</strong>资源，本身并不分配资源，所以通常不会抛出任何异常。我们提前告诉编译器，可以使编译器可能会为了检测异常做一些额外的工作。</p>
 
-<p>同时移动操作需要<strong>使得自己的参数对象（源目标对象）在被窃取了资源后依然可以正常赋值、析构</strong>。这个操作必须是移动操作来完成，<code class="highlighter-rouge">std::move()</code>函数只是返回一个右值来表示源对象。使得移动操作可以顺利进行。</p>
+<p>同时移动操作需要<strong>使得自己的参数对象（源目标对象）在被窃取了资源后依然可以正常赋值、析构</strong>。这个操作必须是移动操作来完成，<code class="language-plaintext highlighter-rouge">std::move()</code>函数只是返回一个右值来表示源对象。使得移动操作可以顺利进行。</p>
 
 <h2 id="合成的移动操作">合成的移动操作</h2>
 <p>与拷贝操作相同，默认情况下，编译器也会<strong>自动生成移动操作</strong>。但是与默认生成拷贝操作的规则大不相同。</p>
@@ -165,7 +165,7 @@ MathJax.Hub.Config({
 <p>同时，更常见的情况是一个类<strong>只支持拷贝操作，不支持移动操作</strong>，此时，<strong>传入右值依旧可以完成拷贝操作</strong>。</p>
 
 <blockquote>
-  <p><strong>原因</strong>很好理解，我们在定义拷贝操作时，因为不会对源目标对象做更改，所以常将参数声明成<code class="highlighter-rouge">const &amp;</code>的类型，而这种类型是可以绑定到一个右值上的。而右值引用不能绑定到一个左值上。</p>
+  <p><strong>原因</strong>很好理解，我们在定义拷贝操作时，因为不会对源目标对象做更改，所以常将参数声明成<code class="language-plaintext highlighter-rouge">const &amp;</code>的类型，而这种类型是可以绑定到一个右值上的。而右值引用不能绑定到一个左值上。</p>
 </blockquote>
 
 <h1 id="参考资料">参考资料</h1>
@@ -180,9 +180,9 @@ MathJax.Hub.Config({
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=c++中的移动操作&url=http://localhost:4000/cpp-copy-move/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/cpp-copy-move/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/cpp-copy-move/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=c++中的移动操作&url=/cpp-copy-move/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/cpp-copy-move/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/cpp-copy-move/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -225,6 +225,10 @@ MathJax.Hub.Config({
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -242,10 +246,6 @@ MathJax.Hub.Config({
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

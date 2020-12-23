@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/cute6.jpg alt="c++中的模板实例化问题">
       </div>
       <div class="post_description">
-        <p class="post_meta">2018, Nov 02</p>
+        <p class="post_meta">2018, Nov 03</p>
         <h1 class="post_title">c++中的模板实例化问题</h1>
       </div>
     </header> <!-- End Header -->
@@ -80,9 +80,9 @@ MathJax.Hub.Config({
 <p>在新标准中，我们可以通过控制<strong>显式实例化</strong>来避免这种开销。</p>
 
 <h3 id="控制实例化">控制实例化</h3>
-<p>与多文件中声明一个变量相同，可以使用关键字<code class="highlighter-rouge">extern</code>来承诺在程序其他位置会有一个该实例化的非<code class="highlighter-rouge">extern</code>声明，只需要在链接成可执行程序时将含有实例化的<code class="highlighter-rouge">.o</code>文件链接上就可以了。<strong>因此使用关键字<code class="highlighter-rouge">extern</code>进行一个模板的声明时不会在本文件中生成实例化代码。</strong></p>
+<p>与多文件中声明一个变量相同，可以使用关键字<code class="language-plaintext highlighter-rouge">extern</code>来承诺在程序其他位置会有一个该实例化的非<code class="language-plaintext highlighter-rouge">extern</code>声明，只需要在链接成可执行程序时将含有实例化的<code class="language-plaintext highlighter-rouge">.o</code>文件链接上就可以了。<strong>因此使用关键字<code class="language-plaintext highlighter-rouge">extern</code>进行一个模板的声明时不会在本文件中生成实例化代码。</strong></p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>extern template declaration;	//实例化声明
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>extern template declaration;	//实例化声明
 template decaration;	//实例化定义
 </code></pre></div></div>
 
@@ -91,14 +91,14 @@ template decaration;	//实例化定义
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//templatebuild.cpp</span>
 <span class="c1">//实例化文件必须为每个在其他文件中声明为extern的类型和函数提供一个（非extern）的定义</span>
 <span class="k">template</span> <span class="kt">int</span> <span class="nf">compare</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span><span class="p">);</span>
-<span class="k">template</span> <span class="k">class</span> <span class="nc">Blob</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">template</span> <span class="k">class</span> <span class="nc">Blob</span><span class="o">&lt;</span><span class="n">string</span><span class="p">&gt;;</span>
 </code></pre></div></div>
 <hr />
 
 <p>第二个文件中</p>
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//application.cpp</span>
 <span class="c1">//这些模板类型必须在其他位置已经进行实例化</span>
-<span class="k">extern</span> <span class="k">template</span> <span class="k">class</span> <span class="nc">Blob</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="p">;</span>	<span class="c1">//声明，接下来就可以使用类Blob&lt;string&gt;了</span>
+<span class="k">extern</span> <span class="k">template</span> <span class="k">class</span> <span class="nc">Blob</span><span class="o">&lt;</span><span class="n">string</span><span class="p">&gt;;</span>	<span class="c1">//声明，接下来就可以使用类Blob&lt;string&gt;了</span>
 <span class="n">Blob</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">b1</span><span class="p">;</span>	<span class="c1">//像一个普通的类一样使用</span>
 <span class="k">extern</span> <span class="k">template</span> <span class="kt">int</span> <span class="nf">compare</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span><span class="p">);</span>
 <span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
@@ -106,7 +106,7 @@ template decaration;	//实例化定义
 </code></pre></div></div>
 <hr />
 
-<p>在编译时，需要将<code class="highlighter-rouge">templatebuild.o</code>与<code class="highlighter-rouge">application.o</code>链接到一起，生成可执行文件。</p>
+<p>在编译时，需要将<code class="language-plaintext highlighter-rouge">templatebuild.o</code>与<code class="language-plaintext highlighter-rouge">application.o</code>链接到一起，生成可执行文件。</p>
 
 <h3 id="类模板的实例化定义">类模板的实例化定义</h3>
 <p>此外，需要说明的一点是，<strong>一个类模板的实例化定义会实例化该模板的所有成员</strong>，包括内联的成员函数。</p>
@@ -124,9 +124,9 @@ template decaration;	//实例化定义
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=c++中的模板实例化问题&url=http://localhost:4000/cpp-template-class/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/cpp-template-class/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/cpp-template-class/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=c++中的模板实例化问题&url=/cpp-template-class/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/cpp-template-class/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/cpp-template-class/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -169,6 +169,10 @@ template decaration;	//实例化定义
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -186,10 +190,6 @@ template decaration;	//实例化定义
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>

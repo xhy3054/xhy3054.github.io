@@ -60,7 +60,7 @@ MathJax.Hub.Config({
         <img src=/assets/img/cartoon6.jpg alt="相机成像的几何描述">
       </div>
       <div class="post_description">
-        <p class="post_meta">2019, Jan 09</p>
+        <p class="post_meta">2019, Jan 10</p>
         <h1 class="post_title">相机成像的几何描述</h1>
       </div>
     </header> <!-- End Header -->
@@ -73,7 +73,7 @@ MathJax.Hub.Config({
 <div style="text-align: center">
 <img src="/assets/img/camera_needle/camera_needle.jpg" />
 </div>
-<p>其中，O为相机的光心，也是针孔模型的针孔。现实世界的空间点P，在经过小孔O投影之后，落在了物理成像平面<code class="highlighter-rouge">O'-x'-y'</code>上，成像点是 P’ ，假设P的相机坐标系坐标是$[X,Y,Z]^T$，P’　的相机坐标系坐标为$[X’,Y’,Z’]^T$，并且假设物理成像平面到小孔的距离为f(焦距)。则这会构成如下相似三角形</p>
+<p>其中，O为相机的光心，也是针孔模型的针孔。现实世界的空间点P，在经过小孔O投影之后，落在了物理成像平面<code class="language-plaintext highlighter-rouge">O'-x'-y'</code>上，成像点是 P’ ，假设P的相机坐标系坐标是$[X,Y,Z]^T$，P’　的相机坐标系坐标为$[X’,Y’,Z’]^T$，并且假设物理成像平面到小孔的距离为f(焦距)。则这会构成如下相似三角形</p>
 <div style="text-align: center">
 <img src="/assets/img/camera_needle/trang.jpg" />
 </div>
@@ -126,14 +126,14 @@ MathJax.Hub.Config({
 <div style="text-align: center">
 <img src="/assets/img/camera_needle/camera1.png" />
 </div>
-<p>其中相机坐标系坐标<code class="highlighter-rouge">(X,Y,Z)</code>到投影平面上的齐次坐标<code class="highlighter-rouge">(x,y,1)</code>可以表示如上。</p>
+<p>其中相机坐标系坐标<code class="language-plaintext highlighter-rouge">(X,Y,Z)</code>到投影平面上的齐次坐标<code class="language-plaintext highlighter-rouge">(x,y,1)</code>可以表示如上。</p>
 
 <blockquote>
   <p>注意，此处主要是两步，第一步是$(X,Y,Z)$变为$(\dfrac{X}{Z}, \dfrac{Y}{Z}, 1)$，即<strong>从相机坐标系坐标变换到归一化平面上</strong>。第二步是将$(\dfrac{X}{Z}, \dfrac{Y}{Z})$变换为$(f \dfrac{X}{Z}, f \dfrac{Y}{Z})$，<strong>即将坐标从归一化平面变换到成像平面上</strong>。这里的第二步其实是包含在了内参操作里的。</p>
 </blockquote>
 
 <h2 id="转换为像素坐标">转换为像素坐标</h2>
-<p>由上已经知道，空间点相机坐标系坐标<code class="highlighter-rouge">(X,Y,Z)</code>到成像平面投影的坐标<code class="highlighter-rouge">(x,y)</code>变换为</p>
+<p>由上已经知道，空间点相机坐标系坐标<code class="language-plaintext highlighter-rouge">(X,Y,Z)</code>到成像平面投影的坐标<code class="language-plaintext highlighter-rouge">(x,y)</code>变换为</p>
 
 <p>[x = f\frac{X}{Z}]</p>
 
@@ -160,7 +160,7 @@ MathJax.Hub.Config({
 <p>其中矩阵K就是相机的<strong>内参矩阵</strong>，我们通常认为，内参矩阵在相机出厂之后是固定的，不会再使用过程中发生变化。有时我们并不知道相机的内参，自己确定内参的操作叫做<strong>标定</strong>。</p>
 
 <blockquote>
-  <p>还有一点可以观察到，在相机坐标系下，<strong>从原点出发的射线上的点全部都投影到一个像素坐标上了</strong>。这个可以通过将上式右边的三维坐标<code class="highlighter-rouge">(X,Y,Z)</code>任意乘以一个常数，由于齐次坐标的尺度等价性，最后的投影结果不会改变。</p>
+  <p>还有一点可以观察到，在相机坐标系下，<strong>从原点出发的射线上的点全部都投影到一个像素坐标上了</strong>。这个可以通过将上式右边的三维坐标<code class="language-plaintext highlighter-rouge">(X,Y,Z)</code>任意乘以一个常数，由于齐次坐标的尺度等价性，最后的投影结果不会改变。</p>
 </blockquote>
 
 <h1 id="总结公式变换过程">总结：公式变换过程</h1>
@@ -201,9 +201,9 @@ MathJax.Hub.Config({
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=相机成像的几何描述&url=http://localhost:4000/camerca-module/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/camerca-module/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=http://localhost:4000/camerca-module/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=相机成像的几何描述&url=/camerca-module/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/camerca-module/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/camerca-module/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
@@ -246,6 +246,10 @@ MathJax.Hub.Config({
       <div class="recent_list">
         
           
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
@@ -263,10 +267,6 @@ MathJax.Hub.Config({
         
           
             <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
-          
-        
-          
-            <a href="/memory-alignment/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece22.jpg )"><span>SSE/AVX加速时的内存对齐问题</span></a>
           
         
       </div>
