@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>鸽群优化 - line - 千里之行</title>
+	<meta name="description" content="">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta property="og:image" content="">
+	<link rel="shortcut icon" href="/assets/img/favicon/favicon.ico" type="image/x-icon">
+	<link rel="apple-touch-icon" href="/assets/img/favicon/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/assets/img/favicon/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/assets/img/favicon/apple-touch-icon-114x114.png">
+	<!-- Chrome, Firefox OS and Opera -->
+	<meta name="theme-color" content="#d25469">
+	<!-- Windows Phone -->
+	<meta name="msapplication-navbutton-color" content="#d25469">
+	<!-- iOS Safari -->
+	<meta name="apple-mobile-web-app-status-bar-style" content="#d25469">
+	<!-- Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+	<!-- Styles -->
+	<link rel="stylesheet" href="/assets/css/main.css">
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
+<!-- mathjax config similar to math.stackexchange --> 
+<script type="text/x-mathjax-config"> 
+MathJax.Hub.Config({ 
+    jax: ["input/TeX", "output/HTML-CSS"], 
+    tex2jax: { 
+        inlineMath: [ ['$', '$'] ], 
+        displayMath: [ ['$$', '$$']], 
+        processEscapes: true, 
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
+    messageStyle: "none", 
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
+}); 
+</script>
+
+
+</head>
+
+<body>
+
+  
+<header class="main_header">
+  <a href="/" class="logo">line</a>
+  <nav class="main_menu">
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
+  </nav>
+</header> <!-- End Section Header -->
+
+
+<main class="post_content">
+  <article class="post">
+    <header>
+      <div class="post_image">
+        <img src=/assets/img/one-piece/one-piece31.jpg alt="鸽群优化">
+      </div>
+      <div class="post_description">
+        <p class="post_meta">2021, Jan 05</p>
+        <h1 class="post_title">鸽群优化</h1>
+      </div>
+    </header> <!-- End Header -->
+
+    <div class="entry_content">
+      <h2 id="鸽群优化">鸽群优化</h2>
+
+<ul>
+  <li>
+    <p>鸽子的导航工具</p>
+
+    <ul>
+      <li>太阳：鸽子可记忆鸽巢位置不同时刻的太阳高度角和方位角，并通过太阳高度信息进行导航；</li>
+      <li>磁场：鸽子上喙结构含有磁感应结构，磁石粒子的信号是通过鼻子经三叉神经反馈给大脑，从而提高导航信息。</li>
+      <li>地标：鸽子依靠重力场进行空间定位，通过比较鸽房的陀螺仪设置与其所在地的陀螺仪数值，设定一个初始的返航方向。</li>
+      <li>导航工具切换：鸽子会在旅程不同阶段使用不同导航工具：前期依赖太阳和磁场，后期依赖地标。</li>
+    </ul>
+
+    <blockquote>
+      <p>鸽群优化：收敛速度快，不易陷入局部最优点等优势。</p>
+    </blockquote>
+
+    <p>初始（依赖磁场或太阳）</p>
+
+    <p>$V_i^{Nc} = V_i^{Nc-1}.e^{-R\times Nc} + rand.(X_{gbest} - X_i^{Nc-1})$</p>
+
+    <p>$X_i^{Nc} = X_i^{Nc-1} + V_i^{Nc}$</p>
+
+    <blockquote>
+      <p>1.此时的速度通过前一时刻速度还有当前最优位置与当前所在位置的差共同决定；根据速度更新位置。</p>
+
+      <p>2.最优位置$X_{gbest}$是通过比较鸽群中每一个鸽子的位置查看哪个是最好的，然后所有鸽子将向拥有最好位置的鸽子进行方向的调整和飞行。</p>
+
+      <p>3.R是地图和指南针因子，可认为设定为0~1之间的数；Nc是当前迭代次数；$X_{gbest}$是在Nc-1次迭代循环后通过比较所有鸽子的位置，得到的全局最优位置；</p>
+    </blockquote>
+
+    <p>后来（根据地标导航）</p>
+
+    <p>$X_i^{Nc} = X_i^{Nc-1} + rand.(X_{center}^{Nc-1} - X_i^{Nc-1}) $</p>
+
+    <p>$X_{\text{center}}^{Nc-1} = \frac{\sum_{i=1}^{N^{Nc-1}} X_{i}^{Nc-1}\cdot F\left(X_i^{Nc-1}\right)}
+{N^{Nc-1} \cdot \sum_{i=1}^{N^{Nc-1}} F\left(X_i^{Nc-1}\right)} $</p>
+
+    <p>$N^{Nc}=\frac{N^{Nc-1}}{2}$</p>
+
+    <blockquote>
+      <p>1.每次迭代循环中将鸽子的总数N折半一次（第三个式子），根据每只鸽子的当前位置依据评价指标进行排序，排在后半段的鸽子被认为远离目的地并且不熟悉地标，从而被舍弃；</p>
+
+      <p>2.将余下鸽子的中心位置（第二个式子，有甲醛）当成地标作为飞行的参考方向（第三个式子）；</p>
+    </blockquote>
+  </li>
+</ul>
+
+<h1 id="参考文献">参考文献</h1>
+
+<ul>
+  <li>[1]北航智能自主系统课件（段海滨老师）。</li>
+</ul>
+
+    </div>
+    
+    <div class="post_wrapper">
+      <footer class="post_footer cf">
+        <div class="post_share">
+          <span>Share:</span>
+          <a href="https://twitter.com/intent/tweet?text=鸽群优化&url=/pigeon/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/pigeon/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/pigeon/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+        </div>
+        <div class="post_tag">
+          <span>Tags:</span>
+          
+          <a href="/tags#多机协同" class="tag">多机协同</a>
+          
+        </div>
+      </footer>
+    </div>
+  </article> <!-- End Section Post -->
+
+  <section class="author cf">
+    <div class="post_wrapper">
+      <div class="author_image">
+        <img src="/assets/img/wechat.jpg" alt="Author face">
+      </div>
+      <div class="author_info">
+        <h2 class="author_title">line</h2>
+        <p class="author_subtitle">怕什么真理无穷，进一寸有一寸的欢喜。</p>
+        <div class="author_social">
+          
+          <span class="author_email"><i class="fa fa-envelope-o" aria-hidden="true"></i> <a href="mailto:xianghengyong17@mails.ucas.edu.cn">xianghengyong17@mails.ucas.edu.cn</a></span>
+          
+          
+          
+          <span class="author_phone"><i class="fa fa-phone" aria-hidden="true"></i> <a href="tel:1314-131-0370">1314-131-0370</a></span>
+          
+
+          
+          <span class="author_website"><i class="fa fa-link" aria-hidden="true"></i> <a href="https://xhy3054.github.io/" target="_blank">https://xhy3054.github.io/</a></span>
+                      
+        </div>
+      </div>
+    </div>
+  </section> <!-- End Section Author -->
+
+  <section class="recent_box">
+    <div class="post_wrapper">
+      <h2 class="recent_title">Recent post</h2>
+      <div class="recent_list">
+        
+          
+            <a href="/pigeon/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece31.jpg )"><span>鸽群优化</span></a>
+          
+        
+          
+            <a href="/dijkstra-astar/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece29.jpg )"><span>dijkstra算法和astar算法</span></a>
+          
+        
+          
+            <a href="/auction/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece30.jpg )"><span>拍卖算法</span></a>
+          
+        
+          
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
+            <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
+          
+        
+          
+            <a href="/pychram-remote/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece26.jpg )"><span>pycharm远程调试</span></a>
+          
+        
+      </div>
+    </div>
+  </section> <!-- End Section Recent Box -->
+  
+  
+<section class="comment_area">
+  <div class="comment_wrapper">
+    
+  </div>
+</section> <!-- End Section Comment Area -->
+  
+</main> <!-- End Section Post Content -->
+
+
+<footer class="main_footer">
+  <div class="wrapper">
+    
+<ul class="social_footer">
+  
+  <li><a href="#" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a></li>      
+  
+
+  
+  <li><a href="#" target="_blank"><i class="fa fa-wechat" aria-hidden="true"></i></a></li>
+  
+
+  
+  <li><a href="#" target="_blank"><i class="fa fa-qq" aria-hidden="true"></i></a></li>
+  
+
+  
+  <li><a href="#" target="_blank"><i class="fa fa-weibo" aria-hidden="true"></i></a></li>
+  
+
+  
+  <li><a href="#" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+  
+
+  
+  <li><a href="#" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+  
+  
+  <li><a href="#" target="_blank"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
+  
+  
+  <li><a href="#" target="_blank"><i class="fa fa-dribbble" aria-hidden="true"></i></a></li>
+  
+  
+  <li><a href="#" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+  
+</ul>
+
+    <div class="copyright">
+      <p>&copy; 2021. Design by line</p>
+    </div>
+  </div>
+</footer> <!-- End Section Footer -->
+
+
+
+  
+<div class="top" title="Top"><i class="fa fa-chevron-up" aria-hidden="true"></i></div> <!-- End Top Scroll -->
+  
+<script src="/assets/js/jquery-3.2.1.min.js"></script>
+<script src="/assets/js/jquery.vide.min.js"></script>
+<script src="/assets/js/custom.js"></script>
+<!-- End Javascript -->
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', '', 'auto');
+  ga('send', 'pageview');
+</script> <!-- End Analytics -->
+</body>
+</html>
