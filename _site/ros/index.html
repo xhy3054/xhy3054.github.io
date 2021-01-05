@@ -88,14 +88,18 @@ MathJax.Hub.Config({
 <h2 id="ros的环境管理">ros的环境管理</h2>
 <p>在$ros$安装完毕后，我们会将<code class="language-plaintext highlighter-rouge">source /opt/ros/kinetic/etc/ros</code>写入到<code class="language-plaintext highlighter-rouge">~/.bashrc</code>中，这样每次打开终端，会自动设置$ros$相关的环境变量。</p>
 
-<p>同时，通常除了系统的环境变量外，我们基于$ros$的开发通常会存在于一个工作空间中，在这个工作空间中我们也会新建一些包，此时我们也会需要导入这个工作空间的环境变量，使用<code class="language-plaintext highlighter-rouge">source ws/devel/setup.bash</code>。</p>
+<p>同时，通常除了系统的环境变量外，我们基于$ros$的开发通常是以工作空间为单位的，不同的工作空间的运行环境可能是有区别的，因此此时我们需要导入这个工作空间的环境变量，使用<code class="language-plaintext highlighter-rouge">source ws/devel/setup.bash</code>。在这个工作空间中我们也可以新建开发一些功能包。</p>
+
+<blockquote>
+  <p>可以理解为ros的每个工作空间为一个项目，工作空间中存在的每一个包代表着该项目需要的一个功能模块。</p>
+</blockquote>
 
 <h2 id="ros文件系统">ros文件系统</h2>
 <p>ros文件系统主要指的是在硬盘上ROS源代码的组织形式。主要有包（package）、元包（meta package）、工作空间（workspace）等概念。</p>
 <h3 id="工作空间">工作空间</h3>
 
 <blockquote>
-  <p>通常工作空间是我们开发某个应用的地方，在这里我们会新开发出一些专用的包来共我们的应用（node）使用。</p>
+  <p>通常工作空间是我们开发某个项目的地方，在这里我们会新开发出一些专用的包来共我们当前的这个项目或应用（node）使用。如下，每个工作空间可以就是一个文件夹，该文件夹中必须存在一个src文件夹，然后使用<code class="language-plaintext highlighter-rouge">catkin_make</code>即可对工作空间进行初始化，或者编译。</p>
 </blockquote>
 
 <ul>
@@ -115,7 +119,7 @@ catkin_make
 
 <h3 id="包">包</h3>
 <blockquote>
-  <p><strong>功能包（package）</strong>是构成ROS的基本单元。ROS应用程序是以功能包为单位开发的。功能包包括至少一个以上的节点或拥有用于运行其他功能包的节点的配置文件。它还包含功能包所需的所有文件，如用于运行各种进程的ROS依赖库、数据集和配置文件等。</p>
+  <p><strong>功能包（package）</strong>是构成一个ROS项目的基本单元。ROS应用程序是以功能包为单位开发的。功能包包括至少一个以上的节点或拥有用于运行其他功能包的节点的配置文件。它还包含功能包所需的所有文件，如用于运行各种进程的ROS依赖库、数据集和配置文件等。</p>
 </blockquote>
 
 <ul>
@@ -140,7 +144,7 @@ catkin_make
 </ul>
 
 <blockquote>
-  <p><strong>元功能包（metapackage）</strong>是一个具有共同目的的功能包的集合。例如，导航元功能包包含AMCL、DWA、EKF和map_server等10余个功能包。</p>
+  <p><strong>元功能包（metapackage）</strong>是一个具有共同目的的功能包的集合。例如，导航元功能包包含AMCL、DWA、EKF和map_server等10余个功能包。其实元功能包在功能上已经是一个应用了，但是我们还是需要将其放入工作空间的src文件夹下，这样才构成一个可以编译的项目。</p>
 </blockquote>
 
 <h3 id="常用命令">常用命令</h3>
@@ -391,6 +395,14 @@ rosparam list           列出参数名
       <div class="recent_list">
         
           
+            <a href="/dijkstra-astar/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece29.jpg )"><span>dijkstra算法和astar算法</span></a>
+          
+        
+          
+            <a href="/auction/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece30.jpg )"><span>拍卖算法</span></a>
+          
+        
+          
             <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
           
         
@@ -404,14 +416,6 @@ rosparam list           列出参数名
         
           
             <a href="/stereo-vision/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece25.jpg )"><span>双目相机模型与标定</span></a>
-          
-        
-          
-            <a href="/self-supervised-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece24.jpg )"><span>自监督学习备忘</span></a>
-          
-        
-          
-            <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
           
         
       </div>
@@ -467,7 +471,7 @@ rosparam list           列出参数名
 </ul>
 
     <div class="copyright">
-      <p>&copy; 2020. Design by line</p>
+      <p>&copy; 2021. Design by line</p>
     </div>
   </div>
 </footer> <!-- End Section Footer -->

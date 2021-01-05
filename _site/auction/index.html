@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>拍卖算法 - line - 千里之行</title>
+	<meta name="description" content="">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta property="og:image" content="">
+	<link rel="shortcut icon" href="/assets/img/favicon/favicon.ico" type="image/x-icon">
+	<link rel="apple-touch-icon" href="/assets/img/favicon/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/assets/img/favicon/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/assets/img/favicon/apple-touch-icon-114x114.png">
+	<!-- Chrome, Firefox OS and Opera -->
+	<meta name="theme-color" content="#d25469">
+	<!-- Windows Phone -->
+	<meta name="msapplication-navbutton-color" content="#d25469">
+	<!-- iOS Safari -->
+	<meta name="apple-mobile-web-app-status-bar-style" content="#d25469">
+	<!-- Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+	<!-- Styles -->
+	<link rel="stylesheet" href="/assets/css/main.css">
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
+<!-- mathjax config similar to math.stackexchange --> 
+<script type="text/x-mathjax-config"> 
+MathJax.Hub.Config({ 
+    jax: ["input/TeX", "output/HTML-CSS"], 
+    tex2jax: { 
+        inlineMath: [ ['$', '$'] ], 
+        displayMath: [ ['$$', '$$']], 
+        processEscapes: true, 
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
+    messageStyle: "none", 
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
+}); 
+</script>
+
+
+</head>
+
+<body>
+
+  
+<header class="main_header">
+  <a href="/" class="logo">line</a>
+  <nav class="main_menu">
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
+  </nav>
+</header> <!-- End Section Header -->
+
+
+<main class="post_content">
+  <article class="post">
+    <header>
+      <div class="post_image">
+        <img src=/assets/img/one-piece/one-piece30.jpg alt="拍卖算法">
+      </div>
+      <div class="post_description">
+        <p class="post_meta">2021, Jan 05</p>
+        <h1 class="post_title">拍卖算法</h1>
+      </div>
+    </header> <!-- End Header -->
+
+    <div class="entry_content">
+      <h1 id="拍卖算法">拍卖算法</h1>
+
+<blockquote>
+  <p><strong>拍卖算法</strong>是一种解决目标分配问题的算法。额这个算法我看了网上好多博客的讲解，都不是很理解，最后直接debug了一个代码，总算弄清楚了。果然源码面前，了无秘密。</p>
+</blockquote>
+
+<h2 id="问题描述">问题描述</h2>
+
+<ul>
+  <li><strong>情景描述</strong>：在一个拍卖场中，存在N个投标人，M件商品，需要将M件商品分配给投标人们。</li>
+  <li><strong>单分配问题</strong>：每个投标人对所有商品都有意愿争取，但是每人最多只能中标一件商品。（更复杂的暂且不谈）</li>
+  <li><strong>完全分配问题</strong>：是单分配问题，并且$N=M$。</li>
+  <li><strong>目标</strong>：拍卖行该如何分配商品给投标人，才能使得投标人综合获益最大？</li>
+</ul>
+
+<p>一个最经典的完全分配问题如下（表格中数据表示对应商品在对应投标人心中的价值）：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>商品价值</th>
+      <th>商品1</th>
+      <th>商品2</th>
+      <th>商品3</th>
+      <th>商品4</th>
+      <th>商品5</th>
+      <th>商品6</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>投标人1</td>
+      <td>11</td>
+      <td>18</td>
+      <td>11</td>
+      <td>18</td>
+      <td>33</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>投标人2</td>
+      <td>4</td>
+      <td>34</td>
+      <td>33</td>
+      <td>32</td>
+      <td>26</td>
+      <td>23</td>
+    </tr>
+    <tr>
+      <td>投标人3</td>
+      <td>3</td>
+      <td>0</td>
+      <td>27</td>
+      <td>24</td>
+      <td>14</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <td>投标人4</td>
+      <td>25</td>
+      <td>15</td>
+      <td>25</td>
+      <td>23</td>
+      <td>7</td>
+      <td>26</td>
+    </tr>
+    <tr>
+      <td>投标人5</td>
+      <td>30</td>
+      <td>18</td>
+      <td>34</td>
+      <td>20</td>
+      <td>17</td>
+      <td>29</td>
+    </tr>
+    <tr>
+      <td>投标人6</td>
+      <td>5</td>
+      <td>35</td>
+      <td>34</td>
+      <td>4</td>
+      <td>17</td>
+      <td>28</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>## 问题分析与数学建模</p>
+
+<ul>
+  <li>N：投标人数量，此处$N=6$；</li>
+  <li>M：商品数量，此处$M=6$；</li>
+  <li>$I={ i_1,…,i_N}$：投标人集合；</li>
+  <li>$J={j_1,…,j_M }$：商品集合；</li>
+  <li>A(n)：第n个投标人感兴趣的集合，此处$A(n)=J$；</li>
+  <li>$S={{i_{s1},j_{s1}},{i_{s2},j_{s2}},…,{i_{sT},j_{sT}} }$：分配情况集合，大小为T；</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>$W={w_{ij}</td>
+          <td>i \in I, j \in J }$：表示投标人i得到商品j可以得到的获益；</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>$P={p_j</td>
+          <td>j \in J }$：表示商品j当前的报价；</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>$F={f_{ij}</td>
+          <td>i\in I, j\in J }$：投标人i是否拍得商品j的集合，是则$f_{ij}=1$，否则$f_{ij}=0$。</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ul>
+
+<p>某种分配方案下，投标人的总收益为：
+\(\sum_{k=s1}^{sT}g_{i_kj_k} = \sum_{k=s1}^{sT} (w_{i_k j_k})\)
+因为每个投标人最多只能拍得一件商品，因此有(在此例中是一一对应应该等于1)：
+\(\sum_{j=1}^M f_{ij} \le 1, \forall i \in I\)
+每件商品都被拍卖，则有(分配集合与商品集合是一一对应的)
+\(T=M\)</p>
+
+<p>所以最终优化的模型应该为
+\(max \sum_{k=s1}^{sT}g_{i_kj_k} \\
+st. \sum_{j=1}^M f_{ij} \le 1, \forall i \in I \\
+T=M\)</p>
+
+<h2 id="拍卖算法流程实现">拍卖算法流程实现</h2>
+
+<ul>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>首先初始化参数：所有商品的初始报价$P={p_j</td>
+          <td>j \in J }$均为0，松弛互补参数$\epsilon=0.01$，待报价投标人集合$B=I$;</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>遍历B中每一个投标人i；
+    <ul>
+      <li>该投标人对每件商品的收益集合为$\pi_i = { w_{ij}-p_j}<em>{j\in J}$，计算该投标人的最大收益$\pi</em>{max}$和次大收益$\pi_{max2}$：</li>
+      <li>更新该投标人i的最大收益商品的报价为$p_j \mathrel{+}= \pi_{max} - \pi_{max2} + \epsilon$；</li>
+      <li>如果该投标人i的最大收益商品之前的报价不为0，则将之前对该商品报价的投标人放入B中；</li>
+      <li>将该投标人i从B中拿出；</li>
+    </ul>
+  </li>
+  <li>直到B中不再有没有拍得商品的投标人，算法截止；</li>
+</ul>
+
+<blockquote>
+  <p>上述算法需要满足$N \le M$</p>
+</blockquote>
+
+<h2 id="问题总结">问题总结</h2>
+
+<ul>
+  <li>首先，投标人根据不同商品目前的的竞标价格，可以知道自身竞标哪个商品可以获得最大收益，因此此处建立投标人的最大获益方程：</li>
+</ul>
+
+<p>[\pi_i = max_{k \in A(i)}{ a_{ik} - p_k }]</p>
+
+<ul>
+  <li>次大获益方程为：</li>
+</ul>
+
+<p>[\pi_{i1} = max_{k\in A(i),k \ne j}{a_{ik} - p_k}]</p>
+
+<ul>
+  <li>拍卖算法有初始化的参数很重要，一个是初始价格（起拍价），一个是松弛互补参数$\epsilon$；
+    <ul>
+      <li>对于完全分配问题，当取$\epsilon &lt; 1/N$时，该算法可以得到最优分配解。
+        <ul>
+          <li>如果一个商品已经分配了，它会一直保持分配状态，只是由于竞标价的迭代可能会不断的分给不同的投标人；</li>
+          <li>如果一个商品未分配，那它会一直保持为最初时的价格，而完全分配问题中，未分配的商品总会对应着一个未中标的投标人，所以随着其他商品竞标价的提升，未中标的投标人总会青睐尚未分配的商品的；</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="参考文献">参考文献</h1>
+
+<ul>
+  <li>[1] https://blog.csdn.net/weixin_47546390/article/details/108470396</li>
+</ul>
+
+    </div>
+    
+    <div class="post_wrapper">
+      <footer class="post_footer cf">
+        <div class="post_share">
+          <span>Share:</span>
+          <a href="https://twitter.com/intent/tweet?text=拍卖算法&url=/auction/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/auction/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/auction/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+        </div>
+        <div class="post_tag">
+          <span>Tags:</span>
+          
+          <a href="/tags#算法与数据结构" class="tag">算法与数据结构</a>
+          
+        </div>
+      </footer>
+    </div>
+  </article> <!-- End Section Post -->
+
+  <section class="author cf">
+    <div class="post_wrapper">
+      <div class="author_image">
+        <img src="/assets/img/wechat.jpg" alt="Author face">
+      </div>
+      <div class="author_info">
+        <h2 class="author_title">line</h2>
+        <p class="author_subtitle">怕什么真理无穷，进一寸有一寸的欢喜。</p>
+        <div class="author_social">
+          
+          <span class="author_email"><i class="fa fa-envelope-o" aria-hidden="true"></i> <a href="mailto:xianghengyong17@mails.ucas.edu.cn">xianghengyong17@mails.ucas.edu.cn</a></span>
+          
+          
+          
+          <span class="author_phone"><i class="fa fa-phone" aria-hidden="true"></i> <a href="tel:1314-131-0370">1314-131-0370</a></span>
+          
+
+          
+          <span class="author_website"><i class="fa fa-link" aria-hidden="true"></i> <a href="https://xhy3054.github.io/" target="_blank">https://xhy3054.github.io/</a></span>
+                      
+        </div>
+      </div>
+    </div>
+  </section> <!-- End Section Author -->
+
+  <section class="recent_box">
+    <div class="post_wrapper">
+      <h2 class="recent_title">Recent post</h2>
+      <div class="recent_list">
+        
+          
+            <a href="/dijkstra-astar/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece29.jpg )"><span>dijkstra算法和astar算法</span></a>
+          
+        
+          
+            <a href="/auction/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece30.jpg )"><span>拍卖算法</span></a>
+          
+        
+          
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+          
+        
+          
+            <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
+          
+        
+          
+            <a href="/pychram-remote/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece26.jpg )"><span>pycharm远程调试</span></a>
+          
+        
+          
+            <a href="/stereo-vision/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece25.jpg )"><span>双目相机模型与标定</span></a>
+          
+        
+      </div>
+    </div>
+  </section> <!-- End Section Recent Box -->
+  
+  
+<section class="comment_area">
+  <div class="comment_wrapper">
+    
+  </div>
+</section> <!-- End Section Comment Area -->
+  
+</main> <!-- End Section Post Content -->
+
+
+<footer class="main_footer">
+  <div class="wrapper">
+    
+<ul class="social_footer">
+  
+  <li><a href="#" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a></li>      
+  
+
+  
+  <li><a href="#" target="_blank"><i class="fa fa-wechat" aria-hidden="true"></i></a></li>
+  
+
+  
+  <li><a href="#" target="_blank"><i class="fa fa-qq" aria-hidden="true"></i></a></li>
+  
+
+  
+  <li><a href="#" target="_blank"><i class="fa fa-weibo" aria-hidden="true"></i></a></li>
+  
+
+  
+  <li><a href="#" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+  
+
+  
+  <li><a href="#" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+  
+  
+  <li><a href="#" target="_blank"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
+  
+  
+  <li><a href="#" target="_blank"><i class="fa fa-dribbble" aria-hidden="true"></i></a></li>
+  
+  
+  <li><a href="#" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+  
+</ul>
+
+    <div class="copyright">
+      <p>&copy; 2021. Design by line</p>
+    </div>
+  </div>
+</footer> <!-- End Section Footer -->
+
+
+
+  
+<div class="top" title="Top"><i class="fa fa-chevron-up" aria-hidden="true"></i></div> <!-- End Top Scroll -->
+  
+<script src="/assets/js/jquery-3.2.1.min.js"></script>
+<script src="/assets/js/jquery.vide.min.js"></script>
+<script src="/assets/js/custom.js"></script>
+<!-- End Javascript -->
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', '', 'auto');
+  ga('send', 'pageview');
+</script> <!-- End Analytics -->
+</body>
+</html>

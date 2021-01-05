@@ -136,7 +136,7 @@ MathJax.Hub.Config({
 </code></pre></div></div>
 
 <p>这有可能是因为目前ubuntu主机一般都是默认安装了<strong>openssh-client</strong>，但是没有安装<strong>openssh-server</strong>，可以使用如下命令解决</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#首先使用如下命令查看看是否有sshd进行</span>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#首先使用如下命令查看看是否有sshd进行(注意：ssh-agent客户端程序是不行的，sshd是server线程)</span>
 <span class="nv">$ </span>ps <span class="nt">-e</span> | <span class="nb">grep </span>ssh
 <span class="c">#如果没有基本就是得自己安装了</span>
 <span class="nv">$ </span><span class="nb">sudo </span>apt-get <span class="nb">install </span>openssh-server
@@ -144,7 +144,7 @@ MathJax.Hub.Config({
 <hr />
 
 <blockquote>
-  <p>当然，也有可能是其他原因，比如说你的ip被人屏蔽了等，但是一般我们遇到其他情况可能性比较低。</p>
+  <p>此处一定要查看有没有sshd服务正在运行，一般有些linux桌面发行版都是只有ssh的客户端agent服务程序的。当然，也有可能是其他原因，比如说你的ip被人屏蔽了等，但是一般我们遇到其他情况可能性比较低。</p>
 </blockquote>
 
 <h2 id="ssh登陆知识常识">SSH登陆知识常识</h2>
@@ -225,6 +225,14 @@ MathJax.Hub.Config({
       <div class="recent_list">
         
           
+            <a href="/dijkstra-astar/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece29.jpg )"><span>dijkstra算法和astar算法</span></a>
+          
+        
+          
+            <a href="/auction/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece30.jpg )"><span>拍卖算法</span></a>
+          
+        
+          
             <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
           
         
@@ -238,14 +246,6 @@ MathJax.Hub.Config({
         
           
             <a href="/stereo-vision/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece25.jpg )"><span>双目相机模型与标定</span></a>
-          
-        
-          
-            <a href="/self-supervised-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece24.jpg )"><span>自监督学习备忘</span></a>
-          
-        
-          
-            <a href="/matchine-learning/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece23.jpg )"><span>机器学习中的常见函数总结（备忘）</span></a>
           
         
       </div>
@@ -301,7 +301,7 @@ MathJax.Hub.Config({
 </ul>
 
     <div class="copyright">
-      <p>&copy; 2020. Design by line</p>
+      <p>&copy; 2021. Design by line</p>
     </div>
   </div>
 </footer> <!-- End Section Footer -->
