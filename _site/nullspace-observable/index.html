@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>SLAM中的可观性问题分析 - line - 千里之行</title>
+	<title>系统的可观性问题分析 - line - 千里之行</title>
 	<meta name="description" content="">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -57,31 +57,56 @@ MathJax.Hub.Config({
   <article class="post">
     <header>
       <div class="post_image">
-        <img src=/assets/img/one-piece/one-piece28.jpg alt="SLAM中的可观性问题分析">
+        <img src=/assets/img/one-piece/one-piece28.jpg alt="系统的可观性问题分析">
       </div>
       <div class="post_description">
         <p class="post_meta">2020, Dec 17</p>
-        <h1 class="post_title">SLAM中的可观性问题分析</h1>
+        <h1 class="post_title">系统的可观性问题分析</h1>
       </div>
     </header> <!-- End Header -->
 
     <div class="entry_content">
-      <h1 id="1-数学基础">1 数学基础</h1>
+      <h1 id="1-系统可观性问题分析">1 系统可观性问题分析</h1>
+
+<h2 id="11-数学基础">1.1 数学基础</h2>
 
 <p>对于一个方程组：$Ax=0$，其中$A$维度为$m \times n$（其中列数为未知数的数量），$x$维度为$n \times 1$，则有</p>
 
 <ul>
-  <li>矩阵$A$是列满秩的（$m \ge n$），则每个列向量之间线性无关，则上面方程的只存在0解（$x$对每列进行线性组合）；</li>
+  <li>矩阵$A$是列满秩的（$m \ge n$，此处列数也是未知向量x的维数），则每个列向量之间线性无关，则上面方程的只存在0解（$x$对每列进行线性组合）；</li>
   <li>矩阵$A$不是列满秩的，则上面方程存在非零解；</li>
 </ul>
 
-<h2 id="11-矩阵零空间">1.1 矩阵零空间</h2>
-
-<p>对于一个矩阵$A$，维度为$m \times n$，所有满足$Ax=0$的向量$x$（维度为$n \times 1$）组成的集合$N$，可以证明$N$包含零向量，并且对于线性运算是封闭的，因此$N$是一个向量子空间。这个向量子空间$N$就是矩阵$A$的零空间。</p>
+<p>对于一个矩阵$A$，维度为$m \times n$，所有满足$Ax=0$的向量$x$（维度为$n \times 1$）组成的集合$N$，可以证明$N$包含零向量，并且对于线性运算是封闭的，因此$N$是一个向量子空间。这个向量子空间$N$就是矩阵$A$的零空间。一般来说零空间的自由度就是系统的不可观的状态维度。</p>
 
 <blockquote>
   <p>矩阵$A$可以看作是由一组列向量$C_1,C_2,…,C_n$组成的，则如果这组列向量是线性无关的，则矩阵$A$是列满秩的，并且其零空间中只包含一个零向量；相反，如果这组列向量是线性相关的，则矩阵$A$不是列满秩的，即矩阵的零空间中会包含非零向量。</p>
 </blockquote>
+
+<p><strong>零空间和可观性</strong>的联系在于：我们将$x$看成当前系统的状态量，$A$看成系统的观测矩阵，则当$x$在零空间的维度上进行变化时，我们通过观测矩阵是发现不了的，也就是对于该观测系统，其零空间维度的状态变化是不可观的。</p>
+
+<h2 id="12-slam系统的可观性分析">1.2 SLAM系统的可观性分析</h2>
+
+<p>由上面的描述可知，首先需要找到SLAM系统的A矩阵——可观性矩阵，在SLAM系统中，k时刻的观测对系统初始状态的可观性矩阵的定义为
+\(A_k = H_k \Phi(t_k,t_0)\)
+其中，$H_k$为k时刻的测量雅克比矩阵（比如视觉测量对状态向量的雅克比），$\Phi(t_k,t_0)$为从0时刻到t时刻的状态转移矩阵。</p>
+
+<p>举一个例子，在黄国权老师的一篇融合gnss测量的vio论文中，有过关于在vio坐标系下系统可观性的探讨。</p>
+
+<ul>
+  <li>1.首先确定k时刻的状态向量：在vio坐标系下imu的位姿、速度，还有一个视觉路标3d位置，vio坐标系与enu坐标系位姿的外参；</li>
+  <li>2.然后确定k时刻对系统初始状态的可观性矩阵$A_k$：$H_k$为视觉观测与gnss观测对状态向量的雅克比，$\Phi(t_k,t_0)$为依赖imu的从初始时刻到k时刻的状态转移矩阵；</li>
+  <li>3.在重力轴上VIO坐标系相对于ENU坐标系添加一个旋转扰动，获得初始状态的扰动向量，发现这个扰动向量乘以$A_k$等于0，因此可以断定这个扰动向量是系统的一个零空间向量；</li>
+  <li>4.在VIO坐标系相对于ENU坐标系的位移上添加一个扰动，获得初始状态的扰动向量，同样发现这个扰动向量乘以$A_k$等于0，又发现一个零空间向量；</li>
+  <li>5.因为4中的位移扰动有3个自由度，可以由此找到3个互不相关的扰动向量，由此可以至少确定一个自由度为4的零空间；</li>
+  <li>6.由5找到的零空间可以找到该系统的4个不可观方向；</li>
+</ul>
+
+<h1 id="参考文献">参考文献</h1>
+
+<ul>
+  <li>[1]. Lee, Woosik &amp; Eckenhoff, Kevin &amp; Geneva, Patrick &amp; Huang, Guoquan. (2020). Intermittent GPS-aided VIO: Online Initialization and Calibration. 10.1109/ICRA40945.2020.9197029.</li>
+</ul>
 
 
     </div>
@@ -90,7 +115,7 @@ MathJax.Hub.Config({
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=SLAM中的可观性问题分析&url=/nullspace-observable/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=系统的可观性问题分析&url=/nullspace-observable/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
           <a href="https://facebook.com/sharer.php?u=/nullspace-observable/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
           <a href="https://plus.google.com/share?url=/nullspace-observable/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
@@ -147,7 +172,7 @@ MathJax.Hub.Config({
           
         
           
-            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>系统的可观性问题分析</span></a>
           
         
           

@@ -19,8 +19,8 @@ $$
 - $u_{k}$   是k时刻系统的输入（在slam中通常是运动传感器的读数）
 - $w_{k}$   是运动过程中的噪声
 - $z_{k}$   是指在$x_k$处进行了一次观测得到的观测值
-- ${\upsilon}_{k}$ 是观测过程中的噪声
- 
+- ${\upsilon}_{k}$  是观测过程中的噪声
+
 # 贝叶斯法则
 对于上述状态估计问题，我们想做的是估计出现在状态的分布
 
@@ -34,9 +34,12 @@ $$
 P\left(\boldsymbol{x}_{k} | \boldsymbol{x}_{0}, \boldsymbol{u}_{1 : k}, \boldsymbol{z}_{1 : k}\right) \propto P\left(\boldsymbol{z}_{k} | \boldsymbol{x}_{k}\right) P\left(\boldsymbol{x}_{k} | \boldsymbol{x}_{0}, \boldsymbol{u}_{1 : k}, \boldsymbol{z}_{1 : k-1}\right)
 $$
 
-其中左边是**后验**概率分布（k时刻状态已经发生），右边第一项是**似然**概率分布，第二项是**先验**概率分布（k时刻状态还没发生）。
+其中左边是**后验**概率分布（k时刻状态已经发生），右边第一项是**似然**概率分布（即根据运动方程计算得到），第二项是**先验**概率分布（k时刻状态还没发生）。
 
 # 卡尔曼滤波
+
+## 原理推导
+
 要使用卡尔曼滤波方法对上述后验概率分布进行估计，我们首先需要两条假设
 1. 上述系统满足**马尔可夫性**，当前状态只与前一状态有关
 2. 系统是**线性高斯**系统，高斯分布经过线性变换仍然是高斯分布
@@ -47,7 +50,7 @@ $$
 \left\{\begin{array}{l}{\boldsymbol{x}_{k}=\boldsymbol{A}_{k} \boldsymbol{x}_{k-1}+\boldsymbol{u}_{k}+\boldsymbol{w}_{k}} \\ {\boldsymbol{z}_{k}=\boldsymbol{C}_{k} \boldsymbol{x}_{k}+\boldsymbol{v}_{k}}\end{array}\right. \quad k=1, \ldots, N
 $$
 
-其中第一个为运动方程，第二个为状态方程，并且**所有的状态与噪声均满足高斯分布**。这里噪声满足如下零均值高斯分布
+其中第一个为运动方程，第二个为测量方程，并且**所有的状态与噪声均满足高斯分布**。这里噪声满足如下零均值高斯分布
 
 $$
 \boldsymbol{w}_{k} \sim N(\mathbf{0}, \boldsymbol{R}) . \quad \boldsymbol{v}_{k} \sim N(\mathbf{0}, \boldsymbol{Q})
@@ -63,14 +66,13 @@ $$
 P\left(\boldsymbol{x}_{k} | \boldsymbol{x}_{0}, \boldsymbol{u}_{1 : k}, \boldsymbol{z}_{1 : k-1}\right)=N\left(\boldsymbol{A}_{k} \hat{\boldsymbol{x}}_{k-1}+\boldsymbol{u}_{k}, \boldsymbol{A}_{k} \hat{\boldsymbol{P}}_{k-1} \boldsymbol{A}_{k}^{T}+\boldsymbol{R}\right)
 $$
 
-其中，利用线性高斯系统的性质，我们得到$x_{k}$的先验分布也是高斯分布，并且均值与方差如下：
+其中，利用线性高斯系统的性质（其实就是**根据上述运动方程**），我们得到$x_{k}$的先验分布也是高斯分布，并且均值与方差如下：
 
 $$
 \overline{\boldsymbol{x}}_{k}=\boldsymbol{A}_{k} \hat{\boldsymbol{x}}_{k-1}+\boldsymbol{u}_{k}, \quad \overline{\boldsymbol{P}}_{k}=\boldsymbol{A}_{k} \hat{\boldsymbol{P}}_{k-1} \boldsymbol{A}_{k}^{T}+\boldsymbol{R}
 $$
 
 **下一步，我们由观测方程得到似然分布**
-
 $$
 P\left(\boldsymbol{z}_{k} | \boldsymbol{x}_{k}\right)=N\left(\boldsymbol{C}_{k} \boldsymbol{x}_{k}, \boldsymbol{Q}\right)
 $$
@@ -123,23 +125,31 @@ $$
 \begin{aligned} \hat{\boldsymbol{x}}_{k} &=\hat{\boldsymbol{P}}_{k} \boldsymbol{C}_{k}^{T} \boldsymbol{Q}^{-1} \boldsymbol{z}_{k}+\hat{\boldsymbol{P}}_{k} \overline{\boldsymbol{P}}_{k}^{-1} \overline{\boldsymbol{x}}_{k} \\ &=\boldsymbol{K} \boldsymbol{z}_{k}+\left(\boldsymbol{I}-\boldsymbol{K} \boldsymbol{C}_{k}\right) \overline{\boldsymbol{x}}_{k} \\ &=\overline{\boldsymbol{x}}_{k}+\boldsymbol{K}\left(\boldsymbol{z}_{k}-\boldsymbol{C}_{k} \overline{\boldsymbol{x}}_{k}\right) \end{aligned}
 $$
 
-## 卡尔曼滤波步骤归纳
+## 卡尔曼滤波实现步骤归纳
+首先再将问题列出来（运动方程与测量方程）：
+$$
+\left\{\begin{array}{l}{\boldsymbol{x}_{k}=\boldsymbol{A}_{k} \boldsymbol{x}_{k-1}+\boldsymbol{u}_{k}+\boldsymbol{w}_{k}} \\ {\boldsymbol{z}_{k}=\boldsymbol{C}_{k} \boldsymbol{x}_{k}+\boldsymbol{v}_{k}}\end{array}\right. \quad k=1, \ldots, N
+$$
+其中$u_k$为系统输入，两个方程噪声均按照高斯白噪声处理：
+$$
+\boldsymbol{w}_{k} \sim N(\mathbf{0}, \boldsymbol{R}) . \quad \boldsymbol{v}_{k} \sim N(\mathbf{0}, \boldsymbol{Q})
+$$
 由上面推导，我们可以将卡尔曼滤波归纳成如下**预测**与**更新**两个步骤：
 
-- 预测：
+- **预测**（根据运动方程更新先验）：
 
 $$
 \overline{\boldsymbol{x}}_{k}=\boldsymbol{A}_{k} \hat{\boldsymbol{x}}_{k-1}+\boldsymbol{u}_{k}, \quad \overline{\boldsymbol{P}}_{k}=\boldsymbol{A}_{k} \hat{\boldsymbol{P}}_{k-1} \boldsymbol{A}_{k}^{T}+\boldsymbol{R}
 $$
 
-- 更新：
-首先计算K（卡尔曼增益）
+- **更新**：
+首先计算K（卡尔曼增益，计算需要预测步骤计算的先验协方差$\overline{\boldsymbol{P}}_{k}$，测量方程的雅克比矩阵$C_k$，还有测量噪声$v_k$的协方差$Q$）
 
 $$
 \boldsymbol{K}=\overline{\boldsymbol{P}}_{k} C_{k}^{T}\left(\boldsymbol{C}_{k} \overline{\boldsymbol{P}}_{k} \boldsymbol{C}_{k}^{T}+\boldsymbol{Q}\right)^{-1}
 $$
 
-然后计算后验概率的分布
+最后对后验概率的分布进行跟新（需要测量误差$z_k - C_k \overline{x}_k$，测量方程的雅克比矩阵$C_k$，还有卡尔曼增益$K$）
 
 $$
 \begin{aligned} \hat{\boldsymbol{x}}_{k} &=\overline{\boldsymbol{x}}_{k}+\boldsymbol{K}\left(\boldsymbol{z}_{k}-\boldsymbol{C}_{k} \overline{\boldsymbol{x}}_{k}\right) \\ \hat{\boldsymbol{P}}_{k} &=\left(\boldsymbol{I}-\boldsymbol{K} \boldsymbol{C}_{k}\right) \overline{\boldsymbol{P}}_{k} \end{aligned}
@@ -188,14 +198,17 @@ $$
 
 下面的推导与卡尔曼滤波相同，通过贝叶斯公式使得高斯分布中的指数部分相同。
 
-## 扩展卡尔曼滤波步骤总结
-- 预测
+## 扩展卡尔曼滤波实现步骤总结
+
+> EKF说到底就是将原本的非线性系统近似成了线性系统，然后每次都会重新计算运动方程和测量方程的雅克比矩阵，然后使用每次近似的线性方程进行卡尔曼滤波的步骤。
+
+- **预测**
 
 $$
 \overline{\boldsymbol{x}}_{k}=f\left(\hat{\boldsymbol{x}}_{k-1}, \boldsymbol{u}_{k}\right), \quad \overline{\boldsymbol{P}}_{k}=\boldsymbol{F} \hat{\boldsymbol{P}}_{k} \boldsymbol{F}^{T}+\boldsymbol{R}_{k}
 $$
 
-- 更新，先计算K（卡尔曼增益）
+- **更新**，先计算K（卡尔曼增益）
 
 $$
 \boldsymbol{K}_{k}=\overline{\boldsymbol{P}}_{k} \boldsymbol{H}^{\mathrm{T}}\left(\boldsymbol{H} \overline{\boldsymbol{P}}_{k} \boldsymbol{H}^{\mathrm{T}}+\boldsymbol{Q}_{k}\right)^{-1}
@@ -221,5 +234,29 @@ $$
 
 > 还有一些其他的滤波方法，比如粒子滤波、IF（信息滤波器）、UKF（Unscented KF）等等。其中粒子滤波不是假设高斯分布。
 
+# Multi-State Constraint Kalman Filter
+
+> MSCKF本质上就是一个EKF滤波器，只是它和它的名字一样，是**多状态约束下的卡尔曼滤波器**。MSCKF被提出主要为了解决EKF-SLAM维数爆炸的问题。传统的EKF-SLAM中一般会将路标（特征点）加入到状态向量中与IMU状态一起更新，这样在环境很大时，路标的数量会非常大，状态向量维数会非常大，计算起来耗时长。MSCKF并不会将路标加入到状态向量中，而是将当前滑窗中的多个状态加入到状态向量中，根据滑窗中的多个状态来临时三角化出3d路标用来更新状态向量。
+
+MSCKF并不会将路标加入到状态向量中，因此每次想获得重投影误差时需要先计算出路标3d位置。MSCKF根据历史相机位姿和观测来三角化计算特征点的3D坐标。这又带来了一个问题：如何确保三角化的精度呢？如果三角化误差太大，那么观测模型就会不准，最终会使得VIO精度太差。MSCKF做法是当特征点跟踪丢失后再进行三角化，特征点跟丢表示该特征的观测不会再继续增加了，这时利用所有的历史观测三角化。所以MSCKF中观测更新的时机是特征点跟丢。
+
+## MSCKF实现步骤总结
+
+- **预测**：IMU积分与状态扩增：每次读入一张图片，利用imu积分来计算当前状态并加入到状态向量中，同时扩充状态协方差；
+- **更新**：
+  - 特征三角化：根据历史相机状态（滑窗）三角化出3d特征点的位置（一般使用非线性优化求解）；
+  - 状态更新：利用测量方程（重投影方程）对状态向量进行更新（包括滑窗中的历史状态）；
+  - 滑窗维护：如果滑窗中相机状态个数超过阈值，移除最老的相机状态以及对应的协方差；
+
+
+
+## MSCKF的评价
+
+**优点**
+
+- 可以适应更剧烈的运动、一段时间的纹理缺失等。
+- 耗时短，精度高。
+
 # 参考文献
 - [1]. 视觉slam十四讲 
+- [2]. https://zhuanlan.zhihu.com/p/78011006

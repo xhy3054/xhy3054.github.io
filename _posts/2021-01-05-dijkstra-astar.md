@@ -3,7 +3,7 @@ layout: post
 title: dijkstra算法和astar算法
 date: 2021-01-05 10:07:24.000000000 +09:00
 img:  one-piece/one-piece29.jpg # Add image post (optional)
-tag: [算法与数据结构]
+tag: [算法与数据结构, 路径规划]
 ---
 
 # dijkstra算法和astar算法

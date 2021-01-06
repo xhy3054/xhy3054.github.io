@@ -79,7 +79,7 @@ MathJax.Hub.Config({
   <li>$u_{k}$   是k时刻系统的输入（在slam中通常是运动传感器的读数）</li>
   <li>$w_{k}$   是运动过程中的噪声</li>
   <li>$z_{k}$   是指在$x_k$处进行了一次观测得到的观测值</li>
-  <li>${\upsilon}_{k}$ 是观测过程中的噪声</li>
+  <li>${\upsilon}_{k}$  是观测过程中的噪声</li>
 </ul>
 
 <h1 id="贝叶斯法则">贝叶斯法则</h1>
@@ -107,9 +107,12 @@ MathJax.Hub.Config({
   </tbody>
 </table>
 
-<p>其中左边是<strong>后验</strong>概率分布（k时刻状态已经发生），右边第一项是<strong>似然</strong>概率分布，第二项是<strong>先验</strong>概率分布（k时刻状态还没发生）。</p>
+<p>其中左边是<strong>后验</strong>概率分布（k时刻状态已经发生），右边第一项是<strong>似然</strong>概率分布（即根据运动方程计算得到），第二项是<strong>先验</strong>概率分布（k时刻状态还没发生）。</p>
 
 <h1 id="卡尔曼滤波">卡尔曼滤波</h1>
+
+<h2 id="原理推导">原理推导</h2>
+
 <p>要使用卡尔曼滤波方法对上述后验概率分布进行估计，我们首先需要两条假设</p>
 <ol>
   <li>上述系统满足<strong>马尔可夫性</strong>，当前状态只与前一状态有关</li>
@@ -120,7 +123,7 @@ MathJax.Hub.Config({
 
 <p>[\left{\begin{array}{l}{\boldsymbol{x}<em>{k}=\boldsymbol{A}</em>{k} \boldsymbol{x}<em>{k-1}+\boldsymbol{u}</em>{k}+\boldsymbol{w}<em>{k}} \ {\boldsymbol{z}</em>{k}=\boldsymbol{C}<em>{k} \boldsymbol{x}</em>{k}+\boldsymbol{v}_{k}}\end{array}\right. \quad k=1, \ldots, N]</p>
 
-<p>其中第一个为运动方程，第二个为状态方程，并且<strong>所有的状态与噪声均满足高斯分布</strong>。这里噪声满足如下零均值高斯分布</p>
+<p>其中第一个为运动方程，第二个为测量方程，并且<strong>所有的状态与噪声均满足高斯分布</strong>。这里噪声满足如下零均值高斯分布</p>
 
 <p>[\boldsymbol{w}<em>{k} \sim N(\mathbf{0}, \boldsymbol{R}) . \quad \boldsymbol{v}</em>{k} \sim N(\mathbf{0}, \boldsymbol{Q})]</p>
 
@@ -141,20 +144,12 @@ MathJax.Hub.Config({
   </tbody>
 </table>
 
-<p>其中，利用线性高斯系统的性质，我们得到$x_{k}$的先验分布也是高斯分布，并且均值与方差如下：</p>
+<p>其中，利用线性高斯系统的性质（其实就是<strong>根据上述运动方程</strong>），我们得到$x_{k}$的先验分布也是高斯分布，并且均值与方差如下：</p>
 
 <p>[\overline{\boldsymbol{x}}<em>{k}=\boldsymbol{A}</em>{k} \hat{\boldsymbol{x}}<em>{k-1}+\boldsymbol{u}</em>{k}, \quad \overline{\boldsymbol{P}}<em>{k}=\boldsymbol{A}</em>{k} \hat{\boldsymbol{P}}<em>{k-1} \boldsymbol{A}</em>{k}^{T}+\boldsymbol{R}]</p>
 
-<p><strong>下一步，我们由观测方程得到似然分布</strong></p>
-
-<table>
-  <tbody>
-    <tr>
-      <td>[P\left(\boldsymbol{z}_{k}</td>
-      <td>\boldsymbol{x}<em>{k}\right)=N\left(\boldsymbol{C}</em>{k} \boldsymbol{x}_{k}, \boldsymbol{Q}\right)]</td>
-    </tr>
-  </tbody>
-</table>
+<p><strong>下一步，我们由观测方程得到似然分布</strong>
+\(P\left(\boldsymbol{z}_{k} | \boldsymbol{x}_{k}\right)=N\left(\boldsymbol{C}_{k} \boldsymbol{x}_{k}, \boldsymbol{Q}\right)\)</p>
 
 <p><strong>然后</strong>，由贝叶斯法则我们知道，后验概率分布与似然分布和先验概率分布的乘积成正比，即</p>
 
@@ -188,23 +183,27 @@ MathJax.Hub.Config({
 
 <p>[\begin{aligned} \hat{\boldsymbol{x}}<em>{k} &amp;=\hat{\boldsymbol{P}}</em>{k} \boldsymbol{C}<em>{k}^{T} \boldsymbol{Q}^{-1} \boldsymbol{z}</em>{k}+\hat{\boldsymbol{P}}<em>{k} \overline{\boldsymbol{P}}</em>{k}^{-1} \overline{\boldsymbol{x}}<em>{k} \ &amp;=\boldsymbol{K} \boldsymbol{z}</em>{k}+\left(\boldsymbol{I}-\boldsymbol{K} \boldsymbol{C}<em>{k}\right) \overline{\boldsymbol{x}}</em>{k} \ &amp;=\overline{\boldsymbol{x}}<em>{k}+\boldsymbol{K}\left(\boldsymbol{z}</em>{k}-\boldsymbol{C}<em>{k} \overline{\boldsymbol{x}}</em>{k}\right) \end{aligned}]</p>
 
-<h2 id="卡尔曼滤波步骤归纳">卡尔曼滤波步骤归纳</h2>
-<p>由上面推导，我们可以将卡尔曼滤波归纳成如下<strong>预测</strong>与<strong>更新</strong>两个步骤：</p>
+<h2 id="卡尔曼滤波实现步骤归纳">卡尔曼滤波实现步骤归纳</h2>
+<p>首先再将问题列出来（运动方程与测量方程）：
+\(\left\{\begin{array}{l}{\boldsymbol{x}_{k}=\boldsymbol{A}_{k} \boldsymbol{x}_{k-1}+\boldsymbol{u}_{k}+\boldsymbol{w}_{k}} \\ {\boldsymbol{z}_{k}=\boldsymbol{C}_{k} \boldsymbol{x}_{k}+\boldsymbol{v}_{k}}\end{array}\right. \quad k=1, \ldots, N\)
+其中$u_k$为系统输入，两个方程噪声均按照高斯白噪声处理：
+\(\boldsymbol{w}_{k} \sim N(\mathbf{0}, \boldsymbol{R}) . \quad \boldsymbol{v}_{k} \sim N(\mathbf{0}, \boldsymbol{Q})\)
+由上面推导，我们可以将卡尔曼滤波归纳成如下<strong>预测</strong>与<strong>更新</strong>两个步骤：</p>
 
 <ul>
-  <li>预测：</li>
+  <li><strong>预测</strong>（根据运动方程更新先验）：</li>
 </ul>
 
 <p>[\overline{\boldsymbol{x}}<em>{k}=\boldsymbol{A}</em>{k} \hat{\boldsymbol{x}}<em>{k-1}+\boldsymbol{u}</em>{k}, \quad \overline{\boldsymbol{P}}<em>{k}=\boldsymbol{A}</em>{k} \hat{\boldsymbol{P}}<em>{k-1} \boldsymbol{A}</em>{k}^{T}+\boldsymbol{R}]</p>
 
 <ul>
-  <li>更新：
-首先计算K（卡尔曼增益）</li>
+  <li><strong>更新</strong>：
+首先计算K（卡尔曼增益，计算需要预测步骤计算的先验协方差$\overline{\boldsymbol{P}}_{k}$，测量方程的雅克比矩阵$C_k$，还有测量噪声$v_k$的协方差$Q$）</li>
 </ul>
 
 <p>[\boldsymbol{K}=\overline{\boldsymbol{P}}<em>{k} C</em>{k}^{T}\left(\boldsymbol{C}<em>{k} \overline{\boldsymbol{P}}</em>{k} \boldsymbol{C}_{k}^{T}+\boldsymbol{Q}\right)^{-1}]</p>
 
-<p>然后计算后验概率的分布</p>
+<p>最后对后验概率的分布进行跟新（需要测量误差$z_k - C_k \overline{x}_k$，测量方程的雅克比矩阵$C_k$，还有卡尔曼增益$K$）</p>
 
 <p>[\begin{aligned} \hat{\boldsymbol{x}}<em>{k} &amp;=\overline{\boldsymbol{x}}</em>{k}+\boldsymbol{K}\left(\boldsymbol{z}<em>{k}-\boldsymbol{C}</em>{k} \overline{\boldsymbol{x}}<em>{k}\right) \ \hat{\boldsymbol{P}}</em>{k} &amp;=\left(\boldsymbol{I}-\boldsymbol{K} \boldsymbol{C}<em>{k}\right) \overline{\boldsymbol{P}}</em>{k} \end{aligned}]</p>
 
@@ -285,15 +284,20 @@ MathJax.Hub.Config({
 
 <p>下面的推导与卡尔曼滤波相同，通过贝叶斯公式使得高斯分布中的指数部分相同。</p>
 
-<h2 id="扩展卡尔曼滤波步骤总结">扩展卡尔曼滤波步骤总结</h2>
+<h2 id="扩展卡尔曼滤波实现步骤总结">扩展卡尔曼滤波实现步骤总结</h2>
+
+<blockquote>
+  <p>EKF说到底就是将原本的非线性系统近似成了线性系统，然后每次都会重新计算运动方程和测量方程的雅克比矩阵，然后使用每次近似的线性方程进行卡尔曼滤波的步骤。</p>
+</blockquote>
+
 <ul>
-  <li>预测</li>
+  <li><strong>预测</strong></li>
 </ul>
 
 <p>[\overline{\boldsymbol{x}}<em>{k}=f\left(\hat{\boldsymbol{x}}</em>{k-1}, \boldsymbol{u}<em>{k}\right), \quad \overline{\boldsymbol{P}}</em>{k}=\boldsymbol{F} \hat{\boldsymbol{P}}<em>{k} \boldsymbol{F}^{T}+\boldsymbol{R}</em>{k}]</p>
 
 <ul>
-  <li>更新，先计算K（卡尔曼增益）</li>
+  <li><strong>更新</strong>，先计算K（卡尔曼增益）</li>
 </ul>
 
 <p>[\boldsymbol{K}<em>{k}=\overline{\boldsymbol{P}}</em>{k} \boldsymbol{H}^{\mathrm{T}}\left(\boldsymbol{H} \overline{\boldsymbol{P}}<em>{k} \boldsymbol{H}^{\mathrm{T}}+\boldsymbol{Q}</em>{k}\right)^{-1}]</p>
@@ -325,9 +329,40 @@ MathJax.Hub.Config({
   <p>还有一些其他的滤波方法，比如粒子滤波、IF（信息滤波器）、UKF（Unscented KF）等等。其中粒子滤波不是假设高斯分布。</p>
 </blockquote>
 
+<h1 id="multi-state-constraint-kalman-filter">Multi-State Constraint Kalman Filter</h1>
+
+<blockquote>
+  <p>MSCKF本质上就是一个EKF滤波器，只是它和它的名字一样，是<strong>多状态约束下的卡尔曼滤波器</strong>。MSCKF被提出主要为了解决EKF-SLAM维数爆炸的问题。传统的EKF-SLAM中一般会将路标（特征点）加入到状态向量中与IMU状态一起更新，这样在环境很大时，路标的数量会非常大，状态向量维数会非常大，计算起来耗时长。MSCKF并不会将路标加入到状态向量中，而是将当前滑窗中的多个状态加入到状态向量中，根据滑窗中的多个状态来临时三角化出3d路标用来更新状态向量。</p>
+</blockquote>
+
+<p>MSCKF并不会将路标加入到状态向量中，因此每次想获得重投影误差时需要先计算出路标3d位置。MSCKF根据历史相机位姿和观测来三角化计算特征点的3D坐标。这又带来了一个问题：如何确保三角化的精度呢？如果三角化误差太大，那么观测模型就会不准，最终会使得VIO精度太差。MSCKF做法是当特征点跟踪丢失后再进行三角化，特征点跟丢表示该特征的观测不会再继续增加了，这时利用所有的历史观测三角化。所以MSCKF中观测更新的时机是特征点跟丢。</p>
+
+<h2 id="msckf实现步骤总结">MSCKF实现步骤总结</h2>
+
+<ul>
+  <li><strong>预测</strong>：IMU积分与状态扩增：每次读入一张图片，利用imu积分来计算当前状态并加入到状态向量中，同时扩充状态协方差；</li>
+  <li><strong>更新</strong>：
+    <ul>
+      <li>特征三角化：根据历史相机状态（滑窗）三角化出3d特征点的位置（一般使用非线性优化求解）；</li>
+      <li>状态更新：利用测量方程（重投影方程）对状态向量进行更新（包括滑窗中的历史状态）；</li>
+      <li>滑窗维护：如果滑窗中相机状态个数超过阈值，移除最老的相机状态以及对应的协方差；</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="msckf的评价">MSCKF的评价</h2>
+
+<p><strong>优点</strong></p>
+
+<ul>
+  <li>可以适应更剧烈的运动、一段时间的纹理缺失等。</li>
+  <li>耗时短，精度高。</li>
+</ul>
+
 <h1 id="参考文献">参考文献</h1>
 <ul>
   <li>[1]. 视觉slam十四讲</li>
+  <li>[2]. https://zhuanlan.zhihu.com/p/78011006</li>
 </ul>
 
     </div>
@@ -393,7 +428,7 @@ MathJax.Hub.Config({
           
         
           
-            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>SLAM中的可观性问题分析</span></a>
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>系统的可观性问题分析</span></a>
           
         
           
