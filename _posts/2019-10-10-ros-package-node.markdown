@@ -60,7 +60,7 @@ $ rosrun ros_tutorials_topic topic_subscriber
 
 ## 2.2 使用`roslaunch`运行节点
 
-- 使用`rosrun`来运行节点实在太麻烦，需要开太多的终端。此时我们可以使用`roslaunch`来同时启动多个节点。同时，它还有很多灵活的地方，比如修改参数与节点的名称，设置节点的命名空间等。
+- 使用`rosrun`来运行节点实在太麻烦，需要开太多的终端。此时我们可以使用`roslaunch`来同时启动多个节点。同时，它还有很多灵活的地方，比如修改参数与节点的名称，设置节点的命名空间等（并且会自动启动ros master）。
 
 - 首先需要创建一个`×.launch`文件，它基于`XML`，提供了标签选项。
 
@@ -73,12 +73,27 @@ $ rosrun ros_tutorials_topic topic_subscriber
 </launch>
 ```
 
-- 在上述的标签中，分别代表如下含义
-    - $node$ 表示运行的节点
-    - $pkg$ 表示该节点所属的功能包名称
-    - $type$ 表示实际运行的节点的名称（也就是该节点对应的可执行文件名称）
-    - $name$ 节点启动后重新起的名字，如果只有一个同类型的节点，一般取的name与type相同
+launch文件中的标签；
 
+- $launch$标签是launch文件中的根元素；
+- $node$标签表示启动节点
+    - $pkg$ 表示该节点所在的功能包的名称
+    - $type$ 表示实际运行的节点的名称（也就是该节点对应的可执行文件名称）
+    - $name$ 节点运行时的名称，如果只有一个同类型的节点，一般取的name与type相同
+    - 其他的还会有output、respawn、required、ns、args等；
+- $param$标签为设置ROS系统运行中的参数，存储在参数服务器中；
+    - 比如`<param name="output_frame" value="odom"/>`
+        - name为参数名
+        - value为参数值
+    - 加载参数文件中的多个参数：`<rosparam file="params.yaml" command="load" ns="params" />`
+- $arg$标签为设置launch文件内部的局部变量，仅限于launch文件使用
+    - 比如`arg name="arg-name" value="arg-value" />`
+        - name为参数名
+        - value为参数值
+- $remap$为重映射ros计算图资源的命名；
+    - 比如`<remap from="/turtlebot/cmd_vel" to="/cmd_vel" />`
+- $include$为包含其他launch文件，类似c语言的头文件包含
+    - 比如`<include file="$(dirname)/other.launch" />`
 - 运行该`union.launch`文件
 
 ```bash

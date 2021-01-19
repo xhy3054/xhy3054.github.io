@@ -141,7 +141,7 @@ add_executable(topic_subscriber src/topic_subscriber.cpp)
 
 <ul>
   <li>
-    <p>使用<code class="language-plaintext highlighter-rouge">rosrun</code>来运行节点实在太麻烦，需要开太多的终端。此时我们可以使用<code class="language-plaintext highlighter-rouge">roslaunch</code>来同时启动多个节点。同时，它还有很多灵活的地方，比如修改参数与节点的名称，设置节点的命名空间等。</p>
+    <p>使用<code class="language-plaintext highlighter-rouge">rosrun</code>来运行节点实在太麻烦，需要开太多的终端。此时我们可以使用<code class="language-plaintext highlighter-rouge">roslaunch</code>来同时启动多个节点。同时，它还有很多灵活的地方，比如修改参数与节点的名称，设置节点的命名空间等（并且会自动启动ros master）。</p>
   </li>
   <li>
     <p>首先需要创建一个<code class="language-plaintext highlighter-rouge">×.launch</code>文件，它基于<code class="language-plaintext highlighter-rouge">XML</code>，提供了标签选项。</p>
@@ -156,13 +156,47 @@ add_executable(topic_subscriber src/topic_subscriber.cpp)
 <span class="nt">&lt;/launch&gt;</span>
 </code></pre></div></div>
 
+<p>launch文件中的标签；</p>
+
 <ul>
-  <li>在上述的标签中，分别代表如下含义
+  <li>$launch$标签是launch文件中的根元素；</li>
+  <li>$node$标签表示启动节点
     <ul>
-      <li>$node$ 表示运行的节点</li>
-      <li>$pkg$ 表示该节点所属的功能包名称</li>
+      <li>$pkg$ 表示该节点所在的功能包的名称</li>
       <li>$type$ 表示实际运行的节点的名称（也就是该节点对应的可执行文件名称）</li>
-      <li>$name$ 节点启动后重新起的名字，如果只有一个同类型的节点，一般取的name与type相同</li>
+      <li>$name$ 节点运行时的名称，如果只有一个同类型的节点，一般取的name与type相同</li>
+      <li>其他的还会有output、respawn、required、ns、args等；</li>
+    </ul>
+  </li>
+  <li>$param$标签为设置ROS系统运行中的参数，存储在参数服务器中；
+    <ul>
+      <li>比如<code class="language-plaintext highlighter-rouge">&lt;param name="output_frame" value="odom"/&gt;</code>
+        <ul>
+          <li>name为参数名</li>
+          <li>value为参数值</li>
+        </ul>
+      </li>
+      <li>加载参数文件中的多个参数：<code class="language-plaintext highlighter-rouge">&lt;rosparam file="params.yaml" command="load" ns="params" /&gt;</code></li>
+    </ul>
+  </li>
+  <li>$arg$标签为设置launch文件内部的局部变量，仅限于launch文件使用
+    <ul>
+      <li>比如<code class="language-plaintext highlighter-rouge">arg name="arg-name" value="arg-value" /&gt;</code>
+        <ul>
+          <li>name为参数名</li>
+          <li>value为参数值</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>$remap$为重映射ros计算图资源的命名；
+    <ul>
+      <li>比如<code class="language-plaintext highlighter-rouge">&lt;remap from="/turtlebot/cmd_vel" to="/cmd_vel" /&gt;</code></li>
+    </ul>
+  </li>
+  <li>$include$为包含其他launch文件，类似c语言的头文件包含
+    <ul>
+      <li>比如<code class="language-plaintext highlighter-rouge">&lt;include file="$(dirname)/other.launch" /&gt;</code></li>
     </ul>
   </li>
   <li>运行该<code class="language-plaintext highlighter-rouge">union.launch</code>文件</li>
