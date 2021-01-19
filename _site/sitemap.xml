@@ -318,7 +318,7 @@
 </url>
 <url>
 <loc>/vins-scale-gravity-velo/</loc>
-<lastmod>2019-08-25T09:07:24+08:00</lastmod>
+<lastmod>2019-08-25T00:00:00+08:00</lastmod>
 </url>
 <url>
 <loc>/vins-backend-optimize/</loc>
@@ -387,6 +387,10 @@
 <url>
 <loc>/pigeon/</loc>
 <lastmod>2021-01-05T09:07:24+08:00</lastmod>
+</url>
+<url>
+<loc>/lens-camera/</loc>
+<lastmod>2021-01-17T09:07:24+08:00</lastmod>
 </url>
 <url>
 <loc>/about/</loc>

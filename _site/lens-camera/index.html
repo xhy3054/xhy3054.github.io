@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>镜头的参数与成像 - line - 千里之行</title>
+	<meta name="description" content="">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta property="og:image" content="">
+	<link rel="shortcut icon" href="/assets/img/favicon/favicon.ico" type="image/x-icon">
+	<link rel="apple-touch-icon" href="/assets/img/favicon/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/assets/img/favicon/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/assets/img/favicon/apple-touch-icon-114x114.png">
+	<!-- Chrome, Firefox OS and Opera -->
+	<meta name="theme-color" content="#d25469">
+	<!-- Windows Phone -->
+	<meta name="msapplication-navbutton-color" content="#d25469">
+	<!-- iOS Safari -->
+	<meta name="apple-mobile-web-app-status-bar-style" content="#d25469">
+	<!-- Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+	<!-- Styles -->
+	<link rel="stylesheet" href="/assets/css/main.css">
+
+
+
+<!--mathjax-->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+        }
+    });
+</script>
+  
+
+</head>
+
+
+<body>
+
+  
+<header class="main_header">
+  <a href="/" class="logo">line</a>
+  <nav class="main_menu">
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
+  </nav>
+</header> <!-- End Section Header -->
+
+
+<main class="post_content">
+  <article class="post">
+    <header>
+      <div class="post_image">
+        <img src=/assets/img/one-piece/one-piece32.jpg alt="镜头的参数与成像">
+      </div>
+      <div class="post_description">
+        <p class="post_meta">2021, Jan 17</p>
+        <h1 class="post_title">镜头的参数与成像</h1>
+      </div>
+    </header> <!-- End Header -->
+
+    <div class="entry_content">
+      <h1 id="镜头的参数与成像">镜头的参数与成像</h1>
+
+<blockquote>
+  <p>最近几天手头刚好有一个闲置的变焦镜头，在把玩的同时对相机的成像特点又有了一些理解。为了不让这些理解被丢进记忆的垃圾堆，打算做一些记录和梳理。</p>
+</blockquote>
+
+<h2 id="镜头">镜头</h2>
+<p>镜头的参数其实是很多的，主要有</p>
+
+<ul>
+  <li>焦距：可以分为物理焦距与摄影焦距。</li>
+  <li>光圈：大小决定了图像的亮度，在拍摄高斯运动物体、曝光时间很短的应用中，应该选用大光圈镜头，以提高亮度。</li>
+  <li>景深：指的是在理想对焦状态下物体允许的前后方向的移动量。（在此范围内可以认为成像是清晰地）</li>
+  <li>视野范围：比较简单的理解就是有多少度（手头这个最大110°）的视场；</li>
+  <li>对应最大ccd尺寸：镜头成像直径可以覆盖的最大CCD芯片的尺寸；</li>
+  <li>接口：比如C、CS等，只要可以和相机接口匹配安装即可；</li>
+</ul>
+
+<h3 id="焦距">焦距</h3>
+
+<ul>
+  <li>物理焦距：一个单片凸透镜的焦距指的是<strong>平行光线经过凸透镜汇聚后的一点到透镜中心的距离（如下图所示）</strong>。一般来说，物理焦距在镜片制作完成后就固定了，是不可变的性质。</li>
+</ul>
+
+<div style="text-align: center">
+<img src="/assets/img/lens/phsic_fl.png" />
+</div>
+
+<p>当然，现在很多镜头其实是<strong>变焦镜头</strong>，这些镜头一般由多片透镜组成，可以通过调节多个透镜之间的相对距离，来对整体的物理焦距进行调整。</p>
+
+<div style="text-align: center">
+<img src="/assets/img/lens/change_fl.png" width="750" height="450" />
+</div>
+
+<ul>
+  <li>摄影焦距：相信很多人都有对着单片的定焦镜头进行旋转的调焦经历，其实此处调节的不是物理焦距，而是<strong>摄影焦距—即相距，成像平面（cmos芯片）与镜头之间的距离</strong>。</li>
+</ul>
+
+<div style="text-align: center">
+<img src="/assets/img/lens/distance.jpeg" width="750" height="450" />
+</div>
+
+<p>通过对相距的调节，使得其与焦距匹配，可以获得清晰的成像。</p>
+
+<h3 id="调焦的原因">调焦的原因</h3>
+
+<p>谈到调焦的原因，首先需要谈到凸透镜的两个光学性质。</p>
+<ul>
+  <li>同一个三维点发出的各个方向的光线，经过镜头后必定汇聚于同一点；</li>
+  <li>与透镜切面平行的平面上不同的点发出的光线，经过镜头后，汇聚于不同的点；</li>
+</ul>
+
+<div style="text-align: center">
+<img src="/assets/img/lens/image.png" width="750" height="450" />
+</div>
+
+<p>上述的两个性质使得：对于与透镜切面平行的一个面，通过调整相距，可以通过透镜清晰成像。如果摄影焦距不当，则会导致一个点不同方向的光线会投影到成像平面上的不同点，出现混叠。</p>
+
+<h3 id="焦距与距离的关系">焦距与距离的关系</h3>
+
+<p>有的时候，我们使用相机拍摄经常会拍摄出如下的照片，只有某个距离的成像是清晰地，更近或者更远的场景成像是模糊的。</p>
+
+<div style="text-align: center">
+<img src="/assets/img/lens/sence_depth1.png" width="750" height="250" />
+</div>
+
+<p>这个现象的原因是，<strong>对于距离镜头切面不同距离的点，摄影焦距是不一样的。</strong>如下图所示，A1与A2的摄影焦距显然不同。</p>
+
+<div style="text-align: center">
+<img src="/assets/img/lens/distance2.png" width="750" height="350" />
+</div>
+
+<p>因此，根据我们想要拍摄的物体到镜头的距离，我们需要调出一个合适的相距，才能使得该物体在cmos芯片上得到清晰的成像。</p>
+
+<h3 id="景深">景深</h3>
+
+<p>看到这里，很多人陷入了疑惑：之前我看到的那些清晰的照片都是怎么来的呢？这就要提及景深的概念了。</p>
+
+<p>事实上，人眼的分辨能力是有限的，因此即使相距与摄影焦距不是完全相同，只要在某个阈值以内，我们看到的成像都是清晰地。而这就带来了景深的概念。<strong>景深指的是某个距离范围</strong>，在这个范围内成的像都可以看作是清晰的。如下图所示。</p>
+
+<div style="text-align: center">
+<img src="/assets/img/lens/sence_depth.png" width="750" height="300" />
+</div>
+
+<p>可以想象，如果景深很大的话，随便拍一张图片，也基本都是清楚的。一般来说，景深随着镜头的光圈值、焦距、拍摄距离而变化。</p>
+
+<ul>
+  <li>光圈越小，景深越大；</li>
+  <li>物理焦距越小，景深越大；（后两个需要测试确定）</li>
+  <li>摄影焦距越大，景深越大；</li>
+</ul>
+
+<h3 id="光圈">光圈</h3>
+<p>镜头的光圈影响了进光量，也影响了景深。一般光圈的大小可以用f值来表示，表示开了几分之几。比如说f/2.0表示开了1/2，如下：</p>
+
+<div style="text-align: center">
+<img src="/assets/img/lens/optical.png" width="750" height="200" />
+</div>
+
+<p>一般来说，光圈越大，代表进光量越大，那么曝光时间相应的就可以设置的短一点，比较适合用来拍摄快速运动的物体。</p>
+
+<p>同时，光圈越大，会使得景深变小（如下图），因此也不能无限扩大光圈。</p>
+
+<div style="text-align: center">
+<img src="/assets/img/lens/optical_depth.png" width="750" height="400" />
+</div>
+
+<h3 id="镜头的选择">镜头的选择</h3>
+<ul>
+  <li>接口：需要和相机接口匹配（比如当前手头的就是C接口的）；</li>
+  <li>CCD尺寸：镜头可支持的最大CCD尺寸应大于选配相机的CCD尺寸（不然最后图像四周会出现黑边）；</li>
+  <li>镜头焦距：可以根据相机CCD尺寸(相机型号尺寸)、工作距离、视场大小（也就是物体的高宽等）计算所需的镜头焦距；</li>
+</ul>
+<div style="text-align: center">
+<img src="/assets/img/lens/calcu.png" width="550" height="200" />
+</div>
+<ul>
+  <li>镜头光圈范围：根据所需曝光时间、景深等联合决定；</li>
+</ul>
+
+<h1 id="参考文献">参考文献</h1>
+<ul>
+  <li>[1] https://www.cnblogs.com/YongQiVisionIMAX/p/13872075.html</li>
+</ul>
+
+    </div>
+    
+    <div class="post_wrapper">
+      <footer class="post_footer cf">
+        <div class="post_share">
+          <span>Share:</span>
+          <a href="https://twitter.com/intent/tweet?text=镜头的参数与成像&url=/lens-camera/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/lens-camera/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/lens-camera/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+        </div>
+        <div class="post_tag">
+          <span>Tags:</span>
+          
+          <a href="/tags#计算机视觉" class="tag">计算机视觉</a>
+          
+          <a href="/tags#多传感器融合" class="tag">多传感器融合</a>
+          
+        </div>
+      </footer>
+    </div>
+  </article> <!-- End Section Post -->
+
+  <section class="author cf">
+    <div class="post_wrapper">
+      <div class="author_image">
+        <img src="/assets/img/wechat.jpg" alt="Author face">
+      </div>
+      <div class="author_info">
+        <h2 class="author_title">line</h2>
+        <p class="author_subtitle">怕什么真理无穷，进一寸有一寸的欢喜。</p>
+        <div class="author_social">
+          
+          <span class="author_email"><i class="fa fa-envelope-o" aria-hidden="true"></i> <a href="mailto:xianghengyong17@mails.ucas.edu.cn">xianghengyong17@mails.ucas.edu.cn</a></span>
+          
+          
+          
+          <span class="author_phone"><i class="fa fa-phone" aria-hidden="true"></i> <a href="tel:1314-131-0370">1314-131-0370</a></span>
+          
+
+          
+          <span class="author_website"><i class="fa fa-link" aria-hidden="true"></i> <a href="https://xhy3054.github.io/" target="_blank">https://xhy3054.github.io/</a></span>
+                      
+        </div>
+      </div>
+    </div>
+  </section> <!-- End Section Author -->
+
+  <section class="recent_box">
+    <div class="post_wrapper">
+      <h2 class="recent_title">Recent post</h2>
+      <div class="recent_list">
+        
+          
+            <a href="/lens-camera/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece32.jpg )"><span>镜头的参数与成像</span></a>
+          
+        
+          
+            <a href="/pigeon/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece31.jpg )"><span>鸽群优化</span></a>
+          
+        
+          
+            <a href="/dijkstra-astar/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece29.jpg )"><span>dijkstra算法和astar算法</span></a>
+          
+        
+          
+            <a href="/auction/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece30.jpg )"><span>拍卖算法</span></a>
+          
+        
+          
+            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>系统的可观性问题分析</span></a>
+          
+        
+          
+            <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
+          
+        
+      </div>
+    </div>
+  </section> <!-- End Section Recent Box -->
+  
+  
+<section class="comment_area">
+  <div class="comment_wrapper">
+    
+  </div>
+</section> <!-- End Section Comment Area -->
+  
+</main> <!-- End Section Post Content -->
+
+
+<footer class="main_footer">
+  <div class="wrapper">
+    
+<ul class="social_footer">
+  
+  <li><a href="#" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a></li>      
+  
+
+  
+  <li><a href="#" target="_blank"><i class="fa fa-wechat" aria-hidden="true"></i></a></li>
+  
+
+  
+  <li><a href="#" target="_blank"><i class="fa fa-qq" aria-hidden="true"></i></a></li>
+  
+
+  
+  <li><a href="#" target="_blank"><i class="fa fa-weibo" aria-hidden="true"></i></a></li>
+  
+
+  
+  <li><a href="#" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+  
+
+  
+  <li><a href="#" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+  
+  
+  <li><a href="#" target="_blank"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
+  
+  
+  <li><a href="#" target="_blank"><i class="fa fa-dribbble" aria-hidden="true"></i></a></li>
+  
+  
+  <li><a href="#" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+  
+</ul>
+
+    <div class="copyright">
+      <p>&copy; 2021. Design by line</p>
+    </div>
+  </div>
+</footer> <!-- End Section Footer -->
+
+
+
+  
+<div class="top" title="Top"><i class="fa fa-chevron-up" aria-hidden="true"></i></div> <!-- End Top Scroll -->
+  
+<script src="/assets/js/jquery-3.2.1.min.js"></script>
+<script src="/assets/js/jquery.vide.min.js"></script>
+<script src="/assets/js/custom.js"></script>
+<!-- End Javascript -->
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', '', 'auto');
+  ga('send', 'pageview');
+</script> <!-- End Analytics -->
+</body>
+</html>

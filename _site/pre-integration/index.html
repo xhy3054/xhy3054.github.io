@@ -23,23 +23,23 @@
 	<!-- Styles -->
 	<link rel="stylesheet" href="/assets/css/main.css">
 
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
-<!-- mathjax config similar to math.stackexchange --> 
-<script type="text/x-mathjax-config"> 
-MathJax.Hub.Config({ 
-    jax: ["input/TeX", "output/HTML-CSS"], 
-    tex2jax: { 
-        inlineMath: [ ['$', '$'] ], 
-        displayMath: [ ['$$', '$$']], 
-        processEscapes: true, 
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
-    messageStyle: "none", 
-    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
-}); 
-</script>
 
+
+<!--mathjax-->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+        }
+    });
+</script>
+  
 
 </head>
+
 
 <body>
 
@@ -262,6 +262,10 @@ MathJax.Hub.Config({
       <div class="recent_list">
         
           
+            <a href="/lens-camera/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece32.jpg )"><span>镜头的参数与成像</span></a>
+          
+        
+          
             <a href="/pigeon/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece31.jpg )"><span>鸽群优化</span></a>
           
         
@@ -279,10 +283,6 @@ MathJax.Hub.Config({
         
           
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
-          
-        
-          
-            <a href="/pychram-remote/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece26.jpg )"><span>pycharm远程调试</span></a>
           
         
       </div>

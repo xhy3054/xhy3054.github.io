@@ -1,5 +1,5 @@
 ---
-layout: post
+  layout: post
 title: vins初始化中的尺度、重力、速度的初始化
 date: 2019-08-25 10:07:24.000000000 +09:00
 img:  one-piece/one-piece14.jpg # Add image post (optional)

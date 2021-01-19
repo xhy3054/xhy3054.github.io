@@ -23,23 +23,23 @@
 	<!-- Styles -->
 	<link rel="stylesheet" href="/assets/css/main.css">
 
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
-<!-- mathjax config similar to math.stackexchange --> 
-<script type="text/x-mathjax-config"> 
-MathJax.Hub.Config({ 
-    jax: ["input/TeX", "output/HTML-CSS"], 
-    tex2jax: { 
-        inlineMath: [ ['$', '$'] ], 
-        displayMath: [ ['$$', '$$']], 
-        processEscapes: true, 
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
-    messageStyle: "none", 
-    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
-}); 
-</script>
 
+
+<!--mathjax-->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+        }
+    });
+</script>
+  
 
 </head>
+
 
 <body>
 
@@ -67,6 +67,18 @@ MathJax.Hub.Config({
   <section class="chapters cf">
       <div class="wrapper flex-row">
       
+  <div class="chapter">
+    <a href="/matchine-learning/">
+      
+      <img src=/assets/img/one-piece/one-piece23.jpg alt="机器学习中的常见函数总结（备忘）">
+      
+    </a>
+    <div class="chapter_inner">
+      <p class="chapter_number">2020, Jun 02</p>
+      <h3 class="chapter_title">机器学习中的常见函数总结（备忘）</h3>
+    </div>
+  </div>
+
   <div class="chapter">
     <a href="/memory-alignment/">
       
@@ -160,18 +172,6 @@ MathJax.Hub.Config({
     <div class="chapter_inner">
       <p class="chapter_number">2019, Sep 03</p>
       <h3 class="chapter_title">vins中基于滑窗的后端优化</h3>
-    </div>
-  </div>
-
-  <div class="chapter">
-    <a href="/vins-scale-gravity-velo/">
-      
-      <img src=/assets/img/one-piece/one-piece14.jpg alt="vins初始化中的尺度、重力、速度的初始化">
-      
-    </a>
-    <div class="chapter_inner">
-      <p class="chapter_number">2019, Aug 25</p>
-      <h3 class="chapter_title">vins初始化中的尺度、重力、速度的初始化</h3>
     </div>
   </div>
 

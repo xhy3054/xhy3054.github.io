@@ -23,23 +23,23 @@
 	<!-- Styles -->
 	<link rel="stylesheet" href="/assets/css/main.css">
 
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
-<!-- mathjax config similar to math.stackexchange --> 
-<script type="text/x-mathjax-config"> 
-MathJax.Hub.Config({ 
-    jax: ["input/TeX", "output/HTML-CSS"], 
-    tex2jax: { 
-        inlineMath: [ ['$', '$'] ], 
-        displayMath: [ ['$$', '$$']], 
-        processEscapes: true, 
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
-    messageStyle: "none", 
-    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
-}); 
-</script>
 
+
+<!--mathjax-->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+        }
+    });
+</script>
+  
 
 </head>
+
 
 <body>
 
@@ -103,8 +103,16 @@ MathJax.Hub.Config({
 </ul>
 
 <blockquote>
-  <p>此处多记录一下这篇论文，论文分析了gps与vio松耦合的定位系统的可观性。首先通过上述分析得到在vio坐标系下该系统不可观（我觉得主要是因为vio系下需要维护vio与enu坐标系之间的外参，这个是因为系统需要输出enu坐标，但是设备每次启动，vio和enu之间的外参有可能是不同的）的；而在enu坐标系下系统是完全可观的（额主要就是因为不需要维护vio与enu之间的外参了，只需要维护gps与imu两个传感器之间的外参就可以了）</p>
+  <p>此处多记录一下这篇论文，论文分析了gps与vio松耦合的定位系统的可观性。首先通过上述分析得到在vio坐标系下该系统不可观（我觉得主要是因为vio系下需要维护vio与enu坐标系之间的外参，这个是因为系统需要输出enu坐标，但是设备每次启动，vio和enu之间的外参有可能是不同的）的；而在enu坐标系下系统是完全可观的（额主要就是因为不需要维护vio与enu之间的外参了）</p>
 </blockquote>
+
+<p>论文中提到关于在vio系下不可观问题的解决方案是：</p>
+
+<ol>
+  <li>系统开机后进行初始化：通过轨迹对齐非线性优化确定enu与vio坐标系之间外参；</li>
+  <li>将vio的状态根据1估计的外参转换到enu坐标系下；</li>
+  <li>在enu下进行状态传播与更新，不需要再维护vio与enu之间的外参；</li>
+</ol>
 
 <h1 id="参考文献">参考文献</h1>
 
@@ -164,6 +172,10 @@ MathJax.Hub.Config({
       <div class="recent_list">
         
           
+            <a href="/lens-camera/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece32.jpg )"><span>镜头的参数与成像</span></a>
+          
+        
+          
             <a href="/pigeon/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece31.jpg )"><span>鸽群优化</span></a>
           
         
@@ -181,10 +193,6 @@ MathJax.Hub.Config({
         
           
             <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
-          
-        
-          
-            <a href="/pychram-remote/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece26.jpg )"><span>pycharm远程调试</span></a>
           
         
       </div>

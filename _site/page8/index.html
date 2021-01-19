@@ -23,23 +23,23 @@
 	<!-- Styles -->
 	<link rel="stylesheet" href="/assets/css/main.css">
 
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script> 
-<!-- mathjax config similar to math.stackexchange --> 
-<script type="text/x-mathjax-config"> 
-MathJax.Hub.Config({ 
-    jax: ["input/TeX", "output/HTML-CSS"], 
-    tex2jax: { 
-        inlineMath: [ ['$', '$'] ], 
-        displayMath: [ ['$$', '$$']], 
-        processEscapes: true, 
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, 
-    messageStyle: "none", 
-    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] } 
-}); 
-</script>
 
+
+<!--mathjax-->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+        }
+    });
+</script>
+  
 
 </head>
+
 
 <body>
 
@@ -67,6 +67,18 @@ MathJax.Hub.Config({
   <section class="chapters cf">
       <div class="wrapper flex-row">
       
+  <div class="chapter">
+    <a href="/cpp-inheritance-virtual-func/">
+      
+      <img src=/assets/img/cute9.jpg alt="c++继承体系中的成员函数调用问题探究">
+      
+    </a>
+    <div class="chapter_inner">
+      <p class="chapter_number">2018, Oct 28</p>
+      <h3 class="chapter_title">c++继承体系中的成员函数调用问题探究</h3>
+    </div>
+  </div>
+
   <div class="chapter">
     <a href="/cpp-copy-move/">
       
@@ -160,18 +172,6 @@ MathJax.Hub.Config({
     <div class="chapter_inner">
       <p class="chapter_number">2018, Oct 09</p>
       <h3 class="chapter_title">c++中的引用</h3>
-    </div>
-  </div>
-
-  <div class="chapter">
-    <a href="/hafuo-feng-struct/">
-      
-      <img src=/assets/img/village.jpg alt="哈佛体系结构与冯诺依曼体系结构的区别">
-      
-    </a>
-    <div class="chapter_inner">
-      <p class="chapter_number">2018, Oct 03</p>
-      <h3 class="chapter_title">哈佛体系结构与冯诺依曼体系结构的区别</h3>
     </div>
   </div>
 
