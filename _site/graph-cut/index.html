@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>图片分割之最大流最小割 - line - 千里之行</title>
+	<meta name="description" content="">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta property="og:image" content="">
+	<link rel="shortcut icon" href="/assets/img/favicon/favicon.ico" type="image/x-icon">
+	<link rel="apple-touch-icon" href="/assets/img/favicon/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/assets/img/favicon/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/assets/img/favicon/apple-touch-icon-114x114.png">
+	<!-- Chrome, Firefox OS and Opera -->
+	<meta name="theme-color" content="#d25469">
+	<!-- Windows Phone -->
+	<meta name="msapplication-navbutton-color" content="#d25469">
+	<!-- iOS Safari -->
+	<meta name="apple-mobile-web-app-status-bar-style" content="#d25469">
+	<!-- Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+	<!-- Styles -->
+	<link rel="stylesheet" href="/assets/css/main.css">
+
+
+
+<!--mathjax-->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+        }
+    });
+</script>
+  
+
+</head>
+
+
+<body>
+
+  
+<header class="main_header">
+  <a href="/" class="logo">line</a>
+  <nav class="main_menu">
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
+  </nav>
+</header> <!-- End Section Header -->
+
+
+<main class="post_content">
+  <article class="post">
+    <header>
+      <div class="post_image">
+        <img src=/assets/img/one-piece/one-piece34.jpg alt="图片分割之最大流最小割">
+      </div>
+      <div class="post_description">
+        <p class="post_meta">2021, Jan 24</p>
+        <h1 class="post_title">图片分割之最大流最小割</h1>
+      </div>
+    </header> <!-- End Header -->
+
+    <div class="entry_content">
+      <p>在图像分割领域，最近几年基于深度学习的方法占据了绝对领先的地位。但是相对于黑匣子的深度学习，传统的方法更有几分味道。这次要介绍的是图割算法，这是一种基于能量优化的方法，在前景背景分割上很有效果。</p>
+
+<h1 id="1-最大流与最小割">1. 最大流与最小割</h1>
+
+<blockquote>
+  <p>在了解图割之前，首先需要了解最大流与最小割的概念。</p>
+</blockquote>
+
+<h2 id="11-最小割min-cut">1.1 最小割min-cut</h2>
+
+<p>举例说明，如下一个有向加权图所示，从顶点<code class="language-plaintext highlighter-rouge">S(source)</code>到顶点<code class="language-plaintext highlighter-rouge">T(sink)</code>有三条路径，每条路径的代价<code class="language-plaintext highlighter-rouge">c(cost)</code>是该路径上所有边的权重之和。最小割的意思就是说通过割断边将图中所有节点划分为两个不相交的集合，<code class="language-plaintext highlighter-rouge">S</code>与<code class="language-plaintext highlighter-rouge">T</code>分别在其中一个集合中。并且最小割保证所割断的边的权重之和最小：</p>
+
+<div style="text-align: center">
+<img src="/assets/img/graph_cut/graphcut001.jpg" width="750" height="400" />
+</div>
+
+<p>可以很明显的发现割断的边是<code class="language-plaintext highlighter-rouge">s-&gt;a</code>与<code class="language-plaintext highlighter-rouge">b-&gt;t</code>时是最小割。</p>
+
+<h2 id="12-最大流max-flow">1.2 最大流max-flow</h2>
+
+<p>我们将边想象成管道，权重表示流量，那么从<code class="language-plaintext highlighter-rouge">S</code>能流入<code class="language-plaintext highlighter-rouge">T</code>的最大流量就是<code class="language-plaintext highlighter-rouge">2+3=5</code>，而在计算最大流量的过程中，我们可以发现起到约束作用的边是<code class="language-plaintext highlighter-rouge">s-&gt;a</code>与<code class="language-plaintext highlighter-rouge">b-&gt;t</code>。这也就是最大流。</p>
+
+<blockquote>
+  <p>可以发现，最大流与最小割结果是一致的，其实有人已经证明过（福特-福克森定理）这两者等价。因此可以将最小割问题转化成最大流问题来进行求解。</p>
+</blockquote>
+
+<h2 id="13-最大流问题的求解">1.3 最大流问题的求解</h2>
+
+<p>传统求解最大流问题的方法是增广路径算法，原理是利用广度优先搜索在图中搜索所有从<code class="language-plaintext highlighter-rouge">S</code>到<code class="language-plaintext highlighter-rouge">T</code>的路径，最终找到最大流路径。这种方法几乎是需要遍历图中所有的节点，因此效率很低。因此目前大多是使用基于优化的方法。</p>
+
+<h1 id="2-图割graph-cut">2. 图割graph-cut</h1>
+
+<blockquote>
+  <p>图割算法其实就是将最大流最小割的理论应用到了图像分割的领域。</p>
+</blockquote>
+
+<p>比如说前景背景分割问题，可以将图像表示为一张无向图<code class="language-plaintext highlighter-rouge">G=(V,E)</code>，其中<code class="language-plaintext highlighter-rouge">V</code>是顶点集合，<code class="language-plaintext highlighter-rouge">E</code>是边集合。在这个图上多添加两个顶点，一个代表前景的<code class="language-plaintext highlighter-rouge">S(Source,源)</code>节点，一个代表背景的<code class="language-plaintext highlighter-rouge">T(Sink,汇)</code>节点。在初始构造的图中，每个像素顶点都和<code class="language-plaintext highlighter-rouge">S</code>与<code class="language-plaintext highlighter-rouge">T</code>连接，并且它们之间的边被叫做<code class="language-plaintext highlighter-rouge">t-links</code>。如下图：</p>
+
+<div style="text-align: center">
+<img src="/assets/img/graph_cut/graphcut002.jpg" width="750" height="400" />
+</div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">t-links</code>：每个像素节点与类别节点（<code class="language-plaintext highlighter-rouge">S/T</code>，t是terminal的缩写）相连的边；</li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">n-links</code>：像素节点之间边（上面图中每个像素节点只与自身周围的四个像素节点相连，n是neighbour的缩写）；</p>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">Cuts</code>：一组边的集合，<code class="language-plaintext highlighter-rouge">Cuts</code>的断开会使得节点<code class="language-plaintext highlighter-rouge">S</code>与<code class="language-plaintext highlighter-rouge">T</code>之间没有通路，即每个像素只会与<code class="language-plaintext highlighter-rouge">S</code>或<code class="language-plaintext highlighter-rouge">T</code>中的一个相连接。其中<code class="language-plaintext highlighter-rouge">t-links</code>的断裂实现了像素的分类，而<code class="language-plaintext highlighter-rouge">n-links</code>的断裂实现了分割；另外！<code class="language-plaintext highlighter-rouge">Cuts</code>是最大流或者最小割的结果，其权重之和最小；</li>
+</ul>
+
+<h2 id="21-权重costs">2.1 权重costs</h2>
+
+<blockquote>
+  <p>由上可知图割算法中如何确定<code class="language-plaintext highlighter-rouge">costs</code>至关重要。</p>
+</blockquote>
+
+<p>在前景背景的分割领域中，前景与背景是有一些外观差异的，这个体现在像素值上。因此<code class="language-plaintext highlighter-rouge">t-links</code>对应的权重可以是像素值与目标像素的相似度（因此此类算法可能需要手工给定前景背景的像素初始值），相似度越大，对应的割断代价也越大。</p>
+
+<p>而对于<code class="language-plaintext highlighter-rouge">n-links</code>，上面每个像素节点都只与相邻的四个像素节点相连（<code class="language-plaintext highlighter-rouge">n-links</code>），表示临近像素之间属于同一类的概率，同时临近像素之间会有邻域相似性，而相似性较差的区域往往是前景和背景的交界处。即如果相邻的两个像素像素值相似，那么断开该边的代价就会高。</p>
+
+<h3 id="211-t-links的权重">2.1.1 <code class="language-plaintext highlighter-rouge">t-links</code>的权重</h3>
+
+<p>对于一个像素点，其有两条<code class="language-plaintext highlighter-rouge">t-links</code>边，分别是连接前景节点S与背景节点T的边。边的权重可以是终端节点的颜色差异。</p>
+
+<h3 id="212-n-links的权重">2.1.2 <code class="language-plaintext highlighter-rouge">n-links</code>的权重</h3>
+
+<p>对于一个像素点，其有周围相邻的像素点之间存在<code class="language-plaintext highlighter-rouge">n-links</code>边，在图像分割任务时边的权重一般也是用颜色差异来确定的。</p>
+
+<blockquote>
+  <p>其实上面讲述的还是图的建立，关于图割进行时的能量最小化算法其实也非常重要，但是这个我现在没想到如何简短的说明白，之后再补充。</p>
+</blockquote>
+
+<h2 id="22-示例">2.2 示例</h2>
+
+<p>如下，对于一个<code class="language-plaintext highlighter-rouge">3x3</code>的图，</p>
+
+<ol>
+  <li>首先取两个种子点（即人为指定分别属于前景背景的两个像素点）；</li>
+  <li>建立一个图，图中边的粗细表示对应权重的大小；</li>
+  <li>找到最大流或最小割的边的组合，完成图像分割；</li>
+</ol>
+
+<div style="text-align: center">
+<img src="/assets/img/graph_cut/graphcut004.jpg" width="600" height="650" />
+</div>
+
+<h1 id="参考文献">参考文献</h1>
+
+<ul>
+  <li>
+    <p>[1] Boykov Y ,  Kolmogorov V . An experimental comparison of min-cut/max-  flow algorithms for energy minimization in vision[J]. IEEE Transactions  on Pattern Analysis and Machine Intelligence, 2004, 26(9):1124-1137.</p>
+  </li>
+  <li>
+    <p>[2] https://pengyizhang.github.io/2020/04/07/graphcut/</p>
+  </li>
+</ul>
+
+    </div>
+    
+    <div class="post_wrapper">
+      <footer class="post_footer cf">
+        <div class="post_share">
+          <span>Share:</span>
+          <a href="https://twitter.com/intent/tweet?text=图片分割之最大流最小割&url=/graph-cut/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/graph-cut/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/graph-cut/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+        </div>
+        <div class="post_tag">
+          <span>Tags:</span>
+          
+          <a href="/tags#计算机视觉" class="tag">计算机视觉</a>
+          
+        </div>
+      </footer>
+    </div>
+  </article> <!-- End Section Post -->
+
+  <section class="author cf">
+    <div class="post_wrapper">
+      <div class="author_image">
+        <img src="/assets/img/wechat.jpg" alt="Author face">
+      </div>
+      <div class="author_info">
+        <h2 class="author_title">line</h2>
+        <p class="author_subtitle">怕什么真理无穷，进一寸有一寸的欢喜。</p>
+        <div class="author_social">
+          
+          <span class="author_email"><i class="fa fa-envelope-o" aria-hidden="true"></i> <a href="mailto:xianghengyong17@mails.ucas.edu.cn">xianghengyong17@mails.ucas.edu.cn</a></span>
+          
+          
+          
+          <span class="author_phone"><i class="fa fa-phone" aria-hidden="true"></i> <a href="tel:1314-131-0370">1314-131-0370</a></span>
+          
+
+          
+          <span class="author_website"><i class="fa fa-link" aria-hidden="true"></i> <a href="https://xhy3054.github.io/" target="_blank">https://xhy3054.github.io/</a></span>
+                      
+        </div>
+      </div>
+    </div>
+  </section> <!-- End Section Author -->
+
+  <section class="recent_box">
+    <div class="post_wrapper">
+      <h2 class="recent_title">Recent post</h2>
+      <div class="recent_list">
+        
+          
+            <a href="/mutex/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece35.jpg )"><span>C++并发编程中的锁---互斥元</span></a>
+          
+        
+          
+            <a href="/graph-cut/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece34.jpg )"><span>图片分割之最大流最小割</span></a>
+          
+        
+          
+            <a href="/lens-camera/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece32.jpg )"><span>镜头的参数与成像</span></a>
+          
+        
+          
+            <a href="/pigeon/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece31.jpg )"><span>鸽群优化</span></a>
+          
+        
+          
+            <a href="/dijkstra-astar/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece29.jpg )"><span>dijkstra算法和astar算法</span></a>
+          
+        
+          
+            <a href="/auction/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece30.jpg )"><span>拍卖算法</span></a>
+          
+        
+      </div>
+    </div>
+  </section> <!-- End Section Recent Box -->
+  
+  
+<section class="comment_area">
+  <div class="comment_wrapper">
+    
+  </div>
+</section> <!-- End Section Comment Area -->
+  
+</main> <!-- End Section Post Content -->
+
+
+<footer class="main_footer">
+  <div class="wrapper">
+    
+<ul class="social_footer">
+  
+  <li><a href="#" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a></li>      
+  
+
+  
+  <li><a href="#" target="_blank"><i class="fa fa-wechat" aria-hidden="true"></i></a></li>
+  
+
+  
+  <li><a href="#" target="_blank"><i class="fa fa-qq" aria-hidden="true"></i></a></li>
+  
+
+  
+  <li><a href="#" target="_blank"><i class="fa fa-weibo" aria-hidden="true"></i></a></li>
+  
+
+  
+  <li><a href="#" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+  
+
+  
+  <li><a href="#" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+  
+  
+  <li><a href="#" target="_blank"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
+  
+  
+  <li><a href="#" target="_blank"><i class="fa fa-dribbble" aria-hidden="true"></i></a></li>
+  
+  
+  <li><a href="#" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+  
+</ul>
+
+    <div class="copyright">
+      <p>&copy; 2021. Design by line</p>
+    </div>
+  </div>
+</footer> <!-- End Section Footer -->
+
+
+
+  
+<div class="top" title="Top"><i class="fa fa-chevron-up" aria-hidden="true"></i></div> <!-- End Top Scroll -->
+  
+<script src="/assets/js/jquery-3.2.1.min.js"></script>
+<script src="/assets/js/jquery.vide.min.js"></script>
+<script src="/assets/js/custom.js"></script>
+<!-- End Javascript -->
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', '', 'auto');
+  ga('send', 'pageview');
+</script> <!-- End Analytics -->
+</body>
+</html>

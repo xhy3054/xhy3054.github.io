@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>编译工具讨论－－make与cmake - line - 千里之行</title>
+	<title>编译问题讨论－－make与cmake已经静态动态链接库 - line - 千里之行</title>
 	<meta name="description" content="">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -57,18 +57,18 @@
   <article class="post">
     <header>
       <div class="post_image">
-        <img src=/assets/img/software.jpg alt="编译工具讨论－－make与cmake">
+        <img src=/assets/img/software.jpg alt="编译问题讨论－－make与cmake已经静态动态链接库">
       </div>
       <div class="post_description">
         <p class="post_meta">2018, May 12</p>
-        <h1 class="post_title">编译工具讨论－－make与cmake</h1>
+        <h1 class="post_title">编译问题讨论－－make与cmake已经静态动态链接库</h1>
       </div>
     </header> <!-- End Header -->
 
     <div class="entry_content">
       <h2 id="前言">前言</h2>
 
-<p>很早之前就接触过makefile的语法，但是没有深入的学习下去。本来以为自己了解这方面的知识了，谁知道最近做项目时，<strong>cmake</strong>、<strong>make install</strong>、<strong>make distribute</strong>…各种形式接连丢过来，我竟是懵了。这才发现自己其实根本没有形成系统的理解，稍微变形就使得我不知所云。想来想去还是写一篇博客吧，把自己的理解梳理一遍，以后如果有更深入、更清晰的理解，我会对这篇博客进行补充，尽量使得自己的知识见解有条理，系统化。</p>
+<p>很早之前就接触过makefile的语法，但是没有深入的学习下去。本来以为自己了解这方面的知识了，谁知道最近做项目时，各种形式接连丢过来，我竟是懵了。这才发现自己其实根本没有形成系统的理解，稍微变形就使得我不知所云。想来想去还是写一篇博客吧，把自己的理解梳理一遍，以后如果有更深入、更清晰的理解，我会对这篇博客进行补充，尽量使得自己的知识见解有条理，系统化。</p>
 
 <h2 id="编译过程">编译过程</h2>
 
@@ -152,8 +152,8 @@ make install
 
 <p><strong>静态连接就是把外部函数库，拷贝到可执行文件中</strong>。所以在编译链接完成后，就不需要静态库文件了。</p>
 <ul>
-  <li>好处是，适用范围比较广，不用担心用户机器缺少某个库文件；</li>
-  <li>缺点是安装包会比较大，而且多个应用程序之间，无法共享库文件。</li>
+  <li>好处是，适用范围比较广，不用担心用户机器后来删掉某个库文件；</li>
+  <li>缺点是安装包会比较大，而且多个应用程序之间，无法共享库文件；并且在链接时如果静态链接库之间存在依赖关系，需要考虑链接顺序问题。</li>
 </ul>
 
 <p><strong>动态连接的做法正好相反，外部函数库不进入安装包，只在运行时动态引用</strong>。在运行可执行文件时，动态库文件必须存在于指定的位置，否则出错。</p>
@@ -171,7 +171,7 @@ make install
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=编译工具讨论－－make与cmake&url=/make/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=编译问题讨论－－make与cmake已经静态动态链接库&url=/make/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
           <a href="https://facebook.com/sharer.php?u=/make/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
           <a href="https://plus.google.com/share?url=/make/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
@@ -216,6 +216,14 @@ make install
       <div class="recent_list">
         
           
+            <a href="/mutex/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece35.jpg )"><span>C++并发编程中的锁---互斥元</span></a>
+          
+        
+          
+            <a href="/graph-cut/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece34.jpg )"><span>图片分割之最大流最小割</span></a>
+          
+        
+          
             <a href="/lens-camera/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece32.jpg )"><span>镜头的参数与成像</span></a>
           
         
@@ -229,14 +237,6 @@ make install
         
           
             <a href="/auction/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece30.jpg )"><span>拍卖算法</span></a>
-          
-        
-          
-            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>系统的可观性问题分析</span></a>
-          
-        
-          
-            <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
       </div>

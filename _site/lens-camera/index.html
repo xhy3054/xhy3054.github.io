@@ -80,7 +80,12 @@
   <li>光圈：大小决定了图像的亮度，在拍摄高斯运动物体、曝光时间很短的应用中，应该选用大光圈镜头，以提高亮度。</li>
   <li>景深：指的是在理想对焦状态下物体允许的前后方向的移动量。（在此范围内可以认为成像是清晰地）</li>
   <li>视野范围：比较简单的理解就是有多少度（手头这个最大110°）的视场；</li>
-  <li>对应最大ccd尺寸：镜头成像直径可以覆盖的最大CCD芯片的尺寸；</li>
+  <li>对应最大ccd尺寸（靶面尺寸）：镜头成像直径可以覆盖的最大CCD芯片的尺寸；
+    <ul>
+      <li>镜头的靶面尺寸应该是大于等于镜头的，不然成像会出现黑边；</li>
+      <li>该参数一般使用英寸来衡量的，最小的一般是1/4‘’，最大的是1‘’；</li>
+    </ul>
+  </li>
   <li>接口：比如C、CS等，只要可以和相机接口匹配安装即可；</li>
 </ul>
 
@@ -186,6 +191,40 @@
   <li>镜头光圈范围：根据所需曝光时间、景深等联合决定；</li>
 </ul>
 
+<h1 id="相机的参数">相机的参数</h1>
+
+<p>上面谈论的主要是镜头的一些参数，但是获得图像的质量不仅仅是由镜头决定的，相机的素质也很重要。下面总结一些相机的比较关键的性质。</p>
+
+<ul>
+  <li>曝光：
+    <ul>
+      <li>自动曝光：相机根据图像亮暗程度自动调节曝光时间；
+        <ul>
+          <li>这种方式其实如果自动曝光控制的好的话很不错，但是实际使用发现很容易出现过曝的情况；</li>
+        </ul>
+      </li>
+      <li>固定曝光：为相机设置固定的曝光时间；
+        <ul>
+          <li>优点：可以根据需要合理设置曝光时间，提高时间戳的准确度等；</li>
+          <li>缺点：在不同光源图像亮暗差异会很大，需要一些后处理；</li>
+        </ul>
+      </li>
+      <li>全局曝光（测量学常用）</li>
+      <li>卷帘曝光（容易出现运动模糊）</li>
+    </ul>
+  </li>
+  <li>相机靶面尺寸：如果这个尺寸太小，镜头的大视角成像只能投影上去一部分，不利于大视角成像；太大超过镜头的靶面尺寸，会导致出现黑边；</li>
+  <li>相机分辨率</li>
+  <li>触发方式
+    <ul>
+      <li>硬件触发：脉冲触发</li>
+      <li>软件触发：往寄存器里写数据触发</li>
+    </ul>
+  </li>
+  <li>帧率（一般与分辨率、像素时钟之间存在耦合）；</li>
+  <li>pixel clock：像素时钟频率越高，可达帧率越高；</li>
+</ul>
+
 <h1 id="参考文献">参考文献</h1>
 <ul>
   <li>[1] https://www.cnblogs.com/YongQiVisionIMAX/p/13872075.html</li>
@@ -244,6 +283,14 @@
       <div class="recent_list">
         
           
+            <a href="/mutex/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece35.jpg )"><span>C++并发编程中的锁---互斥元</span></a>
+          
+        
+          
+            <a href="/graph-cut/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece34.jpg )"><span>图片分割之最大流最小割</span></a>
+          
+        
+          
             <a href="/lens-camera/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece32.jpg )"><span>镜头的参数与成像</span></a>
           
         
@@ -257,14 +304,6 @@
         
           
             <a href="/auction/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece30.jpg )"><span>拍卖算法</span></a>
-          
-        
-          
-            <a href="/nullspace-observable/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece28.jpg )"><span>系统的可观性问题分析</span></a>
-          
-        
-          
-            <a href="/pytorch-network/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece27.jpg )"><span>pytorch中组成网络的卷积、归一化、relu等常见结构</span></a>
           
         
       </div>

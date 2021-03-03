@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>C++并发编程中的锁---互斥元 - line - 千里之行</title>
+	<meta name="description" content="">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta property="og:image" content="">
+	<link rel="shortcut icon" href="/assets/img/favicon/favicon.ico" type="image/x-icon">
+	<link rel="apple-touch-icon" href="/assets/img/favicon/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/assets/img/favicon/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/assets/img/favicon/apple-touch-icon-114x114.png">
+	<!-- Chrome, Firefox OS and Opera -->
+	<meta name="theme-color" content="#d25469">
+	<!-- Windows Phone -->
+	<meta name="msapplication-navbutton-color" content="#d25469">
+	<!-- iOS Safari -->
+	<meta name="apple-mobile-web-app-status-bar-style" content="#d25469">
+	<!-- Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+	<!-- Styles -->
+	<link rel="stylesheet" href="/assets/css/main.css">
+
+
+
+<!--mathjax-->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+        }
+    });
+</script>
+  
+
+</head>
+
+
+<body>
+
+  
+<header class="main_header">
+  <a href="/" class="logo">line</a>
+  <nav class="main_menu">
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
+  </nav>
+</header> <!-- End Section Header -->
+
+
+<main class="post_content">
+  <article class="post">
+    <header>
+      <div class="post_image">
+        <img src=/assets/img/one-piece/one-piece35.jpg alt="C++并发编程中的锁---互斥元">
+      </div>
+      <div class="post_description">
+        <p class="post_meta">2021, Mar 03</p>
+        <h1 class="post_title">C++并发编程中的锁---互斥元</h1>
+      </div>
+    </header> <!-- End Header -->
+
+    <div class="entry_content">
+      <p>说到并发编程就离不开锁的概念。锁其实是一种操作，这种操作可以避免竞争问题的出现。在c++中可以使用互斥元来实现锁的操作。</p>
+
+<h1 id="互斥元">互斥元</h1>
+
+<blockquote>
+  <p>互斥元也叫互斥量，在c++11中被命名为Mutex，所有其相关的类和函数都在头文件<mutex>中。</mutex></p>
+</blockquote>
+
+<p>在头文件<code class="language-plaintext highlighter-rouge">mutex</code>中一共有四种互斥元类，分别是：</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">std::mutex</code>，最基本的互斥元类。</li>
+  <li><code class="language-plaintext highlighter-rouge">std::recursive_mutex</code>，递归Mutex类（同一线程可以对互斥量多次上锁，来获得对互斥量对象的多层所有权）。</li>
+  <li><code class="language-plaintext highlighter-rouge">std::time_mutex</code>，定时Mutex类。</li>
+  <li><code class="language-plaintext highlighter-rouge">std::recursive_timed_mutex</code>，定时递归Mutex类。</li>
+</ol>
+
+<blockquote>
+  <p>上述四种互斥元类都有一个成员函数<code class="language-plaintext highlighter-rouge">lock</code>和一个<code class="language-plaintext highlighter-rouge">unlock</code>来实现锁定与解锁的操作。</p>
+</blockquote>
+
+<p>除此之外，还有两种Lock类，分别是</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">std::lock_guard</code>，这个类的使用类似智能指针，可以销毁时自动解锁；</li>
+  <li><code class="language-plaintext highlighter-rouge">std::unique_lock</code>，这个类与1用法相同，但提供了更灵活的上锁和解锁控制，同时也更占资源；</li>
+</ol>
+
+<blockquote>
+  <p>lock类的作用类似智能指针，可以在销毁时自动解锁，不至于出现一个互斥元被一直锁住。</p>
+</blockquote>
+
+<p>其他类型</p>
+
+<ul>
+  <li>std::once_flag</li>
+  <li>std::adopt_lock_t</li>
+  <li>std::defer_lock_t</li>
+  <li>std::try_to_lock_t</li>
+</ul>
+
+<p>函数：</p>
+
+<ul>
+  <li>std::try_lock，尝试同时对多个互斥量上锁。</li>
+  <li>std::lock，可以同时对多个互斥量上锁。</li>
+  <li>std::call_once，如果多个线程需要同时调用某个函数，call_once 可以保证多个线程对该函数只调用一次。</li>
+</ul>
+
+<h2 id="重点1stdmutex类">重点1：std::mutex类</h2>
+
+<ul>
+  <li>构造函数，<code class="language-plaintext highlighter-rouge">std::mutex</code>不允许拷贝构造，也不允许 move 拷贝，最初产生的 mutex 对象是处于 unlocked 状态的。</li>
+  <li><code class="language-plaintext highlighter-rouge">lock()</code>，调用线程将锁住该互斥量。线程调用该函数会发生下面 <strong>3 种情况</strong>：
+    <ol>
+      <li>如果该互斥量当前没有被锁住，则调用线程将该互斥量锁住，直到调用 unlock之前，该线程一直拥有该锁。</li>
+      <li>如果当前互斥量被其他线程锁住，则当前的调用线程被阻塞住。</li>
+      <li>如果当前互斥量被当前调用线程锁住，则会产生死锁(deadlock)。</li>
+    </ol>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">unlock()</code>， 解锁，释放对互斥量的所有权。</li>
+  <li><code class="language-plaintext highlighter-rouge">try_lock()</code>，尝试锁住互斥量，如果互斥量被其他线程占有，则当前线程也不会被阻塞。线程调用该函数也会出现下面 <strong>3 种情况</strong>：
+    <ol>
+      <li>如果当前互斥量没有被其他线程占有，则该线程锁住互斥量，直到该线程调用 unlock 释放互斥量。</li>
+      <li>如果当前互斥量被其他线程锁住，则当前调用线程返回 false，而并不会被阻塞掉。</li>
+      <li>如果当前互斥量被当前调用线程锁住，则会产生死锁(deadlock)。</li>
+    </ol>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;       // std::cout
+#include &lt;thread&gt;         // std::thread
+#include &lt;mutex&gt;          // std::mutex
+</span> 
+<span class="k">volatile</span> <span class="kt">int</span> <span class="nf">counter</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="c1">// non-atomic counter</span>
+<span class="n">std</span><span class="o">::</span><span class="n">mutex</span> <span class="n">mtx</span><span class="p">;</span>           <span class="c1">// locks access to counter</span>
+ 
+<span class="kt">void</span> <span class="nf">attempt_10k_increases</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">10000</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">mtx</span><span class="p">.</span><span class="n">try_lock</span><span class="p">())</span> <span class="p">{</span>   <span class="c1">// only increase if currently not locked:</span>
+            <span class="o">++</span><span class="n">counter</span><span class="p">;</span>
+            <span class="n">mtx</span><span class="p">.</span><span class="n">unlock</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+ 
+<span class="kt">int</span> <span class="nf">main</span> <span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">threads</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">threads</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">(</span><span class="n">attempt_10k_increases</span><span class="p">);</span>
+ 
+    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">th</span> <span class="o">:</span> <span class="n">threads</span><span class="p">)</span> <span class="n">th</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">counter</span> <span class="o">&lt;&lt;</span> <span class="s">" successful increases of the counter.</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+ 
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="重点2lock类的使用">重点2：lock类的使用</h2>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">std::lock_guard</code></li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;       // std::cout
+#include &lt;thread&gt;         // std::thread
+#include &lt;mutex&gt;          // std::mutex, std::lock_guard
+#include &lt;stdexcept&gt;      // std::logic_error
+</span> 
+<span class="n">std</span><span class="o">::</span><span class="n">mutex</span> <span class="n">mtx</span><span class="p">;</span>
+ 
+<span class="kt">void</span> <span class="nf">print_even</span> <span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="o">%</span><span class="mi">2</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="s">" is even</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">throw</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">logic_error</span><span class="p">(</span><span class="s">"not even"</span><span class="p">));</span>
+<span class="p">}</span>
+ 
+<span class="kt">void</span> <span class="nf">print_thread_id</span> <span class="p">(</span><span class="kt">int</span> <span class="n">id</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="p">{</span>
+        <span class="c1">// using a local lock_guard to lock mtx guarantees unlocking on destruction / exception:</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">lck</span> <span class="p">(</span><span class="n">mtx</span><span class="p">);</span>
+        <span class="n">print_even</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">catch</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">logic_error</span><span class="o">&amp;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"[exception caught]</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+ 
+<span class="kt">int</span> <span class="nf">main</span> <span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">threads</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
+    <span class="c1">// spawn 10 threads:</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">threads</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">(</span><span class="n">print_thread_id</span><span class="p">,</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+ 
+    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">th</span> <span class="o">:</span> <span class="n">threads</span><span class="p">)</span> <span class="n">th</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+ 
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>lock_guard的缺点是使用其锁住一个信号量之后，只有等到该lock_guard对象销毁后才能解锁。</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">std::unique_lock</code></li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;       // std::cout
+#include &lt;thread&gt;         // std::thread
+#include &lt;mutex&gt;          // std::mutex, std::unique_lock
+</span> 
+<span class="n">std</span><span class="o">::</span><span class="n">mutex</span> <span class="n">mtx</span><span class="p">;</span>           <span class="c1">// mutex for critical section</span>
+ 
+<span class="kt">void</span> <span class="nf">print_block</span> <span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">char</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// critical section (exclusive access to std::cout signaled by lifetime of lck):</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">lck</span> <span class="p">(</span><span class="n">mtx</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">c</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+<span class="p">}</span>
+ 
+<span class="kt">int</span> <span class="nf">main</span> <span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">th1</span> <span class="p">(</span><span class="n">print_block</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="sc">'*'</span><span class="p">);</span>
+    <span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">th2</span> <span class="p">(</span><span class="n">print_block</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="sc">'$'</span><span class="p">);</span>
+ 
+    <span class="n">th1</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+    <span class="n">th2</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+ 
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>unique_lock比lock_guard使用灵活很多，具体可以自行查阅。</p>
+</blockquote>
+
+<h1 id="死锁">死锁</h1>
+
+<blockquote>
+  <p>死锁其实就是说线程被阻塞并且一直被阻塞无法跳出执行。举一个多个线程造成死锁的例子，两个线程A和B都需要做一个操作，这个操作需要同时涉及两个互斥元a和b才能完成。则当A锁定了互斥元a，B锁定了互斥元b，则此时A会一直阻塞，知道b解锁，B会一直阻塞，直到a解锁。因此最终导致A与B都一直被阻塞不能执行。</p>
+</blockquote>
+
+<p>上述多个线程造成的死锁的解决方案：</p>
+
+<ol>
+  <li>
+    <p>始终使用相同的顺序锁定两个互斥元。</p>
+  </li>
+  <li>
+    <p>c++标准库的<code class="language-plaintext highlighter-rouge">std::lock</code>可以同时锁定两个或更多的互斥元。</p>
+  </li>
+</ol>
+
+<p>1个线程造成的死锁其实就是上面提到的在当前线程已经锁住一个互斥量的前提下继续尝试加锁。</p>
+
+<h1 id="锁粒度">锁粒度</h1>
+
+<blockquote>
+  <p>锁粒度是一个文字术语，用来描述由单个锁所保护的数据量。细粒度锁保护着少量数据，粗粒度锁保护着大量的数据。锁粒度够大才能确保所需的数据都被保护，但同时会降低时效性。</p>
+</blockquote>
+
+<p>可以使用<code class="language-plaintext highlighter-rouge">std::unique_lock</code>来灵活的确定锁粒度。一般来说，只应该以执行要求的操作所需的最小可能时间而去持有锁。</p>
+
+<h1 id="参考资料">参考资料</h1>
+
+<ul>
+  <li>[1] C++并发编程实战. Anthony Williams 著；</li>
+  <li>[2] https://www.cnblogs.com/haippy/p/3237213.html;</li>
+</ul>
+
+    </div>
+    
+    <div class="post_wrapper">
+      <footer class="post_footer cf">
+        <div class="post_share">
+          <span>Share:</span>
+          <a href="https://twitter.com/intent/tweet?text=C++并发编程中的锁---互斥元&url=/mutex/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/mutex/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/mutex/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+        </div>
+        <div class="post_tag">
+          <span>Tags:</span>
+          
+          <a href="/tags#c与c++" class="tag">c与c++</a>
+          
+        </div>
+      </footer>
+    </div>
+  </article> <!-- End Section Post -->
+
+  <section class="author cf">
+    <div class="post_wrapper">
+      <div class="author_image">
+        <img src="/assets/img/wechat.jpg" alt="Author face">
+      </div>
+      <div class="author_info">
+        <h2 class="author_title">line</h2>
+        <p class="author_subtitle">怕什么真理无穷，进一寸有一寸的欢喜。</p>
+        <div class="author_social">
+          
+          <span class="author_email"><i class="fa fa-envelope-o" aria-hidden="true"></i> <a href="mailto:xianghengyong17@mails.ucas.edu.cn">xianghengyong17@mails.ucas.edu.cn</a></span>
+          
+          
+          
+          <span class="author_phone"><i class="fa fa-phone" aria-hidden="true"></i> <a href="tel:1314-131-0370">1314-131-0370</a></span>
+          
+
+          
+          <span class="author_website"><i class="fa fa-link" aria-hidden="true"></i> <a href="https://xhy3054.github.io/" target="_blank">https://xhy3054.github.io/</a></span>
+                      
+        </div>
+      </div>
+    </div>
+  </section> <!-- End Section Author -->
+
+  <section class="recent_box">
+    <div class="post_wrapper">
+      <h2 class="recent_title">Recent post</h2>
+      <div class="recent_list">
+        
+          
+            <a href="/mutex/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece35.jpg )"><span>C++并发编程中的锁---互斥元</span></a>
+          
+        
+          
+            <a href="/graph-cut/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece34.jpg )"><span>图片分割之最大流最小割</span></a>
+          
+        
+          
+            <a href="/lens-camera/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece32.jpg )"><span>镜头的参数与成像</span></a>
+          
+        
+          
+            <a href="/pigeon/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece31.jpg )"><span>鸽群优化</span></a>
+          
+        
+          
+            <a href="/dijkstra-astar/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece29.jpg )"><span>dijkstra算法和astar算法</span></a>
+          
+        
+          
+            <a href="/auction/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece30.jpg )"><span>拍卖算法</span></a>
+          
+        
+      </div>
+    </div>
+  </section> <!-- End Section Recent Box -->
+  
+  
+<section class="comment_area">
+  <div class="comment_wrapper">
+    
+  </div>
+</section> <!-- End Section Comment Area -->
+  
+</main> <!-- End Section Post Content -->
+
+
+<footer class="main_footer">
+  <div class="wrapper">
+    
+<ul class="social_footer">
+  
+  <li><a href="#" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a></li>      
+  
+
+  
+  <li><a href="#" target="_blank"><i class="fa fa-wechat" aria-hidden="true"></i></a></li>
+  
+
+  
+  <li><a href="#" target="_blank"><i class="fa fa-qq" aria-hidden="true"></i></a></li>
+  
+
+  
+  <li><a href="#" target="_blank"><i class="fa fa-weibo" aria-hidden="true"></i></a></li>
+  
+
+  
+  <li><a href="#" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+  
+
+  
+  <li><a href="#" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+  
+  
+  <li><a href="#" target="_blank"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
+  
+  
+  <li><a href="#" target="_blank"><i class="fa fa-dribbble" aria-hidden="true"></i></a></li>
+  
+  
+  <li><a href="#" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+  
+</ul>
+
+    <div class="copyright">
+      <p>&copy; 2021. Design by line</p>
+    </div>
+  </div>
+</footer> <!-- End Section Footer -->
+
+
+
+  
+<div class="top" title="Top"><i class="fa fa-chevron-up" aria-hidden="true"></i></div> <!-- End Top Scroll -->
+  
+<script src="/assets/js/jquery-3.2.1.min.js"></script>
+<script src="/assets/js/jquery.vide.min.js"></script>
+<script src="/assets/js/custom.js"></script>
+<!-- End Javascript -->
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', '', 'auto');
+  ga('send', 'pageview');
+</script> <!-- End Analytics -->
+</body>
+</html>
