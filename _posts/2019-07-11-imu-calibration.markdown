@@ -1,4 +1,6 @@
 ---
+
+
 layout: post
 title: imu的数学模型与误差标定问题
 date: 2019-07-11 10:07:24.000000000 +09:00
@@ -284,9 +286,18 @@ $$
 \begin{aligned} n_{d}[k] & \triangleq n\left(t_{0}+\Delta t\right) \simeq \frac{1}{\Delta t} \int_{t_{0}}^{t_{0}+\Delta t} n(\tau) d t \\ E\left(n_{d}[k]^{2}\right) &=E\left(\frac{1}{\Delta t^{2}} \int_{t_{0}}^{t_{0}+\Delta t} \int_{t_{0}}^{t_{0}+\Delta t} n(\tau) n(t) d \tau d t\right) \\ &=E\left(\frac{\sigma^{2}}{\Delta t^{2}} \int_{t_{0}}^{t_{0}+\Delta t} \int_{t_{0}}^{t_{0}+\Delta t} \delta(t-\tau) d \tau d t\right) \\ &=E\left(\frac{\sigma^{2}}{\Delta t}\right) \end{aligned}
 $$
 
-> 即离散的序列的方差比连续的方差大$\Delta t$倍（传感器的采样时间）。
+> 即离散的序列的方差是连续的方差除以$\Delta t$（传感器的采样时间），也就是乘以采样频率f。(下面$\sigma$是标准差，一般参数文件里写的也是标准差)
 
-### bias随机游走
+$$
+\sigma_{d} = \sigma \frac{1}{\sqrt{\Delta t}}
+$$
+
+
+
+### bias
+
+### 随机游走
+
 通常使用维纳过程来建模bias随时间连续变化的过程，离散时间下称之为随机游走。
 
 $$
@@ -301,7 +312,13 @@ $$
 \begin{aligned} b_{d}[k] \triangleq & b\left(t_{0}\right)+\int_{t_{0}}^{t_{0}+\Delta t} n(t) d t \\ E\left(\left(b_{d}[k]-b_{d}[k-1]\right)^{2}\right) &=E\left(\int_{t_{0}+\Delta t}^{t_{0}+\Delta t} \int_{t_{0}}^{t_{0}+\Delta t} n(t) n(\tau) d \tau d t\right) \\ &=E\left(\sigma_{b}^{2} \int_{t_{0}}^{t_{0}+\Delta t} \int_{t_{0}}^{t_{0}+\Delta t} \delta(t-\tau) d \tau d t\right) \\ &=E\left(\sigma_{b}^{2} \Delta t\right) \end{aligned}
 $$
 
-> bias随机游走的噪声方差离散的序列比连续的大$\Delta t$倍（传感器的采样时间）。
+> bias随机游走离散序列的噪声方差是连续的方差乘以$\Delta t$倍（传感器的采样时间），也就是除以采样频率f。
+
+$$
+\sigma_{bd}=\sigma_{b}\sqrt{\Delta t}
+$$
+
+
 
 ## 随机误差的标定（艾伦方差标定）
 Allan方差法是20世纪60年代由美国国家标准局的David Allan提出的，它是一种基于时域的分析方法。具体流程如下：
