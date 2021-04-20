@@ -112,6 +112,10 @@
 
 <p><img src="/assets/img/cuda/02.png" alt="dfs" /></p>
 
+<blockquote>
+  <p>一般block数量是GPU的流多处理器数量的两倍时，GPU会给出最佳性能。</p>
+</blockquote>
+
 <h2 id="cuda编程时的内存结构">cuda编程时的内存结构</h2>
 
 <p><img src="/assets/img/cuda/03.png" alt="dfs" /></p>
@@ -122,7 +126,28 @@
 
 <p>在<code class="language-plaintext highlighter-rouge">__global__</code>修饰的设备函数中声明的局部变量肯定使用的是local memory或者是register（一开始会优先使用register，如果register装不下，就会使用local memory）；而使用<code class="language-plaintext highlighter-rouge">cudaMalloc</code>分配的内存都是global memory</p>
 
-<p>此处说的global memory对应的物理结构也就是本文开头的显卡主板构造中的显存芯片，这是在gpu芯片之外的，因此访问速度会比较慢。</p>
+<p>此处说的<strong>global memory</strong>对应的物理结构也就是本文开头的显卡主板构造中的显存芯片，这是在gpu芯片之外的，因此访问速度会比较慢。</p>
+
+<p>上面的<strong>shared memory</strong>是在gpu芯片内部，因此速度比global memory快很多。一般在设备函数中使用<code class="language-plaintext highlighter-rouge">__shared__</code>修饰声明的变量存储在shared memory中，供同一个block中的所有线程使用。</p>
+
+<p>上面的<strong>constant memory</strong>也是占用的显存，并且逻辑上分配64kb大小的常量内存空间，这部分内存是只读的。其中的变量一般在全局程序中使用<code class="language-plaintext highlighter-rouge">__constant__</code>关键字修饰，对常量内存中的变量进行初始化需要使用<code class="language-plaintext highlighter-rouge">cudaMemcpyToSymbol</code>函数。在设备函数中常量内存是只读的，因此每个线程在访问常量内存时不是单独访问，而是统一一次访问，然后广播给所有的线程，因此在频繁访问同一块常量内存时可以节省时间。</p>
+
+<p>上面的<strong>texture memory</strong>是另外一种当数据访问具有特定模式的时候可以加速程序执行、减少显存带宽的只读存储器。纹理内存也是在显存芯片中，和常量内存一样都在芯片内部被cache缓冲。当每个线程的读取位置都与其他线程的读取位置临近时，使用纹理内存会很高效。</p>
+
+<p>CUDA对于显存中常见的大数据量的存储方式有两种，一种是普通的线性存储（cudaMalloc申请），可以直接用指针访问。另一种则是cuda数组（一般与纹理内存绑定），对用户不透明，不能在内核里直接用指针访问，需要通过texture或surface的相应函数访问。</p>
+
+<h4 id="主机内存">主机内存</h4>
+
+<p>一般cuda编程都会涉及到主机与设备之间的内存交换，而主机内存需要注意的是：</p>
+
+<ol>
+  <li>使用<code class="language-plaintext highlighter-rouge">malloc</code>函数在cpu上分配的内存是可换页的标准内存；</li>
+  <li>CUDA提供了<code class="language-plaintext highlighter-rouge">cudaHostAlloc</code>函数可以分配锁定页面的内存，也叫Pinned内存；操作系统会保证永远不会将这种内存换页到磁盘上，总在物理内存中，因此系统内的所有设备都可以直接用该段内存缓冲区的物理地址来访问，此属性可以帮助GPU通过直接内存访问（DMA）将数据复制到主机或从主机复制数据，无需cpu干预（cuda流中的传输需要使用页面锁定内存）；</li>
+</ol>
+
+<h2 id="cuda流">CUDA流</h2>
+
+<p>GPU作为一种专用的并行计算设备，可以同时支持多个内核调用，为了使得这个内核调用互不干扰，独立运行，可以使用CUDA流来组织不同的任务。每个流中的工作是串行的（比如从cpu拷贝内存，内核调用，拷贝内存回cpu，依次执行），而流与流之间则是默认不保证顺序的（并行互不干扰的）。</p>
 
 <h2 id="cu程序编译"><code class="language-plaintext highlighter-rouge">.cu</code>程序编译</h2>
 
@@ -179,6 +204,10 @@
       <div class="recent_list">
         
           
+            <a href="/propagation/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece37.jpg )"><span>离散积分传播的几种方式</span></a>
+          
+        
+          
             <a href="/cuda-basic/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece36.jpg )"><span>cuda编程的基础概念总结</span></a>
           
         
@@ -196,10 +225,6 @@
         
           
             <a href="/pigeon/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece31.jpg )"><span>鸽群优化</span></a>
-          
-        
-          
-            <a href="/dijkstra-astar/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece29.jpg )"><span>dijkstra算法和astar算法</span></a>
           
         
       </div>

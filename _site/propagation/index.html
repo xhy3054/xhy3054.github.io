@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>vins中的外参标定 - line - 千里之行</title>
+	<title>离散积分传播的几种方式 - line - 千里之行</title>
 	<meta name="description" content="">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -57,86 +57,66 @@
   <article class="post">
     <header>
       <div class="post_image">
-        <img src=/assets/img/one-piece/one-piece19.jpg alt="vins中的外参标定">
+        <img src=/assets/img/one-piece/one-piece37.jpg alt="离散积分传播的几种方式">
       </div>
       <div class="post_description">
-        <p class="post_meta">2019, Oct 30</p>
-        <h1 class="post_title">vins中的外参标定</h1>
+        <p class="post_meta">2021, Apr 20</p>
+        <h1 class="post_title">离散积分传播的几种方式</h1>
       </div>
     </header> <!-- End Header -->
 
     <div class="entry_content">
-      <p>之前写过一篇博客介绍vins中进行初始化的操作，其实在这之前，vins会首先进行外参的标定。今天终于找到时间写一下。</p>
+      <p><a href="#欧拉积分">欧拉积分</a></p>
 
-<h1 id="外参标定">外参标定</h1>
+<p><a href="中值积分">中值积分</a></p>
 
-<h2 id="外参">外参</h2>
-<p>此处的外参指的是相机坐标系到imu坐标系（body）的变换矩阵。下文中会使用\(T_{bc}\)来表示。</p>
-
-<h2 id="vins中的设置">vins中的设置</h2>
-<p>在vins中可以通过在配置文件中设置<code class="language-plaintext highlighter-rouge">estimate_extrinsic</code>值来选择对外参进行如何处理</p>
-
-<ol>
-  <li>
-    <p>将这个值设为0时代表提供的外参已经是准确的了，vins之后不会再对其进行优化；</p>
-  </li>
-  <li>
-    <p>将这个值设为1时代表提供的外参只是一个估计值，vins之后还会将其作为节点初始值放入非线性优化中进行优化；</p>
-  </li>
-  <li>
-    <p>将这个值设为2时代表并不提供外参，此时vins会在初始化前在线标定外参。</p>
-  </li>
-</ol>
+<p><a href="#龙格库塔积分">龙格库塔积分</a></p>
 
 <blockquote>
-  <p>需要说明的是，在vins进行外参的在线标定时，只进行了外参旋转部分的估计，而平移部分是直接初始化为0了。这个是因为一般情况下我们使用的都是相机与imu集成起来的设备，两者之间的距离十分小（几厘米），所以在此处可以直接初始化为0，后续可以通过优化来矫正（或者直接忽略也不会有太大影响）。</p>
+  <p>主要的应用场景一般是类似imu的积分传播中，为了更清楚的表达各种积分方式的主要思路，下面都会以简化的速度的传播进行举例。测量的到n时刻的加速度为$a_1$，n+1时刻的加速度为$a_2$，已知n时刻的速度$v_1$，目标是通过积分传播得到n+1时刻的速度$v_2$。（以下不考虑姿态重力等因素对加速度的影响）</p>
 </blockquote>
 
-<h2 id="标定原理">标定原理</h2>
-<p>首先，从第$k+1$帧相机坐标系到第$k$帧body坐标系的旋转变换\(R_{b_k c_{k+1}}\)可以使用两种如下方式求得</p>
+<h2 id="欧拉积分">欧拉积分</h2>
 
-<p>[R_{b_k c_{k+1}} = R_{b_k b_{k+1}} * R_{bc} = R_{bc} * R_{c_k c_{k+1}}]</p>
+<blockquote>
+  <p>欧拉积分一般假设导数恒定，使用初始时刻的导数来进行积分传播，此处速度的，积分为：</p>
+</blockquote>
 
-<p>上面等式用四元数重写为如下形式</p>
+<p>[v_2 = v_1 + a_1 * \Delta t]</p>
 
-<p>[q_{b_k b_{k+1}} * q_{bc} = q_{bc} * q_{c_k c_{k+1}}]</p>
+<h2 id="中值积分">中值积分</h2>
 
-<p>上面的第一个等式我们会发现\(R_{bc}\)在等式两边都出现了，只是一边是左乘了一个矩阵，一边是右乘了一个矩阵，我们可以将等式右边的右乘矩阵\(R_{c_k c_{k+1}}\)变换成左乘形式\(R_{c_k c_{k+1}}^{right}\)然后移动到右边，然后上式子就变成了</p>
+<blockquote>
+  <p>中值积分一般也是假设导数恒定，但是为了使得导数的值更加精确，使用中值处的导数积分，公式为：</p>
+</blockquote>
 
-<p>[[ R_{b_k b_{k+1}} - R_{c_k c_{k+1}}^{right} ] * R_{bc} = 0]</p>
+<p>[v_2 = v_1 + \frac{a_1 + a_2}{2} \Delta t]</p>
 
-<p>将多帧之间的等式关系联立我们可以构建一个超定方程\(Ax=0\)。对$A$进行$svd$分解，其中最小奇异值对应的右奇异向量便是结果\(R_{bc}\)。</p>
+<h2 id="龙格库塔积分">龙格库塔积分</h2>
 
-<h2 id="vins中的实现">vins中的实现</h2>
-<p>在vins的实现中流程如下：</p>
+<blockquote>
+  <p>一般常用的是4阶龙格库塔积分，也叫rk4积分。上面的速度传播太简单，不能很好说明。下面$t_0$为初始时刻，$y_0$为初始时刻的状态，$f$为导数函数（确定某一时刻，某个状态后，可以确定其导数。类比在imu传播中，获得加速度后，是需要将其转换到全局坐标系下，然后再减去重力向量才得到最终的加速度，也就是速度的导数是与系统状态–姿态相关的），主要思路如下：</p>
+</blockquote>
 
-<ol>
-  <li>
-    <p>取得连续两帧之间匹配到（跟踪到）的归一化特征点集合；</p>
-  </li>
-  <li>
-    <p>根据帧间匹配集合由随意抽样一致方法通过对极几何约束得到前后两帧的相机坐标系的相对旋转变换\(R_{c_k c_{k+1}}\)</p>
-  </li>
-  <li>
-    <p>根据imu预积分得到前后两帧BODY坐标系的相对旋转变换\(R_{b_k b_{k+1}}\)</p>
-  </li>
-  <li>
-    <p>连续积累滑动窗口数个上面的方程，解方程得到。</p>
-  </li>
-</ol>
+<p>[{k_1} = f({t_0}, y_0) \Delta t  <br />
+{k_2} = f( {t_0}+{\Delta t \over 2}, y_0 + {1 \over 2}{k_1} ) \Delta t <br />
+{k_3} = f( {t_0}+{\Delta t \over 2}, y_0 + {1 \over 2}{k_2} ) \Delta t <br />
+{k_4} = f( {t_0} + {\Delta t}, y_0 + {k_3} ) \Delta t <br />
+y_{0+\Delta t} = y_0 + \left( {\frac{1}{6} {k_1} + {1 \over 3}{k_2} + {1 \over 3}{k_3} + \frac{1}{6} {k_4}} \right)]</p>
 
-<h3 id="实现细节">实现细节</h3>
-<p>在vins实现中，构建的左乘矩阵$L$是\(R_{c_k c_{k+1}}\)的左乘矩阵，构建的右乘矩阵$R$是\(R_{b_k b_{k+1}}\)，相当于其解方程的公式如下：</p>
+<p>其中：</p>
 
-<p>[[ R_{c_k c_{k+1}} - R_{b_k b_{k+1}}^{right} ] * R_{cb} = 0]</p>
-
-<p>所以解方程求得的是\(R_{cb}\)，因此代码的最后会对其进行求逆来获得\(R_{bc}\)</p>
-
-<h1 id="参考资料">参考资料</h1>
 <ul>
-  <li>[1] https://github.com/HKUST-Aerial-Robotics/VINS-Fusion</li>
+  <li>$k_1$为以时间段开始时刻$t_0$下的导数进行积分得到的状态改变量；</li>
+  <li>$k_2$: 按照$k_1$计算中值时刻${t_0}+{\Delta t \over 2}$时的系统状态为$y_0 + {1 \over 2}{k_1} $，则在此中值时刻与状态下的导数进行积分得到的状态改变量为$k_2$;</li>
+  <li>$k_3$: 按照$k_2$计算中值时刻${t_0}+{\Delta t \over 2}$时的系统状态为$y_0 + {1 \over 2}{k_2} $，则在此中值时刻与状态下的导数进行积分得到的状态改变量为$k_3$;</li>
+  <li>$k_4$: 按照$k_3$计算的终值时刻${t_0}+{\Delta t }$时的系统状态为$y_0 + {k_3} $，则以此状态下积分终点时刻的导数进行积分得到的状态改变量为$k_4$；</li>
+  <li>最终的积分结果为上述的加权叠加，其中中点处的导数权重更大，两端处的导数权重更小。</li>
 </ul>
 
+<h1 id="参考文献">参考文献</h1>
+
+<p>[1] openvins源码：<code class="language-plaintext highlighter-rouge">Propagtor.h</code>文件中的<code class="language-plaintext highlighter-rouge">predict_mean_rk4</code>函数。</p>
 
     </div>
     
@@ -144,14 +124,14 @@
       <footer class="post_footer cf">
         <div class="post_share">
           <span>Share:</span>
-          <a href="https://twitter.com/intent/tweet?text=vins中的外参标定&url=/camera-extrinsic/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://facebook.com/sharer.php?u=/camera-extrinsic/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://plus.google.com/share?url=/camera-extrinsic/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=离散积分传播的几种方式&url=/propagation/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="https://facebook.com/sharer.php?u=/propagation/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="https://plus.google.com/share?url=/propagation/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
         </div>
         <div class="post_tag">
           <span>Tags:</span>
           
-          <a href="/tags#多传感器融合" class="tag">多传感器融合</a>
+          <a href="/tags#数学" class="tag">数学</a>
           
         </div>
       </footer>

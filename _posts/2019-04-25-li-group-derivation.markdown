@@ -6,6 +6,10 @@ img:  sword/sword11.jpg # Add image post (optional)
 tag: [数学]
 ---
 
+> $SO(3)$李代数上的扰动模型求导是slam中使用最广泛的公式。！！！
+
+
+
 在[上一篇](https://xhy3054.github.io/Li-group/)博客中我们了解了李群与李代数的定义，那么知道这些有什么用呢？
 
 **我们经常构建与位姿有关的函数，然后讨论该函数关于位姿的导数，以调整当前的估计值**。表示姿态的李群$SO(3)$与表示位姿的李群$SE(3)$上并没有定义加法，而求导数是需要加法的。因此此时如何求导就成了一个需要解决的问题，它们的李代数由向量组成，具有良好的加法运算，因此我们可以利用李代数来解决对位姿的求导问题。
@@ -63,7 +67,7 @@ $
 ## 扰动模型求导
 > 对李群**左乘**或者**右乘**微小扰动，然后对该扰动求导，称为左扰动和右扰动模型。即**把增量扰动直接添加在李群上，然后使用李代数表示此扰动**
 
-### $SO(3)$李代数上的扰动模型(左扰动)
+### $SO(3)$李代数上的扰动模型(左扰动) !!! 这是slam中应用最多的公式
 
 $
 \begin{aligned} \frac{\partial(\boldsymbol{R} \boldsymbol{p})}{\partial \boldsymbol{\varphi}} &=\lim _{\varphi \rightarrow 0} \frac{\exp \left(\boldsymbol{\varphi}^{\wedge}\right) \exp \left(\phi^{\wedge}\right) \boldsymbol{p}-\exp \left(\phi^{\wedge}\right) \boldsymbol{p}}{\varphi} \\ &=\lim _{\varphi \rightarrow 0} \frac{\left(\boldsymbol{I}+\boldsymbol{\varphi}^{\wedge}\right) \exp \left(\boldsymbol{\phi}^{\wedge}\right) \boldsymbol{p}-\exp \left(\boldsymbol{\phi}^{\wedge}\right) \boldsymbol{p}}{\varphi} \\ &=\lim _{\boldsymbol{\varphi} \rightarrow 0} \frac{\boldsymbol{\varphi}^{\wedge} \boldsymbol{R} \boldsymbol{p}}{\varphi}=\lim _{\boldsymbol{\varphi} \rightarrow 0} \frac{-(\boldsymbol{R} \boldsymbol{p})^{\wedge} \boldsymbol{\varphi}}{\varphi}=-(\boldsymbol{R} \boldsymbol{p})^{\wedge} \end{aligned}

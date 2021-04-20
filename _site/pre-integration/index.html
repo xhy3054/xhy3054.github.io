@@ -86,7 +86,7 @@
 
 <p>从第i时刻的PVQ对IMU的测量值进行积分得到第j时刻的PVQ：</p>
 
-<p>[\begin{array}{l}{\mathbf{p}<em>{w b</em>{j}}=\mathbf{p}<em>{w b</em>{i}}+\mathbf{v}<em>{i}^{w} \Delta t+\iint</em>{t \in[i, j]}\left(\mathbf{q}<em>{w b</em>{t}} \mathbf{a}^{b_{t}}-\mathbf{g}^{w}\right) \delta t^{2}} \ {\mathbf{v}<em>{j}^{w}=\mathbf{v}</em>{i}^{w}+\int_{t \in[i, j]}\left(\mathbf{q}<em>{w b</em>{t}} \mathbf{a}^{b_{t}}-\mathbf{g}^{w}\right) \delta t} \ {\mathbf{q}<em>{w b</em>{j}}=\int_{t \in[i, j]} \mathbf{q}<em>{w b</em>{t}} \otimes\left[\begin{array}{c}{0} \ {\frac{1}{2} \boldsymbol{\omega}^{b_{t}} ] \delta t}\end{array}\right.}\end{array}]</p>
+<p>[\begin{array}{l}{\mathbf{p}<em>{w b</em>{j}}=\mathbf{p}<em>{w b</em>{i}}+\mathbf{v}<em>{i}^{w} \Delta t+\iint</em>{t \in[i, j]}\left(\mathbf{q}<em>{w b</em>{t}} \mathbf{a}^{b_{t}}-\mathbf{g}^{w}\right) \delta t^{2}} \ {\mathbf{v}<em>{j}^{w}=\mathbf{v}</em>{i}^{w}+\int_{t \in[i, j]}\left(\mathbf{q}<em>{w b</em>{t}} \mathbf{a}^{b_{t}}-\mathbf{g}^{w}\right) \delta t} \ {\mathbf{q}<em>{w b</em>{j}}=\int_{t \in[i, j]} \mathbf{q}<em>{w b</em>{t}} \otimes\left[\begin{array}{c}{0} \ {\frac{1}{2} \boldsymbol{\omega}^{b_{t}}}\end{array}\right] \delta t}\end{array}]</p>
 
 <blockquote>
   <p>此时我们发现，在积分项中存在全局姿态$q_{wb_{t}}$，同时在$\mathbf{a}^{b_{t}}$等测量值中还会引入bias。这样每次在迭代优化过后，由于$q_{wb_{t}}$与bias都会更新，因此此时就需要重新进行积分操作。这个计算量是非常巨大的。</p>
@@ -106,14 +106,14 @@
 <p>[\begin{aligned} \boldsymbol{\alpha}<em>{b</em>{i} b_{j}} &amp;=\iint_{t \in[i, j]}\left(\mathbf{q}<em>{b</em>{i} b_{t}} \mathbf{a}^{b_{t}}\right) \delta t^{2} \ \boldsymbol{\beta}<em>{b</em>{i} b_{j}} &amp;=\int_{t \in[i, j]}\left(\mathbf{q}<em>{b</em>{i} b_{t}} \mathbf{a}^{b_{t}}\right) \delta t \ \mathbf{q}<em>{b</em>{i} b_{j}} &amp;=\int_{t \in[i, j]} \mathbf{q}<em>{b</em>{i} b_{t}} \otimes\left[\begin{array}{c}{0} \ {\frac{1}{2} \boldsymbol{\omega}^{b_{t}}}\end{array}\right] \delta t \end{aligned}]</p>
 
 <blockquote>
-  <p>如上，我们发现，其实预积分就是将原本的积分变成了相邻两帧中相对运动的积分。这使得<strong>预积分量</strong>只与IMU的测量有关，如果不考虑更新IMU的bias，那么我们只需要进行一次预积分，以后就无需在重新计算了。</p>
+  <p>如上，我们发现，其实预积分就是将原本的积分变成了相邻两帧中相对运动的积分。这使得<strong>预积分量</strong>只与IMU的测量有关，即只要imu测量不变，预积分的结果也不会变化。如果不考虑更新IMU的bias，那么我们只需要进行一次预积分，以后就无需在重新计算了。</p>
 </blockquote>
 
 <h2 id="基于预积分的状态变换">基于预积分的状态变换</h2>
 
 <p>此时状态量（世界位姿与bias等）和预积分的映射关系如下：</p>
 
-<p>[\left[\begin{array}{c}{\mathbf{p}<em>{w b</em>{j}}} \ {\mathbf{v}<em>{j}^{w}} \ {\mathbf{q}</em>{w b_{j}}} \ {\mathbf{b}<em>{j}^{a}} \ {\mathbf{b}</em>{j}^{g}}\end{array}\right]=\left[\begin{array}{cc}{\mathbf{p}<em>{w b</em>{i}}+\mathbf{v}<em>{i}^{w} \Delta t-\frac{1}{2} \mathbf{g}^{w} \Delta t^{2}+\mathbf{q}</em>{w b_{i}} \mathbf{\alpha}<em>{b</em>{i} b_{j}}} \ {\mathbf{v}<em>{i}^{w}-\mathbf{g}^{w} \Delta t+\mathbf{q}</em>{w b_{i}} \boldsymbol{\beta}<em>{b</em>{i} b_{j}}} \ {\mathbf{q} w b_{i} \mathbf{q}<em>{b i}} \ {\mathbf{b}</em>{i}^{a}} \ {\mathbf{b}_{i}^{g}}\end{array}\right]]</p>
+<p>[\left[\begin{array}{c}{\mathbf{p}<em>{w b</em>{j}}} \ {\mathbf{q}<em>{w b</em>{j}}} \ {\mathbf{v}<em>{j}^{w}} \ {\mathbf{b}</em>{j}^{a}} \ {\mathbf{b}<em>{j}^{g}}\end{array}\right]=\left[\begin{array}{cc}{\mathbf{p}</em>{w b_{i}}+\mathbf{v}<em>{i}^{w} \Delta t-\frac{1}{2} \mathbf{g}^{w} \Delta t^{2}+\mathbf{q}</em>{w b_{i}} \mathbf{\alpha}<em>{b</em>{i} b_{j}}} \ {\mathbf{q}<em>{w b</em>{i}}  \mathbf{q}<em>{b_i b_j}} \ {\mathbf{v}</em>{i}^{w}-\mathbf{g}^{w} \Delta t+\mathbf{q}<em>{w b</em>{i}} \boldsymbol{\beta}<em>{b</em>{i} b_{j}}} \ {\mathbf{b}<em>{i}^{a}} \ {\mathbf{b}</em>{i}^{g}}\end{array}\right]]</p>
 
 <p>此时，如果我们想要建立基于目前状态的预积分误差，则是如下形式（其中表示位姿的四元数我们取其虚部并乘以2恢复出旋转向量）：</p>
 
@@ -262,6 +262,10 @@
       <div class="recent_list">
         
           
+            <a href="/propagation/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece37.jpg )"><span>离散积分传播的几种方式</span></a>
+          
+        
+          
             <a href="/cuda-basic/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece36.jpg )"><span>cuda编程的基础概念总结</span></a>
           
         
@@ -279,10 +283,6 @@
         
           
             <a href="/pigeon/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece31.jpg )"><span>鸽群优化</span></a>
-          
-        
-          
-            <a href="/dijkstra-astar/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece29.jpg )"><span>dijkstra算法和astar算法</span></a>
           
         
       </div>

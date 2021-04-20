@@ -32,7 +32,7 @@ $$
 从第i时刻的PVQ对IMU的测量值进行积分得到第j时刻的PVQ：
 
 $$
-\begin{array}{l}{\mathbf{p}_{w b_{j}}=\mathbf{p}_{w b_{i}}+\mathbf{v}_{i}^{w} \Delta t+\iint_{t \in[i, j]}\left(\mathbf{q}_{w b_{t}} \mathbf{a}^{b_{t}}-\mathbf{g}^{w}\right) \delta t^{2}} \\ {\mathbf{v}_{j}^{w}=\mathbf{v}_{i}^{w}+\int_{t \in[i, j]}\left(\mathbf{q}_{w b_{t}} \mathbf{a}^{b_{t}}-\mathbf{g}^{w}\right) \delta t} \\ {\mathbf{q}_{w b_{j}}=\int_{t \in[i, j]} \mathbf{q}_{w b_{t}} \otimes\left[\begin{array}{c}{0} \\ {\frac{1}{2} \boldsymbol{\omega}^{b_{t}} ] \delta t}\end{array}\right.}\end{array}
+\begin{array}{l}{\mathbf{p}_{w b_{j}}=\mathbf{p}_{w b_{i}}+\mathbf{v}_{i}^{w} \Delta t+\iint_{t \in[i, j]}\left(\mathbf{q}_{w b_{t}} \mathbf{a}^{b_{t}}-\mathbf{g}^{w}\right) \delta t^{2}} \\ {\mathbf{v}_{j}^{w}=\mathbf{v}_{i}^{w}+\int_{t \in[i, j]}\left(\mathbf{q}_{w b_{t}} \mathbf{a}^{b_{t}}-\mathbf{g}^{w}\right) \delta t} \\ {\mathbf{q}_{w b_{j}}=\int_{t \in[i, j]} \mathbf{q}_{w b_{t}} \otimes\left[\begin{array}{c}{0} \\ {\frac{1}{2} \boldsymbol{\omega}^{b_{t}}}\end{array}\right] \delta t}\end{array}
 $$
 
 > 此时我们发现，在积分项中存在全局姿态$q_{wb_{t}}$，同时在$\mathbf{a}^{b_{t}}$等测量值中还会引入bias。这样每次在迭代优化过后，由于$q_{wb_{t}}$与bias都会更新，因此此时就需要重新进行积分操作。这个计算量是非常巨大的。
@@ -56,14 +56,14 @@ $$
 \begin{aligned} \boldsymbol{\alpha}_{b_{i} b_{j}} &=\iint_{t \in[i, j]}\left(\mathbf{q}_{b_{i} b_{t}} \mathbf{a}^{b_{t}}\right) \delta t^{2} \\ \boldsymbol{\beta}_{b_{i} b_{j}} &=\int_{t \in[i, j]}\left(\mathbf{q}_{b_{i} b_{t}} \mathbf{a}^{b_{t}}\right) \delta t \\ \mathbf{q}_{b_{i} b_{j}} &=\int_{t \in[i, j]} \mathbf{q}_{b_{i} b_{t}} \otimes\left[\begin{array}{c}{0} \\ {\frac{1}{2} \boldsymbol{\omega}^{b_{t}}}\end{array}\right] \delta t \end{aligned}
 $$
 
-> 如上，我们发现，其实预积分就是将原本的积分变成了相邻两帧中相对运动的积分。这使得**预积分量**只与IMU的测量有关，如果不考虑更新IMU的bias，那么我们只需要进行一次预积分，以后就无需在重新计算了。
+> 如上，我们发现，其实预积分就是将原本的积分变成了相邻两帧中相对运动的积分。这使得**预积分量**只与IMU的测量有关，即只要imu测量不变，预积分的结果也不会变化。如果不考虑更新IMU的bias，那么我们只需要进行一次预积分，以后就无需在重新计算了。
 
 ## 基于预积分的状态变换
 
 此时状态量（世界位姿与bias等）和预积分的映射关系如下：
 
 $$
-\left[\begin{array}{c}{\mathbf{p}_{w b_{j}}} \\ {\mathbf{v}_{j}^{w}} \\ {\mathbf{q}_{w b_{j}}} \\ {\mathbf{b}_{j}^{a}} \\ {\mathbf{b}_{j}^{g}}\end{array}\right]=\left[\begin{array}{cc}{\mathbf{p}_{w b_{i}}+\mathbf{v}_{i}^{w} \Delta t-\frac{1}{2} \mathbf{g}^{w} \Delta t^{2}+\mathbf{q}_{w b_{i}} \mathbf{\alpha}_{b_{i} b_{j}}} \\ {\mathbf{v}_{i}^{w}-\mathbf{g}^{w} \Delta t+\mathbf{q}_{w b_{i}} \boldsymbol{\beta}_{b_{i} b_{j}}} \\ {\mathbf{q} w b_{i} \mathbf{q}_{b i}} \\ {\mathbf{b}_{i}^{a}} \\ {\mathbf{b}_{i}^{g}}\end{array}\right]
+\left[\begin{array}{c}{\mathbf{p}_{w b_{j}}} \\ {\mathbf{q}_{w b_{j}}} \\ {\mathbf{v}_{j}^{w}} \\ {\mathbf{b}_{j}^{a}} \\ {\mathbf{b}_{j}^{g}}\end{array}\right]=\left[\begin{array}{cc}{\mathbf{p}_{w b_{i}}+\mathbf{v}_{i}^{w} \Delta t-\frac{1}{2} \mathbf{g}^{w} \Delta t^{2}+\mathbf{q}_{w b_{i}} \mathbf{\alpha}_{b_{i} b_{j}}} \\ {\mathbf{q}_{w b_{i}}  \mathbf{q}_{b_i b_j}} \\ {\mathbf{v}_{i}^{w}-\mathbf{g}^{w} \Delta t+\mathbf{q}_{w b_{i}} \boldsymbol{\beta}_{b_{i} b_{j}}} \\ {\mathbf{b}_{i}^{a}} \\ {\mathbf{b}_{i}^{g}}\end{array}\right]
 $$
 
 此时，如果我们想要建立基于目前状态的预积分误差，则是如下形式（其中表示位姿的四元数我们取其虚部并乘以2恢复出旋转向量）：

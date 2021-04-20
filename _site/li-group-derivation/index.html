@@ -66,7 +66,11 @@
     </header> <!-- End Header -->
 
     <div class="entry_content">
-      <p>在<a href="https://xhy3054.github.io/Li-group/">上一篇</a>博客中我们了解了李群与李代数的定义，那么知道这些有什么用呢？</p>
+      <blockquote>
+  <p>$SO(3)$李代数上的扰动模型求导是slam中使用最广泛的公式。！！！</p>
+</blockquote>
+
+<p>在<a href="https://xhy3054.github.io/Li-group/">上一篇</a>博客中我们了解了李群与李代数的定义，那么知道这些有什么用呢？</p>
 
 <p><strong>我们经常构建与位姿有关的函数，然后讨论该函数关于位姿的导数，以调整当前的估计值</strong>。表示姿态的李群$SO(3)$与表示位姿的李群$SE(3)$上并没有定义加法，而求导数是需要加法的。因此此时如何求导就成了一个需要解决的问题，它们的李代数由向量组成，具有良好的加法运算，因此我们可以利用李代数来解决对位姿的求导问题。</p>
 
@@ -133,7 +137,7 @@ $</p>
   <p>对李群<strong>左乘</strong>或者<strong>右乘</strong>微小扰动，然后对该扰动求导，称为左扰动和右扰动模型。即<strong>把增量扰动直接添加在李群上，然后使用李代数表示此扰动</strong></p>
 </blockquote>
 
-<h3 id="so3李代数上的扰动模型左扰动">$SO(3)$李代数上的扰动模型(左扰动)</h3>
+<h3 id="so3李代数上的扰动模型左扰动--这是slam中应用最多的公式">$SO(3)$李代数上的扰动模型(左扰动) !!! 这是slam中应用最多的公式</h3>
 
 <p>$
 \begin{aligned} \frac{\partial(\boldsymbol{R} \boldsymbol{p})}{\partial \boldsymbol{\varphi}} &amp;=\lim _{\varphi \rightarrow 0} \frac{\exp \left(\boldsymbol{\varphi}^{\wedge}\right) \exp \left(\phi^{\wedge}\right) \boldsymbol{p}-\exp \left(\phi^{\wedge}\right) \boldsymbol{p}}{\varphi} \ &amp;=\lim _{\varphi \rightarrow 0} \frac{\left(\boldsymbol{I}+\boldsymbol{\varphi}^{\wedge}\right) \exp \left(\boldsymbol{\phi}^{\wedge}\right) \boldsymbol{p}-\exp \left(\boldsymbol{\phi}^{\wedge}\right) \boldsymbol{p}}{\varphi} \ &amp;=\lim _{\boldsymbol{\varphi} \rightarrow 0} \frac{\boldsymbol{\varphi}^{\wedge} \boldsymbol{R} \boldsymbol{p}}{\varphi}=\lim _{\boldsymbol{\varphi} \rightarrow 0} \frac{-(\boldsymbol{R} \boldsymbol{p})^{\wedge} \boldsymbol{\varphi}}{\varphi}=-(\boldsymbol{R} \boldsymbol{p})^{\wedge} \end{aligned}
@@ -225,6 +229,10 @@ $</p>
       <div class="recent_list">
         
           
+            <a href="/propagation/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece37.jpg )"><span>离散积分传播的几种方式</span></a>
+          
+        
+          
             <a href="/cuda-basic/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece36.jpg )"><span>cuda编程的基础概念总结</span></a>
           
         
@@ -242,10 +250,6 @@ $</p>
         
           
             <a href="/pigeon/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece31.jpg )"><span>鸽群优化</span></a>
-          
-        
-          
-            <a href="/dijkstra-astar/" class="recent_item" style="background-image: url( /assets/img/one-piece/one-piece29.jpg )"><span>dijkstra算法和astar算法</span></a>
           
         
       </div>
