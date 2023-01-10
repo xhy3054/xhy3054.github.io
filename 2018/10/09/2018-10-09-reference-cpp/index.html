@@ -1,0 +1,746 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon1.png">
+  <link rel="icon" href="/img/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Line">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="在c++中，为了改变c语言中指针使用的种种麻烦与困难，定义了一种新的复合类型－－－引用，引用也分为很多种，比如左值引用、右值引用、常量引用等等。 左值引用一般情况下，大家见的最多的就是左值引用。右值引用通常与移动操作结合起来的比较多。其中左值引用使用&amp;符号，右值引用使用&amp;&amp;。 下面是左值引用的两个大类。 普通引用引用为对象起了另外一个名字，引用类型引用（refers to）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="c++中的引用">
+<meta property="og:url" content="http://line.com/2018/10/09/2018-10-09-reference-cpp/index.html">
+<meta property="og:site_name" content="Line&#39;s Blog">
+<meta property="og:description" content="在c++中，为了改变c语言中指针使用的种种麻烦与困难，定义了一种新的复合类型－－－引用，引用也分为很多种，比如左值引用、右值引用、常量引用等等。 左值引用一般情况下，大家见的最多的就是左值引用。右值引用通常与移动操作结合起来的比较多。其中左值引用使用&amp;符号，右值引用使用&amp;&amp;。 下面是左值引用的两个大类。 普通引用引用为对象起了另外一个名字，引用类型引用（refers to）">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-10-08T17:07:24.000Z">
+<meta property="article:modified_time" content="2023-01-08T16:21:28.849Z">
+<meta property="article:author" content="Line">
+<meta property="article:tag" content="c与c++">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>c++中的引用 - Line&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"line.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Line</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default2.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="c++中的引用"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2018-10-09 01:07" pubdate>
+          2018年10月9日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          22 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">c++中的引用</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>在c++中，为了改变c语言中指针使用的种种麻烦与困难，定义了一种新的复合类型－－－引用，引用也分为很多种，比如左值引用、右值引用、常量引用等等。</p>
+<h1 id="左值引用"><a href="#左值引用" class="headerlink" title="左值引用"></a>左值引用</h1><p>一般情况下，大家见的最多的就是左值引用。右值引用通常与移动操作结合起来的比较多。其中左值引用使用<code>&amp;</code>符号，右值引用使用<code>&amp;&amp;</code>。</p>
+<p>下面是左值引用的两个大类。</p>
+<h2 id="普通引用"><a href="#普通引用" class="headerlink" title="普通引用"></a>普通引用</h2><p>引用为对象起了另外一个名字，引用类型引用（refers to）另外一种类型。通过将声明符写成<code>&amp;d</code>的形式来定义引用类型，其中d是声明的变量名。如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">int</span> i1 = <span class="hljs-number">1024</span>;<br><span class="hljs-type">int</span> &amp;r1 = i1;	<span class="hljs-comment">//r1是i1的引用（也就是i1的别名）</span><br><span class="hljs-type">int</span> &amp;r2;	<span class="hljs-comment">//错误！引用必须初始化，引用是无法复制的，因为对引用赋值其实是对引用绑定的变量赋值。</span><br><span class="hljs-type">int</span> &amp;r3 = <span class="hljs-number">1024</span>;	<span class="hljs-comment">//错误！普通引用不能绑定常量</span><br></code></pre></td></tr></table></figure>
+
+<p>如下是几个注意问题：</p>
+<ol>
+<li><p>引用<strong>必须初始化</strong>！因为引用是无法赋值的，对引用赋值其实是对引用绑定的变量赋值。</p>
+</li>
+<li><p>普通引用（非常量引用）是<strong>不能绑定常量</strong>的！因为可以使用引用对绑定的变量进行赋值，所以如果引用绑定了常量，就会有改变常量的操作发生的可能。</p>
+</li>
+<li><p><strong>没有引用的引用，但是可以通过引用绑定到一个对象</strong>（如<code>int i=1; int &amp;a=i; int &amp;b=a;</code>这样是可以的，但是b绑定的是i）。因为引用本身只是一个别名，不是一个对象，所以不能定义引用的引用。</p>
+</li>
+<li><p>引用的<strong>类型必须与绑定的对象严格匹配</strong>。</p>
+</li>
+<li><p>引用只能绑定在对象上，<strong>不能与字面值或者某个表达式的计算结果绑定</strong>。</p>
+</li>
+</ol>
+<blockquote>
+<p>拓展：定义内置数组的引用。</p>
+</blockquote>
+<p>因为内置数组不可拷贝，所以内置数组的引用就会十分有用，并且高效。使用方法如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">int</span> arr[<span class="hljs-number">10</span>] = &#123;<span class="hljs-number">1</span>&#125;;	<span class="hljs-comment">//第一个元素为１，其他元素默认初始化为０</span><br><span class="hljs-built_in">int</span> (&amp;arrRef)[<span class="hljs-number">10</span>] = arr;	<span class="hljs-comment">//其实就是多取了一个名</span><br>cout&lt;&lt;arrRef[<span class="hljs-number">0</span>];	<span class="hljs-comment">//输出１</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="常量引用"><a href="#常量引用" class="headerlink" title="常量引用"></a>常量引用</h2><blockquote>
+<p>科普一下，const可以分为顶层const与底层const两种。一般对象只会有顶层const，表示对象本身是常量不能修改；而对于指针与引用变量除了顶层const外（表示自身是常量，一般只对指针而言，引用一般只关心底层const），还有底层const，表示自身指向或者引用的对象是常量。</p>
+</blockquote>
+<p>此处常量引用指的是底层const，即不能通过此引用改变绑定的对象。常量引用有几个特殊的地方：</p>
+<ol>
+<li><p>常量引用可以<strong>绑定常量，也可以绑定非常量</strong>（但是不能通过此引用改变这个非常量的值）；</p>
+</li>
+<li><p>常量引用的<strong>类型不必与绑定的对象严格一致</strong>，只要可以转换成常量引用的类型即可；</p>
+</li>
+<li><p>常量引用<strong>可与字面值或者某个表达式的计　算结果绑定</strong>；</p>
+</li>
+</ol>
+<p>其中第一条很容易理解，第二条、第三条的原因可由下面例子知道原因：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">double</span> d1 = <span class="hljs-number">3.14</span>;<br><span class="hljs-type">const</span> <span class="hljs-type">int</span> &amp;r1 = d1;	<span class="hljs-comment">//正确！</span><br><span class="hljs-comment">//上式等价于如下：</span><br><span class="hljs-type">const</span> <span class="hljs-type">int</span> temp = d1;	<span class="hljs-comment">//先生成一个临时变量（与常量引用类型一致）</span><br><span class="hljs-type">const</span> <span class="hljs-type">int</span> &amp;r1 = temp;	<span class="hljs-comment">//让r1绑定这个临时量</span><br></code></pre></td></tr></table></figure>
+<p>当所要绑定的对象与常量引用类型不一样时，编译器便会创建一个临时变量，并将原变量转换类型赋值给这个临时变量，常量引用最终绑定的是这个临时变量。当绑定对象是某个表达式时执行操作一样。注意！这种操作只在必要时发生，如果绑定的是一个类型相符的变量，则直接进行绑定操作，不会有什么临时变量。(因此这个引用其实与原变量不再相关，即使原变量值被修改了，这个引用指向的值不变，其实常量引用就相当于一个字面值常量)</p>
+<h1 id="右值引用"><a href="#右值引用" class="headerlink" title="右值引用"></a>右值引用</h1><p>新标准中为了支持移动操作，有了<strong>右值引用</strong>的概念。顾名思义，右值引用就是绑定到右值的引用。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">int</span> i = <span class="hljs-number">42</span>;	<br><span class="hljs-type">int</span> &amp;r = i;				<span class="hljs-comment">//正确：r是变量i的引用</span><br><span class="hljs-type">int</span> &amp;&amp;rr = i;			<span class="hljs-comment">//错误：不能将一个右值引用绑定到一个左值上</span><br><span class="hljs-type">int</span> &amp;r2 = i*<span class="hljs-number">42</span>;			<span class="hljs-comment">//错误：不能将一个普通引用绑定到一个右值上</span><br><span class="hljs-type">const</span> <span class="hljs-type">int</span> &amp;r3 = i*<span class="hljs-number">42</span>;	<span class="hljs-comment">//正确：可以讲一个常量引用绑定到一个临时变量上</span><br><span class="hljs-type">int</span> &amp;&amp;rr2 = i*<span class="hljs-number">42</span>;		<span class="hljs-comment">//正确：将右值引用绑定到一个右值上</span><br></code></pre></td></tr></table></figure>
+<hr>
+<p>由上我们可以看出，左值一般有持久的状态，是一个稳定的对象；而右值要么是字面值常量，要么是表达式求值过程中创建的临时变量。</p>
+<p>此处需要说明的一点是变量表达式都是左值，我们<strong>不能将一个右值引用绑定到一个右值引用上，因为右值引用本身是左值，是可以通过右值引用改变它指向对象的值的</strong>。如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">int</span> &amp;&amp;r1=<span class="hljs-number">42</span>;	<span class="hljs-comment">//正确：42是一个右值</span><br><span class="hljs-type">int</span> &amp;&amp;r2=r1;	<span class="hljs-comment">//错误：右值引用类型的变量表达式r1是一个左值</span><br><span class="hljs-comment">//注意：这样的操作在左值引用就是可以成立的。</span><br></code></pre></td></tr></table></figure>
+
+
+<h2 id="std-move"><a href="#std-move" class="headerlink" title="std::move()"></a>std::move()</h2><p>提到右值引用，就不得不提<code>std::move()</code>这个函数（头文件<code>utility</code>）。这个函数的作用就是<strong>将参数包装成一个右值</strong>。</p>
+<p>因为<strong>右值引用为左值</strong>，所以我们可以通过右值引用改变源对象的值：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">int</span> i = <span class="hljs-number">1</span>;<br><span class="hljs-comment">//int &amp;&amp;rr1 = i;    错误，不能绑定左值</span><br><span class="hljs-type">int</span> &amp;&amp;rr2 = std::<span class="hljs-built_in">move</span>(i);	<span class="hljs-comment">//此处move返回一个右值类型的值被绑定到右值引用类型变量rr2</span><br>rr2 = <span class="hljs-number">2</span>;	<span class="hljs-comment">//正确；通过右值引用改变变量i的值</span><br>cout&lt;&lt;i&lt;&lt;endl;	<span class="hljs-comment">//输出２</span><br><span class="hljs-comment">//int &amp;&amp;rr3 = rr2;  错误，rr2是左值</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>通常肯定不会这样使用move，通常我们将move函数来辅助完成<a target="_blank" rel="noopener" href="https://xhy3054.github.io/cpp-copy-move/">一个对象的移动操作</a>，因此，往往调用<code>move</code>意味着就承诺：除了对源对象重新赋值或者销毁它外，我们将不再使用它。在对一个源对象做了move操作后，我们只能保证移后源对象结构依旧完好，可以正常销毁，但是它的值我们不能做任何假设。</p>
+</blockquote>
+<h1 id="万能引用"><a href="#万能引用" class="headerlink" title="万能引用"></a>万能引用</h1><p>其实还有一种引用，那就是万能引用，万能引用形式和右值引用一样。万能引用只出现在型別推导的场景下，万能引用可以根据不同的语境选择是成为左值或者右值引用。</p>
+<h2 id="std-forward"><a href="#std-forward" class="headerlink" title="std::forward()"></a>std::forward()</h2><p>万能引用总是会搭配<code>std::forward()</code>使用，这个函数会根据语境选择是否<strong>将参数包装成一个右值</strong>。仅在实参原本是右值时才会。因此这中操作也叫做<strong>完美转发</strong>。</p>
+<blockquote>
+<p><code>forward</code>和<code>move</code>其实就是强制类型转换，只不过前者是有条件的转换，后者无条件转换。</p>
+</blockquote>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li>[1] C++ Primer（第5版）</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/c%E4%B8%8Ec/">#c与c++</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>c++中的引用</div>
+      <div>http://line.com/2018/10/09/2018-10-09-reference-cpp/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Line</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2018年10月9日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2018/10/10/2018-10-10-opencv-mat/" title="opencv中的Mat类讲解">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">opencv中的Mat类讲解</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2018/10/03/2018-10-03-hafuo-feng-struct/" title="哈佛体系结构与冯诺依曼体系结构的区别">
+                        <span class="hidden-mobile">哈佛体系结构与冯诺依曼体系结构的区别</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

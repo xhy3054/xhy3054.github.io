@@ -1,0 +1,769 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon1.png">
+  <link rel="icon" href="/img/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Line">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="dijkstra算法和astar算法图搜索算法 图搜索算法指在一个类似图的数据结构上进行路径搜索的算法的总称。二维网格地图其实就是一种类似图的数据结构，每个网格代表一个图节点，它连接着自身周围的四个相邻网格（图节点）。  可以将图搜索的图结构转换成搜索树结构。那么最具代表性的两类图搜索算法就是深度优先与广度优先算法。  需要提前强调的一点是，为了不会形成环路，已经访问过的节点需要做标记，并且不再访">
+<meta property="og:type" content="article">
+<meta property="og:title" content="dijkstra算法和astar算法">
+<meta property="og:url" content="http://line.com/2021/01/05/2021-01-05-dijkstra-astar/index.html">
+<meta property="og:site_name" content="Line&#39;s Blog">
+<meta property="og:description" content="dijkstra算法和astar算法图搜索算法 图搜索算法指在一个类似图的数据结构上进行路径搜索的算法的总称。二维网格地图其实就是一种类似图的数据结构，每个网格代表一个图节点，它连接着自身周围的四个相邻网格（图节点）。  可以将图搜索的图结构转换成搜索树结构。那么最具代表性的两类图搜索算法就是深度优先与广度优先算法。  需要提前强调的一点是，为了不会形成环路，已经访问过的节点需要做标记，并且不再访">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-01-04T17:07:24.000Z">
+<meta property="article:modified_time" content="2023-01-08T16:21:28.853Z">
+<meta property="article:author" content="Line">
+<meta property="article:tag" content="算法与数据结构">
+<meta property="article:tag" content="路径规划">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>dijkstra算法和astar算法 - Line&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"line.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Line</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default2.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="dijkstra算法和astar算法"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-01-05 01:07" pubdate>
+          2021年1月5日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          28 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">dijkstra算法和astar算法</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="dijkstra算法和astar算法"><a href="#dijkstra算法和astar算法" class="headerlink" title="dijkstra算法和astar算法"></a>dijkstra算法和astar算法</h1><h2 id="图搜索算法"><a href="#图搜索算法" class="headerlink" title="图搜索算法"></a>图搜索算法</h2><blockquote>
+<p>图搜索算法指在一个类似图的数据结构上进行路径搜索的算法的总称。二维网格地图其实就是一种类似图的数据结构，每个网格代表一个图节点，它连接着自身周围的四个相邻网格（图节点）。</p>
+</blockquote>
+<p>可以将图搜索的图结构转换成搜索树结构。那么最具代表性的两类图搜索算法就是深度优先与广度优先算法。</p>
+<blockquote>
+<p>需要提前强调的一点是，为了不会形成环路，已经访问过的节点需要做标记，并且不再访问。</p>
+</blockquote>
+<h3 id="深度优先算法-Deep-First-Search"><a href="#深度优先算法-Deep-First-Search" class="headerlink" title="深度优先算法-Deep First Search"></a>深度优先算法-Deep First Search</h3><p>可以使用栈（先进后出）这种数据结构来实现。</p>
+<p>![dfs](&#x2F;assets&#x2F;img&#x2F;astar&#x2F;dfs.png)</p>
+<blockquote>
+<p>可以使用栈结构实现，几乎不太可能找到最优解，因此更短的路径大部分没有试过。因此dfs算法实现简单、路径可能不是最优解、寻路时间比较长</p>
+</blockquote>
+<h3 id="广度优先算法-Breadth-First-Search"><a href="#广度优先算法-Breadth-First-Search" class="headerlink" title="广度优先算法-Breadth First Search"></a>广度优先算法-Breadth First Search</h3><p>可以使用队列（先进先出）这种数据结构来实现。</p>
+<p>![bfs](&#x2F;assets&#x2F;img&#x2F;astar&#x2F;bfs.png)</p>
+<blockquote>
+<p>可以使用队列结构实现，由于是逐层遍历的，因此遍历到目标点时肯定可以得到一条最短路径，因此更短的所有路径都已经遍历了，不能到达目标点。因此BFS算法实现简单、路径能找到最优解、算法消耗时间比较大、遍历的点有点多。</p>
+</blockquote>
+<h3 id="启发式搜索"><a href="#启发式搜索" class="headerlink" title="启发式搜索"></a>启发式搜索</h3><blockquote>
+<p>传统的广度优先搜索与深度优先搜索它们本质的区别就是每次从当前集合中弹出要读取的节点的规则，BFS是先入先出，使得每次弹出搜索树上深度最小的节点；DFS是先入后出，使得每次弹出搜索树上深度最大的节点；这两种弹出规则下两种方法的优缺点都很明显，并且都没有利用目标节点位置信息。因此后来为了找到一种更优的图搜索算法，就有了启发式搜索算法，启发式搜索算法简单来说就是指根据目标位置人为定义的另一种更合理的规则来弹出集合中的节点，这种规则就是所谓的启发。</p>
+</blockquote>
+<p>最简单的启发式搜索算法就是<strong>贪心算法</strong>。贪心算法的启发规则就是简单的弹出当前集合中距离终点最近的那个节点。当然实际的距离我们是不会提前知道的（虽然一般我们知道起点和终点的位置，但是我们不知道地图或者地图会变化），所以用来做启发的是一种理想中的距离，比如假设没有障碍物的存在，使用欧式（或曼哈顿等）距离来做启发。</p>
+<blockquote>
+<p>其实上述的广度优先与深度优先还有一个缺点，那就是只能在无权图上做规划，因为是以生成树上节点的深度来启发的。</p>
+</blockquote>
+<h2 id="Dijkstra算法"><a href="#Dijkstra算法" class="headerlink" title="Dijkstra算法"></a>Dijkstra算法</h2><p>算法要点：</p>
+<ul>
+<li><strong>弹出规则</strong>：g(n)-对于一个节点n，g(n)表示从起点到当前节点已经耗费的总代价。（Dijkstra算法每次<strong>弹出</strong>g(n)最小的那个节点，其实类似BFS，BFS的g(n)为节点在搜索树上的深度）</li>
+<li><strong>更新规则</strong>：对于当前节点n的一个邻居节点m，如果m已经在当前集合中，则根据当前路径（n-&gt;m）重新确定一个g(m)，如果其小于原本的值，则对g(m)进行更新。</li>
+</ul>
+<p>算法伪代码：</p>
+<figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs vbnet">Initial初始化: 初始节点g(X_s)=<span class="hljs-number">0</span>,其他所有节点g(n)=infinite;设计一个数据结构priority queue(自动对其中数据根据g(n)进行排序) <br><span class="hljs-symbol">Loop:</span><br>	- <span class="hljs-keyword">if</span> the queue <span class="hljs-built_in">is</span> empty, <span class="hljs-keyword">return</span> <span class="hljs-literal">FALSE</span>; break;<br>	- Remove the node <span class="hljs-string">&quot;n&quot;</span> <span class="hljs-keyword">with</span> the lowest g(n) <span class="hljs-keyword">from</span> the queue<br>	- Mark node <span class="hljs-string">&quot;n&quot;</span> <span class="hljs-keyword">as</span> expanded<br>	- <span class="hljs-keyword">if</span> the node <span class="hljs-string">&quot;n&quot;</span> <span class="hljs-built_in">is</span> the goal state, <span class="hljs-keyword">return</span> <span class="hljs-literal">TRUE</span>; break;<br>	- <span class="hljs-keyword">For</span> all unexpanded neighbors <span class="hljs-string">&quot;m&quot;</span> <span class="hljs-keyword">of</span> node <span class="hljs-string">&quot;n&quot;</span><br>		- <span class="hljs-keyword">if</span> g(m)=infinite<br>			- g(m) = g(n) + Cnm<br>			- Push node <span class="hljs-string">&quot;m&quot;</span> <span class="hljs-keyword">into</span> the queue<br>		- <span class="hljs-keyword">if</span> g(m) &gt; g(n) + Cnm<br>			- g(m) = g(n) + Cnm<br>	- <span class="hljs-keyword">end</span><br><span class="hljs-keyword">End</span> <span class="hljs-keyword">Loop</span>	<br></code></pre></td></tr></table></figure>
+
+<p>![Dijkstra](&#x2F;assets&#x2F;img&#x2F;astar&#x2F;dijkstra.png)</p>
+<blockquote>
+<p>优点：完备的，只要有解一定可以找到最优解。缺点：只利用了到目前为止的成本，没有利用目标位置的信息，这也导致了当图中每条边权重相同时，Dijkstra算法也就退化成了广度优先搜索算法。所以本算法其实就是对BFS的拓展使其可以用于有权图搜索。此类算法盲目穷举进行探索的，都不是启发式搜索算法。</p>
+</blockquote>
+<ul>
+<li>在cpp中上述Priority queue可以使用下面三种方式实现<ul>
+<li><code>std::priority_queue</code></li>
+<li><code>std::make_heap</code></li>
+<li><code>std::mutimap</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="A-star算法"><a href="#A-star算法" class="headerlink" title="A-star算法"></a>A-star算法</h2><p>算法要点：</p>
+<ul>
+<li><strong>累积成本函数</strong>g(n): 从起点到当前节点n累积的成本cost；</li>
+<li><strong>启发函数</strong>h(n): 从当前节点n到目标估计成本cost（类似欧式距离、曼哈顿距离等）；</li>
+<li><strong>估计成本函数</strong> f(n) &#x3D; g(n) + h(n): 经过当前节点n从起始节点到目标节点的估计成本； </li>
+<li><strong>策略</strong>：每次<strong>弹出</strong>f(n)最小的节点<ul>
+<li><strong>更新策略</strong>：对于当前节点n的一个邻居节点m，如果m已经在当前集合中，则根据当前路径（n-&gt;m）重新确定一个g(m)，如果其小于原本的值，则对g(m)进行更新。</li>
+<li>每个被访问（弹出）过的节点n，一定找到了从起点到n的一个最短路径</li>
+</ul>
+</li>
+</ul>
+<p>算法伪代码：</p>
+<figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs vbnet">Initial初始化: 初始节点g(X_s)=<span class="hljs-number">0</span>,其他所有节点g(n)=infinite;初始化所有节点h(n);设计一个数据结构priority queue(自动对其中数据根据g(n)进行排序) <br><span class="hljs-symbol">Loop:</span><br>	- <span class="hljs-keyword">if</span> the queue <span class="hljs-built_in">is</span> empty, <span class="hljs-keyword">return</span> <span class="hljs-literal">FALSE</span>; break;<br>	- Remove the node <span class="hljs-string">&quot;n&quot;</span> <span class="hljs-keyword">with</span> the lowest f(n) <span class="hljs-keyword">from</span> the queue<br>	- Mark node <span class="hljs-string">&quot;n&quot;</span> <span class="hljs-keyword">as</span> expanded<br>	- <span class="hljs-keyword">if</span> the node <span class="hljs-string">&quot;n&quot;</span> <span class="hljs-built_in">is</span> the goal state, <span class="hljs-keyword">return</span> <span class="hljs-literal">TRUE</span>; break;<br>	- <span class="hljs-keyword">For</span> all unexpanded neighbors <span class="hljs-string">&quot;m&quot;</span> <span class="hljs-keyword">of</span> node <span class="hljs-string">&quot;n&quot;</span><br>		- <span class="hljs-keyword">if</span> g(m)=infinite<br>			- g(m) = g(n) + Cnm<br>			- Push node <span class="hljs-string">&quot;m&quot;</span> <span class="hljs-keyword">into</span> the queue<br>		- <span class="hljs-keyword">if</span> g(m) &gt; g(n) + Cnm<br>			- g(m) = g(n) + Cnm<br>	- <span class="hljs-keyword">end</span><br><span class="hljs-keyword">End</span> <span class="hljs-keyword">Loop</span>	<br></code></pre></td></tr></table></figure>
+
+<p>![astar](&#x2F;assets&#x2F;img&#x2F;astar&#x2F;astar.png)</p>
+<blockquote>
+<p>由于引入了启发函数h，如果启发函数不合理，A星算法有可能是找不到最优解的（如下图）。如果想保证a星算法可以找到最优解，需要满足任意 h(n)小于等于节点n到终点的实际cost。</p>
+</blockquote>
+<p>![astar_wrong](&#x2F;assets&#x2F;img&#x2F;astar&#x2F;astar1.png)</p>
+<ul>
+<li><strong>加权A星算法</strong>，即使用的$f(n)&#x3D;g(n)+\varepsilon h(n)$，当$\varepsilon &gt;1$时，代表着增加了h(n)的权重，这有可能导致不能得到最优解，但是可以更快的到达目标（有可能提升几十倍 ）。<ul>
+<li>这种方法其实是一种 最优性 vs 速度（贪心算法肯定是最快的，只是不能得到最优解）；</li>
+<li>已经被证明：$cost_{solution} \le \varepsilon cost_{optimal}$，即结果的cost与最优解的cost的关系；</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>如果想查看不同算法的动态效果，<a target="_blank" rel="noopener" href="http://qiao.github.io/PathFinding.js/visual/">这个网页</a>提供了在线模拟运行的小程序。</p>
+</blockquote>
+<ul>
+<li>常识强调：<ul>
+<li><code>openlist</code>：也就是维护的priority queue，也就是所有已经扩展过的节点的邻居（不包括已经扩展过的节点）组成的容器；</li>
+<li><code>closelist</code>: 也就是已经扩展过（访问过）的节点组成的容器；</li>
+</ul>
+</li>
+</ul>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ul>
+<li>[1] 深蓝学院运动规划课程PPT（高飞老师）。</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">#算法与数据结构</a>
+      
+        <a href="/tags/%E8%B7%AF%E5%BE%84%E8%A7%84%E5%88%92/">#路径规划</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>dijkstra算法和astar算法</div>
+      <div>http://line.com/2021/01/05/2021-01-05-dijkstra-astar/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Line</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年1月5日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/01/17/2021-01-17-lens-camera/" title="镜头的参数与成像">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">镜头的参数与成像</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/01/05/2021-01-05-pigeon/" title="鸽群优化">
+                        <span class="hidden-mobile">鸽群优化</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

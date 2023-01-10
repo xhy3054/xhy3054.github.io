@@ -1,0 +1,803 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon1.png">
+  <link rel="icon" href="/img/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Line">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="what’s AWK AWK是一种优良的文本处理工具，Linux及Unix环境中现有的功能最强大的数据处理引擎之一。这种编程及数据操作语言（其名称得自于它的创始人阿尔佛雷德·艾侯、彼得·温伯格和布莱恩·柯林汉姓氏的首个字母）的最大功能取决于一个人所拥有的知识。——维基百科  由上可知，AWK是一种强大的用于文本分析处理的工具。很多人简单的把它看作linux下的一个命令，这种观点是浅显的，AWK实际">
+<meta property="og:type" content="article">
+<meta property="og:title" content="简单理解应用AWK">
+<meta property="og:url" content="http://line.com/2018/04/21/2018-04-22-AWK-script/index.html">
+<meta property="og:site_name" content="Line&#39;s Blog">
+<meta property="og:description" content="what’s AWK AWK是一种优良的文本处理工具，Linux及Unix环境中现有的功能最强大的数据处理引擎之一。这种编程及数据操作语言（其名称得自于它的创始人阿尔佛雷德·艾侯、彼得·温伯格和布莱恩·柯林汉姓氏的首个字母）的最大功能取决于一个人所拥有的知识。——维基百科  由上可知，AWK是一种强大的用于文本分析处理的工具。很多人简单的把它看作linux下的一个命令，这种观点是浅显的，AWK实际">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-04-21T15:07:24.000Z">
+<meta property="article:modified_time" content="2023-01-08T16:21:28.849Z">
+<meta property="article:author" content="Line">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>简单理解应用AWK - Line&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"line.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Line</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default2.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="简单理解应用AWK"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2018-04-21 23:07" pubdate>
+          2018年4月21日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          31 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">简单理解应用AWK</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="what’s-AWK"><a href="#what’s-AWK" class="headerlink" title="what’s AWK"></a>what’s <em><strong>AWK</strong></em></h1><blockquote>
+<p>AWK是一种优良的文本处理工具，Linux及Unix环境中现有的功能最强大的数据处理引擎之一。这种编程及数据操作语言（其名称得自于它的创始人阿尔佛雷德·艾侯、彼得·温伯格和布莱恩·柯林汉姓氏的首个字母）的最大功能取决于一个人所拥有的知识。——维基百科</p>
+</blockquote>
+<p>由上可知，<strong>AWK</strong>是一种强大的用于文本分析处理的工具。很多人简单的把它看作<strong>linux</strong>下的一个命令，这种观点是浅显的，<strong>AWK</strong>实际上也是一个脚本解释器（与shell一样），通过下文，我们可以逐渐发现<strong>AWK</strong>的强大。</p>
+<h2 id="AWK：基本知识汇总"><a href="#AWK：基本知识汇总" class="headerlink" title="AWK：基本知识汇总"></a><em><strong>AWK：</strong></em>基本知识汇总</h2><p>实际上AWK的确拥有自己的语言：AWK程序设计语言，三位创建者已将它正式定义为“样式扫描和处理语言”。AWK提供了极其强大的功能：可以进行正则表达式的匹配，样式装入、流控制、数学运算符、进程控制语句甚至于内置的变量和函数。它具备了一个完整的语言所应具有的几乎所有精美特性。</p>
+<p>AWK在处理文本时，一次读入一个记录，每行为一条记录。每条记录会划分成多个域，最终将一个文件规划成一个表格类型的数据结构。</p>
+<h2 id="AWK的内置变量"><a href="#AWK的内置变量" class="headerlink" title="AWK的内置变量"></a>AWK的内置变量</h2><ul>
+<li>$0：当前记录，这个变量存放了当前整行的内容。</li>
+<li>$n：当前记录的第n个域的内容。（由FS进行分隔）</li>
+<li>FS：域分隔符”。其默认值为“空白字符”，即空格和制表符。FS可以替换为其它字符，从而改变域分隔符。</li>
+<li>NF：当前记录中的域个数，也就是总列数。</li>
+<li>NR：已经读出的记录的条数，也就是行号，如果多个文件的话，这个变量会一直累计。</li>
+<li>FNR：也是行号，不过刚开始读每个文件时会清零，因此只代表这条记录在当前文件中的行号。</li>
+<li>RS：“记录分隔符”。默认为换行符。</li>
+<li>OFS：“输出域分隔符”，默认空格。</li>
+<li>ORS：“输出记录分隔符（行）”默认换行符。</li>
+<li>FILENAME：当前输入文件名。</li>
+</ul>
+<h2 id="AWK：作为一个命令用"><a href="#AWK：作为一个命令用" class="headerlink" title="AWK：作为一个命令用"></a><em><strong>AWK：</strong></em>作为一个命令用</h2><p>假设有一段文本<code>test.log</code>，文本内容如下：</p>
+<pre><code class="hljs">Proto    Recv-Q   Send-Q   Local-Address      Foreign-Address        State
+tcp      0        0        0.0.0.0:3306       0.0.0.0:*              LISTEN
+tcp      0        0        0.0.0.0:80         0.0.0.0:*              LISTEN
+tcp      0        0        127.0.0.1:9000     0.0.0.0:*              LISTEN
+tcp      0        0        coolshell.cn:80    124.205.5.146:18245    TIME_WAIT
+tcp      0        0        coolshell.cn:80    61.140.101.185:37538   FIN_WAIT2
+tcp      0        0        coolshell.cn:80    110.194.134.189:1032   ESTABLISHED
+tcp      0        0        coolshell.cn:80    123.169.124.111:49809  ESTABLISHED
+tcp      0        0        coolshell.cn:80    116.234.127.77:11502   FIN_WAIT2
+tcp      0        0        coolshell.cn:80    123.169.124.111:49829  ESTABLISHED
+tcp      0        0        coolshell.cn:80    183.60.215.36:36970    TIME_WAIT
+tcp      0        4166     coolshell.cn:80    61.148.242.38:30901    ESTABLISHED
+tcp      0        1        coolshell.cn:80    124.152.181.209:26825  FIN_WAIT1
+tcp      0        0        coolshell.cn:80    110.194.134.189:4796   ESTABLISHED
+tcp      0        0        coolshell.cn:80    183.60.212.163:51082   TIME_WAIT
+tcp      0        1        coolshell.cn:80    208.115.113.92:50601   LAST_ACK
+tcp      0        0        coolshell.cn:80    123.169.124.111:49840  ESTABLISHED
+tcp      0        0        coolshell.cn:80    117.136.20.85:50025    FIN_WAIT2
+tcp      0        0        :::22              :::*                   LISTEN
+</code></pre>
+<p>输入命令<code>awk &#39;$3&gt;0 || NR==1 &#123;print $0&#125;&#39; test.log &gt; record.log</code>,查看<code>record.log</code>中输出如下：</p>
+<pre><code class="hljs">Proto Recv-Q Send-Q Local-Address          Foreign-Address             State
+tcp        0   4166 coolshell.cn:80        61.148.242.38:30901         ESTABLISHED
+tcp        0      1 coolshell.cn:80        124.152.181.209:26825       FIN_WAIT1
+tcp        0      1 coolshell.cn:80        208.115.113.92:50601        LAST_ACK
+</code></pre>
+<p>输入命令<code>awk &#39;$6 ~ /TIME_WAIT|State/ &#123;printf&quot;%02d %10s %30s %20s \n&quot;,NR,$1,$4,$6&#125;&#39; test.log &gt; record.log</code>，查看<code>record.log</code>中输出如下：</p>
+<pre><code class="hljs">01      Proto                  Local-Address                State 
+05        tcp                coolshell.cn:80            TIME_WAIT 
+11        tcp                coolshell.cn:80            TIME_WAIT 
+15        tcp                coolshell.cn:80            TIME_WAIT 
+</code></pre>
+<p>如上我们可以发现，是如下模式：</p>
+<pre><code class="hljs">    pattern &#123; action &#125;
+</code></pre>
+<p>上面是AWK的基础命令模式，AWK将对输入的文本进行逐记录（行）处理，在遇到符合<code>pattern</code>的记录时，执行<code>action</code>。所以，如果有10行符合pattern，则action会执行10次。</p>
+<h2 id="AWK：脚本编写"><a href="#AWK：脚本编写" class="headerlink" title="AWK：脚本编写"></a><em><strong>AWK：</strong></em>脚本编写</h2><p>有<code>score.log</code>，内容如下：</p>
+<pre><code class="hljs">Marry   2143 78 84 77
+Jack    2321 66 78 45
+Tom     2122 48 77 71
+Mike    2537 87 97 95
+Bob     2415 40 57 62
+</code></pre>
+<p>编写一个后缀名为<code>.awk</code>的脚本，内容如下：</p>
+<pre><code class="hljs">#!/bin/awk -f
+#运行前
+BEGIN &#123;
+    math = 0
+    english = 0
+    computer = 0
+ 
+    printf &quot;NAME    NO.   MATH  ENGLISH  COMPUTER   TOTAL\n&quot;
+    printf &quot;---------------------------------------------\n&quot;
+&#125;
+#运行中
+&#123;
+    math+=$3
+    english+=$4
+    computer+=$5
+    printf &quot;%-6s %-6s %4d %8d %8d %8d\n&quot;, $1, $2, $3,$4,$5, $3+$4+$5
+&#125;
+#运行后
+END &#123;
+    printf &quot;---------------------------------------------\n&quot;
+    printf &quot;  TOTAL:%10d %8d %8d \n&quot;, math, english, computer
+    printf &quot;AVERAGE:%10.2f %8.2f %8.2f\n&quot;, math/NR, english/NR, computer/NR
+&#125;
+</code></pre>
+<p>在终端输入<code>awk -f score.awk score.txt</code>，输出结果如下：</p>
+<pre><code class="hljs">NAME    NO.   MATH  ENGLISH  COMPUTER   TOTAL
+---------------------------------------------
+Marry  2143     78       84       77      239
+Jack   2321     66       78       45      189
+Tom    2122     48       77       71      196
+Mike   2537     87       97       95      279
+Bob    2415     40       57       62      159
+---------------------------------------------
+  TOTAL:       319      393      350 
+AVERAGE:     63.80    78.60    70.00
+</code></pre>
+<p>如上便是AWK的脚本方式，如果想要将脚本嵌入shell中，只需要把AWK代码放入<code>&#39;&#39;</code>中便可以了，而且这样做不需要<code>-f</code>参数。方式：<code>awk &#39;代码&#39;</code></p>
+<h3 id="AWK脚本的流程控制"><a href="#AWK脚本的流程控制" class="headerlink" title="AWK脚本的流程控制"></a>AWK脚本的流程控制</h3><ul>
+<li>if语句控制：</li>
+</ul>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-keyword">if</span> (condition)<br>&#123;<br>    body<br>&#125;<br><span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (condition)<br>&#123;<br>    body<br>&#125;<br><span class="hljs-keyword">else</span><br>&#123;<br>    body<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>for语句控制</li>
+</ul>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-keyword">for</span> (initialization; condition; increment)<br>&#123;<br>    body<br>&#125; <br><br> <br><br><span class="hljs-keyword">for</span> (var <span class="hljs-keyword">in</span> array)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>while语句控制</li>
+</ul>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-keyword">while</span> (condition)<br>&#123;<br>    body<br>&#125;<br>  <br><span class="hljs-keyword">do</span><br>&#123;<br>    body<br>&#125;<br><span class="hljs-keyword">while</span> (condition)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>swith语句控制</li>
+</ul>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs awk">switch (expression) <br>&#123;<br>case value or regular expression:<br>    case-body<br>default:<br>    default-body<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/linux/">#linux</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>简单理解应用AWK</div>
+      <div>http://line.com/2018/04/21/2018-04-22-AWK-script/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Line</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2018年4月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2018/04/24/2018-04-24-%E5%8E%9F%E7%A0%81-%E5%8F%8D%E7%A0%81-%E8%A1%A5%E7%A0%81/" title="补码，原码，反码">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">补码，原码，反码</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2018/04/20/2018-04-20-shell-script/" title="shell脚本快速入门">
+                        <span class="hidden-mobile">shell脚本快速入门</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

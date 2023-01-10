@@ -1,0 +1,744 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon1.png">
+  <link rel="icon" href="/img/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Line">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="在我刚上大学那会儿，学了ｃ语言与c++。当时肯定是没学好哈哈，记得我好长一段时间都认为c++语言就是ｃ语言多了面向对象的部分（这个有可能是因为谭浩强的两本书实在太像了）。这段时间一直在总结c语言和c++语言学习，c++语言确实脱胎于c语言，但是有些地方确实还是会有细微的差别的。已经写了几篇博客了，今天这应该是最后一篇，讲的是一些ｃ语言和c++的几个常识问题．比如关键字struct与关键字class">
+<meta property="og:type" content="article">
+<meta property="og:title" content="c语言和ｃ++语言中的几个常识问题">
+<meta property="og:url" content="http://line.com/2018/09/15/2018-09-15-c-cpp-common/index.html">
+<meta property="og:site_name" content="Line&#39;s Blog">
+<meta property="og:description" content="在我刚上大学那会儿，学了ｃ语言与c++。当时肯定是没学好哈哈，记得我好长一段时间都认为c++语言就是ｃ语言多了面向对象的部分（这个有可能是因为谭浩强的两本书实在太像了）。这段时间一直在总结c语言和c++语言学习，c++语言确实脱胎于c语言，但是有些地方确实还是会有细微的差别的。已经写了几篇博客了，今天这应该是最后一篇，讲的是一些ｃ语言和c++的几个常识问题．比如关键字struct与关键字class">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-09-14T17:07:24.000Z">
+<meta property="article:modified_time" content="2023-01-08T16:21:28.849Z">
+<meta property="article:author" content="Line">
+<meta property="article:tag" content="c与c++">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>c语言和ｃ++语言中的几个常识问题 - Line&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"line.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Line</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default2.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="c语言和ｃ++语言中的几个常识问题"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2018-09-15 01:07" pubdate>
+          2018年9月15日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          19 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">c语言和ｃ++语言中的几个常识问题</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>在我刚上大学那会儿，学了ｃ语言与c++。当时肯定是没学好哈哈，记得我好长一段时间都认为c++语言就是ｃ语言多了面向对象的部分（这个有可能是因为谭浩强的两本书实在太像了）。这段时间一直在总结c语言和c++语言学习，c++语言确实脱胎于c语言，但是有些地方确实还是会有细微的差别的。已经写了几篇博客了，今天这应该是最后一篇，讲的是一些ｃ语言和c++的几个常识问题．比如关键字struct与关键字class等。这个是收尾工作，所以内容十分平，我写的轻松，看起来也轻松。（因为内容实在是少，而且很简单）</p>
+<h1 id="c语言与c-文件的后缀名问题"><a href="#c语言与c-文件的后缀名问题" class="headerlink" title="c语言与c++文件的后缀名问题"></a>c语言与c++文件的后缀名问题</h1><p>这个问题在ｃ语言中会遇到的比较少，但是C++中可能会遇到比较多，比如我就曾经遇到过后缀名是<code>.cc</code>的文件，当时是有些困惑的，后来搞清楚了就好了．这里就来讲清楚这个．</p>
+<p>ｃ语言中的后缀名：</p>
+<ol>
+<li>源文件：<code>.c</code>;</li>
+<li>头文件：<code>.h</code>;</li>
+</ol>
+<p>c++中的后缀名：</p>
+<ol>
+<li>源文件：<code>.cpp</code>、<code>.cc</code>、<code>cxx</code>、<code>.C</code>、<code>.c++</code>;</li>
+<li>头文件：<code>.hpp</code>、<code>.h</code>、<code>.hxx</code>;</li>
+</ol>
+<p>由上我们看到ｃ语言的后缀名比较固定，没什么好说的，但是c++的后缀名似乎版本比较多样。这个其实没什么大不了的，就是一个标注，给人给机器看的，让我们知道它是哪种语言。但是我们也看到了c++那么多版本也不是说所有版本在所有平台上都是可以的，有的平台不区分大小写（windows），所以<code>.C</code>就不能用在该平台上，有的平台不支持<code>+</code>号做后缀，<code>.c++</code>就不能用，下面就列出各个平台支持的c++源文件后缀名版本：</p>
+<ol>
+<li><p>Unix： C, cc, cxx, c</p>
+</li>
+<li><p>GNU C++： C, cc, cxx, cpp, c++</p>
+</li>
+<li><p>Digital Mars： cpp, cxx</p>
+</li>
+<li><p>Borland： C++ cpp</p>
+</li>
+<li><p>Watcom： cpp</p>
+</li>
+<li><p>Microsoft Visual C++： cpp, cxx, cc</p>
+</li>
+<li><p>Metrowerks CodeWarrior： cpp, cp, cc, cxx, c++</p>
+</li>
+</ol>
+<h1 id="c-中的size-t与size-type"><a href="#c-中的size-t与size-type" class="headerlink" title="c++中的size_t与size_type"></a>c++中的size_t与size_type</h1><p>首先，必须得说，<code>size_t</code>与<code>size_type</code>没有本质的区别，都是被标准定义为一种<code>unsigned int</code>类型。但使用时有一点区别需要注意：</p>
+<ol>
+<li><code>size_t</code>类型是容器无关的，定义在全局名称空间中；</li>
+<li><code>size_type</code>类型是容器概念，没有容器不能使用；</li>
+</ol>
+<blockquote>
+<p><code>size_t</code>定义在cstddef头文件中,该文件是C标准库的头文件stddef.h的C++版本.它是一个与机器相关的unsigned类型,其大小足以保证存储内存中对象的大小。size_t与size_type的引入增强了程序在不同平台上的可移植性。经测试发现，在32位系统中size_t是4字节的，而在64位系统中，size_t是8字节的，这样利用该类型可以增强程序的可移植性。理论上，它可以存储任何类型数组的最大大小。size_t类型通常用于循环，数组索引，大小的存储和地址运算。size_t可以存储一个指针，但有一个更好的选择uintptr_t。</p>
+</blockquote>
+<h1 id="c语言与c-中关键字struct的区别"><a href="#c语言与c-中关键字struct的区别" class="headerlink" title="c语言与c++中关键字struct的区别"></a>c语言与c++中关键字struct的区别</h1><h2 id="c语言中的关键字struct"><a href="#c语言中的关键字struct" class="headerlink" title="c语言中的关键字struct"></a>c语言中的关键字struct</h2><p>首先需要说明一下，在ｃ语言中是没有关键字class的。只有关键字struct。</p>
+<p>在ｃ语言中，关键字struct用来开始构建结构体类型。如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span>&#123;</span><br>    <span class="hljs-type">int</span> a;<br>    <span class="hljs-type">char</span> b;<br>    <span class="hljs-type">float</span> c;<br>&#125;x,y[<span class="hljs-number">10</span>];<br></code></pre></td></tr></table></figure>
+<p>如上，<code>struct&#123;int a;char b;float c;&#125;</code>是一种结构体类型，上述代码中声明a为这种类型的变量，y为包含10个这种类型变量的数组。不过会有人发现这样声明是不是太麻烦，确实有些麻烦，所以可以为这种结构体类型设置<strong>标签</strong>。如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">A</span>&#123;</span><br>    <span class="hljs-type">int</span> a;<br>    <span class="hljs-type">char</span> b;<br>    <span class="hljs-type">float</span> c;<br>&#125;;<br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">A</span> <span class="hljs-title">x</span>,<span class="hljs-title">y</span>[10];</span><br></code></pre></td></tr></table></figure>
+<p>如上，可以起到一样的作用，其中<code>A</code>为该结构体的标签。也有很多人喜欢下面的用法：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>    <span class="hljs-type">int</span> a;<br>    <span class="hljs-type">char</span> b;<br>    <span class="hljs-type">float</span> c;<br>&#125; B;<br>B x,y[<span class="hljs-number">10</span>];<br></code></pre></td></tr></table></figure>
+<p>这种用法其实是用<strong>typedef</strong>为这种结构体类型起了一个<strong>别名</strong>。但是这种类型会有一个局限，就是在结构体内部如果有指向本身的指针的话（链表什么常见的数据结构里经常用到），会不好表达，因为此时别名还未生效，此时就可以使用标签来解决，如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">A</span>&#123;</span><br>    <span class="hljs-type">int</span> a;<br>    <span class="hljs-type">char</span> b;<br>    <span class="hljs-type">float</span> c;<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">A</span> *<span class="hljs-title">next</span>;</span><br>&#125; B;<br>B x,y[<span class="hljs-number">10</span>];<br></code></pre></td></tr></table></figure>
+
+<h2 id="c-中的关键字struct与class"><a href="#c-中的关键字struct与class" class="headerlink" title="c++中的关键字struct与class"></a>c++中的关键字struct与class</h2><p>在c++中，关键字struct与class都是用来开始<strong>类</strong>的定义的(注意！c++中关键字struct不再是用来开始结构体的定义，二是类的定义，与ｃ语言中不再一样)。</p>
+<p>那struct与class又有什么区别呢？</p>
+<ol>
+<li><p>我们都知道在类中，成员是有访问属性的，分别是<strong>public</strong>与<strong>private</strong>。这两个关键字唯一的区别就是，使用struct关键字时，如果没有访问说明符，那么成员默认是<strong>public</strong>的；而使用class关键字时，如果没有访问说明符，那么成员默认是<strong>private</strong>的。</p>
+</li>
+<li><p>在定义派生类时，如果没有提供派生访问说明符，则使用<code>struct</code>关键字定义的派生类默认是公有继承，<code>class</code>关键字定义的派生类默认是私有继承。</p>
+</li>
+</ol>
+<blockquote>
+<p>关键字class还可以用在模板定义时修饰类型参数，相当于<code>typename</code>。</p>
+</blockquote>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li>[1] C++ Primer（第5版）</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/c%E4%B8%8Ec/">#c与c++</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>c语言和ｃ++语言中的几个常识问题</div>
+      <div>http://line.com/2018/09/15/2018-09-15-c-cpp-common/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Line</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2018年9月15日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2018/09/16/2018-09-16-visual-feature-orb/" title="图像特征之ORB特征详解">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">图像特征之ORB特征详解</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2018/09/09/2018-09-09-c-cpp-argu-passing/" title="c语言和ｃ++语言中函数参数的传递">
+                        <span class="hidden-mobile">c语言和ｃ++语言中函数参数的传递</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

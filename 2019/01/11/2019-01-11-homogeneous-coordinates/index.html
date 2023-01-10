@@ -1,0 +1,748 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon1.png">
+  <link rel="icon" href="/img/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Line">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="齐次坐标系（Homogeneous Coordinates）是计算机视觉与图形学中的一个重要的数学工具。 齐次坐标的引入在欧式空间里，两条公面的平行线无法相交，但是在投影空间(Projective Space)里不是这样。一个直观的表示如下：两条轨道的间距随着视线变远而逐渐变小，直到在无限远处相交。  在欧式空间里采用$(x, y, z)$表示一个三维点，但是无穷远点$(\infty, \inft">
+<meta property="og:type" content="article">
+<meta property="og:title" content="理解齐次坐标">
+<meta property="og:url" content="http://line.com/2019/01/11/2019-01-11-homogeneous-coordinates/index.html">
+<meta property="og:site_name" content="Line&#39;s Blog">
+<meta property="og:description" content="齐次坐标系（Homogeneous Coordinates）是计算机视觉与图形学中的一个重要的数学工具。 齐次坐标的引入在欧式空间里，两条公面的平行线无法相交，但是在投影空间(Projective Space)里不是这样。一个直观的表示如下：两条轨道的间距随着视线变远而逐渐变小，直到在无限远处相交。  在欧式空间里采用$(x, y, z)$表示一个三维点，但是无穷远点$(\infty, \inft">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://line.com/img/homogeneous_coordinates/railway.jpg">
+<meta property="article:published_time" content="2019-01-10T17:07:24.000Z">
+<meta property="article:modified_time" content="2023-01-10T13:59:15.530Z">
+<meta property="article:author" content="Line">
+<meta property="article:tag" content="数学">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://line.com/img/homogeneous_coordinates/railway.jpg">
+  
+  
+  
+  <title>理解齐次坐标 - Line&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"line.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Line</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default2.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="理解齐次坐标"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-01-11 01:07" pubdate>
+          2019年1月11日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          25 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">理解齐次坐标</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>齐次坐标系（Homogeneous Coordinates）是计算机视觉与图形学中的一个重要的数学工具。</p>
+<h1 id="齐次坐标的引入"><a href="#齐次坐标的引入" class="headerlink" title="齐次坐标的引入"></a>齐次坐标的引入</h1><p>在<strong>欧式空间</strong>里，两条公面的平行线无法相交，但是在<strong>投影空间</strong>(Projective Space)里不是这样。一个直观的表示如下：两条轨道的间距随着视线变远而逐渐变小，直到在无限远处相交。</p>
+<p><img src="/img/homogeneous_coordinates/railway.jpg" srcset="/img/loading.gif" lazyload alt="railway"></p>
+<p>在欧式空间里采用$(x, y, z)$表示一个三维点，但是<strong>无穷远点</strong>$(\infty, \infty, \infty)$在欧式空间里是没有意义的，<strong>在投影空间中进行图形和几何运算</strong>并不是一个简单的问题，为了解决这个问题，数学家　August Ferdinand Möbius　提出了齐次坐标系，使用 N+1 个量来表示　N 维坐标。例如在二维齐次坐标系中，我们引入一个量w，将一个二维点$(x, y)$重新表示为$(X, Y, w)$的形式，其中转换关系为：</p>
+<p>$$ x = \frac{X}{w} $$</p>
+<p>$$ y = \frac{Y}{w} $$</p>
+<p>例如，欧式坐标中的一个二维点$(1, 2)$可以在齐次坐标中表示为$(1, 2, 1)$，如果点逐渐移动向无穷远处，其欧式坐标变为$(\infty, \infty, \infty)$，齐次坐标变为$(1, 2, 0)$。其中齐次坐标在表示无穷远处的点时不需要用到$\infty$。</p>
+<blockquote>
+<p>其中齐次坐标$(1, 2, 1)$等价于齐次坐标$(2, 4, 2)$…即$(k, 2k, k)，k \in R$，此处这些点具有<strong>尺度不变性</strong>，是齐性的，所以称为<strong>齐次坐标</strong></p>
+</blockquote>
+<h2 id="照片中平行线相交的不太严格的证明"><a href="#照片中平行线相交的不太严格的证明" class="headerlink" title="照片中平行线相交的不太严格的证明"></a>照片中平行线相交的不太严格的证明</h2><p>欧式空间中假设有如下两条平行线:</p>
+<p>$$ Ax + By + C = 0 $$</p>
+<p>$$ Ax + By + D = 0 $$</p>
+<p>上面两条先在欧式空间中除非$C = D$，否则不相交。使用$\frac{x}{w}, \frac{y}{w}$替换$x, y$(正如前文提到的使用$N+1$个量表示N维坐标，这里增加了一个量w)，可以得到：</p>
+<p>$$ Ax + By + Cw = 0 $$</p>
+<p>$$ Ax + By + Dw = 0 $$</p>
+<p>上式可以得到解$(x, y, 0)$，即两条平行线的齐次坐标表示在$(x, y, 0)$也就是无穷点处相遇</p>
+<blockquote>
+<p>当然这只是一个不严格不严谨的表示，齐次坐标真正的作用在于下文。</p>
+</blockquote>
+<h1 id="齐次坐标可以区分点与向量"><a href="#齐次坐标可以区分点与向量" class="headerlink" title="齐次坐标可以区分点与向量"></a>齐次坐标可以区分点与向量</h1><p>以二维空间为例，$(a, b)$这样的表示既可以是一个坐标表示，也可以是一个向量表示。假设这个坐标系$xOy$中两个基向量为$\vec{x}, \vec{y}$，坐标原点为o，则其中</p>
+<ul>
+<li>表示向量$\vec{v}$时，代表$\vec{v} = a\vec{x} + b\vec{y}$</li>
+<li>表示一个点p时，代表$ p - o = a\vec{x} + b\vec{y} $</li>
+</ul>
+<p>如果没有附加说明，我们不能区别$(a, b)$表示的是向量还是点。用三个量来表示的化，我们可以明确的区分向量和点</p>
+<ul>
+<li>齐次点$(a, b, 1)$</li>
+<li>齐次向量$(a, b, 0)$</li>
+</ul>
+<h1 id="齐次坐标更易描述仿射变换"><a href="#齐次坐标更易描述仿射变换" class="headerlink" title="齐次坐标更易描述仿射变换"></a>齐次坐标更易描述仿射变换</h1><p>一个二维点的仿射变换可以用一个矩阵乘法(线性变换)与一个矩阵加法(平移变换)的叠加来表示：</p>
+<ul>
+<li>矩阵乘法可以表示线性变换，线性变换可以表示旋转变换或者缩放变换（不局限于表示这两种）</li>
+</ul>
+<p>$$ \left[ \begin{array}{ccc} x’\\  y’ \end{array} \right] = \left[ \begin{array}{ccc} cos(\theta) &amp; -sin(\theta) \\  sin(\theta) &amp; cos(\theta) \end{array} \right] \left[ \begin{array}{ccc} x\\  y \end{array} \right]$$</p>
+<p>$$ \left[ \begin{array}{ccc} x’\\  y’ \end{array} \right] = \left[ \begin{array}{ccc} S_x &amp; 0 \\  0 &amp; S_y \end{array} \right] \left[ \begin{array}{ccc} x\\  y \end{array} \right] $$</p>
+<ul>
+<li>矩阵加法可以表示平移变换（不局限于表示平移）</li>
+</ul>
+<p>$$ \left[ \begin{array}{ccc} x’\\  y’ \end{array} \right] = \left[ \begin{array}{ccc} x’\\  y’ \end{array} \right] + \left[ \begin{array}{ccc} t_x\\  t_y \end{array} \right] $$</p>
+<p>如上，我们发现原本的平移变换不能用矩阵相乘的形式表达。在引入齐次坐标后（具有尺度不变性，实际上在高一维的空间映射到$w=1$平面后的结果可直接导出到欧式空间）</p>
+<ul>
+<li>旋转变换和尺度变换</li>
+</ul>
+<p>$$ \left[ \begin{array}{ccc} x’\\  y’\\ 1 \end{array} \right] = \left[ \begin{array}{ccc} cos(\theta) &amp; -sin(\theta) &amp; 0 \\  sin(\theta) &amp; cos(\theta) &amp; 0 \\ 0 &amp; 0 &amp; 1 \end{array} \right] \left[ \begin{array}{ccc} x\\  y \\ 1 \end{array} \right]$$</p>
+<p>$$ \left[ \begin{array}{ccc} x’\\  y’\\ 1 \end{array} \right] = \left[ \begin{array}{ccc} S_x &amp; 0 &amp; 0 \\  0 &amp; S_y &amp; 0\\ 0 &amp; 0 &amp; 1\end{array} \right] \left[ \begin{array}{ccc} x\\  y\\ 1 \end{array} \right] $$</p>
+<ul>
+<li>平移变换</li>
+</ul>
+<p>$$ \left[ \begin{array}{ccc} x’\\  y’\\ 1 \end{array} \right] = \left[ \begin{array}{ccc} 1 &amp; 0 &amp; t_x \\  0 &amp; 1 &amp; t_y\\ 0 &amp; 0 &amp; 1\end{array} \right] \left[ \begin{array}{ccc} x\\  y\\ 1 \end{array} \right] $$</p>
+<ul>
+<li>这样，我们可以导出整个仿射变换的矩阵形式</li>
+</ul>
+<p>$$ T = \left[ \begin{array}{ccc} A &amp; t \\ O_{1*2} &amp; 1\end{array} \right] \left[ \begin{array}{ccc} x\\  y\\ 1 \end{array} \right] $$</p>
+<p>仿射变换保留了点的共线、共面、比例等关系，是图形处理中十分重要的一环。而齐次坐标的引入<strong>使得仿射变换能够以一种紧凑统一的矩阵形式表示和计算</strong>。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><blockquote>
+<p>齐次坐标表示是计算机图形学的重要手段之一，它既能够用来<strong>明确的区分向量和点</strong>，同时也更<strong>易于进行仿射几何变换</strong>。　—— F.S.Hill Jr.《计算机图形学(OpenGL版)》</p>
+</blockquote>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li>[1] 《计算机图形学(OpenGL版)》-　F.S.Hill Jr.</li>
+<li>[2] 《Computer Vision: Algorithms and Applications》- Richard Szeliski </li>
+<li>[3]  <a target="_blank" rel="noopener" href="https://oncemore.wang/blog/homogeneous/">https://oncemore.wang/blog/homogeneous/</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%95%B0%E5%AD%A6/">#数学</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>理解齐次坐标</div>
+      <div>http://line.com/2019/01/11/2019-01-11-homogeneous-coordinates/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Line</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年1月11日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/01/13/2019-01-13-epipolar-geometry/" title="理解对极几何与基本矩阵">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">理解对极几何与基本矩阵</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/01/10/2019-01-10-camerca-module/" title="相机成像的几何描述">
+                        <span class="hidden-mobile">相机成像的几何描述</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

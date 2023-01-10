@@ -1,0 +1,744 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon1.png">
+  <link rel="icon" href="/img/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Line">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="之前有仔细介绍过非线性优化，其中二阶梯度的方法有高斯牛顿法、LM算法、dogleg算法等。前段时间仔细研究了dogleg算法的实现步骤，今天抽出时间总结一下。  dogleg属于二阶梯度法，为了解决高斯牛顿法在使用一阶导数平方近似计算hessian矩阵时可能不准确的问题，它结合了高斯牛顿法与最速下降法，通过定义近似半径来限制近似的可执行范围。本质上与LM算法类似，不过实现细节大有不同。  算法do">
+<meta property="og:type" content="article">
+<meta property="og:title" content="dogleg算法解析">
+<meta property="og:url" content="http://line.com/2019/09/29/2019-09-29-dogleg/index.html">
+<meta property="og:site_name" content="Line&#39;s Blog">
+<meta property="og:description" content="之前有仔细介绍过非线性优化，其中二阶梯度的方法有高斯牛顿法、LM算法、dogleg算法等。前段时间仔细研究了dogleg算法的实现步骤，今天抽出时间总结一下。  dogleg属于二阶梯度法，为了解决高斯牛顿法在使用一阶导数平方近似计算hessian矩阵时可能不准确的问题，它结合了高斯牛顿法与最速下降法，通过定义近似半径来限制近似的可执行范围。本质上与LM算法类似，不过实现细节大有不同。  算法do">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://line.com/assets/img/math/dogleg.PNG">
+<meta property="article:published_time" content="2019-09-28T17:07:24.000Z">
+<meta property="article:modified_time" content="2023-01-08T16:21:28.853Z">
+<meta property="article:author" content="Line">
+<meta property="article:tag" content="数学">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://line.com/assets/img/math/dogleg.PNG">
+  
+  
+  
+  <title>dogleg算法解析 - Line&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"line.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Line</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default2.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="dogleg算法解析"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-09-29 01:07" pubdate>
+          2019年9月29日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          33 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">dogleg算法解析</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>之前有仔细介绍过非线性优化，其中二阶梯度的方法有高斯牛顿法、LM算法、dogleg算法等。前段时间仔细研究了dogleg算法的实现步骤，今天抽出时间总结一下。</p>
+<blockquote>
+<p>dogleg属于二阶梯度法，为了解决高斯牛顿法在使用一阶导数平方近似计算hessian矩阵时可能不准确的问题，它结合了高斯牛顿法与最速下降法，通过定义近似半径来限制近似的可执行范围。本质上与LM算法类似，不过实现细节大有不同。</p>
+</blockquote>
+<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><p>dogleg的思想很简单，对于一个非线性优化问题，它的每次的迭代步骤可以归纳如下：</p>
+<ol>
+<li><p>首先计算当前其高斯牛顿方法的迭代步长$$H_{gn}$$，然后计算最速下降法的迭代步长$$H_{sd}$$。</p>
+</li>
+<li><p>根据第一步中确定的$$H_{gn}$$与$$H_{sd}$$相对与当前信赖域半径$$r$$的大小确定本次dogleg更新的步长$$\delta$$；</p>
+</li>
+<li><p>使用第二步中确定的更新步长进行更新，然后计算$\rho$（与LM中相同），根据其大小判断是否执行本次迭代与如何更新信赖域半径$$r$$。</p>
+</li>
+</ol>
+<h3 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h3><p>第一步是计算高斯牛顿与最速下降两种方法的更新步长。</p>
+<ul>
+<li>高斯牛顿法步长$$H_{gn}$$可以通过求解如下方程组得到（推导可见<a target="_blank" rel="noopener" href="https://xhy3054.github.io/nonlinear-optimization/">非线性优化</a>）</li>
+</ul>
+<p>$$\left(\mathbf{J}(\mathbf{x})^{\top} \mathbf{J}(\mathbf{x})\right) \mathbf{h}_{\mathrm{gn}}&#x3D;-\mathbf{J}(\mathbf{x})^{\top} \mathbf{f}(\mathbf{x}) $$</p>
+<ul>
+<li>最速下降法步长$$H_{sd}$$，获得可以分为两步来获得<ul>
+<li>第一步是先获得最速下降的方向</li>
+<li>第二步是确定最速下降的步长</li>
+<li>最后综合方向与步长即可得到更新的向量</li>
+</ul>
+</li>
+</ul>
+<p>首先，最速下降法的方向即是梯度反方向，先不考虑模长，我们可以使用下面公式表示(其中ｇ表示梯度方向)</p>
+<p>$$ \mathbf{h}_{\mathrm{sd}} &#x3D; -\mathbf{g} &#x3D; -\mathbf{J}(\mathbf{x})^{\top} \mathbf{f}(\mathbf{x}) $$</p>
+<p>然后我们知道利用雅克比矩阵可以得到下面模型：</p>
+<p>$$<br>\begin{aligned} \mathbf{f}\left(\mathbf{x}+\alpha \mathbf{h}<em>{\mathrm{sd}}\right) &amp; \simeq \mathbf{f}(\mathbf{x})+\alpha \mathbf{J}(\mathbf{x}) \mathbf{h}</em>{\mathrm{sd}} \ F\left(\mathbf{x}+\alpha \mathbf{h}<em>{\mathrm{sd}}\right) &amp; \simeq \frac{1}{2}\left|\mathbf{f}(\mathbf{x})+\alpha \mathbf{J}(\mathbf{x}) \mathbf{h}</em>{\mathrm{sd}}\right|^{2} \ &amp;&#x3D;F(\mathbf{x})+\alpha \mathbf{h}<em>{\mathrm{sd}}^{\top} \mathbf{J}(\mathbf{x})^{\top} \mathbf{f}(\mathbf{x})+\frac{1}{2} \alpha^{2}\left|\mathbf{J}(\mathbf{x}) \mathbf{h}</em>{\mathrm{sd}}\right|^{2} \end{aligned}<br>$$</p>
+<p>我们对上述模型求最小值，此时$$\alpha$$应取值为：</p>
+<p>$$<br>\alpha&#x3D;-\frac{\mathbf{h}<em>{\mathrm{sd}}^{\top} \mathbf{J}(\mathbf{x})^{\top} \mathbf{f}(\mathbf{x})}{\left|\mathbf{J}(\mathbf{x}) \mathbf{h}</em>{\mathrm{sd}}\right|^{2}}&#x3D;\frac{|\mathbf{g}|^{2}}{|\mathbf{J}(\mathbf{x}) \mathbf{g}|^{2}}<br>$$</p>
+<p>所以，最后最速下降法的更新向量为</p>
+<p>$$ \mathbf{h}<em>{\mathrm{sd}} &#x3D; \alpha \mathbf{h}</em>{\mathrm{sd}} $$　</p>
+<h3 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h3><p>通过当前的信赖域半径与上一步计算的两种步长结合计算处dogleg算法的更新步长更新规则如下：</p>
+<div style="text-align: center">
+<img src="/assets/img/math/dogleg.PNG" srcset="/img/loading.gif" lazyload/>
+</div>
+上图中的更新规则描述的较为清楚，但是代码实现尚有难度，主要是$$\beta$$的值较难确定。我在网上看到了一个更加明确的规则，将上述更新规则总结为一个统一的表达式。
+
+<p>$$<br>h_{dl}&#x3D;\left{\begin{array}{ll}{\tau h_{sd},} &amp; {0 \leq \tau \leq 1} \ {h_{sd}+(\tau-1)\left(h_{gn}-h_{sd}\right),} &amp; {1 \leq \tau \leq 2}\end{array}\right.<br>$$</p>
+<p>其中比较关键的是变量$$\tau$$的确定，我直接贴出代码(其中<code>delta_</code>是信赖区域的半径大小)</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">double</span> tau;<br><span class="hljs-keyword">if</span>(H_gn.<span class="hljs-built_in">norm</span>() &lt;= delta_)<br>    tau = <span class="hljs-number">2</span>;<br><span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(H_sd.<span class="hljs-built_in">norm</span>() &gt;= delta_)<br>    tau = delta_ / H_sd.<span class="hljs-built_in">norm</span>() ;<br><span class="hljs-keyword">else</span>&#123;<br>    VecX tmp = H_gn - H_sd ;<br>    tau = (- H_sd.<span class="hljs-built_in">transpose</span>() * tmp + <span class="hljs-built_in">sqrt</span>(<span class="hljs-built_in">pow</span>((H_sd.<span class="hljs-built_in">transpose</span>() * tmp),<span class="hljs-number">2</span>) - tmp.<span class="hljs-built_in">squaredNorm</span>() * (H_sd.<span class="hljs-built_in">squaredNorm</span>() - <span class="hljs-built_in">pow</span>(delta_,<span class="hljs-number">2</span>)))) / tmp.<span class="hljs-built_in">squaredNorm</span>()       ;<br>    tau += <span class="hljs-number">1</span>;     <br>&#125;<br></code></pre></td></tr></table></figure>
+<hr>
+<h3 id="第三步"><a href="#第三步" class="headerlink" title="第三步"></a>第三步</h3><p>判断改更新是否执行，并更新信赖域半径，此处的迭代策略比较简单，我是看的参考文献第一篇提供的策略，直接贴代码了。</p>
+<p>注意此处有个$$\rho$$的计算，其值为</p>
+<p>$$<br>\rho&#x3D;\frac{F(\mathbf{x})-F\left(\mathbf{x}+\Delta \mathbf{x}<em>{\operatorname{dl}}\right)}{L(\mathbf{0})-L\left(\Delta \mathbf{x}</em>{\mathrm{dl}}\right)}<br>$$</p>
+<p>其中分母是此次更新后真实目标函数损失减少的量，分子是使用近似模型此次更新后目标函数损失应该减少的量。其中$$L(h)$$函数是如下线性函数模型</p>
+<p>$$L(\mathbf{h}) &#x3D; \frac{1}{2}|\mathbf{f}(\mathbf{x})+\mathbf{J}(\mathbf{x}) \mathbf{h}|^{2}$$</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// 狗腿</span><br><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">Problem::IsGoodStep</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-comment">//此处是计算当前目标函数的损失</span><br>    <span class="hljs-type">double</span> tempChi = <span class="hljs-number">0.0</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">auto</span> edge:edges_)&#123;<br>        edge.second-&gt;<span class="hljs-built_in">ComputeResidual</span>();<br>        tempChi += edge.second-&gt;<span class="hljs-built_in">Chi2</span>();    <br>    &#125;<br> <br>    <span class="hljs-comment">//此处是计算近似使用dogleg步长更新理论上应该减小的损失</span><br>    <span class="hljs-type">double</span> scale = <span class="hljs-number">0</span>;<br>    scale = delta_x_.<span class="hljs-built_in">transpose</span>() * b_ ;<br>    std::cout&lt;&lt;<span class="hljs-string">&quot;第一部分scale为 &quot;</span>&lt;&lt;scale&lt;&lt;endl;<br>    scale -= <span class="hljs-number">0.5</span> * delta_x_.<span class="hljs-built_in">transpose</span>() * Hessian_ * delta_x_; <br>    scale += <span class="hljs-number">1e-3</span>;<br>    cout&lt;&lt;<span class="hljs-string">&quot;scale = &quot;</span>&lt;&lt;scale&lt;&lt;endl;<br><br>    <span class="hljs-type">double</span> rho = (currentChi_ - tempChi)/scale;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;rho: &quot;</span> &lt;&lt; rho &lt;&lt; <span class="hljs-string">&quot; , chi= &quot;</span> &lt;&lt; tempChi &lt;&lt; <span class="hljs-string">&quot; , delta= &quot;</span> &lt;&lt; delta_<br>                  &lt;&lt; std::endl;<br>    <span class="hljs-comment">//迭代策略</span><br>    <span class="hljs-keyword">if</span>(rho &gt; <span class="hljs-number">0</span> &amp;&amp; <span class="hljs-built_in">isfinite</span>(tempChi))&#123;<br>        <span class="hljs-keyword">if</span>(rho&gt;<span class="hljs-number">0.75</span>) delta_ = std::<span class="hljs-built_in">max</span>(delta_, <span class="hljs-number">3.</span>*delta_x_.<span class="hljs-built_in">norm</span>());<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(rho&lt;<span class="hljs-number">0.25</span>)   delta_ = delta_/<span class="hljs-number">2.</span>;<br>        currentChi_ = tempChi;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;    <br>    &#125;<br>    <span class="hljs-keyword">else</span>&#123;<br>        delta_ = delta_/<span class="hljs-number">2.</span>;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;    <br>    &#125;<br><br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>对于dogleg算法基于eigen实现了一般版本，下面是其应用于曲线拟合的实例。</p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ul>
+<li><p>[1] METHODS FOR NON-LINEAR LEAST SOUARES PROBLEMS. K.Madsen, H.B.Nielsen, O.Tingleff</p>
+</li>
+<li><p>[2] Is Levenberg-Marquardt the Most Efficient Optimization Algorithm for Implementing Bundle Adjustment. Manolis I.A.</p>
+</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%95%B0%E5%AD%A6/">#数学</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>dogleg算法解析</div>
+      <div>http://line.com/2019/09/29/2019-09-29-dogleg/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Line</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年9月29日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/10/10/2019-10-10-ros-package-node/" title="ros中的包与节点与roslaunch的使用">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">ros中的包与节点与roslaunch的使用</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/09/03/2019-09-03-vins-backend-optimize/" title="vins中基于滑窗的后端优化">
+                        <span class="hidden-mobile">vins中基于滑窗的后端优化</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,788 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon1.png">
+  <link rel="icon" href="/img/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Line">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="对极几何是双视图之间内在的射影几何。它独立于景物结构，只依赖于摄像机的内参外参。 而基本矩阵是对对极几何的代数表示。 对极几何如下图所示，对极几何通常用来解决双眼匹配搜索对应点的问题。  上图a中两个摄像机的中心分别是C与C’，而X为一个三维空间点，它在两个摄像机的成像平面上的投影点分别是x与x’。我们常称：  基线：两个摄像机光心的连线$CC’$ 对极点：上图b中的e与e’，它们分别是一幅视图中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="理解对极几何与基本矩阵">
+<meta property="og:url" content="http://line.com/2019/01/13/2019-01-13-epipolar-geometry/index.html">
+<meta property="og:site_name" content="Line&#39;s Blog">
+<meta property="og:description" content="对极几何是双视图之间内在的射影几何。它独立于景物结构，只依赖于摄像机的内参外参。 而基本矩阵是对对极几何的代数表示。 对极几何如下图所示，对极几何通常用来解决双眼匹配搜索对应点的问题。  上图a中两个摄像机的中心分别是C与C’，而X为一个三维空间点，它在两个摄像机的成像平面上的投影点分别是x与x’。我们常称：  基线：两个摄像机光心的连线$CC’$ 对极点：上图b中的e与e’，它们分别是一幅视图中">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://line.com/img/epipolar_geometry/epipolar1.png">
+<meta property="article:published_time" content="2019-01-12T17:07:24.000Z">
+<meta property="article:modified_time" content="2023-01-10T14:01:18.057Z">
+<meta property="article:author" content="Line">
+<meta property="article:tag" content="计算机视觉">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://line.com/img/epipolar_geometry/epipolar1.png">
+  
+  
+  
+  <title>理解对极几何与基本矩阵 - Line&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"line.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Line</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default2.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="理解对极几何与基本矩阵"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-01-13 01:07" pubdate>
+          2019年1月13日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          35 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">理解对极几何与基本矩阵</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>对极几何是<strong>双视图</strong>之间内在的射影几何。它独立于景物结构，只依赖于摄像机的内参外参。</p>
+<p>而基本矩阵是对对极几何的代数表示。</p>
+<h1 id="对极几何"><a href="#对极几何" class="headerlink" title="对极几何"></a>对极几何</h1><p>如下图所示，对极几何通常用来解决双眼匹配搜索对应点的问题。</p>
+<p><img src="/img/epipolar_geometry/epipolar1.png" srcset="/img/loading.gif" lazyload alt="epipolar1"></p>
+<p>上图a中两个摄像机的中心分别是C与C’，而X为一个三维空间点，它在两个摄像机的成像平面上的投影点分别是x与x’。我们常称：</p>
+<ul>
+<li><strong>基线</strong>：两个摄像机光心的连线$CC’$</li>
+<li><strong>对极点</strong>：上图b中的e与e’，它们分别是一幅视图中另一个摄像机中心的像。二维表示为基线$CC’$与两个成像平面的交点。</li>
+<li><strong>对极平面</strong>：是一张包含基线的平面，存在着对极平面的一个集合（以基线为轴转动），上图中的一个例子就是$CXC’$。</li>
+<li><strong>对极线</strong>：对极平面与图像平面的交线。上图中的例子是$xe$与$x’e’$，一个成像平面上的所有的对极线相交于对极点。</li>
+</ul>
+<blockquote>
+<p>上图中还体现了一些性质，对于一幅图像上的每一点x，在第二幅图像上，任何与该点x匹配的点x’必然在对极线I’上，该对极线是过点x与第一个摄像机中心C的射线在第二幅图像上的投影。</p>
+</blockquote>
+<h2 id="基本矩阵F"><a href="#基本矩阵F" class="headerlink" title="基本矩阵F"></a>基本矩阵F</h2><p>由上面的讲述，我们知道，在深度未知的情况下，对于一幅图像上的一点x，映射在另一幅图像上是一条与之对应的对极线I’。</p>
+<p>$$ x \rightarrowtail I’ $$</p>
+<p><strong>基本矩阵F表示的正是这个从一个点到一条直线的射影映射</strong>。</p>
+<blockquote>
+<p>由上，我们发现基本矩阵F实现的是从二维（二维点）到一维（一条线上的点）的转换，因此F的秩只能是2。</p>
+</blockquote>
+<h3 id="推导出基础矩阵与本质矩阵"><a href="#推导出基础矩阵与本质矩阵" class="headerlink" title="推导出基础矩阵与本质矩阵"></a>推导出基础矩阵与本质矩阵</h3><p>由<a target="_blank" rel="noopener" href="https://xhy3054.github.io/camerca-module/">相机成像的几何描述</a>我们可以理解如下的公式(世界坐标到像素坐标的转换)：</p>
+<p>$$ Z_1p_{uv1} = K_1P_w   $$</p>
+<p>$$ Z_2p_{uv2} = K_2(RP_w + t)   $$</p>
+<p>其中K是相机内参，R与t是第二个相机在第一个相机的相机坐标系下的外参，$P_w$是此空间点在第一个相机的相机坐标系下的坐标。Z是空间点到相机光心的距离(也是相机坐标系下的z轴坐标)。$p_{uv1}$与$p_{uv2}$是空间点$P_w$在两个相机平面上的投影点。</p>
+<ul>
+<li>首先做出如下定义（其中$x_1$与$x_2$是归一化的相机坐标（X/Z,Y/Z,1））：</li>
+</ul>
+<p>$$ x_1 = K_1^{-1}p_{uv1} $$</p>
+<p>$$ x_2 = K_2^{-1}p_{uv2} $$ </p>
+<ul>
+<li>带入如上定义可得：</li>
+</ul>
+<p>$$ Z_2 x_2 = Z_1 Rx_1 + t $$</p>
+<ul>
+<li>上式两边同时左乘<code>t^</code>，也就是两侧同时与t做外积：</li>
+</ul>
+<p>$$ Z_2 t^{\land} x_2 = Z_1 t^{\land} R x_1 $$</p>
+<ul>
+<li>两侧同时左乘$x_{2}^T$：</li>
+</ul>
+<p>$$ Z_2 x_{2}^T t^{\land} x_2 = Z_1 x_{2}^T t^{\land} R x_1 $$</p>
+<ul>
+<li>上式中由于等式左侧 $t^{\land} x_2$ 是一个与t、$x_2$都垂直的向量，再和$x_2$做内积将得到0，因此上式子其实可以写成如下形式：</li>
+</ul>
+<p>$$ x_{2}^T t^{\land} R x_1 = 0 $$</p>
+<ul>
+<li>上式就是大名鼎鼎的<strong>対极约束</strong>，将 $x_1$ 与 $x_2$ 换下，重新带入 $p_{uv1}$ 与 $p_{uv2}$ 可得：</li>
+</ul>
+<p>$$ p_{uv2}^T K_2^{-T} t^{\land} R K_1^{-1} p_{uv1} = 0 $$</p>
+<ul>
+<li>其中，中间项就是<strong>基础矩阵</strong>，满足如下：</li>
+</ul>
+<p>$$ p_{uv2}^T F p_{uv1} = 0 $$</p>
+<p>$$ F = K_2^{-T} t^{\land} R K_1^{-1} $$</p>
+<blockquote>
+<p>此处注意，当点$p_{uv1}$与基础矩阵F确定时，上式演变成一个直线方程，更好的诠释了基础矩阵的本质是<strong>从一个点到一条直线的射影映射的代数表示。</strong></p>
+</blockquote>
+<ul>
+<li><strong>本质矩阵</strong>是基础矩阵中只与外参相关的部分，即去掉相机内参，可以得到：</li>
+</ul>
+<p>$$ E = t^{\land} R  $$</p>
+<p>$$ F = K_2^{-T} E K_1^{-1} $$</p>
+<h2 id="基础矩阵与本质矩阵的性质"><a href="#基础矩阵与本质矩阵的性质" class="headerlink" title="基础矩阵与本质矩阵的性质"></a>基础矩阵与本质矩阵的性质</h2><ol>
+<li><p><strong>本质矩阵</strong>是两个矩阵的乘积，其中R的秩为3（满秩），$t^{\land}$的秩为2，因此E的<strong>秩为2</strong>。</p>
+</li>
+<li><p><strong>基础矩阵</strong>是四个矩阵的乘积，其中只有$t^{\land}$的秩为2，其他的三个都是满秩的（为3）,最终<strong>秩也为2</strong>。</p>
+</li>
+<li><p><strong>基础矩阵</strong>是四个矩阵的乘积，其中左右相机内参矩阵待定参数各4个，平移自由度是3，旋转自由度也是3，因此总共应该是14个待定参数。但是实际上F是一个$3 \times 3$的矩阵，总共9个参数，所以它最大自由度是9。又因为F满足以下两个约束，所以F的<strong>自由度其实是$9-2=7$</strong>。</p>
+<ul>
+<li>尺度等价性</li>
+<li>def(f)=0</li>
+</ul>
+</li>
+<li><p><strong>本质矩阵</strong>的自由度由平移与旋转的各三个自由度组成，加上尺度等价性，因此本质矩阵<strong>自由度为5。</strong></p>
+</li>
+</ol>
+<h2 id="对极约束条件的探讨"><a href="#对极约束条件的探讨" class="headerlink" title="对极约束条件的探讨"></a>对极约束条件的探讨</h2><ol>
+<li><p>一般在slam中，可以通过本质矩阵E的奇异值分解得到相机相对于前一时刻的位姿变换。</p>
+</li>
+<li><p>但是在只有旋转没有平移时，対极约束是恒成立的，此时不能用本质矩阵进行相机的位姿估计。</p>
+</li>
+<li><p>対极约束条件是尺度无关的，所以恢复出来的的位姿变换具有尺度的不确定性。</p>
+</li>
+</ol>
+<h2 id="基础矩阵与本质矩阵的求解"><a href="#基础矩阵与本质矩阵的求解" class="headerlink" title="基础矩阵与本质矩阵的求解"></a>基础矩阵与本质矩阵的求解</h2><p>由上面我们知道基础矩阵自由度为7，所以最少我们可以使用7对点来求解基础矩阵。同样，本质矩阵自由度是5，我们最小可以使用5对点进行求解。但是因为它们的内在性质中很多都是非线性的性质，因此使用最少的点数求解会比较麻烦，所以一般情况下，只考虑尺度等价性，然后使用8对点进行求解。这也叫作<strong>八点法</strong>。</p>
+<p>考虑一对匹配点，它们的像素坐标（如果是求解本质矩阵，那就是归一化坐标）为$$x_1 = [u_1, v_1, 1]^T, x_2 = [u_2, v_2, 1]^T$$。根据对极约束，有：</p>
+<p>$$<br>\left(u_{2}, v_{2}, 1\right)\left(\begin{array}{lll}{e_{1}} &amp; {e_{2}} &amp; {e_{3}} \\ {e_{4}} &amp; {e_{5}} &amp; {e_{6}} \\ {e_{7}} &amp; {e_{8}} &amp; {e_{9}}\end{array}\right)\left(\begin{array}{l}{u_{1}} \\ {v_{1}} \\ {1}\end{array}\right)=0<br>$$</p>
+<p>将上面矩阵展开，写成向量的形式（为了后续好解）：</p>
+<p>$$<br>e=\left[e_{1}, e_{2}, e_{3}, e_{4}, e_{5}, e_{6}, e_{7}, e_{8}, e_{9}\right]^{\mathrm{T}}<br>$$</p>
+<p>此时上面对极约束的等式可以写成如下的形式</p>
+<p>$$<br>\left[u_{2} u_{1}, u_{2} v_{1}, u_{2}, v_{2} u_{1}, v_{2} v_{1}, v_{2}, u_{1}, v_{1}, 1\right] \cdot e=0<br>$$</p>
+<p>将八个点的对极约束放在一起便可以得到一个方程组：</p>
+<p>$$<br>\left(\begin{array}{cccccccc}{u_{2}^{1} u_{1}^{1}} &amp; {u_{2}^{1} v_{1}^{1}} &amp; {u_{2}^{1}} &amp; {v_{2}^{1} u_{1}^{1}} &amp; {v_{2}^{1} v_{1}^{1}} &amp; {v_{2}^{1}} &amp; {u_{1}^{1}} &amp; {v_{1}^{1}} &amp; {1} \\ {u_{2}^{2} u_{1}^{2}} &amp; {u_{2}^{2} v_{1}^{2}} &amp; {u_{2}^{2}} &amp; {v_{2}^{2} u_{1}^{2}} &amp; {v_{2}^{2} v_{1}^{2}} &amp; {v_{2}^{2}} &amp; {u_{1}^{2}} &amp; {v_{1}^{2}} &amp; {1} \\ {\vdots} &amp; {\vdots} &amp; {\vdots} &amp; {\vdots} &amp; {\vdots} &amp; {\vdots} &amp; {\vdots} &amp; {\vdots} \\ {u_{2}^{8} u_{1}^{8}} &amp; {u_{2}^{8} v_{1}^{8}} &amp; {u_{2}^{8}} &amp; {v_{2}^{8} u_{1}^{8}} &amp; {v_{2}^{8} v_{1}^{8}} &amp; {v_{2}^{8}} &amp; {u_{1}^{8}} &amp; {v_{1}^{8}} &amp; {1}\end{array}\right)\left(\begin{array}{c}{e_{1}} \\ {e_{2}} \\ {e_{3}} \\ {e_{4}} \\ {e_{5}} \\ {e_{6}} \\ {e_{7}} \\ {e_{8}} \\ {e_{9}}\end{array}\right) = 0<br>$$</p>
+<p>解方程组便可以求解出本质矩阵或基础矩阵。</p>
+<h2 id="通过本质矩阵恢复处R与T"><a href="#通过本质矩阵恢复处R与T" class="headerlink" title="通过本质矩阵恢复处R与T"></a>通过本质矩阵恢复处R与T</h2><p>在上述工作完成求解出本质矩阵E之后，可以通过SVD分解得到如下等式</p>
+<p>$$<br>\boldsymbol{E}=\boldsymbol{U} \boldsymbol{\Sigma} \boldsymbol{V}^{\mathrm{T}}<br>$$</p>
+<p>其中U和V是正交阵，中间$\boldsymbol{\Sigma}$是奇异值矩阵。根据E的内在性质，我们知道$$\boldsymbol{\Sigma} = diag(\mu, \mu, 0)$$。通过SVD分解，任意一个E，存在两个可能的R和t与其对应。</p>
+<p>$$<br>\begin{array}{l}{t_{1}^{\wedge}=U R_{Z}\left(\frac{\pi}{2}\right) \Sigma U^{\mathrm{T}}, \quad R_{1}=U R_{Z}^{\mathrm{T}}\left(\frac{\pi}{2}\right) V^{\mathrm{T}}} \\ {t_{2}^{\wedge}=U R_{Z}\left(-\frac{\pi}{2}\right) \Sigma U^{\mathrm{T}}, \quad R_{2}=U R_{Z}^{\mathrm{T}}\left(-\frac{\pi}{2}\right) V^{\mathrm{T}}}\end{array}<br>$$</p>
+<p>其中$$R_{Z}\left(\frac{\pi}{2}\right)$$表示沿Z轴旋转90°得到的旋转矩阵。同时由于E无论是否取符号都是等价的，因此对上面得到的t取负号也会得到相同的结果。因此每个E通过分解一共有四种可能的解。 </p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li>[1] 《Multiple View Geometry in Computer Vision (Second Edition)》</li>
+<li>[2] 《视觉slam十四讲》</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">#计算机视觉</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>理解对极几何与基本矩阵</div>
+      <div>http://line.com/2019/01/13/2019-01-13-epipolar-geometry/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Line</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年1月13日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/01/15/2019-01-15-hash-table/" title="哈希表的原理与实现">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">哈希表的原理与实现</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/01/11/2019-01-11-homogeneous-coordinates/" title="理解齐次坐标">
+                        <span class="hidden-mobile">理解齐次坐标</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,740 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon1.png">
+  <link rel="icon" href="/img/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Line">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前言很早之前就接触过makefile的语法，但是没有深入的学习下去。本来以为自己了解这方面的知识了，谁知道最近做项目时，各种形式接连丢过来，我竟是懵了。这才发现自己其实根本没有形成系统的理解，稍微变形就使得我不知所云。想来想去还是写一篇博客吧，把自己的理解梳理一遍，以后如果有更深入、更清晰的理解，我会对这篇博客进行补充，尽量使得自己的知识见解有条理，系统化。 编译过程首先，拿c语言为例，我们先写出">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编译问题讨论－－make与cmake已经静态动态链接库">
+<meta property="og:url" content="http://line.com/2018/05/12/2018-05-13-make/index.html">
+<meta property="og:site_name" content="Line&#39;s Blog">
+<meta property="og:description" content="前言很早之前就接触过makefile的语法，但是没有深入的学习下去。本来以为自己了解这方面的知识了，谁知道最近做项目时，各种形式接连丢过来，我竟是懵了。这才发现自己其实根本没有形成系统的理解，稍微变形就使得我不知所云。想来想去还是写一篇博客吧，把自己的理解梳理一遍，以后如果有更深入、更清晰的理解，我会对这篇博客进行补充，尽量使得自己的知识见解有条理，系统化。 编译过程首先，拿c语言为例，我们先写出">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://line.com/img/make/make.png">
+<meta property="article:published_time" content="2018-05-11T17:07:24.000Z">
+<meta property="article:modified_time" content="2023-01-09T07:34:57.575Z">
+<meta property="article:author" content="Line">
+<meta property="article:tag" content="tools">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://line.com/img/make/make.png">
+  
+  
+  
+  <title>编译问题讨论－－make与cmake已经静态动态链接库 - Line&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"line.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Line</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default2.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="编译问题讨论－－make与cmake已经静态动态链接库"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2018-05-12 01:07" pubdate>
+          2018年5月12日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          18 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">编译问题讨论－－make与cmake已经静态动态链接库</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>很早之前就接触过makefile的语法，但是没有深入的学习下去。本来以为自己了解这方面的知识了，谁知道最近做项目时，各种形式接连丢过来，我竟是懵了。这才发现自己其实根本没有形成系统的理解，稍微变形就使得我不知所云。想来想去还是写一篇博客吧，把自己的理解梳理一遍，以后如果有更深入、更清晰的理解，我会对这篇博客进行补充，尽量使得自己的知识见解有条理，系统化。</p>
+<h2 id="编译过程"><a href="#编译过程" class="headerlink" title="编译过程"></a>编译过程</h2><p>首先，拿c语言为例，我们先写出了代码。通过编译器可以利用这些c代码（源文件）生成可执行文件。整个的编译流程可以分成四步：</p>
+<ol>
+<li>预处理阶段：进行预处理器处理（用实际值替代#define、读入#include指令包含的头文件等）；</li>
+<li>编译阶段：将<code>.c</code>文件转换成<code>.s</code>文件，即将ｃ语言代码转换成汇编语言代码；</li>
+<li>汇编阶段：将<code>.s</code>文件转换成<code>.o</code>文件，即将汇编语言代码转换成机器语言指令；</li>
+<li>链接阶段：最后将各个目标文件由链接器捆绑起来形成单一完整的可执行文件，链接器同时也会引入标准c函数库中任何被该程序用到的函数。</li>
+</ol>
+<p>我在网上看到一张图，对于整个编译流程归纳的特别详细：<br><img src="/img/make/make.png" srcset="/img/loading.gif" lazyload alt="make"></p>
+<p>假设生成可执行文件<code>excute</code>在当前目录下，我们可以通过如下shell命令将<code>excute</code>载入内存执行。</p>
+<pre><code class="hljs">./excute
+</code></pre>
+<p>一般情况下，当输入一条命令，shell会检测第一个单词是不是一个内置的shell命令，如果不是就会把它当成一个可执行文件的名字，并加载运行这个可执行文件。</p>
+<h3 id="gcc编译方式（bash）"><a href="#gcc编译方式（bash）" class="headerlink" title="gcc编译方式（bash）"></a>gcc编译方式（bash）</h3><p>编译<code>main.c</code>、<code>1.c</code>、<code>1.h</code>，生成可执行文件<code>excute</code></p>
+<pre><code class="hljs">gcc -o excute main.c 1.c 1.h 
+</code></pre>
+<p>注1：如果不<code>-o</code>指定生成<code>excute</code>，将默认生成<code>a.out</code>。</p>
+<p>注2：如果源文件不止一个，第二步产生的<code>.o</code>文件将会保留，以待重新编译只编译改动过的代码。</p>
+<h2 id="make与cmake"><a href="#make与cmake" class="headerlink" title="make与cmake"></a>make与cmake</h2><p>由上，我们知道了整个编译过程，但是如果一个项目很大，使用上述方式输入命令，似乎就很不灵活了。于是产生了<strong>make</strong>工具，它是一个自动化编译工具，规定好编译规则（<strong>Makefile</strong>），一条命令<code>make</code>，便能将整个工程编译完毕。</p>
+<p>对于一个合格的程序员来说，编写Makefile是必备技能。</p>
+<p>但是对于一个很大的项目，自己编写Makefile无疑是一件及其吃力的事情。于是又出现了<strong>cmake</strong>，它可以读入所有源文件后，自动生成Makefile文件。当然，cmake也有自己的规则文件（<strong>CmakeLists.txt</strong>）。不过比较而言，编写<code>CmakeLists.txt</code>却是简单多了。</p>
+<p>一般只需要输入<code>cmake</code>，整个项目会自动编译完成。cmake时大体流程如下：</p>
+<pre><code class="hljs">`cmake(CmakeLists.txt) --&gt; Makefile`
+
+`make(Makefile) --&gt; 编译完成`
+</code></pre>
+<p>注：make一般在windows下效果不好，camke跨平台比较常见</p>
+<h3 id="make选项"><a href="#make选项" class="headerlink" title="make选项"></a>make选项</h3><p>我们也会经常看到<code>make install</code>、<code>make distribute</code>等形式，这些都是什么意思呢？</p>
+<p><code>make install</code>:有些程序需要源码安装，<strong>make install</strong>在编译完程序源码后，会接着往系统写入一些配置，完成程序安装。</p>
+<p><code>make distribute</code>:感觉应该是使当前项目可以被外部项目依赖？</p>
+<h3 id="大工程-make-编译流程"><a href="#大工程-make-编译流程" class="headerlink" title="大工程 make 编译流程"></a>大工程 make 编译流程</h3><pre><code class="hljs">./configure
+make
+make install
+</code></pre>
+<p>一般会是如上的顺序进行大工程的编译（c与c++）。</p>
+<ol>
+<li><p>configure脚本：这个脚本的作用有获取编译参数（当前的系统环境，比如标准库在哪里、软件的安装位置在哪里、需要安装哪些组件）;确定标准库与头文件的位置;确定依赖关系，生成makefile;</p>
+</li>
+<li><p>make：编译;</p>
+</li>
+<li><p>make install：将编译器在内存中生成的可执行文件保存到用户事先指定的安装目录（创建目录、保存文件、设置权限等，并告知操作系统，即在操作系统中，登记这个程序的元数据：文件名、文件描述、关联后缀名等等。Linux系统中，这些信息通常保存在&#x2F;usr&#x2F;share&#x2F;applications目录下的.desktop文件中。）</p>
+</li>
+</ol>
+<h3 id="动态连接与静态连接"><a href="#动态连接与静态连接" class="headerlink" title="动态连接与静态连接"></a>动态连接与静态连接</h3><p>开发者可以在编译阶段选择可执行文件连接外部函数库的方式，到底是静态连接（编译时连接），还是动态连接（运行时连接）。所以，最后还要提一下，什么叫做动态连接。</p>
+<p><strong>静态连接就是把外部函数库，拷贝到可执行文件中</strong>。所以在编译链接完成后，就不需要静态库文件了。</p>
+<ul>
+<li>好处是，适用范围比较广，不用担心用户机器后来删掉某个库文件；</li>
+<li>缺点是安装包会比较大，而且多个应用程序之间，无法共享库文件；并且在链接时如果静态链接库之间存在依赖关系，需要考虑链接顺序问题。</li>
+</ul>
+<p><strong>动态连接的做法正好相反，外部函数库不进入安装包，只在运行时动态引用</strong>。在运行可执行文件时，动态库文件必须存在于指定的位置，否则出错。</p>
+<ul>
+<li>好处是安装包会比较小，多个应用程序可以共享库文件；</li>
+<li>缺点是用户必须事先安装好库文件，而且版本和安装位置都必须符合要求，否则就不能正常运行。</li>
+</ul>
+<p>现实中，大部分软件采用动态连接，共享库文件。这种动态共享的库文件，Linux平台是后缀名为.so的文件，Windows平台是.dll文件，Mac平台是.dylib文件。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/tools/">#tools</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>编译问题讨论－－make与cmake已经静态动态链接库</div>
+      <div>http://line.com/2018/05/12/2018-05-13-make/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Line</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2018年5月12日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2018/06/20/2018-06-20-cnn-base/" title="CNN基础回顾">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">CNN基础回顾</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2018/05/01/2018-05-01-apt-simple/" title="APT包管理简析">
+                        <span class="hidden-mobile">APT包管理简析</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

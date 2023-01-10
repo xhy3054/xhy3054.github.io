@@ -1,0 +1,814 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon1.png">
+  <link rel="icon" href="/img/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Line">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="镜头的参数与成像 最近几天手头刚好有一个闲置的变焦镜头，在把玩的同时对相机的成像特点又有了一些理解。为了不让这些理解被丢进记忆的垃圾堆，打算做一些记录和梳理。  镜头镜头的参数其实是很多的，主要有  焦距：可以分为物理焦距与摄影焦距。 光圈：大小决定了图像的亮度，在拍摄高斯运动物体、曝光时间很短的应用中，应该选用大光圈镜头，以提高亮度。 景深：指的是在理想对焦状态下物体允许的前后方向的移动量。（在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="镜头的参数与成像">
+<meta property="og:url" content="http://line.com/2021/01/17/2021-01-17-lens-camera/index.html">
+<meta property="og:site_name" content="Line&#39;s Blog">
+<meta property="og:description" content="镜头的参数与成像 最近几天手头刚好有一个闲置的变焦镜头，在把玩的同时对相机的成像特点又有了一些理解。为了不让这些理解被丢进记忆的垃圾堆，打算做一些记录和梳理。  镜头镜头的参数其实是很多的，主要有  焦距：可以分为物理焦距与摄影焦距。 光圈：大小决定了图像的亮度，在拍摄高斯运动物体、曝光时间很短的应用中，应该选用大光圈镜头，以提高亮度。 景深：指的是在理想对焦状态下物体允许的前后方向的移动量。（在">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://line.com/assets/img/lens/phsic_fl.png">
+<meta property="og:image" content="http://line.com/assets/img/lens/change_fl.png">
+<meta property="og:image" content="http://line.com/assets/img/lens/distance.jpeg">
+<meta property="og:image" content="http://line.com/assets/img/lens/image.png">
+<meta property="og:image" content="http://line.com/assets/img/lens/sence_depth1.png">
+<meta property="og:image" content="http://line.com/assets/img/lens/distance2.png">
+<meta property="og:image" content="http://line.com/assets/img/lens/sence_depth.png">
+<meta property="og:image" content="http://line.com/assets/img/lens/optical.png">
+<meta property="og:image" content="http://line.com/assets/img/lens/optical_depth.png">
+<meta property="og:image" content="http://line.com/assets/img/lens/calcu.png">
+<meta property="article:published_time" content="2021-01-16T17:07:24.000Z">
+<meta property="article:modified_time" content="2023-01-08T16:21:28.853Z">
+<meta property="article:author" content="Line">
+<meta property="article:tag" content="计算机视觉">
+<meta property="article:tag" content="多传感器融合">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://line.com/assets/img/lens/phsic_fl.png">
+  
+  
+  
+  <title>镜头的参数与成像 - Line&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"line.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Line</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default2.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="镜头的参数与成像"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-01-17 01:07" pubdate>
+          2021年1月17日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          17 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">镜头的参数与成像</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="镜头的参数与成像"><a href="#镜头的参数与成像" class="headerlink" title="镜头的参数与成像"></a>镜头的参数与成像</h1><blockquote>
+<p>最近几天手头刚好有一个闲置的变焦镜头，在把玩的同时对相机的成像特点又有了一些理解。为了不让这些理解被丢进记忆的垃圾堆，打算做一些记录和梳理。</p>
+</blockquote>
+<h2 id="镜头"><a href="#镜头" class="headerlink" title="镜头"></a>镜头</h2><p>镜头的参数其实是很多的，主要有</p>
+<ul>
+<li>焦距：可以分为物理焦距与摄影焦距。</li>
+<li>光圈：大小决定了图像的亮度，在拍摄高斯运动物体、曝光时间很短的应用中，应该选用大光圈镜头，以提高亮度。</li>
+<li>景深：指的是在理想对焦状态下物体允许的前后方向的移动量。（在此范围内可以认为成像是清晰地）</li>
+<li>视野范围：比较简单的理解就是有多少度（手头这个最大110°）的视场；</li>
+<li>对应最大ccd尺寸（靶面尺寸）：镜头成像直径可以覆盖的最大CCD芯片的尺寸；<ul>
+<li>镜头的靶面尺寸应该是大于等于镜头的，不然成像会出现黑边；</li>
+<li>该参数一般使用英寸来衡量的，最小的一般是1&#x2F;4‘’，最大的是1‘’；</li>
+</ul>
+</li>
+<li>接口：比如C、CS等，只要可以和相机接口匹配安装即可；</li>
+</ul>
+<h3 id="焦距"><a href="#焦距" class="headerlink" title="焦距"></a>焦距</h3><ul>
+<li>物理焦距：一个单片凸透镜的焦距指的是<strong>平行光线经过凸透镜汇聚后的一点到透镜中心的距离（如下图所示）</strong>。一般来说，物理焦距在镜片制作完成后就固定了，是不可变的性质。</li>
+</ul>
+<div style="text-align: center">
+<img src="/assets/img/lens/phsic_fl.png" srcset="/img/loading.gif" lazyload />
+</div>
+
+<p>当然，现在很多镜头其实是<strong>变焦镜头</strong>，这些镜头一般由多片透镜组成，可以通过调节多个透镜之间的相对距离，来对整体的物理焦距进行调整。</p>
+<div style="text-align: center">
+<img src="/assets/img/lens/change_fl.png" srcset="/img/loading.gif" lazyload   width="750" height="450"/>
+</div>
+
+<ul>
+<li>摄影焦距：相信很多人都有对着单片的定焦镜头进行旋转的调焦经历，其实此处调节的不是物理焦距，而是<strong>摄影焦距—即相距，成像平面（cmos芯片）与镜头之间的距离</strong>。</li>
+</ul>
+<div style="text-align: center">
+<img src="/assets/img/lens/distance.jpeg" srcset="/img/loading.gif" lazyload   width="750" height="450"/>
+</div>
+
+<p>通过对相距的调节，使得其与焦距匹配，可以获得清晰的成像。</p>
+<h3 id="调焦的原因"><a href="#调焦的原因" class="headerlink" title="调焦的原因"></a>调焦的原因</h3><p>谈到调焦的原因，首先需要谈到凸透镜的两个光学性质。</p>
+<ul>
+<li>同一个三维点发出的各个方向的光线，经过镜头后必定汇聚于同一点；</li>
+<li>与透镜切面平行的平面上不同的点发出的光线，经过镜头后，汇聚于不同的点；</li>
+</ul>
+<div style="text-align: center">
+<img src="/assets/img/lens/image.png" srcset="/img/loading.gif" lazyload   width="750" height="450"/>
+</div>
+
+<p>上述的两个性质使得：对于与透镜切面平行的一个面，通过调整相距，可以通过透镜清晰成像。如果摄影焦距不当，则会导致一个点不同方向的光线会投影到成像平面上的不同点，出现混叠。</p>
+<h3 id="焦距与距离的关系"><a href="#焦距与距离的关系" class="headerlink" title="焦距与距离的关系"></a>焦距与距离的关系</h3><p>有的时候，我们使用相机拍摄经常会拍摄出如下的照片，只有某个距离的成像是清晰地，更近或者更远的场景成像是模糊的。</p>
+<div style="text-align: center">
+<img src="/assets/img/lens/sence_depth1.png" srcset="/img/loading.gif" lazyload   width="750" height="250"/>
+</div>
+
+<p>这个现象的原因是，<strong>对于距离镜头切面不同距离的点，摄影焦距是不一样的。</strong>如下图所示，A1与A2的摄影焦距显然不同。</p>
+<div style="text-align: center">
+<img src="/assets/img/lens/distance2.png" srcset="/img/loading.gif" lazyload   width="750" height="350"/>
+</div>
+
+<p>因此，根据我们想要拍摄的物体到镜头的距离，我们需要调出一个合适的相距，才能使得该物体在cmos芯片上得到清晰的成像。</p>
+<h3 id="景深"><a href="#景深" class="headerlink" title="景深"></a>景深</h3><p>看到这里，很多人陷入了疑惑：之前我看到的那些清晰的照片都是怎么来的呢？这就要提及景深的概念了。</p>
+<p>事实上，人眼的分辨能力是有限的，因此即使相距与摄影焦距不是完全相同，只要在某个阈值以内，我们看到的成像都是清晰地。而这就带来了景深的概念。<strong>景深指的是某个距离范围</strong>，在这个范围内成的像都可以看作是清晰的。如下图所示。</p>
+<div style="text-align: center">
+<img src="/assets/img/lens/sence_depth.png" srcset="/img/loading.gif" lazyload   width="750" height="300"/>
+</div>
+
+<p>可以想象，如果景深很大的话，随便拍一张图片，也基本都是清楚的。一般来说，景深随着镜头的光圈值、焦距、拍摄距离而变化。</p>
+<ul>
+<li>光圈越小，景深越大；</li>
+<li>物理焦距越小，景深越大；（后两个需要测试确定）</li>
+<li>摄影焦距越大，景深越大；</li>
+</ul>
+<h3 id="光圈"><a href="#光圈" class="headerlink" title="光圈"></a>光圈</h3><p>镜头的光圈影响了进光量，也影响了景深。一般光圈的大小可以用f值来表示，表示开了几分之几。比如说f&#x2F;2.0表示开了1&#x2F;2，如下：</p>
+<div style="text-align: center">
+<img src="/assets/img/lens/optical.png" srcset="/img/loading.gif" lazyload   width="750" height="200"/>
+</div>
+
+<p>一般来说，光圈越大，代表进光量越大，那么曝光时间相应的就可以设置的短一点，比较适合用来拍摄快速运动的物体。</p>
+<p>同时，光圈越大，会使得景深变小（如下图），因此也不能无限扩大光圈。</p>
+<div style="text-align: center">
+<img src="/assets/img/lens/optical_depth.png" srcset="/img/loading.gif" lazyload   width="750" height="400"/>
+</div>
+
+<h3 id="镜头的选择"><a href="#镜头的选择" class="headerlink" title="镜头的选择"></a>镜头的选择</h3><ul>
+<li>接口：需要和相机接口匹配（比如当前手头的就是C接口的）；</li>
+<li>CCD尺寸：镜头可支持的最大CCD尺寸应大于选配相机的CCD尺寸（不然最后图像四周会出现黑边）；</li>
+<li>镜头焦距：可以根据相机CCD尺寸(相机型号尺寸)、工作距离、视场大小（也就是物体的高宽等）计算所需的镜头焦距；<div style="text-align: center">
+<img src="/assets/img/lens/calcu.png" srcset="/img/loading.gif" lazyload   width="550" height="200"/>
+</div></li>
+<li>镜头光圈范围：根据所需曝光时间、景深等联合决定；</li>
+</ul>
+<h1 id="相机的参数"><a href="#相机的参数" class="headerlink" title="相机的参数"></a>相机的参数</h1><p>上面谈论的主要是镜头的一些参数，但是获得图像的质量不仅仅是由镜头决定的，相机的素质也很重要。下面总结一些相机的比较关键的性质。</p>
+<ul>
+<li>曝光：<ul>
+<li>自动曝光：相机根据图像亮暗程度自动调节曝光时间；<ul>
+<li>这种方式其实如果自动曝光控制的好的话很不错，但是实际使用发现很容易出现过曝的情况；</li>
+</ul>
+</li>
+<li>固定曝光：为相机设置固定的曝光时间；<ul>
+<li>优点：可以根据需要合理设置曝光时间，提高时间戳的准确度等；</li>
+<li>缺点：在不同光源图像亮暗差异会很大，需要一些后处理；</li>
+</ul>
+</li>
+<li>全局曝光（测量学常用）</li>
+<li>卷帘曝光（容易出现运动模糊）</li>
+</ul>
+</li>
+<li>相机靶面尺寸：如果这个尺寸太小，镜头的大视角成像只能投影上去一部分，不利于大视角成像；太大超过镜头的靶面尺寸，会导致出现黑边；</li>
+<li>相机分辨率</li>
+<li>触发方式<ul>
+<li>硬件触发：脉冲触发</li>
+<li>软件触发：往寄存器里写数据触发</li>
+</ul>
+</li>
+<li>帧率（一般与分辨率、像素时钟之间存在耦合）；</li>
+<li>pixel clock：像素时钟频率越高，可达帧率越高；</li>
+</ul>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ul>
+<li>[1] <a target="_blank" rel="noopener" href="https://www.cnblogs.com/YongQiVisionIMAX/p/13872075.html">https://www.cnblogs.com/YongQiVisionIMAX/p/13872075.html</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">#计算机视觉</a>
+      
+        <a href="/tags/%E5%A4%9A%E4%BC%A0%E6%84%9F%E5%99%A8%E8%9E%8D%E5%90%88/">#多传感器融合</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>镜头的参数与成像</div>
+      <div>http://line.com/2021/01/17/2021-01-17-lens-camera/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Line</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年1月17日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/01/24/2021-01-24-graph-cut/" title="图片分割之最大流最小割">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">图片分割之最大流最小割</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/01/05/2021-01-05-dijkstra-astar/" title="dijkstra算法和astar算法">
+                        <span class="hidden-mobile">dijkstra算法和astar算法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

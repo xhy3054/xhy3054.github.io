@@ -1,0 +1,747 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon1.png">
+  <link rel="icon" href="/img/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Line">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="之前写过一篇讲解BA的博客，不过那篇主要侧重于讲解BA在slam中的应用与求解方式，但是忽略了对于细节的边的构造与jacobian矩阵的计算的讲解，前几天有人提醒我这一点，所以今天抽出来时间补充一下。 BA优化中的边（重投影误差）Bundle Adjustment，中文翻译有捆集调整、光束法平差。它的主要思想是最小化重投影误差。 BA优化的误差边也就是重投影误差边。  投影过程是将一个地图点（三维">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BA优化中Jacobian矩阵的计算">
+<meta property="og:url" content="http://line.com/2019/11/01/2019-11-01-BA-jacobian/index.html">
+<meta property="og:site_name" content="Line&#39;s Blog">
+<meta property="og:description" content="之前写过一篇讲解BA的博客，不过那篇主要侧重于讲解BA在slam中的应用与求解方式，但是忽略了对于细节的边的构造与jacobian矩阵的计算的讲解，前几天有人提醒我这一点，所以今天抽出来时间补充一下。 BA优化中的边（重投影误差）Bundle Adjustment，中文翻译有捆集调整、光束法平差。它的主要思想是最小化重投影误差。 BA优化的误差边也就是重投影误差边。  投影过程是将一个地图点（三维">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://line.com/assets/img/math/raodong.PNG">
+<meta property="article:published_time" content="2019-10-31T17:07:24.000Z">
+<meta property="article:modified_time" content="2023-01-08T16:21:28.853Z">
+<meta property="article:author" content="Line">
+<meta property="article:tag" content="数学">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://line.com/assets/img/math/raodong.PNG">
+  
+  
+  
+  <title>BA优化中Jacobian矩阵的计算 - Line&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"line.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Line</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default2.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="BA优化中Jacobian矩阵的计算"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-11-01 01:07" pubdate>
+          2019年11月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          36 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">BA优化中Jacobian矩阵的计算</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>之前写过一篇讲解<a target="_blank" rel="noopener" href="https://xhy3054.github.io/bundle-adjustment-solve/">BA</a>的博客，不过那篇主要侧重于讲解BA在slam中的应用与求解方式，但是忽略了对于细节的边的构造与jacobian矩阵的计算的讲解，前几天有人提醒我这一点，所以今天抽出来时间补充一下。</p>
+<h2 id="BA优化中的边（重投影误差）"><a href="#BA优化中的边（重投影误差）" class="headerlink" title="BA优化中的边（重投影误差）"></a>BA优化中的边（重投影误差）</h2><p>Bundle Adjustment，中文翻译有捆集调整、光束法平差。它的主要思想是<strong>最小化重投影误差</strong>。</p>
+<p>BA优化的误差边也就是<strong>重投影误差边</strong>。</p>
+<ul>
+<li><p>投影过程是将一个地图点（三维坐标为$(X,Y,Z)$）投影到当前帧（假设位姿为$$T_{wc}$$）的像素平面上（得到投影坐标为$(u,v)$）</p>
+</li>
+<li><p>误差边的定义是测量坐标（该帧上提取到的此地图点的位置$(u_m,v_m)$）减去投影得到坐标$(u,v)$</p>
+</li>
+</ul>
+<p>$$ e &#x3D; [u_m,v_m]^T - [u,v]^T $$</p>
+<h2 id="BA优化中的节点（投影点与关键帧）"><a href="#BA优化中的节点（投影点与关键帧）" class="headerlink" title="BA优化中的节点（投影点与关键帧）"></a>BA优化中的节点（投影点与关键帧）</h2><p>通常我们最经常放入BA中进行优化的节点有两个</p>
+<ol>
+<li><p>地图点的三维坐标为$(X,Y,Z)$</p>
+</li>
+<li><p>被投影帧的位姿$$T_{wc}$$</p>
+</li>
+</ol>
+<blockquote>
+<p>当然了，BA优化时只要观测到的约束足够多，方程就足够多，因此可以优化更多节点。比如我们还可以放入的节点有相机内参等。</p>
+</blockquote>
+<h2 id="jacobian的推导"><a href="#jacobian的推导" class="headerlink" title="jacobian的推导"></a>jacobian的推导</h2><p>前面已经列出来了<strong>重投影误差</strong>的定义为：</p>
+<p>$$ e &#x3D; [u_m,v_m]^T - [u,v]^T $$</p>
+<p>然后被投影帧的位姿为$$T_{wc}$$，地图点在世界坐标系中的位置为$P$，则将其<strong>变换到该帧的相机坐标系下的坐标</strong>为</p>
+<p>$$ P’ &#x3D; T_{wc} * P  &#x3D; [X’, Y’, Z’]^T$$</p>
+<p>然后将这个点<strong>投影到像素平面</strong>上的操作为</p>
+<p>$$ \left[\begin{array}{c}{Z’ u} \ {Z’ v} \ {Z’}\end{array}\right]&#x3D;\left[\begin{array}{ccc}{f_{x}} &amp; {0} &amp; {c_{x}} \ {0} &amp; {f_{y}} &amp; {c_{y}} \ {0} &amp; {0} &amp; {1}\end{array}\right]\left[\begin{array}{c}{X^{\prime}} \ {Y^{\prime}} \ {Z^{\prime}}\end{array}\right] $$</p>
+<p>即</p>
+<p>$$<br>u&#x3D;f_{x} \frac{X^{\prime}}{Z^{\prime}}+c_{x}, \quad v&#x3D;f_{y} \frac{Y^{\prime}}{Z^{\prime}}+c_{y}<br>$$</p>
+<h3 id="重投影误差对地图点三维坐标的jacobian"><a href="#重投影误差对地图点三维坐标的jacobian" class="headerlink" title="重投影误差对地图点三维坐标的jacobian"></a>重投影误差对地图点三维坐标的jacobian</h3><p>由上，我们首先计算重投影误差对地图点相机坐标系下坐标$$P^{\prime}$$的偏导，</p>
+<p>$$<br>\frac{\partial e}{\partial P^{\prime}}&#x3D;-\left[\begin{array}{ccc}{\frac{\partial u}{\partial X^{\prime}}} &amp; {\frac{\partial u}{\partial Y^{\prime}}} &amp; {\frac{\partial u}{\partial Z^{\prime}}} \ {\frac{\partial v}{\partial X^{\prime}}} &amp; {\frac{\partial v}{\partial Y^{\prime}}} &amp; {\frac{\partial v}{\partial Z^{\prime}}}\end{array}\right]&#x3D;-\left[\begin{array}{ccc}{\frac{f_{x}}{Z^{\prime}}} &amp; {0} &amp; {-\frac{f_{x^{\prime}} X^{\prime}}{Z^{\prime 2}}} \ {0} &amp; {\frac{f_{y}}{Z^{\prime}}} &amp; {-\frac{f_{y} Y^{\prime}}{Z^{\prime 2}}}\end{array}\right]<br>$$</p>
+<p>接着根据如下链式法则与坐标变换关系</p>
+<p>$$<br>\frac{\partial e}{\partial \boldsymbol{P}}&#x3D;\frac{\partial \boldsymbol{e}}{\partial \boldsymbol{P}^{\prime}} \frac{\partial \boldsymbol{P}^{\prime}}{\partial \boldsymbol{P}}<br>$$</p>
+<p>$$<br>\boldsymbol{P}^{\prime} &#x3D; \boldsymbol{R} \boldsymbol{P} + t<br>$$</p>
+<p>可以得到最终的<strong>重投影误差对地图点三维坐标的jacobian</strong></p>
+<p>$$<br>\frac{\partial e}{\partial \boldsymbol{P}} &#x3D; -\left[\begin{array}{ccc}{\frac{f_{x}}{Z^{\prime}}} &amp; {0} &amp; {-\frac{f_{x^{\prime}} X^{\prime}}{Z^{\prime 2}}} \ {0} &amp; {\frac{f_{y}}{Z^{\prime}}} &amp; {-\frac{f_{y} Y^{\prime}}{Z^{\prime 2}}}\end{array}\right] \boldsymbol{R}<br>$$</p>
+<h3 id="重投影误差对被投影帧位姿的jacobian"><a href="#重投影误差对被投影帧位姿的jacobian" class="headerlink" title="重投影误差对被投影帧位姿的jacobian"></a>重投影误差对被投影帧位姿的jacobian</h3><blockquote>
+<p>此处需要说明的是，对于位姿变换（对应的李群是$SE(3)$）的求导我们一般将其变换到$SE(3)$对应的李代数$$\xi$$上使用扰动模型来求导。</p>
+</blockquote>
+<p>根据前面的推导我们可以发现，重投影误差项$e$中与位姿$T_{wc}$相关的只有$\boldsymbol{P}^{\prime}$，因此可以将求解过程分解为如下两步</p>
+<p>$$<br>\frac{\partial e}{\partial \delta \xi}&#x3D;\frac{\partial e}{\partial P^{\prime}} \frac{\partial P^{\prime}}{\partial \delta \xi}<br>$$</p>
+<p>其中第一部分$$\frac{\partial e}{\partial P^{\prime}}$$在前面已经求解出来了，第二部分可以通过使用扰动模型左乘扰动量来求得（具体步骤见附录1）</p>
+<p>$$<br>\frac{\partial(\boldsymbol{T} \boldsymbol{P})}{\partial \delta \boldsymbol{\xi}}&#x3D;(\boldsymbol{T} \boldsymbol{P})^{\odot}&#x3D;\left[\begin{array}{cc}{\boldsymbol{I}} &amp; {-\boldsymbol{P}^{\prime \wedge}} \ {\boldsymbol{0}^{\mathrm{T}}} &amp; {\boldsymbol{0}^{\mathrm{T}}}\end{array}\right]<br>$$</p>
+<p>由于上面是使用的$$\boldsymbol{P}$$的齐次坐标形式，所以从上式结果中取出前三维就是（这是一个$3*6$大小的矩阵）</p>
+<p>$$<br>\frac{\partial \boldsymbol{P}^{\prime}}{\partial \delta \boldsymbol{\xi}}&#x3D;\left[\boldsymbol{I},-\boldsymbol{P}^{\prime \wedge}\right]<br>$$</p>
+<p>然后将两项相乘就可以得到我们想要的结果–<strong>重投影误差对被投影帧位姿的jacobian</strong></p>
+<p>$$<br>\frac{\partial e}{\partial \delta \xi}&#x3D;-\left[\begin{array}{lllll}{\frac{f_{x}}{Z^{\prime}}} &amp; {0} &amp; {-\frac{f_{x} X^{\prime}}{Z^{\prime 2}}} &amp; {-\frac{f_{x} X^{\prime} Y^{\prime}}{Z^{\prime 2}}} &amp; {f_{x}+\frac{f_{x} X^{2}}{Z^{\prime 2}}} &amp; {-\frac{f_{x} Y^{\prime}}{Z^{\prime}}} \ {0} &amp; {\frac{f_{y}}{Z^{\prime}}} &amp; {-\frac{f_{y Y^{\prime}}}{Z^{\prime 2}}} &amp; {-f_{y}-\frac{f_{y} Y^{\prime 2}}{Z^{\prime 2}}} &amp; {\frac{f_{y} X^{\prime Y^{\prime}}}{Z^{\prime 2}}} &amp; {\frac{f_{y} X^{\prime}}{Z^{\prime}}}\end{array}\right]<br>$$</p>
+<h3 id="附录1"><a href="#附录1" class="headerlink" title="附录1"></a>附录1</h3><p>假设如下求导中的左乘的扰动项的李代数为$$\delta \boldsymbol{\xi}&#x3D;[\delta \boldsymbol{\rho}, \delta \phi]^{\mathrm{T}}$$，那么：</p>
+<div style="text-align: center">
+<img src="/assets/img/math/raodong.PNG" srcset="/img/loading.gif" lazyload/>
+</div>
+
+<blockquote>
+<p>上面最后一行矩阵除法，与矩阵乘法规则类似，只是乘号变成了除号。其使用一个$4×1$矩阵除以一个$1×6$矩阵得到一个$4×6$矩阵</p>
+</blockquote>
+<h3 id="附录2"><a href="#附录2" class="headerlink" title="附录2"></a>附录2</h3><p><strong>雅克比矩阵即是偏导数矩阵</strong>，由于一般待求导的目标函数的因变量是列向量，自变量也是列向量，在求雅克比矩阵时遵循如下规则：</p>
+<p>$$<br>\frac{\mathrm{d}\left[\begin{array}{l}{a} \ {b}\end{array}\right]}{\mathrm{d}\left[\begin{array}{l}{x} \ {y}\end{array}\right]}&#x3D;\left[\begin{array}{cc}{\frac{\mathrm{d} a}{\mathrm{d} x}} &amp; {\frac{\mathrm{d} a}{\mathrm{d} y}} \ {\frac{\mathrm{d} b}{\mathrm{d} x}} &amp; {\frac{\mathrm{d} b}{\mathrm{d} y}}\end{array}\right]<br>$$</p>
+<blockquote>
+<p>其实只需要明确一点，上述公式便很容易记起来了。对于输入为n维向量，输出为m维向量的变换（即从$R^n$到$R^m$的变换），它的雅克比矩阵为$m*n$维。即行数由输出向量的维度决定，列数由输入向量的维度决定</p>
+</blockquote>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ul>
+<li>[1] 视觉slam十四讲 从理论到实践 高翔等著；</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%95%B0%E5%AD%A6/">#数学</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>BA优化中Jacobian矩阵的计算</div>
+      <div>http://line.com/2019/11/01/2019-11-01-BA-jacobian/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Line</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年11月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/11/10/2019-11-10-spatial-coordinate-system/" title="空间坐标系系统介绍">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">空间坐标系系统介绍</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/10/30/2019-10-30-camera-extrinsic/" title="vins中的外参标定">
+                        <span class="hidden-mobile">vins中的外参标定</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

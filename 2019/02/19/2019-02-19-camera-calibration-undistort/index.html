@@ -1,0 +1,777 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon1.png">
+  <link rel="icon" href="/img/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Line">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="在相机成像的几何描述这篇文章中我们讨论了如何将一个点从世界坐标映射到像素坐标，不过那是比较理想的成像情况。现实世界中的相机在成像时还会受到透镜畸变的影响。  需要说明的是，下面的畸变模型都是基于针孔模型(一般的相机)得到的结果。而如果遇到一些特殊的相机，比如说鱼眼相机，它的投影模型会与针孔模型有些不同，它是投影在球面而不是平面上的。这样下面的畸变模型就不管用了。因此对于不同的相机，我们要使用不同的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="透镜畸变与相机标定">
+<meta property="og:url" content="http://line.com/2019/02/19/2019-02-19-camera-calibration-undistort/index.html">
+<meta property="og:site_name" content="Line&#39;s Blog">
+<meta property="og:description" content="在相机成像的几何描述这篇文章中我们讨论了如何将一个点从世界坐标映射到像素坐标，不过那是比较理想的成像情况。现实世界中的相机在成像时还会受到透镜畸变的影响。  需要说明的是，下面的畸变模型都是基于针孔模型(一般的相机)得到的结果。而如果遇到一些特殊的相机，比如说鱼眼相机，它的投影模型会与针孔模型有些不同，它是投影在球面而不是平面上的。这样下面的畸变模型就不管用了。因此对于不同的相机，我们要使用不同的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://line.com/img/distort_calibration/distort0.jpg">
+<meta property="og:image" content="http://line.com/img/distort_calibration/distort.png">
+<meta property="og:image" content="http://line.com/img/distort_calibration/distort1.png">
+<meta property="article:published_time" content="2019-02-18T17:07:24.000Z">
+<meta property="article:modified_time" content="2023-01-10T16:13:59.642Z">
+<meta property="article:author" content="Line">
+<meta property="article:tag" content="计算机视觉">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://line.com/img/distort_calibration/distort0.jpg">
+  
+  
+  
+  <title>透镜畸变与相机标定 - Line&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"line.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Line</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default2.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="透镜畸变与相机标定"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-02-19 01:07" pubdate>
+          2019年2月19日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          20 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">透镜畸变与相机标定</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>在<a target="_blank" rel="noopener" href="https://xhy3054.github.io/camerca-module/">相机成像的几何描述</a>这篇文章中我们讨论了如何将一个点从世界坐标映射到像素坐标，不过那是比较理想的成像情况。现实世界中的相机在成像时还会受到透镜畸变的影响。</p>
+<blockquote>
+<p>需要说明的是，下面的畸变模型都是基于<strong>针孔模型</strong>(一般的相机)得到的结果。而如果遇到一些特殊的相机，比如说鱼眼相机，它的投影模型会与针孔模型有些不同，它是投影在球面而不是平面上的。这样下面的畸变模型就不管用了。因此对于不同的相机，我们要使用不同的投影模型来建立畸变模型。</p>
+</blockquote>
+<h1 id="透镜畸变"><a href="#透镜畸变" class="headerlink" title="透镜畸变"></a>透镜畸变</h1><p>现代相机为了获得更好的成像效果，相机里一般都加入了透镜。而透镜的加入对成像过程中光线的传播会产生新的影响，进而出现畸变，一般有两种主要的畸变（其实也还有其他的种类的畸变，但是不如这两种明显）：</p>
+<div style="text-align: center">
+<img src="/img/distort_calibration/distort0.jpg" srcset="/img/loading.gif" lazyload/>
+</div>
+
+<h2 id="径向畸变"><a href="#径向畸变" class="headerlink" title="径向畸变"></a>径向畸变</h2><ul>
+<li><strong>径向畸变</strong>：透镜自身的形状对光线传播会有影响；<ul>
+<li>桶形畸变：图像放大率随着与光轴之间的距离增加而减小</li>
+<li>枕形畸变：图像放大率随着与光轴之间的距离增大而增大</li>
+</ul>
+</li>
+</ul>
+<div style="text-align: center">
+<img src="/img/distort_calibration/distort.png" srcset="/img/loading.gif" lazyload  width="800" height="300" />
+</div>
+
+<ul>
+<li>一般径向畸变对于二维平面上一个坐标(x,y)（如上图畸变最小的点为坐标原点，一般在图像中心，r是点到原点的距离）的影响可以使用如下公式表述：</li>
+</ul>
+<p>$$ x_{distorted} = x( 1 + k_1 r^2 + k_2 r^4 + k_3 r^6)　 \\ y_{distorted} = y( 1 + k_1 r^2 + k_2 r^4 + k_3 r^6) $$</p>
+<blockquote>
+<p>无论是桶形畸变还是枕形畸变，由于他们都是随着与中心之间的距离增加而增加，因此可以使用一个<strong>多项式函数</strong>来描述畸变前后的像素坐标变化。这个公式中，对于畸变较小的图像中心区域，畸变主要是$k_1$在起作用；而对于畸变较大的边缘区域，主要是$k_2$在起作用。一般的普通摄像头用这两个系数就已经可以很好地纠正径向畸变了。但是对于一部分畸变很大的摄像头，比如说鱼眼镜头等，还需要加入$k_3$畸变项才能比较好的表述畸变情况。</p>
+</blockquote>
+<h2 id="切向畸变"><a href="#切向畸变" class="headerlink" title="切向畸变"></a>切向畸变</h2><ul>
+<li><strong>切向畸变</strong>：在机械组装过程中，透镜和成像平面不可能完全平行，这也会使得光线穿过透镜投影到成像面时的位置出现变化；</li>
+</ul>
+<div style="text-align: center">
+<img src="/img/distort_calibration/distort1.png" srcset="/img/loading.gif" lazyload/>
+</div>
+
+<ul>
+<li>一般切向畸变对于二维平面上的坐标(x,y)的影响可以使用如下公式进行表述：</li>
+</ul>
+<p>$$ x_{distorted} = x + [ 2p_1xy + p_2(r^2+2x^2)]  \\ y_{distorted} = y + [ p_1(r^2+ 2y^2)+ 2p_2xy]  $$</p>
+<h2 id="加入畸变的成像-理想情况下"><a href="#加入畸变的成像-理想情况下" class="headerlink" title="加入畸变的成像(理想情况下)"></a>加入畸变的成像(理想情况下)</h2><ul>
+<li><p>首先，世界坐标系下有一个固定的点P，<strong>世界坐标</strong>是 $P_w$</p>
+</li>
+<li><p>获得点P的<strong>相机坐标系坐标</strong>，可以利用相机外参R与t得到 $ P_c = RP_w + t $</p>
+</li>
+<li><p>在2中获得的 $P_c$ 仍然是三维的 (X,Y,Z) ，将其投影到归一化平面 $Z=1$ 上，得到<strong>归一化相机坐标</strong>：$ P_C = [X/Z, Y/Z, 1]^T $</p>
+</li>
+<li><p>此处加入<strong>畸变</strong>因素，畸变公式如下(其中，$x=X/Z, y=Y/Z$)：</p>
+</li>
+</ul>
+<p>$$ x_{distorted} = x( 1 + k_1 r^2 + k_2 r^4 + k_3 r^6) + [ 2p_1xy + p_2(r^2+2x^2)]  \\ y_{distorted} = y( 1 + k_1 r^2 + k_2 r^4 + k_3 r^6) + [ p_1(r^2+ 2y^2)+ 2p_2xy]   $$</p>
+<ul>
+<li>最后一步，利用内参K，将归一化相机坐标转换成<strong>像素坐标</strong>： $ P_{uv} = KP_{distorted} $</li>
+</ul>
+<p>$$ u = f_x x_{distorted} + c_x \\ v = f_y y_{distorted} + c_y  $$</p>
+<blockquote>
+<p>此处之所以将畸变放在内参前面作用，是因为上面已经说过了这个畸变模型假设的原点是图像中心，也就是未经过内参作用时符合。</p>
+</blockquote>
+<h1 id="相机标定"><a href="#相机标定" class="headerlink" title="相机标定"></a>相机标定</h1><p>现在，我们知道，将一个三维世界坐标点通过相机映射到像素平面上一般需要三个矩阵参数，分别是相机外参、相机内参、畸变参数。而获得上述这些参数的过程便叫做<strong>相机标定</strong>。其中相机外参可以由相机的位姿固定获得，一般我们仅仅通过标定获得相机内参与畸变参数。而在某些时候，比如vio或rgbd-slam中，因为除了彩色相机外，也会有第二种传感器–imu或深度相机，此时为了后续的工作，我们也需要对两种传感器之间的外参进行精确标定。</p>
+<blockquote>
+<p>需要说明的是相机标定只是对相机物理特性的<strong>近似</strong>获取。</p>
+</blockquote>
+<p>对于相机的标定工作，已经有了很多的研究，主要可以分为两类：第一类是基于特定的实验条件，如形状、尺寸已知的标定物，利用一系列的数学变换与计算方法进行标定；第二类叫做自标定，不依赖于标定的参照物，仅仅利用摄像机在运动过程中周围环境的图像与图像之间的对应关系进行摄像机进行标定。</p>
+<h2 id="利用棋盘格的参数标定"><a href="#利用棋盘格的参数标定" class="headerlink" title="利用棋盘格的参数标定"></a>利用棋盘格的参数标定</h2><ol>
+<li>棋盘格可以提供很多三维世界中的路标点；</li>
+<li>相机采集后首先检测棋盘的角点；</li>
+<li>通过三维点与二维点的投影方程可以建立很多方程约束；</li>
+<li>通过非线性优化即可求出外参、内参、畸变参数；</li>
+</ol>
+<p>对于一个具有N个格点的棋盘，假设我们拍摄K的角度的照片，则可以得到$2NK$个方程，如果我们想要求解出相机参数，则需要满足方程数量大于参数数量：（下面中K个角度有K组外参）</p>
+<p>$$2NK &gt;= 4 + 6K + 5 $$</p>
+<blockquote>
+<p>此处需要说明的是，按照上述理解，只要一个棋盘上点足够多那不就一个视角就够了吗？这么做其实是不好的，因为在某个视角下，如果我们知道了其中一个格子的四个端点，那我们只需要继续延伸就可以得到其他的格点，那些多余的格点其实是不可以提供额外信息的，因次一个角度最好只利用四个点。这样上面的方程就可以变为</p>
+</blockquote>
+<p>$$ 8K &gt;= 4+6K+5 $$</p>
+<p>即</p>
+<p>$$ 2K &gt;= 9 $$</p>
+<blockquote>
+<p>理论上是这样，但是实际上当然是角度越多，可利用的路标点越多越好。</p>
+</blockquote>
+<h3 id="使用棋盘格标定彩色相机与深度相机的外参"><a href="#使用棋盘格标定彩色相机与深度相机的外参" class="headerlink" title="使用棋盘格标定彩色相机与深度相机的外参"></a>使用棋盘格标定彩色相机与深度相机的外参</h3><ol>
+<li>首先检测棋盘角点；</li>
+<li>明确一点：两个相机拍摄到的这些点在现实世界中是同一个点；</li>
+<li>利用深度相机的深度可以得到这些点在深度相机坐标系的三维坐标；</li>
+<li>假设一个外参R和T，便可以将这些点投影到彩色相机成像平面上；</li>
+<li>最小化重投影误差即可得到最合适的外参；</li>
+</ol>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li>[1] 《视觉SLAM十四讲》，高翔著；</li>
+<li>[2] <a target="_blank" rel="noopener" href="https://docs.opencv.org">https://docs.opencv.org</a></li>
+<li>[3] 《学习OpenCV3》,O’REILLY著；</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">#计算机视觉</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>透镜畸变与相机标定</div>
+      <div>http://line.com/2019/02/19/2019-02-19-camera-calibration-undistort/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Line</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年2月19日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/03/30/2019-03-30-vim/" title="备忘vim编辑器">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">备忘vim编辑器</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/01/27/2019-01-27-Homography-matrix/" title="射影几何中的单应变换">
+                        <span class="hidden-mobile">射影几何中的单应变换</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

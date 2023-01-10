@@ -1,0 +1,739 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon1.png">
+  <link rel="icon" href="/img/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Line">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="单目相机无法恢复真实尺度，使得双目相机成为了很多开发者的选择。 双目相机模型双目恢复深度进行三维重建的原理与人眼类似，为了进一步分析双目测距的原理，可以从下图深入理解双目相机模型：     双目相机一般由左眼和右眼两个水平放置的相机组成。上图中左右两个相机都是使用针孔相机模型，两个相机的成像平面在同一个水平面上，同时两个相机光心是水平放置的，因此对于一个P点，其在两个图像上的投影点的行坐标是相同的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="双目相机模型与标定">
+<meta property="og:url" content="http://line.com/2020/08/08/2020-08-08-stereo-vision/index.html">
+<meta property="og:site_name" content="Line&#39;s Blog">
+<meta property="og:description" content="单目相机无法恢复真实尺度，使得双目相机成为了很多开发者的选择。 双目相机模型双目恢复深度进行三维重建的原理与人眼类似，为了进一步分析双目测距的原理，可以从下图深入理解双目相机模型：     双目相机一般由左眼和右眼两个水平放置的相机组成。上图中左右两个相机都是使用针孔相机模型，两个相机的成像平面在同一个水平面上，同时两个相机光心是水平放置的，因此对于一个P点，其在两个图像上的投影点的行坐标是相同的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://line.com/assets/img/stereo/stereo.PNG">
+<meta property="og:image" content="http://line.com/assets/img/stereo/stereo_rectify.gif">
+<meta property="og:image" content="http://line.com/assets/img/stereo/stereo_rectify1.PNG">
+<meta property="article:published_time" content="2020-08-07T17:07:24.000Z">
+<meta property="article:modified_time" content="2023-01-08T16:21:28.853Z">
+<meta property="article:author" content="Line">
+<meta property="article:tag" content="计算机视觉">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://line.com/assets/img/stereo/stereo.PNG">
+  
+  
+  
+  <title>双目相机模型与标定 - Line&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"line.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Line</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default2.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="双目相机模型与标定"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2020-08-08 01:07" pubdate>
+          2020年8月8日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          24 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">双目相机模型与标定</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>单目相机无法恢复真实尺度，使得双目相机成为了很多开发者的选择。</p>
+<h1 id="双目相机模型"><a href="#双目相机模型" class="headerlink" title="双目相机模型"></a>双目相机模型</h1><p>双目恢复深度进行三维重建的原理与人眼类似，为了进一步分析双目测距的原理，可以从下图深入理解双目相机模型：</p>
+<div style="text-align: center">
+<img src="/assets/img/stereo/stereo.PNG" srcset="/img/loading.gif" lazyload    width="750" height="450"/>
+</div>
+
+<p>双目相机一般由左眼和右眼两个<strong>水平放置</strong>的相机组成。上图中左右两个相机都是使用针孔相机模型，两个相机的成像平面在同一个水平面上，同时两个相机光心是水平放置的，因此对于一个P点，其在两个图像上的投影点的行坐标是相同的，我们通过对其纵坐标的处理便可以得到视差了。</p>
+<p>图中两个相机光心之间的距离b被成为双目相机的<strong>基线</strong>，是与焦距f一样重要的参数。</p>
+<p>根据上图，假设一个空间点P，在左右目各成一像$P_L$与$P_R$，分别以两个光心垂直的位置为二维坐标原点，则$P_L$的横坐标为$u_L$，$P_R$的横坐标为$u_R$，可以发现$u_R$是一个负数。根据上图中右侧三角形相似的原理，可以得到下面公式</p>
+<p>$$\frac{z-f}{z}&#x3D;\frac{b-u_{L}+u_{R}}{b}$$</p>
+<p>经过整理，可以得到</p>
+<p>$$ z &#x3D; \frac{fb}{d}, d&#x3D; u_L -u_R $$</p>
+<p>此处d为投影点在左右图上的横坐标之差，也叫作<strong>视差</strong>，因此，根据视差我们就可以估计出这个空间点的深度了。此处可以发现，视差最小也就是1个像素，因此双目可以测量的最大深度是有上限的，而这个值和$fb$有关，所以一般相机焦距f确定的时候，双目基线越大，可测量的最远深度也越大。</p>
+<blockquote>
+<p>由于以上双目相机模型的特殊，我们不仅可以方便的估计深度，也可以在双目匹配时很容易的进行极线（横坐标一致的水平线）搜索匹配，大大减小匹配计算量。</p>
+</blockquote>
+<h1 id="双目立体标定"><a href="#双目立体标定" class="headerlink" title="双目立体标定"></a>双目立体标定</h1><p>上面讲述了双目相机模型的原理，我们可以发现这是一个很苛刻的条件，要求两个相机光心在同一水平线上，并且成像平面平行。这个在双目相机的制作中很难做到。因此在获得一个双目相机后，需要对其进行双目标定，得到两个$3*4$的投影矩阵H1和H2，在两个相机成像分别使用这两个矩阵进行投影后得到两个新的矫正后的图像，此时校正后的两个图像应该是满足上面的双目相机模型的。整个矫正过程如下所示 </p>
+<div style="text-align: center">
+<img src="/assets/img/stereo/stereo_rectify.gif" srcset="/img/loading.gif" lazyload />
+</div>
+
+
+<h2 id="opencv进行双目标定"><a href="#opencv进行双目标定" class="headerlink" title="opencv进行双目标定"></a>opencv进行双目标定</h2><h3 id="知道内参"><a href="#知道内参" class="headerlink" title="知道内参"></a>知道内参</h3><blockquote>
+<p>对于一个已经标定的双目相机（已知内参、畸变参数等），在opencv中可以使用<code>cv:StereoRectify</code>来完成双目矫正矩阵的获得（不只是矫正矩阵，还有两个相机之间的位姿变换，视差到深度的4*4映射矩阵等）；</p>
+</blockquote>
+<p>这种方法也称为(Bouguet)方法，需要先分别对两个相机进行标定，分别得出两个相机的内参数矩阵，然后再进行立体标定，进行立体图像的矫正。具体可以去opencv官网查看，函数介绍比较清晰。</p>
+<h3 id="不知道内参"><a href="#不知道内参" class="headerlink" title="不知道内参"></a>不知道内参</h3><blockquote>
+<p>对于一个没有标定的双目相机，可以使用opencv中<code>cv::stereoRectifyUncalibrated</code>函数来获得双目的矫正矩阵H1和H2，分别使用这两个矩阵对图像做单应变换，即可矫正图像。</p>
+</blockquote>
+<p>这种方法也叫非标定方法也称为（Hartley)方法，有时候我们不知道相机的内参矩阵，而且也不用知道内参数具体是多少，因为我们仅关心如何得到两幅图像的稠密匹配，或者两幅图像之间的视差图或者深度图就足够了。因为不知道相机的内参数，所以只能借助对极约束来解决问题了，通过计算两幅图像的基础矩阵F，然后利用对极约束条件中对极线为平行且行对准，可以很好的实现目标。</p>
+<div style="text-align: center">
+<img src="/assets/img/stereo/stereo_rectify1.PNG" srcset="/img/loading.gif" lazyload  width="780" height="350"/>
+</div>
+
+<p>第三个参数是本质矩阵可以通过<code>cv::findFundamentalMat</code>获得，需要说明一点，该函数的前两个参数<code>Mat&amp; points1, Mat&amp; points2</code>与<code>cv::findFundamentalMat</code>的前两个参数并不是相同的数据结构。它们虽然可以是同一个匹配点集，但是他们的数据结构是完全不同的！<code>cv::findFundamentalMat</code>中传入的匹配点集要求是2xN或者Nx2的矩阵，但是<code>cv::stereoRectifyUncalibrated</code>中要求传入的匹配点集必须是1x2N或者2Nx1的矩阵！在很多文档中都说他们的参数是一样的，这其实是一个天大的错误，如果用计算F的匹配点集直接传给图像矫正函数，程序将直接崩溃。正确的做法是利用cv::Mat的构造函数，直接从vector<Point2f>构造一个cv::Mat传入。</p>
+<p><code>cv::stereoRectifyUncalibrated</code>函数默认原始图像是没有径向畸变的，因此在矫正图像之前，最好先对原始图像做径向矫正。另外需要注意的一点，函数返回的单应变换矩阵H1和H2都是double类型，也即CV_64F类型，若不是该类型的矩阵，与之相乘会报错。	</p>
+<h3 id="生成映射矩阵"><a href="#生成映射矩阵" class="headerlink" title="生成映射矩阵"></a>生成映射矩阵</h3><blockquote>
+<p>在双目立体标定之后，需要根据标定结果生成新的映射表，然后通过映射表完成矫正。</p>
+</blockquote>
+<p>映射表的生成使用如下函数，这个函数需要使用两遍，如下这边是得到左目的映射表，这个映射函数的原理可以查看opencv的docs，关于该函数有详细的公式推导</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs cpp">cv::<span class="hljs-built_in">initUndistortRectifyMap</span>(            <span class="hljs-comment">//计算无畸变和修正转换映射</span><br>    K_l,                                <span class="hljs-comment">//输入：相机内参矩阵 (单目标定阶段得到的相机内参矩阵)</span><br>    D_l,                                <span class="hljs-comment">//输入：单目标定阶段得到的相机的去畸变参数</span><br>    R_l,                                <span class="hljs-comment">//输入：可选的修正变换矩阵,3*3, 从 cv::stereoRectify 得来.如果这个矩阵为空矩阵,那么就将会被设置成为单位矩阵</span><br>    P_l.<span class="hljs-built_in">rowRange</span>(<span class="hljs-number">0</span>,<span class="hljs-number">3</span>).<span class="hljs-built_in">colRange</span>(<span class="hljs-number">0</span>,<span class="hljs-number">3</span>),    <span class="hljs-comment">//输入：新的相机内参矩阵（后续根据这个矩阵来进行投影变换，畸变已经没有了）</span><br>    cv::<span class="hljs-built_in">Size</span>(cols_l,rows_l),            <span class="hljs-comment">//在去畸变之前的图像尺寸</span><br>    CV_32F,                             <span class="hljs-comment">//第一个输出映射的类型，映射x</span><br>    M1l,                                <span class="hljs-comment">//输出：第一个输出映射表，映射y</span><br>    M2l);                               <span class="hljs-comment">//输出：第二个输出映射</span><br></code></pre></td></tr></table></figure>
+
+<p>得到映射表后，可以通过如下函数完成映射：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs cpp">cv::<span class="hljs-built_in">remap</span>(              <span class="hljs-comment">//重映射，就是把一幅图像中某位置的像素放置到另一个图片指定位置的过程。</span><br>            imLeft,             <span class="hljs-comment">//输入图像</span><br>            imLeftRect,         <span class="hljs-comment">//输出图像</span><br>            M1l,                <span class="hljs-comment">//第一个映射矩阵表， 作用是对于输出图像某个位置（x,y），M1l(x,y)处的值为一个x1坐标</span><br>            M2l,                <span class="hljs-comment">//第二个映射矩阵，作用是对于输出图像某个位置（x,y），M2l(x,y)处的值一个y1坐标, remap函数将输入图像(x1,y1)处的值赋值给输出图像（x,y）位置处</span><br>            cv::INTER_LINEAR);<br></code></pre></td></tr></table></figure>
+
+<p>至此，大功告成得到的imLeftRect便是修正后的左目图像了，与同样修正后的右目图像满足上面介绍的双目相机模型</p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ul>
+<li>[1]. 视觉slam十四讲</li>
+<li>[2]. <a target="_blank" rel="noopener" href="https://blog.csdn.net/jaccen/article/details/51217936">https://blog.csdn.net/jaccen/article/details/51217936</a></li>
+<li>[3]. <a target="_blank" rel="noopener" href="https://docs.opencv.org/4.2.0/d9/d0c/group__calib3d.html#gaadc5b14471ddc004939471339294f052">https://docs.opencv.org/4.2.0/d9/d0c/group__calib3d.html#gaadc5b14471ddc004939471339294f052</a></li>
+<li>[4]. <a target="_blank" rel="noopener" href="https://blog.csdn.net/u010368556/article/details/86484695">https://blog.csdn.net/u010368556/article/details/86484695</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">#计算机视觉</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>双目相机模型与标定</div>
+      <div>http://line.com/2020/08/08/2020-08-08-stereo-vision/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Line</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2020年8月8日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/08/14/2020-08-14-pychram-remote/" title="pycharm远程调试">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">pycharm远程调试</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/07/13/2020-07-13-self-supervised-learning/" title="自监督学习备忘">
+                        <span class="hidden-mobile">自监督学习备忘</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

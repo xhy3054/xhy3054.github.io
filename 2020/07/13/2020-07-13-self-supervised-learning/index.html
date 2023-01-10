@@ -1,0 +1,751 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon1.png">
+  <link rel="icon" href="/img/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Line">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="目录 第一类-基于数据生成的任务 第二类-基于数据变换的任务 第三类-基于多模态数据的自监督任务 对比学习   以下转载自知乎的一篇文章  自监督学习（self-supervised learning）可以被看作是机器学习的一种“理想状态”，模型直接从无标签数据中自行学习，无需标注数据。本文主要对当前自监督学习涉及到的一些方面进行总结（笔记）。 自监督学习简介 自监督学习的核心，在于如何自动为数据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自监督学习备忘">
+<meta property="og:url" content="http://line.com/2020/07/13/2020-07-13-self-supervised-learning/index.html">
+<meta property="og:site_name" content="Line&#39;s Blog">
+<meta property="og:description" content="目录 第一类-基于数据生成的任务 第二类-基于数据变换的任务 第三类-基于多模态数据的自监督任务 对比学习   以下转载自知乎的一篇文章  自监督学习（self-supervised learning）可以被看作是机器学习的一种“理想状态”，模型直接从无标签数据中自行学习，无需标注数据。本文主要对当前自监督学习涉及到的一些方面进行总结（笔记）。 自监督学习简介 自监督学习的核心，在于如何自动为数据">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://line.com/assets/img/self-supervised/s1.jpg">
+<meta property="og:image" content="http://line.com/assets/img/self-supervised/s2.jpg">
+<meta property="article:published_time" content="2020-07-12T17:07:24.000Z">
+<meta property="article:modified_time" content="2023-01-08T16:21:28.853Z">
+<meta property="article:author" content="Line">
+<meta property="article:tag" content="机器学习">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://line.com/assets/img/self-supervised/s1.jpg">
+  
+  
+  
+  <title>自监督学习备忘 - Line&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"line.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Line</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default2.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="自监督学习备忘"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2020-07-13 01:07" pubdate>
+          2020年7月13日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          40 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">自监督学习备忘</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><ul>
+<li><a href="#%E7%AC%AC%E4%B8%80%E7%B1%BB-%E5%9F%BA%E4%BA%8E%E6%95%B0%E6%8D%AE%E7%94%9F%E6%88%90%E7%9A%84%E4%BB%BB%E5%8A%A1">第一类-基于数据生成的任务</a></li>
+<li><a href="#%E7%AC%AC%E4%BA%8C%E7%B1%BB-%E5%9F%BA%E4%BA%8E%E6%95%B0%E6%8D%AE%E5%8F%98%E6%8D%A2%E7%9A%84%E4%BB%BB%E5%8A%A1">第二类-基于数据变换的任务</a></li>
+<li><a href="#%E7%AC%AC%E4%B8%89%E7%B1%BB-%E5%9F%BA%E4%BA%8E%E5%A4%9A%E6%A8%A1%E6%80%81%E6%95%B0%E6%8D%AE%E7%9A%84%E8%87%AA%E7%9B%91%E7%9D%A3%E4%BB%BB%E5%8A%A1">第三类-基于多模态数据的自监督任务</a></li>
+<li><a href="#%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0">对比学习</a></li>
+</ul>
+<blockquote>
+<p>以下转载自<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/66063089">知乎的一篇文章</a></p>
+</blockquote>
+<p>自监督学习（self-supervised learning）可以被看作是机器学习的一种“理想状态”，模型直接从无标签数据中自行学习，无需标注数据。本文主要对当前自监督学习涉及到的一些方面进行总结（笔记）。</p>
+<h1 id="自监督学习简介"><a href="#自监督学习简介" class="headerlink" title="自监督学习简介"></a>自监督学习简介</h1><ol>
+<li>自监督学习的核心，在于如何自动为数据产生标签。例如输入一张图片，把图片随机旋转一个角度，然后把旋转后的图片作为输入，随机旋转的角度作为标签。再例如，把输入的图片均匀分割成3*3的格子，每个格子里面的内容作为一个patch，随机打乱patch的排列顺序，然后用打乱顺序的patch作为输入，正确的排列顺序作为label。类似这种自动产生的标注，完全无需人工参与。</li>
+<li>自监督学习如何评价性能？自监督学习性能的高低，主要通过模型学出来的feature的质量来评价。feature质量的高低，主要是通过迁移学习的方式，把feature用到其它视觉任务中（分类、分割、物体检测…），然后通过视觉任务的结果的好坏来评价。目前没有统一的、标准的评价方式。</li>
+<li>自监督学习的一个研究套路。前面说到，自监督学习的核心是如何给输入数据自动生成标签。之前的很多工作都是围绕这个核心展开的。一般的套路是：首先提出一个新的自动打标签的辅助任务（pretext task，例如：旋转图片、打乱patch顺序），用辅助任务自动生成标签，然后做实验、测性能、发文章。每年都有新的辅助任务被提出来，自监督学习的性能也在不断提高，有的甚至已经接近监督学习的性能。总体上说，或者是提出一种完全新的辅助任务，或者是把多个旧的辅助任务组合到一起作为一个“新”的辅助任务。</li>
+</ol>
+<blockquote>
+<p>以下转载自<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/125721565">另一篇知乎文章</a></p>
+</blockquote>
+<h1 id="自监督学习与监督学习和无监督学习的比较"><a href="#自监督学习与监督学习和无监督学习的比较" class="headerlink" title="自监督学习与监督学习和无监督学习的比较"></a>自监督学习与监督学习和无监督学习的比较</h1><p>手动数据注释是监督学习中必不可少的步骤，这是耗时，费力且有噪声的。与有监督的方法不同，无监督的方法不依赖于人类注释，并且通常集中在数据良好表示（例如平滑度，稀疏性和分解）的预设先验上。无监督方法的经典类型是聚类方法，例如高斯混合模型，它将数据集分解为多个高斯分布式子数据集。然而，非监督学习学习由于预设先验的一般性较差而不太值得信赖，在某些数据集（例如非高斯子数据集）上选择将数据拟合为高斯分布可能是完全错误的。</p>
+<p>自我监督方法可以看作是一种具有监督形式的特殊形式的非监督学习方法，这里的监督是由自我监督任务而不是预设先验知识诱发的。与完全不受监督的设置相比，自监督学习使用数据集本身的信息来构造伪标签。在表示学习方面，自我监督学习具有取代完全监督学习的巨大潜力。人类学习的本质告诉我们，大型注释数据集可能不是必需的，我们可以自发地从未标记的数据集中学习。更为现实的设置是使用少量带注释的数据进行自学习。这称为Few-shot Learning。</p>
+<p>在自监督学习中，如何自动获取伪标签至关重要。 根据伪标签的不同类型，我将自我监督的表示学习方法分为4种类型：基于数据生成(恢复)的任务，基于数据变换的任务，基于多模态的任务，基于辅助信息的任务。</p>
+<h2 id="第一类-基于数据生成的任务"><a href="#第一类-基于数据生成的任务" class="headerlink" title="第一类-基于数据生成的任务"></a>第一类-基于数据生成的任务</h2><p>对于第一种类型，其实自监督学习与非监督学习本质上是基本相同的。所有的非监督学习方法，例如数据降维(PCA:在减少数据维度的同时最大化的保留原有数据的方差)，数据拟合分类(GMM: 最大化高斯混合分布的似然)， 本质上都是为了得到一个良好的数据表示并希望其能够生成(恢复)原始输入。这也正是目前很多的自监督学习方法赖以使用的监督信息。基本上所有的encoder-decoder模型都是以数据恢复为训练损失。</p>
+<p>自监督学习的出发点是考虑在缺少标签或者完全没有标签的情况下，依然学习到能够表示原始图片的良好有意义的特征。那么什么样的特征是良好有意义的呢？在第一类自监督任务——数据恢复任务中，能够通过学习到的特征还原生成原始数据的特征，我们认为是良好有意义的。看到这里，实际上大家能够联想到自动编码器类的模型，甚至更简单的PCA。实际上，几乎所有的非监督学习方法都是以这个原则作为基础的。包括非常火的GAN</p>
+<blockquote>
+<p>GAN的核心是通过Discriminator去缩小Generator distribution和real distribution之间的距离。GAN的学习过程不需要人为进行数据标注，其监督信号也即是优化目标就是使得上述对抗过程趋向平稳。</p>
+</blockquote>
+<p>这里我们以两篇具体的paper为例子，介绍数据恢复类的自监督任务如何操作实现。我们的重点依然是视觉问题，这里分别介绍一篇图片上色的文章和一篇视频预测的文章。其余的领域比如NLP，其本质是类似的，在弄清楚了数据本身的特点之后，可以先做一些低级的照猫画虎的工作。</p>
+<h3 id="上色任务"><a href="#上色任务" class="headerlink" title="上色任务"></a>上色任务</h3><p>设计自监督任务时需要一些巧妙的思考。比如图片色彩恢复任务，我们已有的数据集是一张张的彩色图片，假如去掉色彩，作为感性思考者的我们，是否能够从黑白图片中显示的内容推测原来图片真实的色彩？对于一个婴儿来说可能很难，但是对于我们来说，生活的经历告诉我们瓢虫应当是红色的(下图第二行中)。我们是如何做出预测的？事实上，我们通过观察大量的瓢虫，在脑中建立了从“瓢虫”到“红色”的映射。</p>
+<p>把这个学习过程推广到我们的模型上，在给定黑白输入的情况下，我们用正确的彩色的原始图像作为学习的标签，从而模型会试着理解原始黑白图像中“每个区域”是“什么”进而去建立从是“什么”到“不同颜色”的映射。</p>
+<p>当我们完成训练，模型的中间层feature map就得到了类似人脑对于“瓢虫”以及其他物体的记忆，以向量的形式。</p>
+<h3 id="视频预测——下一秒你会在哪里？"><a href="#视频预测——下一秒你会在哪里？" class="headerlink" title="视频预测——下一秒你会在哪里？"></a>视频预测——下一秒你会在哪里？</h3><blockquote>
+<p>一般来说，视觉问题分成图片和视频两大类，图片数据可以认为具有i.i.d特性，而视频是由多个图片帧构成的，可以认为具有一定的Markov dependency，时序关系是他们之间最大的不同。比如最简单的思路，利用CNN提取单张图片特征可以做图片分类，再加入一个RNN或者LSTM去刻画Markov Dependency，便可以应用到视频上。</p>
+</blockquote>
+<p>视频预测任务十分的耿直。怎么形容呢，他就是那种，你知道的，我们说视频中帧与帧之间存在时空连续性。类似的，人类会利用这种帧与帧之间的连续性，当我们看电影时突然按了暂停，下一秒下几秒会发生什么实际上我们是可以预测的。</p>
+<p>同样，把这个学习过程推广到我们的模型上，在给定前一帧或者前几帧的情况下，我们用后续的视频帧作为学习的标签，从而模型会试着理解给定视频帧中的语义信息(发生了啥？)进而去建立从当前到未来的映射关系。</p>
+<h2 id="第二类-基于数据变换的任务"><a href="#第二类-基于数据变换的任务" class="headerlink" title="第二类-基于数据变换的任务"></a>第二类-基于数据变换的任务</h2><p>这种类型的自监督学习是大家熟知的窄意的自监督学习。本文<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1803.07728.pdf">链接</a></p>
+<p>用一句话说明这一类任务，事实上原理很简单。对于样本 X ，我们对其做任意变换 T(X)&#x3D;Y ，则自监督任务的目标是能够对生成的 Y 估计出其变换 T。下面介绍一种原理十分简单但是目前看来非常有效的自监督任务——Rotation Prediction。</p>
+<p>给定输入图片 X ，我们对其做4个角度的旋转，分别得到 $X_0, X_1, X_2, X_3$ ,并且我们知道其对应的变换角度分别为 0°，90°，180°，270° 。此时，任务目标即是对于以上4张图片预测其对应的旋转角度，这里每张图片都经过同样的卷积神经网。</p>
+<blockquote>
+<p>我始终坚持的观点是自监督学习需要动机明确，这里我们能做的任意变换应当是对目标有益的。比如在Rotation Prediction中，作为人类的我们只有在理解了图片中是一只鸟站在枝头之后才知道X_0的旋转角度应当是 0° 。那么我们有理由相信，当模型能够做出同样正确的判断时，其中间的feature map必然携带了有意义的图片语义信息。</p>
+</blockquote>
+<h2 id="第三类-基于多模态数据的自监督任务"><a href="#第三类-基于多模态数据的自监督任务" class="headerlink" title="第三类-基于多模态数据的自监督任务"></a>第三类-基于多模态数据的自监督任务</h2><p>下面介绍一种典型的多模态数据，是的，你没有猜错，就是伴随声音信息的视频数据。我们平时看到的短视频，电影实际上都属于这一类多模态数据。基于多模态数据进行自监督学习其内含的假设是，视频每一帧的内容与对应的音轨应当存在相关性，比如在一段乐器演奏视频中，人类能够通过观察乐器的种类在脑海中想象出不同的音色（当然我并不懂乐器），同样的，在听到一段旋律的时候，人类能够通过已有的知识判断出这是来自那种乐器（当然我也并不能）。</p>
+<blockquote>
+<p>本篇论文<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1705.08168.pdf">链接</a></p>
+</blockquote>
+<div style="text-align: center">
+<img src="/assets/img/self-supervised/s1.jpg" srcset="/img/loading.gif" lazyload/>
+</div>
+
+<p>文中将此任务命名为Audio-Visual Correspondence Task，后文简称为AVC。AVC任务事实上是一个简单的二进制分类：针对每一个视频帧和一段音频剪辑，网络需要判断其是否彼此对应。对应的（正）对是在同一时间从同一视频，但从不同视频中提取了不匹配的（负）对。为了解决这个任务，我们期望模型能够学会在视觉和音频领域中检测各种语义概念。</p>
+<p>应当指出，这项任务非常困难。模型需要从0开始建立网络以学习视觉和音频功能，并且却从未见过一个标签。此外，原始的视频数据可能非常嘈杂，音频源不一定在视频中可见（例如，摄像机操作员讲话，对视频进行旁白的人，声源不可见或被遮挡等），以及音频和视觉内容可能是完全不相关的（例如，带有附加音乐的视频，声音很小，周围环境诸如风之类的声音主导了音轨等）。</p>
+<p>尽管如此，本文的结果仍然表明AVC网络能够相当成功地解决AVC任务，并且在此过程中习得非常好的视觉和听觉表示。</p>
+<h2 id="对比学习"><a href="#对比学习" class="headerlink" title="对比学习"></a>对比学习</h2><p>说到当下最火热的非监督学习方法，非对比学习(Contrastive Learning)莫属。Bengio和Lecun在AAAI还是哪个会上力挺自监督学习尤其是对比学习方法，这篇简单介绍以下对比学习是为何物。</p>
+<p>就我而言，当下的对比学习框架与之前的两篇文章(Exemplar learning)有着类似的思路，有兴趣大家可以自行阅读，在那两篇文章中，每一张图片被视为一个独立的class，我们对每一张图片做各种变换进行数据augmentation，这样就得到了一个多分类问题（有多少张图片就有多少个类别）。</p>
+<p>对比学习可以视为将上面两篇文章中的Cross-entropy loss替换为contrastive loss之后的版本。我们用一个简单的例子描述对比学习：</p>
+<p>假如有两张图片A(足球)，B(猫咪)，由于是非监督学习，我们并不知道真实标签，但我们知道A 和B分属不同的语义类别，即使我们对A和B分别做一些变换，比如旋转(R)，裁减(C)，高斯模糊(G)等等，在理想的情况下，人们仍然能够合理的避免变换的影响，将变换后的图片正确归类到A或是B。这一点很好理解，正常人都不会因为一张猫咪照被翻转之后就认为他变成了狗甚至是足球。</p>
+<p>基于以上的动机，假设我们有模型f，我们希望f同样具有以上能力，假如我们用特征之间的距离来表示图片之间的关联度，那么分别图片A和图片B，我们希望旋转后的图片A与裁减后的图片后距离较近，而与高斯模糊后的图片B较远。</p>
+<div style="text-align: center">
+<img src="/assets/img/self-supervised/s2.jpg" srcset="/img/loading.gif" lazyload/>
+</div>
+
+<p>$$\operatorname{dist}(f(R(A)), f(C(A)))&lt;\operatorname{dist}(f(R(A)), f(G(B)))$$</p>
+<p>看到这里，有经验的同学可能会想到Triplet Loss，事实上我认为这两者确实蛮相似的，唯一的区别可能是这里的负样本不是一对，而是很多对，也即，在满足上式的同时，对于图片A和数据库中的其他图片，我们都希望其满足此距离关系：</p>
+<p>$$\operatorname{dist}(f(R(A)), f(C(X)))&lt;\operatorname{dist}(f(R(A)), f(G(X))), \quad X \in R^{H \times W}$$</p>
+<p>大家思考一下，实际上最终的目标是，希望每一张图片及其变换后的图片所产生的特征形成一个cluster，在我们假设类内方差小于类间方差的情况下，这一点是可以保证的。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">#机器学习</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>自监督学习备忘</div>
+      <div>http://line.com/2020/07/13/2020-07-13-self-supervised-learning/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Line</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2020年7月13日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/08/08/2020-08-08-stereo-vision/" title="双目相机模型与标定">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">双目相机模型与标定</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/06/02/2020-06-02-matchine-learning/" title="机器学习中的常见函数总结（备忘）">
+                        <span class="hidden-mobile">机器学习中的常见函数总结（备忘）</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

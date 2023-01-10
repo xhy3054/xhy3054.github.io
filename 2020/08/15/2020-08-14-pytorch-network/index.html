@@ -1,0 +1,775 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon1.png">
+  <link rel="icon" href="/img/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Line">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="对pytorch中组成网络的各种结构进行介绍记录，防止忘掉。  第一类-提取特征并调整网络结构的层 第二类-归一化调整数值范围层 第三类-非线性激活函数层  提取并调整特征维度2维卷积层torch.nn.Conv2d 卷积操作主要用来提取图像特征，卷积过程可以参考我之前的一篇文章中的一个动图。  12345678910CLASS torch.nn.Conv2d(	in_channels: int,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pytorch中组成网络的卷积、归一化、relu等常见结构">
+<meta property="og:url" content="http://line.com/2020/08/15/2020-08-14-pytorch-network/index.html">
+<meta property="og:site_name" content="Line&#39;s Blog">
+<meta property="og:description" content="对pytorch中组成网络的各种结构进行介绍记录，防止忘掉。  第一类-提取特征并调整网络结构的层 第二类-归一化调整数值范围层 第三类-非线性激活函数层  提取并调整特征维度2维卷积层torch.nn.Conv2d 卷积操作主要用来提取图像特征，卷积过程可以参考我之前的一篇文章中的一个动图。  12345678910CLASS torch.nn.Conv2d(	in_channels: int,">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-08-14T17:07:24.000Z">
+<meta property="article:modified_time" content="2023-01-08T16:21:28.853Z">
+<meta property="article:author" content="Line">
+<meta property="article:tag" content="深度学习">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>pytorch中组成网络的卷积、归一化、relu等常见结构 - Line&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"line.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Line</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default2.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="pytorch中组成网络的卷积、归一化、relu等常见结构"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2020-08-15 01:07" pubdate>
+          2020年8月15日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          28 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">pytorch中组成网络的卷积、归一化、relu等常见结构</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>对pytorch中组成网络的各种结构进行介绍记录，防止忘掉。</p>
+<ul>
+<li><a href="#%E6%8F%90%E5%8F%96%E5%B9%B6%E8%B0%83%E6%95%B4%E7%89%B9%E5%BE%81%E7%BB%B4%E5%BA%A6">第一类-提取特征并调整网络结构的层</a></li>
+<li><a href="#%E5%BD%92%E4%B8%80%E5%8C%96%E8%B0%83%E6%95%B4%E6%95%B0%E5%80%BC%E8%8C%83%E5%9B%B4%E5%B1%82">第二类-归一化调整数值范围层</a></li>
+<li><a href="#%E9%9D%9E%E7%BA%BF%E6%80%A7%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0%E5%B1%82">第三类-非线性激活函数层</a></li>
+</ul>
+<h1 id="提取并调整特征维度"><a href="#提取并调整特征维度" class="headerlink" title="提取并调整特征维度"></a>提取并调整特征维度</h1><h2 id="2维卷积层torch-nn-Conv2d"><a href="#2维卷积层torch-nn-Conv2d" class="headerlink" title="2维卷积层torch.nn.Conv2d"></a>2维卷积层<code>torch.nn.Conv2d</code></h2><blockquote>
+<p>卷积操作主要用来提取图像特征，卷积过程可以参考我之前的一篇<a target="_blank" rel="noopener" href="https://xhy3054.github.io/cnn-base/">文章</a>中的一个动图。</p>
+</blockquote>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs py">CLASS torch.nn.Conv2d(	in_channels: <span class="hljs-built_in">int</span>, <br>				out_channels: <span class="hljs-built_in">int</span>, <br>				kernel_size: <span class="hljs-type">Union</span>[<span class="hljs-built_in">int</span>, <br>				<span class="hljs-type">Tuple</span>[<span class="hljs-built_in">int</span>, <span class="hljs-built_in">int</span>]], <br>				stride: <span class="hljs-type">Union</span>[<span class="hljs-built_in">int</span>, <span class="hljs-type">Tuple</span>[<span class="hljs-built_in">int</span>, <span class="hljs-built_in">int</span>]] = <span class="hljs-number">1</span>, <br>				padding: <span class="hljs-type">Union</span>[<span class="hljs-built_in">int</span>, <span class="hljs-type">Tuple</span>[<span class="hljs-built_in">int</span>, <span class="hljs-built_in">int</span>]] = <span class="hljs-number">0</span>, <br>				dilation: <span class="hljs-type">Union</span>[<span class="hljs-built_in">int</span>, <span class="hljs-type">Tuple</span>[<span class="hljs-built_in">int</span>, <span class="hljs-built_in">int</span>]] = <span class="hljs-number">1</span>, <br>				groups: <span class="hljs-built_in">int</span> = <span class="hljs-number">1</span>, <br>				bias: <span class="hljs-built_in">bool</span> = <span class="hljs-literal">True</span>, <br>				padding_mode: <span class="hljs-built_in">str</span> = <span class="hljs-string">&#x27;zeros&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>in_channels</code>：一个整型，表示输入通道数；</li>
+<li><code>out_channels</code>：一个整型，表示输出通道数；</li>
+<li><code>kernel_size</code>：卷积核尺寸，可以是一个整型数，也可以是一个包含两个整型的tuple，一个整数时默认长宽相同；</li>
+<li><code>stride</code>： 输入可以是一个整型号，也可以是一个包含两个整型的tuple；表示步长；一般步长也可以看作提取到的特征相对于原图尺寸缩小的倍数；</li>
+<li><code>padding</code>：输入可以是一个整型号，也可以是一个包含两个整型的tuple；表示默认在图像边缘补0的尺寸，输入一个tuple的话，第一个数表示高度上，第二个表示宽度上填充的尺寸；比如当为1时，表示原图基础上，上下左右各补了一行；</li>
+<li><code>dilation</code>：输入可以是一个整型号，也可以是一个包含两个整型的tuple；表示卷积核的扩张尺寸，也是核点之间的间距；</li>
+<li><code>groups</code>: 范围从1到<code>in_channels</code>，默认是1，表示所有每个输出通道都包含了所有输入通道的信息；如果为2，则一半的输出通道是由一半的输入通道产生的，另一半的输出通道是由剩下一半的输入通道产生；如果为<code>in_channels</code>，表示每个输入通道都有自己单独的卷积核，卷积核输出维度为<code>out_channels/in_channels</code>；</li>
+</ul>
+<h2 id="上采样层torch-nn-PixelShuffle"><a href="#上采样层torch-nn-PixelShuffle" class="headerlink" title="上采样层torch.nn.PixelShuffle"></a>上采样层<code>torch.nn.PixelShuffle</code></h2><blockquote>
+<p>主要用来重新排列一个维度(x, C<em>r^2, H, W)的tensor为一个维度(x, C, H</em>r, W<em>r)的tensor。这种做法是16年一篇论文提出的超分辨率方法，主要思想是对于（1, H, W）维度的图像，为了将其放大r倍，首先使用卷积网络提取得到(r^2, H, W)维度的深层特征；然后使用PixelShuffle对深层特征重新排列，得到一个(1, H</em>r, W*r)的高分辨的图像。</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">CLASS torch.nn.PixelShuffle(upscale_factor: <span class="hljs-built_in">int</span>)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>upscale_factor</code>：int类型，上采样的倍数，也是上面的r；</li>
+</ul>
+<h1 id="归一化调整数值范围层"><a href="#归一化调整数值范围层" class="headerlink" title="归一化调整数值范围层"></a>归一化调整数值范围层</h1><h2 id="批处理归一化层torch-nn-BatchNorm2d"><a href="#批处理归一化层torch-nn-BatchNorm2d" class="headerlink" title="批处理归一化层torch.nn.BatchNorm2d"></a>批处理归一化层<code>torch.nn.BatchNorm2d</code></h2><blockquote>
+<p>批处理归一化层主要用来进行数据归一化，使得在relu之前不会因数据过大而导致网络性能不稳定。对于一个（1,3，H,W）的输入，主要的处理如下：</p>
+</blockquote>
+<p>$$y&#x3D;\frac{x-\mathrm{E}[x]}{\sqrt{\operatorname{Var}[x]+\epsilon}} * \gamma+\beta$$</p>
+<p>上面计算是对3个通道分别进行的，其中x为一个一个像素位置多个通道值组成的向量，E为每个通道的平均数组成的向量，var为每个通道的标准差组成的向量，$\epsilon$是为了数值稳定性在分母上增加的值，$\gamma$（默认1）和$beta$（默认0）为可学习的参数向量（维度为通道数）。上面公式写成向量形式，但是实际理解可以是对特征的每个通道分别执行上式。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs py">CLASS torch.nn.BatchNorm2d(num_features, <br>	eps=<span class="hljs-number">1e-05</span>, <br>	momentum=<span class="hljs-number">0.1</span>, <br>	affine=<span class="hljs-literal">True</span>, <br>	track_running_stats=<span class="hljs-literal">True</span>)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>num_features</code>：当前要处理的特征层的通道数（一开始rgb图像的话是3）；</li>
+<li><code>eps</code>：也就是上面公式中的$\epsilon$，为数值稳定性在分母上增加的值。默认为：1e-5；</li>
+<li><code>momentum</code>：一个用于运行过程中均值和方差的一个估计参数（我的理解是一个稳定系数，类似于SGD中的momentum的系数）；</li>
+<li><code>affine</code>：当设为true时，该模块拥有可以学习的系数$\gamma$和$beta$；</li>
+<li><code>track_running_stats</code>: 是否跟踪均值和标准差的计算；</li>
+</ul>
+<h2 id="归一化层torch-nn-functional-normalize"><a href="#归一化层torch-nn-functional-normalize" class="headerlink" title="归一化层torch.nn.functional.normalize"></a>归一化层<code>torch.nn.functional.normalize</code></h2><blockquote>
+<p>在指定的维度上执行$L_p$归一化操作，其实就是在某个维度上对每个元素做$L_p$操作并做sum，然后当前元素值为原值除以sum，公式为：</p>
+</blockquote>
+<p>$$v&#x3D;\frac{v}{\max \left(|v|_{p}, \epsilon\right)}$$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">torch.nn.functional.normalize(<span class="hljs-built_in">input</span>: torch.Tensor, <br>	p: <span class="hljs-built_in">float</span> = <span class="hljs-number">2</span>, <br>	dim: <span class="hljs-built_in">int</span> = <span class="hljs-number">1</span>, <br>	eps: <span class="hljs-built_in">float</span> = <span class="hljs-number">1e-12</span>, <br>	out: <span class="hljs-type">Optional</span>[torch.Tensor] = <span class="hljs-literal">None</span>) → torch.Tensor<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>input</code>：任意shape的tensor输入；</li>
+<li><code>p</code>：范数的指数，默认为2，即$L_2$范数；</li>
+<li><code>dim</code>：计算范数的维度，默认是1；</li>
+<li><code>out</code>：the output tensor. If out is used, this operation won’t be differentiable.</li>
+</ul>
+<h2 id="层torch-nn-functional-softplus"><a href="#层torch-nn-functional-softplus" class="headerlink" title="层torch.nn.functional.softplus"></a>层<code>torch.nn.functional.softplus</code></h2><blockquote>
+<p>逐元素执行如下操作，note:为了数值稳定，当$\beta x &gt; threshold$时实现变为线性函数。</p>
+</blockquote>
+<p>$$\text { Softplus }(x)&#x3D;\frac{1}{\beta} * \log (1+\exp (\beta * x))$$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">torch.nn.functional.softplus(<span class="hljs-built_in">input</span>, beta=<span class="hljs-number">1</span>, threshold=<span class="hljs-number">20</span>) → Tensor<br></code></pre></td></tr></table></figure>
+
+<h2 id="层torch-nn-functional-softmax"><a href="#层torch-nn-functional-softmax" class="headerlink" title="层torch.nn.functional.softmax"></a>层<code>torch.nn.functional.softmax</code></h2><blockquote>
+<p>也是一种归一化操作，沿着某个维度执行如下操作，使得该维度向量每个元素值在0到1之间，并且和为1。</p>
+</blockquote>
+<p>$$\operatorname{Softmax}\left(x_{i}\right)&#x3D;\frac{\exp \left(x_{i}\right)}{\sum_{j} \exp \left(x_{j}\right)}$$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">torch.nn.functional.softmax(<span class="hljs-built_in">input</span>: torch.Tensor, <br>	dim: <span class="hljs-type">Optional</span>[<span class="hljs-built_in">int</span>] = <span class="hljs-literal">None</span>, <br>	_stacklevel: <span class="hljs-built_in">int</span> = <span class="hljs-number">3</span>, <br>	dtype: <span class="hljs-type">Optional</span>[<span class="hljs-built_in">int</span>] = <span class="hljs-literal">None</span>) → torch.Tensor<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>input</code>：输入tensor；</li>
+<li><code>dim</code>：沿着这个维度执行softmax</li>
+<li><code>dtype</code>：如果指定类型，在执行操作前需要将输入被转换为该类型；</li>
+</ul>
+<h1 id="非线性激活函数层"><a href="#非线性激活函数层" class="headerlink" title="非线性激活函数层"></a>非线性激活函数层</h1><h2 id="修正线性单元层torch-nn-ReLU"><a href="#修正线性单元层torch-nn-ReLU" class="headerlink" title="修正线性单元层torch.nn.ReLU"></a>修正线性单元层<code>torch.nn.ReLU</code></h2><blockquote>
+<p>主要是执行非线性变换。Relu的非线性变换是大于0时不变，小于0时置为0，特点是瘦脸快，求梯度简单。</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">CLASStorch.nn.ReLU(inplace: <span class="hljs-built_in">bool</span> = <span class="hljs-literal">False</span>)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>inplace</code>：是否在原数据上操作；</li>
+</ul>
+<h2 id="第二种激活函数torch-nn-ELU"><a href="#第二种激活函数torch-nn-ELU" class="headerlink" title="第二种激活函数torch.nn.ELU"></a>第二种激活函数<code>torch.nn.ELU</code></h2><blockquote>
+<p>对每个元素执行如下操作：</p>
+</blockquote>
+<p>$$ ELU(x)&#x3D;max(0,x)+min(0,α∗(exp(x)−1)) $$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">CLASStorch.nn.ELU(alpha: <span class="hljs-built_in">float</span> = <span class="hljs-number">1.0</span>, inplace: <span class="hljs-built_in">bool</span> = <span class="hljs-literal">False</span>)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>alpha</code>：上面公式中的$\alpha$值，默认为1；</li>
+<li><code>inplace</code>：是否在原数据位置进行操作；</li>
+</ul>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ul>
+<li>[1] pytorch官方文档</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">#深度学习</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>pytorch中组成网络的卷积、归一化、relu等常见结构</div>
+      <div>http://line.com/2020/08/15/2020-08-14-pytorch-network/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Line</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2020年8月15日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/12/17/2020-12-17-nullspace-observable/" title="系统的可观性问题分析">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">系统的可观性问题分析</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/08/14/2020-08-14-pychram-remote/" title="pycharm远程调试">
+                        <span class="hidden-mobile">pycharm远程调试</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

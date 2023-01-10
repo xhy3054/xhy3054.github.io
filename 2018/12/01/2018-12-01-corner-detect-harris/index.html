@@ -1,0 +1,776 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon1.png">
+  <link rel="icon" href="/img/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Line">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1. 角点与角点的检测1.1 什么是角点？从图像分析的角度来看，一般而言角点有如下两种定义：  角点可以是两个边缘的角点； 角点是邻域内具有两个主方向的特征点；  如同下图所示，前俩例子一个是平坦区域，一个是边缘。第三个就如上述两种定义方式的角点一样，设置一个滑动窗口，无论朝那个方向移动，对应位置上的亮度都会有很大变化，  1.2 不同的角点检测方法角点定义出来了以后，如何检测角点呢？这个有好多种">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图像特征之Harris角点检测">
+<meta property="og:url" content="http://line.com/2018/12/01/2018-12-01-corner-detect-harris/index.html">
+<meta property="og:site_name" content="Line&#39;s Blog">
+<meta property="og:description" content="1. 角点与角点的检测1.1 什么是角点？从图像分析的角度来看，一般而言角点有如下两种定义：  角点可以是两个边缘的角点； 角点是邻域内具有两个主方向的特征点；  如同下图所示，前俩例子一个是平坦区域，一个是边缘。第三个就如上述两种定义方式的角点一样，设置一个滑动窗口，无论朝那个方向移动，对应位置上的亮度都会有很大变化，  1.2 不同的角点检测方法角点定义出来了以后，如何检测角点呢？这个有好多种">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://line.com/img/harris/corner.png">
+<meta property="og:image" content="http://line.com/img/harris/eclipse.png">
+<meta property="og:image" content="http://line.com/img/harris/analyse.png">
+<meta property="og:image" content="http://line.com/img/harris/harris.png">
+<meta property="og:image" content="http://line.com/img/harris/brightness.png">
+<meta property="og:image" content="http://line.com/img/harris/scale.png">
+<meta property="article:published_time" content="2018-11-30T17:07:24.000Z">
+<meta property="article:modified_time" content="2023-01-10T13:30:54.198Z">
+<meta property="article:author" content="Line">
+<meta property="article:tag" content="计算机视觉">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://line.com/img/harris/corner.png">
+  
+  
+  
+  <title>图像特征之Harris角点检测 - Line&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"line.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Line</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default2.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="图像特征之Harris角点检测"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2018-12-01 01:07" pubdate>
+          2018年12月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          32 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">图像特征之Harris角点检测</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="1-角点与角点的检测"><a href="#1-角点与角点的检测" class="headerlink" title="1. 角点与角点的检测"></a>1. 角点与角点的检测</h1><h2 id="1-1-什么是角点？"><a href="#1-1-什么是角点？" class="headerlink" title="1.1 什么是角点？"></a>1.1 什么是角点？</h2><p>从图像分析的角度来看，一般而言角点有如下两种定义：</p>
+<ol>
+<li>角点可以是两个边缘的角点；</li>
+<li>角点是邻域内具有两个主方向的特征点；</li>
+</ol>
+<p>如同下图所示，前俩例子一个是平坦区域，一个是边缘。第三个就如上述两种定义方式的角点一样，设置一个滑动窗口，无论朝那个方向移动，对应位置上的亮度都会有很大变化，</p>
+<p><img src="/img/harris/corner.png" srcset="/img/loading.gif" lazyload alt="harris"></p>
+<h2 id="1-2-不同的角点检测方法"><a href="#1-2-不同的角点检测方法" class="headerlink" title="1.2 不同的角点检测方法"></a>1.2 不同的角点检测方法</h2><p>角点定义出来了以后，如何检测角点呢？这个有好多种方法，比如以前提到的orb特征里的fast关键点的检测方式，就是一种角点检测方法。本文提到的harris也是一种角点检测方法，而且应该是名气很大的一种方法。除此之外，还有一些其他的角点检测方法，比如Shi-Tomasi算法、SUSAN算子等。</p>
+<h1 id="2-harris角点检测"><a href="#2-harris角点检测" class="headerlink" title="2. harris角点检测"></a>2. harris角点检测</h1><h2 id="2-1-原理"><a href="#2-1-原理" class="headerlink" title="2.1 原理"></a>2.1 原理</h2><p>由1.1中所述，我们知道在一个角点处设置一个滑动窗口，这个窗口无论朝哪个方向滑动，对应位置上的亮度都会有很大变化。对应如下公式</p>
+<p>$$E(u,v) = \sum _{x,y} w(x,y)[ I(x+u,y+v) - I(x,y)]^{2}$$</p>
+<p>其中：</p>
+<ul>
+<li>w(x,y)是滑动窗口系数，系数越大，代表这个位置上的亮度差异对结果所占权重更大。一般使用二维高斯窗口</li>
+<li>(u,v)是一个确定位移</li>
+<li>I(x,y)是在位置(x,y)的亮度值，(x,y)是在滑动窗口范围内的一个点</li>
+</ul>
+<p>上述公式中，有如下一项存在操作空间</p>
+<p>$$[I(x+u,y+v) - I(x,y)]^{2}$$</p>
+<p>可以泰勒展开<strong>近似</strong>成</p>
+<p>$$ [ I(x,y) + u I_{x} + vI_{y} - I(x,y)]^{2} $$</p>
+<p>消去并展开方程，带入原式得</p>
+<p>$$ E(u,v) \approx \sum_{x,y} w(x,y)(u^{2}I_{x}^{2} + 2uvI_{x}I_{y} + v^{2}I_{y}^{2}) $$</p>
+<p>写成矩阵形式是（可以这样写是因为$(u,v)$仅仅代表一个移动方向，与窗口的大小、系数都不相关）：</p>
+<p>$$ E(u,v) \approx \begin{bmatrix} u &amp; v \end{bmatrix} \left ( \displaystyle \sum_{x,y} w(x,y) \begin{bmatrix} I_x^{2} &amp; I_{x}I_{y} \\ I_xI_{y} &amp; I_{y}^{2} \end{bmatrix} \right ) \begin{bmatrix} u \\ v \end{bmatrix} $$</p>
+<p>可以定义矩阵M为</p>
+<p>$$ M = \displaystyle \sum_{x,y} w(x,y) \begin{bmatrix} I_x^{2} &amp; I_{x}I_{y} \\ I_xI_{y} &amp; I_{y}^{2} \end{bmatrix} $$</p>
+<p>现在式子变成</p>
+<p>$$ E(u,v) \approx \begin{bmatrix} u &amp; v \end{bmatrix} M \begin{bmatrix} u \\ v \end{bmatrix} $$</p>
+<blockquote>
+<p>我们知道，如果是角点的话，无论$(u,v)$往哪个方向，$E(u,v)$的值都会变化很大，而这个性质是由二维矩阵$M$决定的。或者说，这个性质是由矩阵M的特征值与特征向量决定的。在特征值大的特征向量方向，$E(u,v)$的值变化较快，在特征值较小的特征向量方向，$E(u,v)$的值变化较慢</p>
+</blockquote>
+<p>上式如果左值固定，这个式子本质上是一个椭圆，椭圆的扁率与尺寸是由M的特征值$ \lambda_1、\lambda_2 $决定的，椭圆的方向是由M的特征矢量决定的。假设椭圆方程如下</p>
+<p>$$ \begin{bmatrix} u &amp; v \end{bmatrix} M \begin{bmatrix} u \\ v \end{bmatrix} = 1  $$</p>
+<p><img src="/img/harris/eclipse.png" srcset="/img/loading.gif" lazyload alt="eclipse"></p>
+<p>因此由矩阵M的特征值$ \lambda_1、\lambda_2 $的情况，可以将图像上的一个点分为三种情况：</p>
+<ol>
+<li>图像中<strong>边缘上的点</strong>。一个特征值大，另一个特征值小，即$ \lambda_1\gg \lambda_2 $或$ \lambda_2\gg \lambda_1 $，在窗口朝某一方向滑动时，E的值变化明显，其他方向上不明显。</li>
+<li>图像中<strong>平面上的点</strong>。两个特征值都小，且近似相等。窗口朝各个方向上滑动，E的值变化都不明显。</li>
+<li>图像中<strong>角点</strong>。两个特征值都大，且近似相等。窗口朝每个方向滑动，E的值都会有很明显的变化。</li>
+</ol>
+<p><img src="/img/harris/analyse.png" srcset="/img/loading.gif" lazyload alt="analyse"></p>
+<p>上述分析过后，我们知道如何使用M矩阵的特征值来判断一个点是边缘点、平面点还是角点。Harris提出可以计算一个harris<strong>角点响应值R</strong>来判断一个点是否是角点，而无需计算具体的矩阵特征值。R的计算公式如下：</p>
+<p>$$ R=det \boldsymbol{M} - \alpha(trace\boldsymbol{M})^2 $$</p>
+<p>其中：</p>
+<ul>
+<li>$det\boldsymbol{M}$是矩阵M的行列式，并且$det\boldsymbol{M} = \lambda_1\lambda_2 = AC-B^2$，A,B,C,D是M矩阵的四个元素</li>
+<li>$trace\boldsymbol{M}$是矩阵M的直迹，并且$trace\boldsymbol{M}=\lambda_2+\lambda_2 = A+C$</li>
+<li>$\alpha$是一个经验系数，通常取值范围在0.04~0.06。下文还会对这个系数进行探讨。</li>
+</ul>
+<p>至于为什么Harris响应值R如此定义，可以由下图知道原因。</p>
+<p><img src="/img/harris/harris.png" srcset="/img/loading.gif" lazyload alt="harris"></p>
+<h2 id="2-2-实际代码实现步骤"><a href="#2-2-实际代码实现步骤" class="headerlink" title="2.2 实际代码实现步骤"></a>2.2 实际代码实现步骤</h2><p>在上述原理讲解完毕后，代码实现主要可以分为五步：</p>
+<ol>
+<li><p>分别计算像素I(x,y)在x,y方向的梯度，使用<strong>sobel算子</strong>：$$I_x=\frac{\partial I}{\partial x}=I\otimes(-1\ 0\ 1)，I_y =\frac{\partial I}{\partial x}=I\otimes(-1\ 0\ 1)^T$$</p>
+</li>
+<li><p>计算两个方向梯度的乘积：$$ I_x^2=I_x\cdot I_y，I_y^2=I_y\cdot I_y，I_{xy}=I_x\cdot I_y $$</p>
+</li>
+<li><p>生成高斯系数窗口，并最终<strong>确定M矩阵</strong>(前三步都是为了确定矩阵M)。</p>
+</li>
+<li><p>依据M矩阵计算每个像素的<strong>harris响应值R</strong>，并设置一个阈值，小于阈值的清零。</p>
+</li>
+<li><p>在$3\times3或5\times5$的领域内进行<strong>非极大值抑制</strong>，局部最大值点即为图像中的角点。</p>
+</li>
+</ol>
+<blockquote>
+<p><strong>非极大值抑制</strong>原理是，在一个窗口内，如果有多个角点则用值最大的那个角点，其他的角点都删除。这样做可以祛除一些黏在一起的角点，好处是可以防止角点太密集，出现一小撮全是角点的情况。</p>
+</blockquote>
+<h2 id="2-3-harris角点性质"><a href="#2-3-harris角点性质" class="headerlink" title="2.3 harris角点性质"></a>2.3 harris角点性质</h2><h3 id="2-3-1-旋转不变性"><a href="#2-3-1-旋转不变性" class="headerlink" title="2.3.1 旋转不变性"></a>2.3.1 旋转不变性</h3><p>由我们上述讲解的原理可知，当旋转发生时，矩阵M确定的椭圆也会发生旋转，但是椭圆的长短轴的大小是不会变化的。而椭圆的长短轴是<strong>矩阵M的特征值平方根的倒数</strong>，也就是说矩阵的特征值不会发生变化，所以harris响应值的大小也不会发生变化。因此harris角点检测具有旋转不变性。</p>
+<h3 id="2-3-2-光照不敏感"><a href="#2-3-2-光照不敏感" class="headerlink" title="2.3.2 光照不敏感"></a>2.3.2 光照不敏感</h3><p>这是因为我们在进行harris响应值的计算时，并没有直接使用像素亮度信息，而是使用了像素亮度的梯度信息。但由于梯度信息对于像素亮度的拉升与收缩变化并不敏感，就算光照条件发生变化导致像素亮度整体发生变化，也不会影响harris响应值的极值点出现的位置。最多由于阈值的选择，会影响检测到的角点数量而已。</p>
+<p><img src="/img/harris/brightness.png" srcset="/img/loading.gif" lazyload alt="brightness"></p>
+<h3 id="2-3-3-不具备尺度不变"><a href="#2-3-3-不具备尺度不变" class="headerlink" title="2.3.3 不具备尺度不变"></a>2.3.3 不具备尺度不变</h3><p>这一点同样容易理解，下图解释的尤其形象。</p>
+<p><img src="/img/harris/scale.png" srcset="/img/loading.gif" lazyload alt="scale"></p>
+<h3 id="2-3-4-参数-alpha-的意义"><a href="#2-3-4-参数-alpha-的意义" class="headerlink" title="2.3.4 参数$\alpha$的意义"></a>2.3.4 参数$\alpha$的意义</h3><p>假设已经得到了矩阵M的特征值$\lambda_1\ge\lambda_2\ge0$，令$\lambda_2=k\lambda_1,0\le k\le 1$。由特征值与矩阵M的直迹和行列式的关系可得：</p>
+<p>$$ det\boldsymbol{M}=\prod_i\lambda_i \ \ \ \ \ \  trace\boldsymbol{M}=\sum_i\lambda_i $$</p>
+<p>所以角点的响应值为</p>
+<p>$$ R=\lambda_2\lambda_2=\alpha(\lambda_2+\lambda_2)^2=\lambda^2(k-\alpha(1+k)^2) $$</p>
+<p>若有R不小于0，则</p>
+<p>$$ 0\le \alpha \le\frac{k}{(1+k)^2}\le0.25 $$</p>
+<p>并且有如下结论：<strong>增大α的值，将减小角点响应值R，降低角点检测的灵性，减少被检测角点的数量；减小α值，将增大角点响应值R，增加角点检测的灵敏性，增加被检测角点的数量。</strong></p>
+<h2 id="2-4-harris角点检测的opencv接口与自己的c-实现"><a href="#2-4-harris角点检测的opencv接口与自己的c-实现" class="headerlink" title="2.4 harris角点检测的opencv接口与自己的c++实现"></a>2.4 harris角点检测的opencv接口与自己的c++实现</h2><p>见我的<a target="_blank" rel="noopener" href="https://github.com/xhy3054/myopencv/tree/master/08_feature2d_module/01_harris_corner_detector">github</a></p>
+<h1 id="3-总结"><a href="#3-总结" class="headerlink" title="3. 总结"></a>3. 总结</h1><p>由上面的描述我们知道了什么是角点，harris角点响应值的定义等，<strong>其实角点的定义都是相同的，只是不同的角点检测方法定义了不同的角点响应值的计算方式罢了。上述推导了最出名的harris响应值的定义公式，还有其他的角点响应值，比如Shi-Tomasi角点响应值是矩阵M较小的那个特征值。这种方法不仅充分，而且在很多情况下（比如跟踪）会比harris更加有效。</strong></p>
+<h1 id="4-参考资料"><a href="#4-参考资料" class="headerlink" title="4. 参考资料"></a>4. 参考资料</h1><ul>
+<li>[1] <a target="_blank" rel="noopener" href="https://docs.opencv.org/3.4.1/d4/d7d/tutorial_harris_detector.html">https://docs.opencv.org/3.4.1/d4/d7d/tutorial_harris_detector.html</a></li>
+<li>[2] <a target="_blank" rel="noopener" href="https://www.cnblogs.com/ronny/p/4009425.html#4056636">https://www.cnblogs.com/ronny/p/4009425.html#4056636</a></li>
+<li>[3] <a target="_blank" rel="noopener" href="https://blog.csdn.net/lwzkiller/article/details/54633670">https://blog.csdn.net/lwzkiller/article/details/54633670</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">#计算机视觉</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>图像特征之Harris角点检测</div>
+      <div>http://line.com/2018/12/01/2018-12-01-corner-detect-harris/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Line</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2018年12月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2018/12/02/2018-12-02-disk-partition/" title="磁盘分区问题解析">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">磁盘分区问题解析</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2018/11/07/2018-11-07-cpp-namespace-use/" title="c++中关于命名空间中成员的使用">
+                        <span class="hidden-mobile">c++中关于命名空间中成员的使用</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

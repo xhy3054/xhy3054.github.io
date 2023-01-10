@@ -1,0 +1,748 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon1.png">
+  <link rel="icon" href="/img/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Line">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="在图像分割领域，最近几年基于深度学习的方法占据了绝对领先的地位。但是相对于黑匣子的深度学习，传统的方法更有几分味道。这次要介绍的是图割算法，这是一种基于能量优化的方法，在前景背景分割上很有效果。 1. 最大流与最小割 在了解图割之前，首先需要了解最大流与最小割的概念。  1.1 最小割min-cut举例说明，如下一个有向加权图所示，从顶点S(source)到顶点T(sink)有三条路径，每条路径的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图片分割之最大流最小割">
+<meta property="og:url" content="http://line.com/2021/01/24/2021-01-24-graph-cut/index.html">
+<meta property="og:site_name" content="Line&#39;s Blog">
+<meta property="og:description" content="在图像分割领域，最近几年基于深度学习的方法占据了绝对领先的地位。但是相对于黑匣子的深度学习，传统的方法更有几分味道。这次要介绍的是图割算法，这是一种基于能量优化的方法，在前景背景分割上很有效果。 1. 最大流与最小割 在了解图割之前，首先需要了解最大流与最小割的概念。  1.1 最小割min-cut举例说明，如下一个有向加权图所示，从顶点S(source)到顶点T(sink)有三条路径，每条路径的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://line.com/assets/img/graph_cut/graphcut001.jpg">
+<meta property="og:image" content="http://line.com/assets/img/graph_cut/graphcut002.jpg">
+<meta property="og:image" content="http://line.com/assets/img/graph_cut/graphcut004.jpg">
+<meta property="article:published_time" content="2021-01-23T17:07:24.000Z">
+<meta property="article:modified_time" content="2023-01-08T16:21:28.853Z">
+<meta property="article:author" content="Line">
+<meta property="article:tag" content="计算机视觉">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://line.com/assets/img/graph_cut/graphcut001.jpg">
+  
+  
+  
+  <title>图片分割之最大流最小割 - Line&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"line.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Line</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default2.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="图片分割之最大流最小割"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-01-24 01:07" pubdate>
+          2021年1月24日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          16 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">图片分割之最大流最小割</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>在图像分割领域，最近几年基于深度学习的方法占据了绝对领先的地位。但是相对于黑匣子的深度学习，传统的方法更有几分味道。这次要介绍的是图割算法，这是一种基于能量优化的方法，在前景背景分割上很有效果。</p>
+<h1 id="1-最大流与最小割"><a href="#1-最大流与最小割" class="headerlink" title="1. 最大流与最小割"></a>1. 最大流与最小割</h1><blockquote>
+<p>在了解图割之前，首先需要了解最大流与最小割的概念。</p>
+</blockquote>
+<h2 id="1-1-最小割min-cut"><a href="#1-1-最小割min-cut" class="headerlink" title="1.1 最小割min-cut"></a>1.1 最小割min-cut</h2><p>举例说明，如下一个有向加权图所示，从顶点<code>S(source)</code>到顶点<code>T(sink)</code>有三条路径，每条路径的代价<code>c(cost)</code>是该路径上所有边的权重之和。最小割的意思就是说通过割断边将图中所有节点划分为两个不相交的集合，<code>S</code>与<code>T</code>分别在其中一个集合中。并且最小割保证所割断的边的权重之和最小：</p>
+<div style="text-align: center">
+<img src="/assets/img/graph_cut/graphcut001.jpg" srcset="/img/loading.gif" lazyload   width="750" height="400"/>
+</div>
+
+<p>可以很明显的发现割断的边是<code>s-&gt;a</code>与<code>b-&gt;t</code>时是最小割。</p>
+<h2 id="1-2-最大流max-flow"><a href="#1-2-最大流max-flow" class="headerlink" title="1.2 最大流max-flow"></a>1.2 最大流max-flow</h2><p>我们将边想象成管道，权重表示流量，那么从<code>S</code>能流入<code>T</code>的最大流量就是<code>2+3=5</code>，而在计算最大流量的过程中，我们可以发现起到约束作用的边是<code>s-&gt;a</code>与<code>b-&gt;t</code>。这也就是最大流。</p>
+<blockquote>
+<p>可以发现，最大流与最小割结果是一致的，其实有人已经证明过（福特-福克森定理）这两者等价。因此可以将最小割问题转化成最大流问题来进行求解。</p>
+</blockquote>
+<h2 id="1-3-最大流问题的求解"><a href="#1-3-最大流问题的求解" class="headerlink" title="1.3 最大流问题的求解"></a>1.3 最大流问题的求解</h2><p>传统求解最大流问题的方法是增广路径算法，原理是利用广度优先搜索在图中搜索所有从<code>S</code>到<code>T</code>的路径，最终找到最大流路径。这种方法几乎是需要遍历图中所有的节点，因此效率很低。因此目前大多是使用基于优化的方法。</p>
+<h1 id="2-图割graph-cut"><a href="#2-图割graph-cut" class="headerlink" title="2. 图割graph-cut"></a>2. 图割graph-cut</h1><blockquote>
+<p>图割算法其实就是将最大流最小割的理论应用到了图像分割的领域。</p>
+</blockquote>
+<p>比如说前景背景分割问题，可以将图像表示为一张无向图<code>G=(V,E)</code>，其中<code>V</code>是顶点集合，<code>E</code>是边集合。在这个图上多添加两个顶点，一个代表前景的<code>S(Source,源)</code>节点，一个代表背景的<code>T(Sink,汇)</code>节点。在初始构造的图中，每个像素顶点都和<code>S</code>与<code>T</code>连接，并且它们之间的边被叫做<code>t-links</code>。如下图：</p>
+<div style="text-align: center">
+<img src="/assets/img/graph_cut/graphcut002.jpg" srcset="/img/loading.gif" lazyload   width="750" height="400"/>
+</div>
+
+
+
+<ul>
+<li><p><code>t-links</code>：每个像素节点与类别节点（<code>S/T</code>，t是terminal的缩写）相连的边；</p>
+</li>
+<li><p><code>n-links</code>：像素节点之间边（上面图中每个像素节点只与自身周围的四个像素节点相连，n是neighbour的缩写）；</p>
+</li>
+<li><p><code>Cuts</code>：一组边的集合，<code>Cuts</code>的断开会使得节点<code>S</code>与<code>T</code>之间没有通路，即每个像素只会与<code>S</code>或<code>T</code>中的一个相连接。其中<code>t-links</code>的断裂实现了像素的分类，而<code>n-links</code>的断裂实现了分割；另外！<code>Cuts</code>是最大流或者最小割的结果，其权重之和最小；</p>
+</li>
+</ul>
+<h2 id="2-1-权重costs"><a href="#2-1-权重costs" class="headerlink" title="2.1 权重costs"></a>2.1 权重costs</h2><blockquote>
+<p>由上可知图割算法中如何确定<code>costs</code>至关重要。</p>
+</blockquote>
+<p>在前景背景的分割领域中，前景与背景是有一些外观差异的，这个体现在像素值上。因此<code>t-links</code>对应的权重可以是像素值与目标像素的相似度（因此此类算法可能需要手工给定前景背景的像素初始值），相似度越大，对应的割断代价也越大。</p>
+<p>而对于<code>n-links</code>，上面每个像素节点都只与相邻的四个像素节点相连（<code>n-links</code>），表示临近像素之间属于同一类的概率，同时临近像素之间会有邻域相似性，而相似性较差的区域往往是前景和背景的交界处。即如果相邻的两个像素像素值相似，那么断开该边的代价就会高。</p>
+<h3 id="2-1-1-t-links的权重"><a href="#2-1-1-t-links的权重" class="headerlink" title="2.1.1 t-links的权重"></a>2.1.1 <code>t-links</code>的权重</h3><p>对于一个像素点，其有两条<code>t-links</code>边，分别是连接前景节点S与背景节点T的边。边的权重可以是终端节点的颜色差异。</p>
+<h3 id="2-1-2-n-links的权重"><a href="#2-1-2-n-links的权重" class="headerlink" title="2.1.2 n-links的权重"></a>2.1.2 <code>n-links</code>的权重</h3><p>对于一个像素点，其有周围相邻的像素点之间存在<code>n-links</code>边，在图像分割任务时边的权重一般也是用颜色差异来确定的。</p>
+<blockquote>
+<p>其实上面讲述的还是图的建立，关于图割进行时的能量最小化算法其实也非常重要，但是这个我现在没想到如何简短的说明白，之后再补充。</p>
+</blockquote>
+<h2 id="2-2-示例"><a href="#2-2-示例" class="headerlink" title="2.2 示例"></a>2.2 示例</h2><p>如下，对于一个<code>3x3</code>的图，</p>
+<ol>
+<li>首先取两个种子点（即人为指定分别属于前景背景的两个像素点）；</li>
+<li>建立一个图，图中边的粗细表示对应权重的大小；</li>
+<li>找到最大流或最小割的边的组合，完成图像分割；</li>
+</ol>
+<div style="text-align: center">
+<img src="/assets/img/graph_cut/graphcut004.jpg" srcset="/img/loading.gif" lazyload   width="600" height="650"/>
+</div>
+
+
+
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ul>
+<li><p>[1] Boykov Y ,  Kolmogorov V . An experimental comparison of min-cut&#x2F;max-  flow algorithms for energy minimization in vision[J]. IEEE Transactions  on Pattern Analysis and Machine Intelligence, 2004, 26(9):1124-1137.</p>
+</li>
+<li><p>[2] <a target="_blank" rel="noopener" href="https://pengyizhang.github.io/2020/04/07/graphcut/">https://pengyizhang.github.io/2020/04/07/graphcut/</a></p>
+</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">#计算机视觉</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>图片分割之最大流最小割</div>
+      <div>http://line.com/2021/01/24/2021-01-24-graph-cut/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Line</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年1月24日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/03/03/2021-03-03-mutex/" title="C++并发编程中的锁---互斥元">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">C++并发编程中的锁---互斥元</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/01/17/2021-01-17-lens-camera/" title="镜头的参数与成像">
+                        <span class="hidden-mobile">镜头的参数与成像</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

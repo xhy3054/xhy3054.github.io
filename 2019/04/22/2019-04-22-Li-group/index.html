@@ -1,0 +1,784 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon1.png">
+  <link rel="icon" href="/img/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Line">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="这部分内容是在slam中经常会用到的数学内容。 群群(group)是一种代数结构，由两部分(一个集合A与一种运算$\cdot$)构成，可以记作$G&#x3D;(A, \cdot)$,并且群满足如下条件:  封闭性:     $ \quad \forall a_1, a_2, \quad a_1 \cdot a_2 \in A $ 结合律:     $ \quad \forall a_1, a_2,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="李群与李代数">
+<meta property="og:url" content="http://line.com/2019/04/22/2019-04-22-Li-group/index.html">
+<meta property="og:site_name" content="Line&#39;s Blog">
+<meta property="og:description" content="这部分内容是在slam中经常会用到的数学内容。 群群(group)是一种代数结构，由两部分(一个集合A与一种运算$\cdot$)构成，可以记作$G&#x3D;(A, \cdot)$,并且群满足如下条件:  封闭性:     $ \quad \forall a_1, a_2, \quad a_1 \cdot a_2 \in A $ 结合律:     $ \quad \forall a_1, a_2,">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://line.com/assets/img/liqun/li-qun.png">
+<meta property="article:published_time" content="2019-04-21T17:07:24.000Z">
+<meta property="article:modified_time" content="2023-01-08T16:21:28.853Z">
+<meta property="article:author" content="Line">
+<meta property="article:tag" content="数学">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://line.com/assets/img/liqun/li-qun.png">
+  
+  
+  
+  <title>李群与李代数 - Line&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"line.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Line</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default2.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="李群与李代数"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-04-22 01:07" pubdate>
+          2019年4月22日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          8.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          72 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">李群与李代数</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>这部分内容是在slam中经常会用到的数学内容。</p>
+<h1 id="群"><a href="#群" class="headerlink" title="群"></a>群</h1><p>群(group)是一种代数结构，由两部分(一个集合A与一种运算$\cdot$)构成，可以记作$G&#x3D;(A, \cdot)$,并且群满足如下条件:</p>
+<ol>
+<li>封闭性:     $ \quad \forall a_1, a_2, \quad a_1 \cdot a_2 \in A $</li>
+<li>结合律:     $ \quad \forall a_1, a_2, a_3, \quad (a_1 \cdot a_2) \cdot a_3 &#x3D; a_1 \cdot ( a_2 \cdot a_3) $</li>
+<li>幺元:       $ \quad \exists a_0 \in A, \quad s.t. \quad \forall a \in A, \quad a_0 \cdot a &#x3D; a \cdot a_0 &#x3D; a $</li>
+<li>逆:        $ \quad \forall a \in A, \quad \exists a^{-1} \in A, \quad s.t. \quad a \cdot a^{-1} &#x3D; a_0 $</li>
+</ol>
+<p>由上面我们可以知道了群的定义，下面例举几个群：</p>
+<ul>
+<li><p><strong>一般线性群</strong>$GL(n)$: n×n的可逆矩阵与矩阵乘法构成一个群，幺元是E矩阵</p>
+</li>
+<li><p><strong>旋转矩阵群</strong>$SO(n)$: 旋转矩阵与矩阵乘法构成的一个群，满足上面任何一个性质，幺元是旋转角度0的矩阵。<br>$$\begin{equation} SO(n) &#x3D; { \mathbf{R} \in \mathbb{R}^{n \times n} | \mathbf{R R}^T &#x3D; \mathbf{I}, det(\mathbf{R})&#x3D;1 } \end{equation}$$</p>
+</li>
+<li><p><strong>特殊欧式群</strong>$SE(n)$: 欧式变换矩阵(旋转加平移)与矩阵乘法也构成一个群，它的幺元是旋转角度为0，平移也是0的变换矩阵。<br>$$\begin{equation} SE(3) &#x3D; \left{ \mathbf{T} &#x3D; \left[ {\begin{array}{*{20}{c}} \mathbf{R} &amp; \mathbf{t} \ {\mathbf{0}^T} &amp; 1 \end{array}} \right]  \in \mathbb{R}^{4 \times 4} | \mathbf{R} \in SO(3), \mathbf{t} \in \mathbb{R}^3\right} \end{equation} $$</p>
+</li>
+<li><p><strong>相似变换群</strong>$Sim(n)$: 相似变换就是在旋转矩阵上再加上尺度变换，这个群主要会在<strong>单目视觉</strong>中使用，因为单目具有尺度不确定性。如果在单目slam中使用$SE(3)$来表示位姿，那么由于尺度不确定性与尺度漂移，整个slam过程中尺度会发生变化，而这在SE(3)中不能体现出来。所以在单目视觉中，我们一般在相似变换群上来进行位姿的优化。<br>$$ \begin{equation} Sim(3) &#x3D; \left{ \mathbf{S} &#x3D; \left[ {\begin{array}{*{20}{c}} \mathbf{sR} &amp; \mathbf{t} \ {\mathbf{0}^T} &amp; 1 \end{array}} \right]  \in \mathbb{R}^{4 \times 4} | \mathbf{R} \in SO(3), \mathbf{t} \in \mathbb{R}^3\right} \end{equation} $$</p>
+</li>
+</ul>
+<h2 id="李群"><a href="#李群" class="headerlink" title="李群"></a>李群</h2><p>李群是指具有连续性质的群。比如向整数群Z那样的离散的群就没有连续性质，所以不是李群。而$SO(n)$与$SE(n)$是李群</p>
+<h3 id="李代数"><a href="#李代数" class="headerlink" title="李代数"></a>李代数</h3><p>每个李群都有与之对应的李代数。李代数描述了李群的局部性质。</p>
+<p>通常李代数由一个集合V，一个数域F和一个二元运算[]组成。通常如果我们说$(\mathbb{V}, \mathbb{F}, [])$是一个李代数，那么它具有如下性质:</p>
+<ul>
+<li><p>封闭性: $\forall \mathbf{X}, \mathbf{Y} \in \mathbb{V}, [\mathbf{X} \mathbf{Y}] \in \mathbb{V}$</p>
+</li>
+<li><p>双线性: $\forall \mathbf{X,Y,Z} \in \mathbb{V}, a,b \in \mathbb{F},$有<br>$$[a\mathbf{X}+b\mathbf{Y}, \mathbf{Z}] &#x3D; a[\mathbf{X}\mathbf{Z}] + b [ \mathbf{Y} \mathbf{Z} ] \quad [\mathbf{Z}, a \mathbf{X}+b\mathbf{Y}] &#x3D; a [\mathbf{Z} \mathbf{X} ]+ b [\mathbf{ZY}]$$</p>
+</li>
+<li><p>自反性: $\forall \mathbf{X} \in \mathbb{V}, [\mathbf{X} \mathbf{X}] &#x3D; \mathbf{0}$</p>
+</li>
+<li><p>雅可比等价: $\forall \mathbf{X,Y,Z} \in \mathbb{V}, [\mathbf{X}, [\mathbf{YZ}] ] + [\mathbf{Z}, [\mathbf{YX}] ] + [\mathbf{Y}, [\mathbf{ZX}]]$</p>
+</li>
+</ul>
+<blockquote>
+<p>通常我们成李代数中的二元运算为<strong>李括号</strong>。相比于群中较为简单的二元运算，李括号通常的含义是计算集合中两个元素的差异。一般它不要求结合律，但是满足反对称性，以及元素和自己做李括号之后为0的性质。一个典型的例子是$\mathfrak{g} &#x3D; (\mathbb{R}^3, \mathbb{R}, \times)$是一个李代数。</p>
+</blockquote>
+<h2 id="三维旋转群-SO-3-与其对应的李代数-mathfrak-so-3"><a href="#三维旋转群-SO-3-与其对应的李代数-mathfrak-so-3" class="headerlink" title="三维旋转群$SO(3)$与其对应的李代数$\mathfrak{so}(3)$"></a>三维旋转群$SO(3)$与其对应的李代数$\mathfrak{so}(3)$</h2><p>三维旋转群描述三维空间中的旋转，其集合元素为3×3的正交且行列式为1的矩阵R，我们知道$RR^T&#x3D;I$。如果将R看作一个随着时间t变化的函数R(t),则有$\mathbf{R}(t) \mathbf{R}(t) ^T &#x3D; \mathbf{I}$。在等式两边分别对时间求导，可以得到:</p>
+<p>$$ \begin{equation} \mathbf{\dot{R}} (t) \mathbf{R} {(t)^T} + \mathbf{R} (t) \mathbf{\dot{R}} {(t)^T} &#x3D; 0 \end{equation} $$</p>
+<p>对上式进行整理，可以得到:</p>
+<p>$$ \begin{equation} \mathbf{\dot{R}} (t) \mathbf{R} {(t)^T} &#x3D; - \left(  \mathbf{\dot{R}} (t) \mathbf{R} {(t)^T} \right)^T \end{equation}$$</p>
+<p>从上面的公式我们可以看出$\mathbf{\dot{R}} (t) \mathbf{R} {(t)^T}$是一个<strong>反对称矩阵</strong>。</p>
+<h3 id="反对称矩阵与叉乘"><a href="#反对称矩阵与叉乘" class="headerlink" title="反对称矩阵与叉乘"></a>反对称矩阵与叉乘</h3><p>对于三维向量a与b之间的外积，其中$\mathbf{a}&#x3D;[a_1, a_2, a_3]^T$,如下公式:</p>
+<p>$$ a×b &#x3D; a^{\wedge} b $$</p>
+<p>$$\begin{equation}   {\mathbf{a}^ \wedge } &#x3D; \left[ {\begin{array}{*{20}{c}} 0&amp;{ - {a_3}}&amp;{a_2} \ {a_3}&amp;0&amp;{ - {a_1}}\ { - {a_2}}&amp;{a_1}&amp;0 \end{array}} \right] \end{equation} $$</p>
+<hr>
+<p>回到刚才的话题，对于$\mathbf{\dot{R}} (t) \mathbf{R} {(t)^T}$这个反对称矩阵，我们将其记为A。可以将其对应到一个向量$\mathbf{a}&#x3D;[a_1, a_2, a_3]^T$。</p>
+<p>$$\begin{equation}   {\mathbf{a}^ \wedge } &#x3D; \mathbf{A} &#x3D; \left[ {\begin{array}{*{20}{c}} 0&amp;{ - {a_3}}&amp;{a_2}\ {a_3}&amp;0&amp;{ - {a_1}}\ { - {a_2}}&amp;{a_1}&amp;0 \end{array}} \right] \end{equation}$$</p>
+<p>上式也就可以写做</p>
+<p>$$ \begin{equation}   \mathbf{ \dot{R} } (t) \mathbf{R}(t)^T &#x3D; \mathbf{\phi} (t) ^ {\wedge} \end{equation} $$</p>
+<p>将上式左右各右乘$\mathbf{R}(t)$，由于R是正交的，所以有</p>
+<p>$$ \begin{equation}   \mathbf{ \dot{R} } (t)  &#x3D; \mathbf{\phi} (t)^{\wedge} \mathbf{R}(t) &#x3D;   \left[ {\begin{array}{*{20}{c}}    0&amp;{ - {\phi _3}}&amp;{\phi _2}\      {\phi _3}&amp;0&amp;{ - {\phi _1}}\      { - {\phi _2}}&amp;{\phi _1}&amp;0    \end{array}} \right] \mathbf{R} (t) \end{equation}$$</p>
+<p>由上式我们可以发现，每次<strong>对旋转矩阵求导数</strong>，只需要左乘一个$\mathbf{\phi}$矩阵即可。这表明$\mathbf{\phi}$反映了R的导数性质，所以称其在$SO(3)$的正切空间上。同时对上面微分方程进行求解，我们可以得到</p>
+<p>$$\begin{equation} \label{eq:so3ode} \mathbf{R}(t) &#x3D; \exp \left( \mathbf{\phi} (t) ^\wedge \right) \mathbf{R}(t_0) \end{equation}$$</p>
+<hr>
+<p>由上我们可以知道，<strong>三维旋转群$SO(3)$与其对应的李代数$\mathfrak{so}(3)$是$(\mathbb{R}^3, \mathbb{R}, \times)$(三维向量，实数，外积运算)，这个李代数的集合由三维向量组成，每个向量对应到一个反对称矩阵，可以表达旋转矩阵的导数</strong>。它描述了三维旋转群$SO(3)$的局部性质。</p>
+<p>此处我们发现SO(3)对应的李代数是定义在$\mathbb{R}^3$上的向量，我们记作$\mathbf{\phi}$（注意这是个向量，虽然希腊字母的粗体不明显）。而每个$\mathbf{\phi}$都可以生成一个反对称矩阵:</p>
+<p>$$ \begin{equation} \label{eq:phi} \mathbf{\Phi} &#x3D; \mathbf{\phi}^{\wedge} &#x3D; \left[ {\begin{array}{*{20}{c}}     0&amp;{ - {\phi _3}}&amp;{\phi _2}\  {\phi _3}&amp;0&amp;{ - {\phi _1}}\  { - {\phi _2}}&amp;{\phi _1}&amp;0    \end{array}} \right] \in \mathbb{R}^{3 \times 3} \end{equation} $$</p>
+<p>在此定义下，两个向量$\mathbf{\phi}_1, \mathbf{\phi}_2$的李括号运算对应的反对称矩阵运算为:</p>
+<p>$$ \begin{equation} [\mathbf{\phi}_1, \mathbf{\phi}_2]^{\wedge} &#x3D; \mathbf{ \Phi }_1 \mathbf{ \Phi }_2 - \mathbf{ \Phi }_2 \mathbf{ \Phi }_1 \end{equation} $$</p>
+<p><strong>由于向量与其对应的反对称矩阵关系密切，所以我们说旋转矩阵群的李代数的元素是3维向量或者3维反对称矩阵，都是可以的。</strong></p>
+<p>$$ \begin{equation} \mathfrak{so}(3) &#x3D; \left{ \Phi &#x3D; \mathbf{\phi^\wedge} \in \mathbb{R}^{3 \times 3} | \mathbf{\phi} \in \mathbb{R}^3 \right} \end{equation} $$</p>
+<h3 id="SO-3-上的指数映射"><a href="#SO-3-上的指数映射" class="headerlink" title="$SO(3)$上的指数映射"></a>$SO(3)$上的指数映射</h3><p>首先，任意矩阵的指数映射可以写成一个泰勒展开，当然，只有在收敛的情况下才会有结果，其结果仍然是一个矩阵。</p>
+<p>$$\begin{equation} \exp(\mathbf{A}) &#x3D; \sum\limits_{n &#x3D; 0}^\infty  {\frac{1}{n!}{ \mathbf{A}^n}} \end{equation}$$</p>
+<p>同样，对$$\mathfrak{so}(3)$$中任意一个元素$\mathbf{\phi}$，它的指数映射是:</p>
+<p>$$ \begin{equation} \exp(\mathbf{\phi}^\wedge) &#x3D; \sum\limits_{n &#x3D; 0}^\infty  {\frac{1}{n!}{ (\mathbf{\phi}^{\wedge})^n}} \end{equation} $$</p>
+<p>仔细推导这个定义，首先$\mathbf{\phi}$是一个三维向量，我们可以定义它的模长和方法，分别记作$\theta$与$\mathbf{a}$(注意此处的$\mathbf{a}$是一个单位长度的向量)，于是有$\mathbf{\phi} &#x3D; {\theta} {a}$，首先此处说明的是，$a^{\wedge}$具有如下两条性质:</p>
+<p>$$\begin{equation} \mathbf{a} \mathbf{a}^T &#x3D; \mathbf{a}^{\wedge} \mathbf{a}^{\wedge} + \mathbf{I} \end{equation}$$</p>
+<p>$$ \begin{equation} \mathbf{a}^{\wedge} \mathbf{a}^{\wedge} \mathbf{a}^{\wedge} &#x3D; - \mathbf{a}^{\wedge} \end{equation} $$</p>
+<p>上述性质有时间可以尝试证明一下，利用这两个性质，我们可以进行如下推导:</p>
+<p>$$ \begin{align*} \exp \left( {\mathbf{\phi} ^ \wedge } \right) &amp;&#x3D; \exp \left( {\theta {\mathbf{a}^ \wedge }} \right) &#x3D; \sum\limits_{n &#x3D; 0}^\infty  {\frac{1}{n!}{\left( {\theta {\mathbf{a}^ \wedge }} \right)}^n} \ &amp;&#x3D; \mathbf{I} + \theta {\mathbf{a}^ \wedge } + \frac{1}{2!}{\theta ^2}{\mathbf{a}^ \wedge }{\mathbf{a}^ \wedge } + \frac{1}{3!}{\theta ^3}{\mathbf{a}^ \wedge }{\mathbf{a}^ \wedge }{\mathbf{a}^ \wedge } + \frac{1}{4!}{\theta ^4}{\left( {\mathbf{a}^ \wedge } \right)^4} + …\ &amp;&#x3D; \mathbf{a} {\mathbf{a}^T} - {\mathbf{a}^ \wedge }{\mathbf{a}^ \wedge } + \theta {\mathbf{a}^ \wedge } + \frac{1}{2!}\theta {\mathbf{a}^ \wedge }{\mathbf{a}^ \wedge } - \frac{1}{3!}{\theta ^3}{\mathbf{a}^ \wedge } + \frac{1}{4!}{\theta ^4}{\left( {\mathbf{a}^ \wedge } \right)^4} + …\ &amp;&#x3D; \mathbf{a}{\mathbf{a}^T} + \left( {\theta  - \frac{1}{3!}{\theta ^3} + \frac{1}{5!}{\theta ^5} - …} \right){\mathbf{a}^ \wedge } - \left( {1 - \frac{1}{2!}{\theta ^2} + \frac{1}{4!}{\theta ^4} - …} \right){\mathbf{a}^ \wedge }{\mathbf{a}^ \wedge }\ &amp;&#x3D; {\mathbf{a}^ \wedge }{\mathbf{a}^ \wedge } + \mathbf{I} + \sin \theta {\mathbf{a}^ \wedge } - \cos \theta {\mathbf{a}^ \wedge }{\mathbf{a}^ \wedge }\ &amp;&#x3D; (1 - \cos \theta ){\mathbf{a}^ \wedge }{\mathbf{a}^ \wedge } + I + \sin \theta {\mathbf{a}^ \wedge }\ &amp;&#x3D; \cos \theta \mathbf{I} + (1 - \cos \theta )\mathbf{a}{\mathbf{a}^T} + \sin \theta {\mathbf{a}^ \wedge } \ \end{align*} $$</p>
+<p>记住最后的这个公式:</p>
+<p>$$ \begin{equation} \exp( \theta \mathbf{a} ) &#x3D; \cos \theta \mathbf{I} + (1 - \cos \theta )\mathbf{a}{\mathbf{a}^T} + \sin \theta {\mathbf{a}^ \wedge } \end{equation} $$</p>
+<p>这时<strong>罗德里格斯公式</strong>，这个公式本身的作用是将旋转向量变换成旋转矩阵。所以从这里我们知道$$\mathfrak{so}(3)$$实际上是由旋转向量组成的空间。而指数映射就是罗德里格斯公式映射，通过他们我们可以将$$\mathfrak{so}(3)$$中的任意一个旋转向量对应到一个$SO(3)$中的一个旋转矩阵。</p>
+<blockquote>
+<p>这里需要提到的一点是，指数映射不是一个双射，但他是一个满射。这一意味着每一个旋转矩阵都可以找到一个向量与之对应，但是可能存在多个向量对应到同一个矩阵。这个很好理解，因为旋转角度具有周期性，多转360度效果一样。</p>
+</blockquote>
+<blockquote>
+<p>同理，<strong>指数映射</strong>作用是从向量到矩阵的映射，反过来，从矩阵到向量的映射是<strong>对数映射</strong>。</p>
+</blockquote>
+<h2 id="三维欧式群-SE-3-与其对应的李代数-mathfrak-se-3"><a href="#三维欧式群-SE-3-与其对应的李代数-mathfrak-se-3" class="headerlink" title="三维欧式群$SE(3)$与其对应的李代数$\mathfrak{se}(3)$"></a>三维欧式群$SE(3)$与其对应的李代数$\mathfrak{se}(3)$</h2><p>首先，列出三维欧式群$SE(3)$的定义:</p>
+<p>$$\begin{equation} SE(3) &#x3D; \left{ \mathbf{T} &#x3D; \left[ {\begin{array}{*{20}{c}}     \mathbf{R} &amp; \mathbf{t} \  {\mathbf{0}^T} &amp; 1    \end{array}} \right] \in \mathbb{R}^{4 \times 4} | \mathbf{R} \in SO(3), \mathbf{t} \in \mathbb{R}^3\right} \end{equation}$$</p>
+<p>由于每个欧式变换矩阵具有六个自由度，所以其对应的李代数位于$\mathbb{R}^6$中:</p>
+<p>$$\begin{equation} \mathfrak{se}(3) &#x3D; \left{ \mathbf{ \Xi } &#x3D; \mathbf{\xi}^\wedge \in \mathbb{R}^{4 \times 4} | \mathbf{\xi} \in \mathbb{R}^6 \right} \end{equation}$$</p>
+<p>不过需要注意的是，此处我们对$^\wedge$的作用进行拓展，使得其不再是一个反对称关系，而是讲一个六维度向量转换成四维矩阵。如下:</p>
+<p>$$\begin{equation} \mathbf{\xi}^\wedge &#x3D; {\left[ \begin{array}{l}   \mathbf{\rho} \    \mathbf{\phi}   \end{array} \right]^ \wedge } &#x3D; \left[ {\begin{array}{*{20}{c}}     {\mathbf{\phi} ^ \wedge }&amp;\mathbf{\rho} \    {\mathbf{0}^T}&amp;0  \end{array}} \right] &#x3D; \mathbf{\Xi} \end{equation}$$</p>
+<p>其中，前三维是平移分量，后三位为旋转分量，这个分量是$\mathfrak{so}(3)$的元素。在此处，该李代数对应的微分方程是:</p>
+<p>$$\begin{equation} \mathbf{\dot{T}}(t) &#x3D; \mathbf{\xi}^\wedge(t) \mathbf{T}(t) \end{equation}$$</p>
+<blockquote>
+<p>三维欧式群及其李代数的指数与对数映射类似。</p>
+</blockquote>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><div style="text-align: center">
+<img src="/assets/img/liqun/li-qun.png" srcset="/img/loading.gif" lazyload width="700" height="600"/>
+</div>
+
+<blockquote>
+<p>其中，J是雅克比矩阵，这个矩阵是在SE(3)上的指数映射中，平移部分经过指数映射后，发生了一次以J为系数矩阵的线性变换。旋转部分的指数映射还是罗德里格斯公式。</p>
+</blockquote>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ul>
+<li>[1] 视觉SLAM十四讲:从理论到实践</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%95%B0%E5%AD%A6/">#数学</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>李群与李代数</div>
+      <div>http://line.com/2019/04/22/2019-04-22-Li-group/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Line</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年4月22日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/04/25/2019-04-25-li-group-derivation/" title="李代数求导与扰动模型">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">李代数求导与扰动模型</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/04/21/2019-04-21-pose-estimation/" title="特征点法slam中位姿估计方法总结">
+                        <span class="hidden-mobile">特征点法slam中位姿估计方法总结</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

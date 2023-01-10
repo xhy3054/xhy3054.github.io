@@ -1,0 +1,826 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon1.png">
+  <link rel="icon" href="/img/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Line">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前面已经讲了很多vins里的细节操作，今天来谈谈将整个系统最核心的后端优化部分。 vins的后端优化一般在vins系统中，视觉与imu数据经过预处理后，此时如果已经完成初始化，则会在滑窗中进行非线性优化操作。整个过程一般会是如下过程：  对滑窗中所有特征点进行三角化操作  针对现有的窗口中的数据，构建非线性优化问题，并为该问题添加优化参数与待优化残差项，然后进行优化；  优化完成后进行滑窗操作（根">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vins中基于滑窗的后端优化">
+<meta property="og:url" content="http://line.com/2019/09/03/2019-09-03-vins-backend-optimize/index.html">
+<meta property="og:site_name" content="Line&#39;s Blog">
+<meta property="og:description" content="前面已经讲了很多vins里的细节操作，今天来谈谈将整个系统最核心的后端优化部分。 vins的后端优化一般在vins系统中，视觉与imu数据经过预处理后，此时如果已经完成初始化，则会在滑窗中进行非线性优化操作。整个过程一般会是如下过程：  对滑窗中所有特征点进行三角化操作  针对现有的窗口中的数据，构建非线性优化问题，并为该问题添加优化参数与待优化残差项，然后进行优化；  优化完成后进行滑窗操作（根">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-09-02T17:07:24.000Z">
+<meta property="article:modified_time" content="2023-01-08T16:21:28.853Z">
+<meta property="article:author" content="Line">
+<meta property="article:tag" content="多传感器融合">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>vins中基于滑窗的后端优化 - Line&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"line.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Line</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default2.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="vins中基于滑窗的后端优化"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-09-03 01:07" pubdate>
+          2019年9月3日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          10k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          84 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">vins中基于滑窗的后端优化</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>前面已经讲了很多vins里的细节操作，今天来谈谈将整个系统最核心的后端优化部分。</p>
+<h1 id="vins的后端优化"><a href="#vins的后端优化" class="headerlink" title="vins的后端优化"></a>vins的后端优化</h1><p>一般在vins系统中，视觉与imu数据经过预处理后，此时如果已经完成初始化，则会在滑窗中进行非线性优化操作。整个过程一般会是如下过程：</p>
+<ol>
+<li><p>对滑窗中所有特征点进行三角化操作</p>
+</li>
+<li><p>针对现有的窗口中的数据，构建非线性优化问题，并为该问题添加优化参数与待优化残差项，然后进行优化；</p>
+</li>
+<li><p>优化完成后进行滑窗操作（根据之前判断的次新帧是否作为关键帧保留，而选择是marg掉最老的关键帧或者marg掉次新帧）；</p>
+</li>
+</ol>
+<blockquote>
+<p>其中2,3两步是整个滑窗优化问题的核心操作。</p>
+</blockquote>
+<h2 id="参与优化的参数"><a href="#参与优化的参数" class="headerlink" title="参与优化的参数"></a>参与优化的参数</h2><p>在vins的后端优化中，<strong>优化的参数变量</strong>很多，主要有</p>
+<ol>
+<li><p>每一帧body系的位姿；</p>
+</li>
+<li><p>每一帧body系的速度；</p>
+</li>
+<li><p>每一帧时imu的bias;</p>
+</li>
+<li><p>每个特征点在可以观测到它的第一帧相机坐标系下的逆深度；</p>
+</li>
+<li><p>相机与body系的外参；</p>
+</li>
+<li><p>相机与imu测量的时间偏差（如果存在）;</p>
+</li>
+</ol>
+<blockquote>
+<p>其中imu测量的预积分残差会对1,2,3进行优化，视觉重投影残差会对1,4,5,6进行优化。</p>
+</blockquote>
+<h2 id="待优化的残差项"><a href="#待优化的残差项" class="headerlink" title="待优化的残差项"></a>待优化的残差项</h2><p>在vins的后端优化中，<strong>待优化的残差项</strong>也有一些，主要有</p>
+<ol>
+<li><p>imu测量的预积分残差；</p>
+</li>
+<li><p>视觉观测的重投影误差；</p>
+</li>
+<li><p>先验残差；</p>
+</li>
+<li><p>闭环检测残差；</p>
+</li>
+</ol>
+<blockquote>
+<p>在下面讲到优化过程时，涉及到很多求导雅克比矩阵的操作，这些求导操作是有明显的流程的。首先需要明确被求导的因变量，与求导的自变量。然后如果是关于姿态（四元数）的求导，就先将旋转变换到李群上，使用扰动模型去推导。其他的比较简单直接推就行了。</p>
+</blockquote>
+<h2 id="imu测量的预积分残差"><a href="#imu测量的预积分残差" class="headerlink" title="imu测量的预积分残差"></a>imu测量的预积分残差</h2><p>在滑窗中，首先被添加到问题中的残差项就是imu的残差。imu残差其实就是imu预积分的误差，计算方式如下（此处计算的残差是i帧与j帧之间的预积分残差）：</p>
+<p>$$<br>\left[\begin{array}{c}{\mathbf{r}<em>{p}} \ {\mathbf{r}</em>{q}} \ {\mathbf{r}<em>{v}} \ {\mathbf{r}</em>{b a}} \ {\mathbf{r}<em>{b g}}\end{array}\right]</em>{15 \times 1}&#x3D;\left[\begin{array}{c}{\mathbf{q}<em>{b</em>{i} w}\left(\mathbf{p}<em>{w b</em>{j}}-\mathbf{p}<em>{w b</em>{i}}-\mathbf{v}<em>{i}^{w} \Delta t+\frac{1}{2} \mathbf{g}^{w} \Delta t^{2}\right)-\boldsymbol{\alpha}</em>{b_{i} b_{j}}} \ {2\left[\mathbf{q}<em>{b</em>{j} b_{i}} \otimes\left(\mathbf{q}<em>{b</em>{i} w} \otimes \mathbf{q}<em>{w b</em>{j}}\right)\right]<em>{x y z}} \ {\mathbf{q}</em>{b_{i} w}\left(\mathbf{v}<em>{j}^{w}-\mathbf{v}</em>{i}^{w}+\mathbf{g}^{w} \Delta t\right)-\beta_{b_{i} b_{j}}} \ {\mathbf{b}<em>{j}^{a}-\mathbf{b}</em>{i}^{a}} \ {\mathbf{b}<em>{j}^{g}-\mathbf{b}</em>{i}^{g}}\end{array}\right]<br>$$</p>
+<blockquote>
+<p>在vins中，这个残差块与i帧时刻位姿、速度、bias还有j帧时刻的位姿、速度、bias相关，也就是最小化这个残差块需要不断优化以上的参数块。</p>
+</blockquote>
+<h3 id="imu残差的雅克比"><a href="#imu残差的雅克比" class="headerlink" title="imu残差的雅克比"></a>imu残差的雅克比</h3><blockquote>
+<p>此处我们发现，上面的imu残差一共有五维，因此在计算雅克比时，可以对五个维度的残差分别对待优化参数块进行求导。由于此处如果全部进行求导，实在会太多公式，因此，此处仅仅以$$r_v$$为例，列举几个求导过程</p>
+</blockquote>
+<ul>
+<li>$$r_v$$对i时刻位置求导</li>
+</ul>
+<p>$$<br>\frac{\partial \mathbf{r}<em>{v}}{\partial \delta \mathbf{p}</em>{b_{i} b_{i}^{\prime}}}&#x3D;\mathbf{0}<br>$$</p>
+<ul>
+<li>$$r_v$$对i时刻角度求导</li>
+</ul>
+<p>$$<br>\begin{aligned} \frac{\partial \mathbf{r}<em>{v}}{\partial \delta \boldsymbol{\theta}</em>{b_{i} b_{i}^{\prime}}} &amp;&#x3D;\frac{\partial\left(\mathbf{q}<em>{w b</em>{i}} \otimes\left[\begin{array}{c}{1} \ {\frac{1}{2} \delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}}\end{array}\right]\right)^{-1}\left(\mathbf{v}<em>{j}^{w}-\mathbf{v}</em>{i}^{w}+\mathbf{g}^{w} \Delta t\right)}{\partial \delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}} \ &amp;&#x3D;\frac{\partial\left(\mathbf{R}<em>{w b</em>{i}} \exp \left(\left[\delta \boldsymbol{\theta}<em>{b</em>{i}}^{\prime}\right] \times\right)\right)^{-1}\left(\mathbf{v}<em>{j}^{w}-\mathbf{v}</em>{i}^{w}+\mathbf{g}^{w} \Delta t\right)}{\partial \delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}} \ &amp;&#x3D;\frac{\partial \exp \left(\left[-\delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}\right]<em>{\mathbf{X}}\right) \mathbf{R}</em>{b_{i} w}\left(\mathbf{v}<em>{j}^{w}-\mathbf{v}</em>{i}^{w}+\mathbf{g}^{w} \Delta t\right)}{\partial \delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}} \end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned} &amp;&#x3D;\frac{\partial\left(\mathbf{I}-\left[\delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}\right] \times\right) \mathbf{R}<em>{b</em>{i} w}\left(\mathbf{v}<em>{j}^{w}-\mathbf{v}</em>{i}^{w}+\mathbf{g}^{w} \Delta t\right)}{\partial \delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}} \&#x3D;&amp; \frac{\partial-\left[\delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}\right] \times \boldsymbol{R}<em>{b</em>{i} w}\left(\mathbf{v}<em>{j}^{w}-\mathbf{v}</em>{i}^{w}+\mathbf{g}^{w} \Delta t\right)}{\partial \delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}} \&#x3D;&amp; \frac{\partial\left[\mathbf{R}<em>{b</em>{i} w}\left(\mathbf{v}<em>{j}^{w}-\mathbf{v}</em>{i}^{w}+\mathbf{g}^{w} \Delta t\right]<em>{ \times}\right) \delta \boldsymbol{\theta}</em>{b_{i} b_{i}^{\prime}}}{\partial \delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}} \&#x3D;&amp;\left[\mathbf{R}<em>{b</em>{i} w}\left(\mathbf{v}<em>{j}^{w}-\mathbf{v}</em>{i}^{w}+\mathbf{g}^{w} \Delta t\right)\right]_{\mathbf{x}} \end{aligned}<br>$$</p>
+<ul>
+<li>$$r_v$$对i时刻速度求导</li>
+</ul>
+<p>$$<br>\frac{\partial \mathbf{r}<em>{v}}{\partial \delta \mathbf{v}</em>{i}^{w}}&#x3D;-\mathbf{R}<em>{b</em>{i} w}<br>$$</p>
+<ul>
+<li>$$r_v$$对i时刻bias求导（注意，此处预积分对bias的导数在初始化时就已经求过了）</li>
+</ul>
+<p>$$<br>\frac{\partial \mathbf{r}<em>{v}}{\partial \delta \mathbf{b}</em>{i}^{a}}&#x3D;-\frac{\partial \boldsymbol{\beta}<em>{b</em>{i} b_{j}}}{\partial \delta \mathbf{b}<em>{i}^{a}}&#x3D;-\mathbf{J}</em>{b_{i}^{a}}^{\beta}<br>$$</p>
+<blockquote>
+<p>其实在计算imu残差的雅克比矩阵时，会多次用到链式法则，因为在另外一篇讲解<a target="_blank" rel="noopener" href="http://xhy3054.github.io/triangulation/">imu预积分</a>的博客中，已经计算出了imu预积分相对于bias的雅克比。</p>
+</blockquote>
+<h3 id="imu残差的协方差"><a href="#imu残差的协方差" class="headerlink" title="imu残差的协方差"></a>imu残差的协方差</h3><p>上文中给出了残差与雅克比的计算，我们知道如果想使用高斯牛顿或者LM算法，最好还需要给出准确的协方差。此处由于在imu积分中，协方差是一直传递的。我们知道imu增量的递推公式可以写为：</p>
+<p>$$\delta z_{k+1}^{15 \times 1}&#x3D;F^{15 \times 15} \delta z_{k}^{15 \times 1} + V^{15 \times 18} n^{18 \times 1}$$</p>
+<p>由上式我们知道，协方差的传递公式为：</p>
+<p>$$ P_{k+1} &#x3D; F P_k F^T + V Q V^T, P_0 &#x3D; 0 $$</p>
+<p>此处我们假设初始值是为0，噪声项的<strong>对角协方差矩阵Q</strong>可以通过艾伦方差标定得到(此处前两项是k时刻的加速度与角速度的高斯白噪方差，中间两项是k+1时刻的高斯白噪方差，最后两项是k时刻的bias随机游走方差，它们之间互相不相关，所以是对角矩阵)。</p>
+<p>$$ Q^{18 \times 18} &#x3D; \left(\sigma_{a}^2 , \sigma_{w}^2 , \sigma_{a}^2 , \sigma_{w}^2 , \sigma_{ba}^2 , \sigma_{bw}^2 \right) $$</p>
+<h2 id="视觉观测的重投影误差"><a href="#视觉观测的重投影误差" class="headerlink" title="视觉观测的重投影误差"></a>视觉观测的重投影误差</h2><p>视觉残差也就是特征点的重投影误差，vins中的视觉残差是由每个特征点从观测到它的第一帧，到所有可以观测到它的其他帧的重投影误差组成的。</p>
+<p>拿其中任意一项举例，比如这项是一个特征点从i帧到j帧的重投影误差，这个特征点在i帧相机平面的归一化坐标为$$(u_{ci}, v_{ci})$$，深度为$$\lambda$$，在j帧相机平面的归一化坐标为$$(u_{cj}, v_{cj})$$。假设将这个点从i帧投影到j帧的相机坐标系，则过程如下：</p>
+<p>$$<br>\left[\begin{array}{c}{x_{c_{j}}} \ {y_{c_{j}}} \ {z_{c_{j}}} \ {1}\end{array}\right]&#x3D;\mathbf{T}<em>{b c}^{-1} \mathbf{T}</em>{w b_{j}}^{-1} \mathbf{T}<em>{w b</em>{i}} \mathbf{T}<em>{b c}\left[\begin{array}{c}{\frac{1}{\lambda} u</em>{c_{i}}} \ {\frac{1}{\lambda} v_{c_{i}}} \ {\frac{1}{\lambda}} \ {1}\end{array}\right]<br>$$</p>
+<p>整个投影过程比较长，依次是将特征点</p>
+<ol>
+<li><p>从i帧相机坐标系变换到i帧body坐标系</p>
+</li>
+<li><p>从i帧body坐标系变换到世界坐标系</p>
+</li>
+<li><p>从世界坐标系变换到j帧body坐标系</p>
+</li>
+<li><p>从j帧body坐标系变换到j帧相机坐标系</p>
+</li>
+</ol>
+<p>将上面这个变换拆分成3维坐标形式，变换形式如下：</p>
+<p>$$<br>\begin{aligned} \mathbf{f}<em>{c</em>{j}}&#x3D;\left[\begin{array}{c}{x_{c_{j}}} \ {y_{c_{j}}} \ {z_{c_{j}}}\end{array}\right] &amp;&#x3D;\mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top} \mathbf{R}<em>{w b</em>{i}} \mathbf{R}<em>{b c} \frac{1}{\lambda}\left[\begin{array}{c}{u</em>{c_{i}}} \ {v_{c_{i}}} \ {1}\end{array}\right] \ &amp;+\mathbf{R}<em>{b c}^{\top}\left(\mathbf{R}</em>{w b_{j}}^{\top}\left(\left(\mathbf{R}<em>{w b</em>{i}} \mathbf{p}<em>{b c}+\mathbf{p}</em>{w b_{i}}\right)-\mathbf{p}<em>{w b</em>{j}}\right)-\mathbf{p}_{b c}\right) \end{aligned}<br>$$</p>
+<p>而视觉残差就是</p>
+<p>$$<br>\mathbf{r}<em>{c}&#x3D;\left[\begin{array}{c}{\frac{x</em>{c_{j}}}{z_{c_{j}}}-u_{c_{j}}} \ {\frac{y_{c_{j}}}{z_{c_{j}}}-v_{c_{j}}}\end{array}\right]<br>$$</p>
+<h3 id="视觉残差的雅克比"><a href="#视觉残差的雅克比" class="headerlink" title="视觉残差的雅克比"></a>视觉残差的雅克比</h3><blockquote>
+<p>此处推导视觉残差的雅克比遵循了链式法则，首先求视觉残差对$$\mathbf{f}<em>{c</em>{j}}$$的导数，然后由$$\mathbf{f}<em>{c</em>{j}}$$开始求其对待优化参数的偏导数。</p>
+</blockquote>
+<ul>
+<li>首先，残差对$$\mathbf{f}<em>{c</em>{j}}$$求导；</li>
+</ul>
+<p>$$<br>\frac{\partial \mathbf{r}<em>{c}}{\partial \mathbf{f}</em>{c_{j}}}&#x3D;\left[\begin{array}{ccc}{\frac{1}{z_{c_{j}}}} &amp; {0} &amp; {-\frac{x_{c_{j}}}{z_{c_{j}}^{2}}} \ {0} &amp; {\frac{1}{z_{c_{j}}}} &amp; {-\frac{y_{c_{j}}}{z_{c_{j}}^{2}}}\end{array}\right]<br>$$</p>
+<ul>
+<li><p>其次，$$\mathbf{f}<em>{c</em>{j}}$$对各状态量求导；</p>
+</li>
+<li><p>$$\mathbf{f}<em>{c</em>{j}}$$对i时刻位置求导；</p>
+</li>
+</ul>
+<p>$$<br>\frac{\partial \mathbf{f}<em>{c</em>{j}}}{\partial \delta \mathbf{p}<em>{b</em>{i} b_{i}^{\prime}}}&#x3D;\mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top}<br>$$</p>
+<ul>
+<li>$$\mathbf{f}<em>{c</em>{j}}$$对i时刻姿态求导；</li>
+</ul>
+<p>$$<br>\mathbf{f}<em>{c</em>{j}}&#x3D;\mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top} \mathbf{R}<em>{w b</em>{i}} \mathbf{R}<em>{b c} \mathbf{f}</em>{c_{i}}+\mathbf{R}<em>{b c}^{\top}\left(\mathbf{R}</em>{w b_{j}}^{\top}\left(\left(\mathbf{R}<em>{w b</em>{i} \mathbf{p}<em>{b c}}+\mathbf{p}</em>{w b_{i}}\right)-\mathbf{p}<em>{w b</em>{j}}\right)-\mathbf{p}_{b c}\right)<br>$$</p>
+<p>$$<br>\begin{aligned} \frac{\partial \mathbf{f}<em>{c</em>{j}}}{\partial \delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}} &amp;&#x3D;\frac{\partial \mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top} \mathbf{R}<em>{w b</em>{i}}\left(\mathbf{I}+\left[\delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}\right]<em>{\mathbf{x}}\right) \mathbf{f}</em>{b_{i}}}{\partial \delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}} \ &amp;&#x3D;-\mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top} \mathbf{R}<em>{w b</em>{i}}\left[\mathbf{f}<em>{b</em>{i}}\right]_{ \times} \end{aligned}<br>$$</p>
+<ul>
+<li>$$\mathbf{f}<em>{c</em>{j}}$$对j时刻位置求导；</li>
+</ul>
+<p>$$<br>\frac{\partial \mathbf{f}<em>{c</em>{j}}}{\partial \delta \mathbf{p}<em>{b</em>{j} b_{j}^{\prime}}}&#x3D; - \mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top}<br>$$</p>
+<ul>
+<li>$$\mathbf{f}<em>{c</em>{j}}$$对j时刻姿态求导；</li>
+</ul>
+<p>$$<br>\begin{aligned} \mathbf{f}<em>{c</em>{j}} &amp;&#x3D;\mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top} \mathbf{R}<em>{w b</em>{i}} \mathbf{R}<em>{b c} \mathbf{f}</em>{c_{i}}+\mathbf{R}<em>{b c}^{\top}\left(\mathbf{R}</em>{w b_{j}}^{\top}\left(\left(\mathbf{R}<em>{w b</em>{i} \mathbf{p}<em>{b c}}+\mathbf{p}</em>{w b_{i}}\right)-\mathbf{p}<em>{w b</em>{j}}\right)-\mathbf{p}<em>{b c}\right) \ &amp;&#x3D;\mathbf{R}</em>{b c}^{\top} \mathbf{R}<em>{w b</em>{j}}^{\top}\left(\mathbf{R}<em>{w b</em>{i}}\left(\mathbf{R}<em>{b c} \mathbf{f}</em>{c_{i}}+\mathbf{p}<em>{b c}\right)+\mathbf{p}</em>{w b_{i}}-\mathbf{p}<em>{w b</em>{j}}\right)+(\ldots) \ &amp;&#x3D;\mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top}\left(\mathbf{f}<em>{w}-\mathbf{p}</em>{w b_{j}}\right)+(\ldots) \end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned} \frac{\partial \mathbf{f}<em>{c</em>{j}}}{\partial \delta \boldsymbol{\theta}<em>{b</em>{j} b_{j}^{\prime}}} &amp;&#x3D;\frac{\partial \mathbf{R}<em>{b c}^{\top}\left(\mathbf{I}-\left[\delta \boldsymbol{\theta}</em>{b_{j} b_{j}^{\prime}}\right] \times\right) \mathbf{R}<em>{w b</em>{j}}^{\top}\left(\mathbf{f}<em>{w}-\mathbf{p}</em>{w b_{j}}\right)}{\partial \delta \boldsymbol{\theta}<em>{b</em>{j} b_{j}^{\prime}}} \ &amp;&#x3D;\frac{\partial \mathbf{R}<em>{b c}^{\top}\left(\mathbf{I}-\left[\delta \boldsymbol{\theta}</em>{b_{j} b_{j}^{\prime}}\right] \times\right) \mathbf{f}<em>{b</em>{j}}}{\partial \delta \boldsymbol{\theta}<em>{b</em>{j} b_{j}^{\prime}}} \ &amp;&#x3D;\mathbf{R}<em>{b c}^{\top}\left[\mathbf{f}</em>{b_{j}}\right]_{ \times} \end{aligned}<br>$$</p>
+<ul>
+<li>$$\mathbf{f}<em>{c</em>{j}}$$对imu与相机之间的外参位移求导；</li>
+</ul>
+<p>$$<br>\frac{\partial \mathbf{f}<em>{c</em>{j}}}{\partial \delta \mathbf{p}<em>{c c^{\prime}}}&#x3D;\mathbf{R}</em>{b c}^{\top}\left(\mathbf{R}<em>{w b</em>{j}}^{\top} \mathbf{R}<em>{w b</em>{i}}-\mathbf{I}_{3 \times 3}\right)<br>$$</p>
+<ul>
+<li>$$\mathbf{f}<em>{c</em>{j}}$$对imu与相机之间的外参角度求导；</li>
+</ul>
+<p>$$<br>\frac{\partial \mathbf{f}<em>{c</em>{j}}}{\partial \delta \boldsymbol{\theta}<em>{c c^{\prime}}}&#x3D;-\mathbf{R}</em>{b c}^{\top} \mathbf{R}<em>{w b</em>{j}}^{\top} \mathbf{R}<em>{w b</em>{i}} \mathbf{R}<em>{b c}\left[\mathbf{f}</em>{c_{i}}\right]<em>{\mathbf{x}}+\left[\mathbf{R}</em>{b c}^{\top} \mathbf{R}<em>{w b</em>{j}}^{\top} \mathbf{R}<em>{w b</em>{i}} \mathbf{R}<em>{b c} \mathbf{f}</em>{c_{i}}\right]<em>{ \times} +<br>\left[\mathbf{R}</em>{b c}^{\top}\left(\mathbf{R}<em>{w b</em>{j}}^{\top}\left(\left(\mathbf{R}<em>{w b</em>{i}} \mathbf{p}<em>{b c}+\mathbf{p}</em>{w b_{i}}\right)-\mathbf{p}<em>{w b</em>{j}}\right)-\mathbf{p}_{b c}\right)\right] \times<br>$$</p>
+<ul>
+<li>$$\mathbf{f}<em>{c</em>{j}}$$对特征在i帧相机坐标系中的逆深度求导；</li>
+</ul>
+<p>$$<br>\begin{aligned} \frac{\partial \mathbf{f}<em>{c</em>{j}}}{\partial \delta \lambda} &amp;&#x3D;\frac{\partial \mathbf{f}<em>{c</em>{j}}}{\partial \mathbf{f}<em>{c</em>{i}}} \frac{\partial \mathbf{f}<em>{c</em>{i}}}{\partial \delta \lambda} \ &amp;&#x3D;\mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top} \mathbf{R}<em>{w b</em>{i}} \mathbf{R}<em>{b c}\left(-\frac{1}{\lambda^{2}}\left[\begin{array}{c}{u</em>{c_{i}}} \ {v_{c_{i}}} \ {1}\end{array}\right]\right) \ &amp;&#x3D;-\frac{1}{\lambda} \mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top} \mathbf{R}<em>{w b</em>{i}} \mathbf{R}<em>{b c} \mathbf{f}</em>{c_{i}} \end{aligned}<br>$$</p>
+<blockquote>
+<p>上面的推导公式中，有一些推导步骤实在太过繁琐复杂，因此被我舍去了，如果大家想看，可以自己手动推导或者查看一些vio论文，会有详细推导过程。</p>
+</blockquote>
+<h3 id="视觉约束的协方差"><a href="#视觉约束的协方差" class="headerlink" title="视觉约束的协方差"></a>视觉约束的协方差</h3><p>在vins代码中假设重投影到像素平面上时的<code>sqrt_info</code>为1.5个像素，对应到归一化平面上需要除以焦距f。这个是假设视觉投影时投影点的位置在理论值附近呈均值为0，标准差为1.5个像素的高斯分布。代码部分如下：</p>
+<pre><code class="hljs">ProjectionFactor::sqrt_info = FOCAL_LENGTH / 1.5 * Matrix2d::Identity();
+</code></pre>
+<h2 id="先验残差"><a href="#先验残差" class="headerlink" title="先验残差"></a>先验残差</h2><h2 id="marg掉最老的关键帧"><a href="#marg掉最老的关键帧" class="headerlink" title="marg掉最老的关键帧"></a>marg掉最老的关键帧</h2><h2 id="marg掉次新的关键帧"><a href="#marg掉次新的关键帧" class="headerlink" title="marg掉次新的关键帧"></a>marg掉次新的关键帧</h2>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%A4%9A%E4%BC%A0%E6%84%9F%E5%99%A8%E8%9E%8D%E5%90%88/">#多传感器融合</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>vins中基于滑窗的后端优化</div>
+      <div>http://line.com/2019/09/03/2019-09-03-vins-backend-optimize/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Line</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年9月3日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/09/29/2019-09-29-dogleg/" title="dogleg算法解析">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">dogleg算法解析</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/08/23/2019-08-23-vins-gyro-bias/" title="vins初始化中的陀螺仪偏置标定">
+                        <span class="hidden-mobile">vins初始化中的陀螺仪偏置标定</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,744 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon1.png">
+  <link rel="icon" href="/img/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Line">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1. 主成分分析原理介绍 PCA是一种无监督的降维方法，主要作用是压缩与简化  顾名思义，主成分分析(PCA)是用来分析数据的主要成分的。 打个比方，一些ｎ维点可以用一个ｎ维的坐标完全表示。主成分分析，可以提取出ｎ个空间基向量来表示这些数据点。不过你可以理解成这ｎ个空间基向量是按顺序求出的，首先根据这些ｎ维点确定第一个空间基向量方向，使得如果只能用一个基向量来表示这些点，只使用这个基向量表示这些二">
+<meta property="og:type" content="article">
+<meta property="og:title" content="主成分分析(PCA)">
+<meta property="og:url" content="http://line.com/2018/12/20/2018-12-20-ml-PCA/index.html">
+<meta property="og:site_name" content="Line&#39;s Blog">
+<meta property="og:description" content="1. 主成分分析原理介绍 PCA是一种无监督的降维方法，主要作用是压缩与简化  顾名思义，主成分分析(PCA)是用来分析数据的主要成分的。 打个比方，一些ｎ维点可以用一个ｎ维的坐标完全表示。主成分分析，可以提取出ｎ个空间基向量来表示这些数据点。不过你可以理解成这ｎ个空间基向量是按顺序求出的，首先根据这些ｎ维点确定第一个空间基向量方向，使得如果只能用一个基向量来表示这些点，只使用这个基向量表示这些二">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://line.com/img/pca/pca_line.png">
+<meta property="og:image" content="http://line.com/img/pca/pca_eigen.png">
+<meta property="article:published_time" content="2018-12-19T17:07:24.000Z">
+<meta property="article:modified_time" content="2023-01-10T13:40:58.210Z">
+<meta property="article:author" content="Line">
+<meta property="article:tag" content="机器学习">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://line.com/img/pca/pca_line.png">
+  
+  
+  
+  <title>主成分分析(PCA) - Line&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"line.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Line</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default2.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="主成分分析(PCA)"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2018-12-20 01:07" pubdate>
+          2018年12月20日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          17 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">主成分分析(PCA)</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="1-主成分分析原理介绍"><a href="#1-主成分分析原理介绍" class="headerlink" title="1. 主成分分析原理介绍"></a>1. 主成分分析原理介绍</h1><blockquote>
+<p>PCA是一种<strong>无监督的降维方法</strong>，主要作用是压缩与简化</p>
+</blockquote>
+<p>顾名思义，主成分分析(PCA)是用来分析数据的主要成分的。</p>
+<p>打个比方，一些ｎ维点可以用一个ｎ维的坐标完全表示。主成分分析，可以提取出<strong>ｎ个空间基向量</strong>来表示这些数据点。不过你可以理解成这ｎ个空间基向量是按顺序求出的，首先根据这些ｎ维点确定第一个空间基向量方向，使得如果只能用一个基向量来表示这些点，只使用这个基向量表示这些二维点误差最小。然后求下一个基向量，使得只使用这两个基向量表示这些ｎ维点误差最小。依次类推，直到求出n维度完备的空间向量基，便肯定可以完全表示了。</p>
+<p><img src="/img/pca/pca_line.png" srcset="/img/loading.gif" lazyload alt="pca_line"></p>
+<p>如上图，是根据一些二维点计算出来的第一个“主成分”基向量。</p>
+<p><img src="/img/pca/pca_eigen.png" srcset="/img/loading.gif" lazyload alt="pca_eigen"></p>
+<p>如上图，是这些二维点的两个<strong>主成分</strong>基向量。</p>
+<blockquote>
+<p>由上面分析我们发现，PCA可以用来做<strong>降维</strong>。虽然肯定会有些精度损失，但是这已经是最小的精度损失了。</p>
+</blockquote>
+<h1 id="2-主成分分析-PCA-的代码实现"><a href="#2-主成分分析-PCA-的代码实现" class="headerlink" title="2. 主成分分析(PCA)的代码实现"></a>2. 主成分分析(PCA)的代码实现</h1><p>通常m个n维点排列在一起会得到一个<code>m*n</code>矩阵，很奇妙的是，我们可以通过数学推导得出ｎ个特征向量，这个矩阵包含的点集合的<strong>主成分</strong>就是这n个特征向量集合。这些特征向量的代表的主要成分的重要重要程度可以用其对应的特征值来衡量，<strong>特征值越大，其对应的特征向量代表的主成分越重要</strong>。</p>
+<p>比如你有$x_1…x_m$总共m个数据，其中每个数据由n个变量表示，我们的目的是将这m个数据使用少于n个变量表示，比如将维度降为<code>p，p&lt;n</code>。这个过程叫做<strong>降维</strong>。具体操作步骤如下：</p>
+<h2 id="2-1-组织数据集"><a href="#2-1-组织数据集" class="headerlink" title="2.1 组织数据集"></a>2.1 组织数据集</h2><p>首先将数据整理成如下固定形式。</p>
+<ul>
+<li>将$x_1…x_m$写成行向量，每一行有n个元素，即n列。</li>
+<li>将这些行向量放入一个单一的矩阵x，矩阵维度是<code>m*n</code></li>
+</ul>
+<h2 id="2-2-计算经验均值"><a href="#2-2-计算经验均值" class="headerlink" title="2.2 计算经验均值"></a>2.2 计算经验均值</h2><ul>
+<li>计算每一个维度的经验均值，维度总共有$j = 1, …, n$</li>
+<li>将计算出来的n个经验均值放入一个向量u，这个向量维度是<code>n*1</code></li>
+</ul>
+<p>$$ \mathbf{u[j]} = \frac{1}{m}\sum_{i=1}^{m}\mathbf{X[i,j]} $$</p>
+<h2 id="2-3-计算离均值的偏差矩阵"><a href="#2-3-计算离均值的偏差矩阵" class="headerlink" title="2.3 计算离均值的偏差矩阵"></a>2.3 计算离均值的偏差矩阵</h2><p>我们计算均值的原因是我们想把数据搬移到原点附近，让原点处于这些数据的中心，这样可以使得均方误差最小。所以这一步要做的就是：</p>
+<ul>
+<li>将矩阵x的每一行都减去均值向量u</li>
+<li>得到一个新的均值矩阵B，维度也是<code>m*n</code></li>
+</ul>
+<p>上述操作可以使用如下方式完成</p>
+<p>$$ \mathbf{B} = \mathbf{X} - \mathbf{h}\mathbf{u^{T}} $$</p>
+<p>其中，h是一个<code>m*1</code>的列向量，并且值为全1。</p>
+<h2 id="2-4-计算上述偏差矩阵的协方差矩阵"><a href="#2-4-计算上述偏差矩阵的协方差矩阵" class="headerlink" title="2.4 计算上述偏差矩阵的协方差矩阵"></a>2.4 计算上述偏差矩阵的协方差矩阵</h2><ul>
+<li>这一步是计算B矩阵的协方差矩阵C，C矩阵的维度会是<code>n*n</code>。可以使用下式实现</li>
+</ul>
+<p>$$ \mathbf{C} = \frac{1}{m-1} \mathbf{B^{*}} \cdot \mathbf{B} $$</p>
+<p>上式中<code>*</code>是共轭转置运算符。不过由于一般B中包含的都是实数，所以在大部分情况下这个操作相当于一个转置运算符。</p>
+<h2 id="2-5-由特征值分解求得上一步中协方差矩阵的特征值与特征向量"><a href="#2-5-由特征值分解求得上一步中协方差矩阵的特征值与特征向量" class="headerlink" title="2.5 由特征值分解求得上一步中协方差矩阵的特征值与特征向量"></a>2.5 由特征值分解求得上一步中协方差矩阵的特征值与特征向量</h2><p>首先说明一下，特征值与特征向量还有矩阵之间的关系。</p>
+<blockquote>
+<p>特征向量是<strong>矩阵空间的基向量</strong>，长度为1，特征向量之间互相正交，特征值是矩阵在对应特征向量上的投影。将矩阵理解成一种变换，则每个特征向量就是这个变换的一个方向，对应的特征值就是在这个方向上的变换速度。</p>
+</blockquote>
+<p>一般对于一个矩阵C(维度为<code>n*n</code>)，会存在n个特征向量(每个维度都是n)，与n个特征值，每个特征值对应一个特征向量。它们之间的关系如下：</p>
+<p>$$ \mathbf{V^{-1}} \mathbf{C} \mathbf{V} = \mathbf{D} 　也可以写成　 \mathbf{C} = \mathbf{V} \mathbf{D} \mathbf{V^{-1}} $$</p>
+<p>其中，</p>
+<ul>
+<li>V是n个特征向量组成的<code>n*n</code>维矩阵</li>
+<li>D是n个特征值组成的一个对角矩阵（只有对角线上值不为0，维度也是<code>n*n</code>）</li>
+<li>上面V与D中的特征向量与特征值是有序配对的，即第i个特征值对应第i个特征向量</li>
+</ul>
+<blockquote>
+<p><strong>特征值分解</strong>(变换矩阵必须是方阵)就是从矩阵C中分解出V与D，我们下面可以做的就是根据特征值的大小保留前p个特征向量，作为新的维度基础。实现将n维度降维到p维度。</p>
+</blockquote>
+<h1 id="3-opencv中的cv-PCA类的使用"><a href="#3-opencv中的cv-PCA类的使用" class="headerlink" title="3. opencv中的cv::PCA类的使用"></a>3. opencv中的<code>cv::PCA</code>类的使用</h1><p>见我的<a href="">github</a></p>
+<h1 id="4-参考资料"><a href="#4-参考资料" class="headerlink" title="4. 参考资料"></a>4. 参考资料</h1><ul>
+<li>[1] <a target="_blank" rel="noopener" href="https://docs.opencv.org/3.4.1/d1/dee/tutorial_introduction_to_pca.html">https://docs.opencv.org/3.4.1/d1/dee/tutorial_introduction_to_pca.html</a></li>
+<li>[2] <a target="_blank" rel="noopener" href="https://robospace.wordpress.com/2013/10/09/object-orientation-principal-component-analysis-opencv/">https://robospace.wordpress.com/2013/10/09/object-orientation-principal-component-analysis-opencv/</a></li>
+<li>[3] <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Principal_component_analysis">https://en.wikipedia.org/wiki/Principal_component_analysis</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">#机器学习</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>主成分分析(PCA)</div>
+      <div>http://line.com/2018/12/20/2018-12-20-ml-PCA/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Line</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2018年12月20日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2018/12/24/2018-12-24-optical-flow/" title="光流算法简述">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">光流算法简述</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2018/12/16/2018-12-16-linux-file-permission/" title="Linux系统下文件权限问题解析">
+                        <span class="hidden-mobile">Linux系统下文件权限问题解析</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

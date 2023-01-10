@@ -1,0 +1,833 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon1.png">
+  <link rel="icon" href="/img/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Line">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="很长时间没有用ros了，刚好这几天手头有一台闲置的$turtlebot$，于是就想用它验证一些导航算法。重新看ros的官网教程，写的很好，但是每一节讲的东西很少，而我这里网速不快，每次打开新的网页都要等一会，超级费时间，所以写篇博客将ros的常用操作概括归纳一些，以后忘记了方便查阅。 rosROS是一个用于开发机器人应用程序的、类似操作系统的机器人软件平台。ROS提供开发机器人应用程序时所需的硬件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ros操作系统入门">
+<meta property="og:url" content="http://line.com/2019/05/25/2019-05-25-ros/index.html">
+<meta property="og:site_name" content="Line&#39;s Blog">
+<meta property="og:description" content="很长时间没有用ros了，刚好这几天手头有一台闲置的$turtlebot$，于是就想用它验证一些导航算法。重新看ros的官网教程，写的很好，但是每一节讲的东西很少，而我这里网速不快，每次打开新的网页都要等一会，超级费时间，所以写篇博客将ros的常用操作概括归纳一些，以后忘记了方便查阅。 rosROS是一个用于开发机器人应用程序的、类似操作系统的机器人软件平台。ROS提供开发机器人应用程序时所需的硬件">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://line.com/img/ros/kuangjia.PNG">
+<meta property="og:image" content="http://line.com/img/ros/file.PNG">
+<meta property="og:image" content="http://line.com/img/ros/ros_cmd.PNG">
+<meta property="og:image" content="http://line.com/img/ros/topic_service.PNG">
+<meta property="article:published_time" content="2019-05-24T17:07:24.000Z">
+<meta property="article:modified_time" content="2023-01-10T16:34:29.974Z">
+<meta property="article:author" content="Line">
+<meta property="article:tag" content="tools">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://line.com/img/ros/kuangjia.PNG">
+  
+  
+  
+  <title>ros操作系统入门 - Line&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"line.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Line</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default2.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="ros操作系统入门"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-05-25 01:07" pubdate>
+          2019年5月25日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          55 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">ros操作系统入门</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>很长时间没有用ros了，刚好这几天手头有一台闲置的$turtlebot$，于是就想用它验证一些导航算法。重新看ros的官网教程，写的很好，但是每一节讲的东西很少，而我这里网速不快，每次打开新的网页都要等一会，超级费时间，所以写篇博客将ros的常用操作概括归纳一些，以后忘记了方便查阅。</p>
+<h1 id="ros"><a href="#ros" class="headerlink" title="ros"></a>ros</h1><p>ROS是一个用于开发机器人应用程序的、类似操作系统的机器人软件平台。ROS提供开发机器人应用程序时所需的硬件抽象、子设备控制，以及机器人工程中广泛使用的传感、识别、绘图、运动规划等功能。此外ROS还提供进程之间的消息解析、功能包管理、库和丰富的开发及调试工具。</p>
+<p>ros是一种分布式机器人操作系统，依赖于$linux$（一般支持的linux系统有$ubuntu$系列与$debian$系列），由斯坦福发布，目前，很多机器人的研究都是基于它。其基本框架如下：</p>
+<div style="text-align: center">
+<img src="/img/ros/kuangjia.PNG" srcset="/img/loading.gif" lazyload/>
+</div>
+
+<blockquote>
+<p>上图是一个在机器人上跑起来的ros的整体框架图，下面我的介绍会依次从 安装、环境配置、文件系统、通信机制、基础实践 来展开。</p>
+</blockquote>
+<h2 id="在Ubuntu16-04上安装ros"><a href="#在Ubuntu16-04上安装ros" class="headerlink" title="在Ubuntu16.04上安装ros"></a>在Ubuntu16.04上安装ros</h2><p>$ros$有很多的版本，一般都是和$linux$系统的版本绑定的，在$Ubuntu16.04$上，我们可以安装的是$kinetic$版本。安装过程可以按照<a target="_blank" rel="noopener" href="http://wiki.ros.org/kinetic/Installation/Ubuntu">官网教程</a>进行，建议直接安装$desktop-full$版。</p>
+<p>安装完毕记得照着教程初始化$rosdep$、设置环境、安装一些用于构建包的依赖。</p>
+<h2 id="ros的环境管理"><a href="#ros的环境管理" class="headerlink" title="ros的环境管理"></a>ros的环境管理</h2><p>在$ros$安装完毕后，我们会将<code>source /opt/ros/kinetic/etc/ros</code>写入到<code>~/.bashrc</code>中，这样每次打开终端，会自动设置$ros$相关的环境变量。</p>
+<p>同时，通常除了系统的环境变量外，我们基于$ros$的开发通常是以工作空间为单位的，不同的工作空间的运行环境可能是有区别的，因此此时我们需要导入这个工作空间的环境变量，使用<code>source ws/devel/setup.bash</code>。在这个工作空间中我们也可以新建开发一些功能包。</p>
+<blockquote>
+<p>可以理解为ros的每个工作空间为一个项目，工作空间中存在的每一个包代表着该项目需要的一个功能模块。</p>
+</blockquote>
+<h2 id="ros文件系统"><a href="#ros文件系统" class="headerlink" title="ros文件系统"></a>ros文件系统</h2><p>ros文件系统主要指的是在硬盘上ROS源代码的组织形式。主要有包（package）、元包（meta package）、工作空间（workspace）等概念。</p>
+<h3 id="工作空间"><a href="#工作空间" class="headerlink" title="工作空间"></a>工作空间</h3><blockquote>
+<p>通常工作空间是我们开发某个项目的地方，在这里我们会新开发出一些专用的包来共我们当前的这个项目或应用（node）使用。如下，每个工作空间可以就是一个文件夹，该文件夹中必须存在一个src文件夹，然后使用<code>catkin_make</code>即可对工作空间进行初始化，或者编译。</p>
+</blockquote>
+<ul>
+<li>创建一个名叫<code>catkin_ws</code>的工作空间<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> -p ~/catkin_ws/src<br><span class="hljs-built_in">cd</span> ~/catkin_ws<br>catkin_make<br><span class="hljs-built_in">source</span> /devel/setup.bash<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<div style="text-align: center">
+<img src="/img/ros/file.PNG" srcset="/img/loading.gif" lazyload   width="800" height="350"/>
+</div>
+
+<h3 id="包"><a href="#包" class="headerlink" title="包"></a>包</h3><blockquote>
+<p><strong>功能包（package）</strong>是构成一个ROS项目的基本单元。ROS应用程序是以功能包为单位开发的。功能包包括至少一个以上的节点或拥有用于运行其他功能包的节点的配置文件。它还包含功能包所需的所有文件，如用于运行各种进程的ROS依赖库、数据集和配置文件等。</p>
+</blockquote>
+<ul>
+<li>在工作空间中创建包<code>new_package</code>，依赖于包<code>depend_p1</code>与<code>depend_p2</code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> ~/catkin_ws/src<br>catkin_create_pkg new_package depend_p1 depend_p2 <br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p>查看一个包的直接依赖<code>rospack depends1 new_packsge</code></p>
+</li>
+<li><p>查看一个包的所有依赖（包括直接与间接）<code>rospack depends new_package</code></p>
+</li>
+<li><p>编译包，直接编译整个工作空间就可以了</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> ~/catkin_ws<br>catkin_make<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<blockquote>
+<p><strong>元功能包（metapackage）</strong>是一个具有共同目的的功能包的集合。例如，导航元功能包包含AMCL、DWA、EKF和map_server等10余个功能包。其实元功能包在功能上已经是一个应用了，但是我们还是需要将其放入工作空间的src文件夹下，这样才构成一个可以编译的项目。</p>
+</blockquote>
+<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><ul>
+<li><p>查找ros包<code>roscpp</code>:<code>rospack find roscpp</code></p>
+</li>
+<li><p>进入ros文件系统的某个目录下：<code>roscd 包名称/子目录</code></p>
+</li>
+<li><p>查看ros包的保存路径：<code>echo $ROS_PACKAGE_PATH</code>，结果应该为ros系统目录下的包路径与你当前的工作空间的ros包路径，比如：<code>/home/xhy/catkin_ws/src:/opt/ros/kinetic/share</code></p>
+</li>
+<li><p>罗列ros文件系统某个目录：<code>rosls 包名称/子目录</code></p>
+</li>
+<li><p>ros命令行工具支持<code>tab</code>自动补全功能</p>
+</li>
+<li><p>使用<code>rosed</code>快速编辑指定文件(默认编辑器是vim)：<code>rosed [package_name] [filename]</code>,例如<code>rosed roscpp Logger.msg</code></p>
+</li>
+</ul>
+<div style="text-align: center">
+<img src="/img/ros/ros_cmd.PNG" srcset="/img/loading.gif" lazyload/>
+</div>
+
+
+<h2 id="ros节点"><a href="#ros节点" class="headerlink" title="ros节点"></a>ros节点</h2><h3 id="主节点"><a href="#主节点" class="headerlink" title="主节点"></a>主节点</h3><p>主节点（master）负责节点到节点的连接和消息通信，类似于名称服务器（Name Server）。roscore是它的运行命令，当您运行主节点时，可以注册每个节点的名字，并根据需要获取信息。没有主节点，就不能在节点之间建立访问和消息交流（如话题和服务）。</p>
+<p>主节点使用XML远程过程调用（XMLRPC，XML-Remote Procedure Call）3与节点进行通信。XMLRPC是一种基于HTTP的协议，主节点不与连接到主节点的节点保持连接。换句话说，节点只有在需要注册自己的信息或向其他节点发送请求信息时才能访问主节点并获取信息。通常情况下，不检查彼此的连接状态。由于这些特点，ROS可用于非常大而复杂的环境。XMLRPC也非常轻便，支持多种编程语言，使其非常适合支持各种硬件和语言的ROS。</p>
+<p>当启动ROS时，主节点将获取用户设置的<code>ROS_MASTER_URI</code>变量中列出的URI地址和端口。除非另外设置，默认情况下，URI地址使用当前的本地IP，端口使用11311。</p>
+<h3 id="普通节点"><a href="#普通节点" class="headerlink" title="普通节点"></a>普通节点</h3><p>节点（node）是指在ROS中运行的最小处理器单元。可以把它看作一个可执行程序。在ROS中，建议为一个目的创建一个节点，建议设计时注重可重用性。例如，在移动机器人的情况下，为了驱动机器人，将每个程序细分化。也就是说，使用传感器驱动、传感器数据转换、障碍物判断、电机驱动、编码器输入和导航等多个细分节点。</p>
+<p>节点在运行的同时，向主节点注册节点的名称，并且还注册发布者（publisher）、订阅者（subscriber）、服务服务器（service server）、服务客户端（service client）的名称，且注册消息形式、URI地址和端口。基于这些信息，每个节点可以使用话题和服务与其他节点交换消息。</p>
+<p>节点使用XMLRPC与主站进行通信，并使用TCP/IP通信系列的XMLRPC或TCPROS进行节点之间的通信。节点之间的连接请求和响应使用XMLRPC，而消息通信使用TCPROS，因为它是节点和节点之间的直接通信，与主节点无关。URI地址和端口则使用存储于运行当前节点的计算机上的名为<code>ROS_HOSTNAME</code>的环境变量作为URI地址，并将端口设置为任意的固有值。</p>
+<p>ros节点是整个机器人控制系统的一个功能单元，运行起来一个ros节点，即运行一个ros程序包中的一个可执行文件。例如<code>rosrun turtlesim turtle_teleop_key</code></p>
+<blockquote>
+<p>ros系统在启动之前，首先需要运行<code>rosore</code>，我们可以将node看做ros操作系统上的应用软件。</p>
+</blockquote>
+<h3 id="roslaunch"><a href="#roslaunch" class="headerlink" title="roslaunch"></a>roslaunch</h3><p>使用<code>rosrun</code>每次只能启动一个节点，我们可以使用<code>roslaunch</code>来启动定义在$launch$文件中的多个节点。</p>
+<p>用法：<code>roslaunch [package] [filename.launch]</code></p>
+<p>launch文件语法解析，运行如下launch文件会启动两个节点</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs abnf">&lt;launch&gt;<br><br>  &lt;group ns<span class="hljs-operator">=</span><span class="hljs-string">&quot;turtlesim1&quot;</span>&gt;<br>    &lt;node pkg<span class="hljs-operator">=</span><span class="hljs-string">&quot;turtlesim&quot;</span> name<span class="hljs-operator">=</span><span class="hljs-string">&quot;sim&quot;</span> type<span class="hljs-operator">=</span><span class="hljs-string">&quot;turtlesim_node&quot;</span>/&gt;<br>  &lt;/group&gt;<br><br>  &lt;group ns<span class="hljs-operator">=</span><span class="hljs-string">&quot;turtlesim2&quot;</span>&gt;<br>    &lt;node pkg<span class="hljs-operator">=</span><span class="hljs-string">&quot;turtlesim&quot;</span> name<span class="hljs-operator">=</span><span class="hljs-string">&quot;sim&quot;</span> type<span class="hljs-operator">=</span><span class="hljs-string">&quot;turtlesim_node&quot;</span>/&gt;<br>  &lt;/group&gt;<br><br>  &lt;node pkg<span class="hljs-operator">=</span><span class="hljs-string">&quot;turtlesim&quot;</span> name<span class="hljs-operator">=</span><span class="hljs-string">&quot;mimic&quot;</span> type<span class="hljs-operator">=</span><span class="hljs-string">&quot;mimic&quot;</span>&gt;<br>    &lt;remap from<span class="hljs-operator">=</span><span class="hljs-string">&quot;input&quot;</span> to<span class="hljs-operator">=</span><span class="hljs-string">&quot;turtlesim1/turtle1&quot;</span>/&gt;<br>    &lt;remap from<span class="hljs-operator">=</span><span class="hljs-string">&quot;output&quot;</span> to<span class="hljs-operator">=</span><span class="hljs-string">&quot;turtlesim2/turtle1&quot;</span>/&gt;<br>  &lt;/node&gt;<br><br>&lt;/launch&gt;<br></code></pre></td></tr></table></figure>
+<hr>
+<h2 id="ros通信（计算图级网络形式）"><a href="#ros通信（计算图级网络形式）" class="headerlink" title="ros通信（计算图级网络形式）"></a>ros通信（计算图级网络形式）</h2><p>了解ros的通信主要需要了解以下四个概念：节点（node）、消息（messages）、话题（topic）、服务（service）、动作（action）</p>
+<h3 id="ros消息（msg）"><a href="#ros消息（msg）" class="headerlink" title="ros消息（msg）"></a>ros消息（msg）</h3><p>节点之间通过消息（message）来发送和接收数据。消息是诸如integer、floating point和boolean等类型的变量。用户还可以使用诸如消息里包括消息的简单数据结构或列举消息的消息数组的结构。使用消息的通信方法包括TCPROS，UDPROS等，根据情况使用<strong>单向消息</strong>发送/接收方式的话题（topic）和<strong>双向消息</strong>请求（request）/响应（response）方式的服务（service）。</p>
+<p>$msg$文件就是一个描述$ROS$中所使用消息类型的简单文本。通常$msg$文件存放在$package$的$msg$目录下</p>
+<blockquote>
+<p>ros中在一个包里消息$msg$与服务$srv$的创建教程详细可以查看<a target="_blank" rel="noopener" href="http://wiki.ros.org/cn/ROS/Tutorials/CreatingMsgAndSrv">官网教程</a></p>
+</blockquote>
+<h3 id="ros话题（topic）"><a href="#ros话题（topic）" class="headerlink" title="ros话题（topic）"></a>ros话题（topic）</h3><p>ros话题是ros中不同节点之间的一种通信方式，一个节点在一个话题上发布消息，另一个节点订阅该话题以接收该消息。</p>
+<p>我们通常使用rostopic来进行话题的相关操作</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs routeros">rostopic -h<br>rostopic is a command-line<span class="hljs-built_in"> tool </span><span class="hljs-keyword">for</span> printing information about ROS Topics.<br><br>Commands:<br>    rostopic bw display bandwidth used by topic<br>    rostopic delay  display delay of topic <span class="hljs-keyword">from</span> timestamp <span class="hljs-keyword">in</span> header<br>    rostopic echo   <span class="hljs-built_in">print</span> messages <span class="hljs-keyword">to</span><span class="hljs-built_in"> screen</span><br><span class="hljs-built_in"></span>    rostopic <span class="hljs-built_in">find</span>   <span class="hljs-built_in">find</span> topics by<span class="hljs-built_in"> type</span><br><span class="hljs-built_in"></span>    rostopic hz display publishing rate of topic    <br>    rostopic <span class="hljs-built_in">info</span>   <span class="hljs-built_in">print</span> information about active topic<br>    rostopic list   list active topics<br>    rostopic pub    publish data <span class="hljs-keyword">to</span> topic<br>    rostopic<span class="hljs-built_in"> type </span>  <span class="hljs-built_in">print</span> topic <span class="hljs-keyword">or</span> field<span class="hljs-built_in"> type</span><br><span class="hljs-built_in"></span><span class="hljs-built_in"></span><br><span class="hljs-built_in">Type </span>rostopic &lt;command&gt; -h <span class="hljs-keyword">for</span> more detailed usage, e.g. <span class="hljs-string">&#x27;rostopic echo -h&#x27;</span><br><br></code></pre></td></tr></table></figure>
+<hr>
+<blockquote>
+<p>话题（topic）就是“故事”。在发布者（publisher）节点关于故事向主节点注册之后，它以消息形式发布关于该故事的广告。希望接收该故事的订阅者（subscriber）节点获得在主节点中以这个话题注册的那个发布者节点的信息。基于这个信息，订阅者节点直接连接到发布者节点，用话题发送和接收消息。</p>
+</blockquote>
+<h3 id="ros的服务"><a href="#ros的服务" class="headerlink" title="ros的服务"></a>ros的服务</h3><p>服务（service）是ros提供的一种同步双向消息通信。其中服务客户端请求对应于特定目的任务的服务，而服务服务器则负责服务响应。</p>
+<p>使用<code>rosservice</code>可以轻松使用ros客户端、服务器框架提供的服务。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">rosservice list         输出可用服务的信息<br>rosservice call         调用带参数的服务<br>rosservice <span class="hljs-built_in">type</span>         输出服务类型<br>rosservice find         依据类型寻找服务find services by service <span class="hljs-built_in">type</span><br>rosservice uri          输出服务的ROSRPC uri<br></code></pre></td></tr></table></figure>
+<hr>
+<blockquote>
+<p>一个$srv$文件描述一项服务。它包含两个部分：请求与响应。一般$srv$文件存放在$package$的$srv$目录下。</p>
+</blockquote>
+<div style="text-align: center">
+<img src="/img/ros/topic_service.PNG" srcset="/img/loading.gif" lazyload/>
+</div>
+
+<h3 id="动作"><a href="#动作" class="headerlink" title="动作"></a>动作</h3><p>动作（action）是在需要像服务那样的双向请求的情况下使用的消息通信方式，不同点是在处理请求之后需要很长的响应，并且需要中途反馈值。动作文件也非常类似于服务，目标（goal）和结果（result）对应于请求和响应。此外，还添加了对应于中途的反馈（feedback）。它由一个设置动作目标（goal）的动作客户端（action client）和一个动作服务器（action server），动作服务器根据目标执行动作，并发送反馈和结果。</p>
+<blockquote>
+<p>动作客户端与动作服务器之间进行异步双向消息通信。</p>
+</blockquote>
+<h3 id="发布与发布者"><a href="#发布与发布者" class="headerlink" title="发布与发布者"></a>发布与发布者</h3><p>发布（publish）是指以与话题的内容对应的消息的形式发送数据。为了执行发布，发布者（publisher）节点在主节点上注册自己的话题等多种信息，并向希望订阅的订阅者节点发送消息。发布者在节点中声明自己是执行发布的个体。单个节点可以成为多个发布者。</p>
+<h3 id="订阅与订阅者"><a href="#订阅与订阅者" class="headerlink" title="订阅与订阅者"></a>订阅与订阅者</h3><p>订阅是指以与话题内容对应的消息的形式接收数据。为了执行订阅，订阅者节点在主节点上注册自己的话题等多种信息，并从主节点接收那些发布此节点要订阅的话题的发布者节点的信息。基于这个信息，订阅者节点直接联系发布者节点来接收消息。订阅者在节点中声明自己执行订阅的个体。单个节点可以成为多个订阅者。</p>
+<blockquote>
+<p>发布和订阅概念中的<strong>话题是异步的</strong>，这是一种根据需要发送和接收数据的好方法。另外，由于它通过一次的连接，发送和接收连续的消息，所以它经常被用于必须连续发送消息的传感器数据。然而，在某些情况下，需要一种共同使用请求和响应的同步消息交换方案。因此，ROS提供叫做<strong>服务（service）的消息同步方法</strong>。服务分为响应请求的服务服务器和请求后接收响应的服务客户端。与话题不同，<strong>服务是一次性的消息通信</strong>。当服务的请求和响应完成时，两个节点的连接被断开。</p>
+</blockquote>
+<blockquote>
+<p>发布者、订阅者、服务服务器、服务客户端、动作服务器和动作客户端都存在于不同的节点中，这些节点需要连接才能进行消息通信。这时候，主节点是帮助节点之间的连接。主节点就像节点名称、话题和服务、动作名称、URI地址和端口以及参数们的名称服务器。换句话说，节点同时向主节点注册自己的信息，并从主节点获取其他节点希望通过主节点访问的节点的信息。然后，节点和节点直接连接进行消息通信。</p>
+</blockquote>
+<h2 id="ros中的参数"><a href="#ros中的参数" class="headerlink" title="ros中的参数"></a>ros中的参数</h2><p>ros中还存在参数服务器（由主节点维护），上面存储一些服务的参数设置，参数可以看作是节点中使用的全局变量。可以使用<code>rosparam</code>进行如下操作</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">rosparam <span class="hljs-built_in">set</span>            设置参数<br>rosparam get            获取参数<br>rosparam load           从文件读取参数<br>rosparam dump           向文件中写入参数<br>rosparam delete         删除参数<br>rosparam list           列出参数名<br></code></pre></td></tr></table></figure>
+<hr>
+<h2 id="ros基础案例"><a href="#ros基础案例" class="headerlink" title="ros基础案例"></a>ros基础案例</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="http://wiki.ros.org/cn/ROS/Tutorials/WritingPublisherSubscriber%28c%2B%2B%29">编写消息发布器与订阅器c++版本</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://wiki.ros.org/cn/ROS/Tutorials/WritingPublisherSubscriber%28python%29">编写消息发布器与订阅器python版本</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://wiki.ros.org/cn/ROS/Tutorials/WritingServiceClient%28c%2B%2B%29">编写简单的服务器与客户端c++版本</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://wiki.ros.org/cn/ROS/Tutorials/WritingServiceClient%28python%29">编写简单的服务器与客户端python版本</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://wiki.ros.org/cn/ROS/Tutorials/ExaminingServiceClient">验证流程可以查看这里，python节点无需编译，直接运行脚本即可</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://wiki.ros.org/cn/ROS/Tutorials/Recording%20and%20playing%20back%20data">录制话题数据，通过bag文件</a>   </p>
+</li>
+</ul>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/xhy3054/catkin_ws">我的教程工作空间</a></p>
+</blockquote>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这篇博客主要是对ros的整体概念进行介绍，并且介绍了ros官网基础教程中我个人认为最值得介绍的点。至此，ros的入门算是基本完成了，接下来就是需要使用仿真或者实战对ros进行进一步的操作与体验了。</p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ul>
+<li>[1]. <a target="_blank" rel="noopener" href="http://wiki.ros.org/cn/ROS/Tutorials">http://wiki.ros.org/cn/ROS/Tutorials</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/tools/">#tools</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>ros操作系统入门</div>
+      <div>http://line.com/2019/05/25/2019-05-25-ros/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Line</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年5月25日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/05/30/2019-05-30-auto-drive/" title="自动驾驶系统描述">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">自动驾驶系统描述</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/05/17/2019-05-17-slam-map/" title="视觉slam中的一种单目稠密建图方法">
+                        <span class="hidden-mobile">视觉slam中的一种单目稠密建图方法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

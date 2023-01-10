@@ -1,0 +1,752 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon1.png">
+  <link rel="icon" href="/img/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Line">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="在vio中会经常看到预积分这个词，vins中有，okvis中也有，所以，这个东西到底有什么作用呢？ 预积分的由来首先，一般imu的频率是比相机高的，所以在两个图像帧之间，会有很多imu采集的数据。如下图：     此处假设IMU的真实值是$\omega, \mathbf{a}$，测量值为$\tilde{\boldsymbol{\omega}}, \tilde{\mathbf{a}}$，则有： $$">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IMU预积分">
+<meta property="og:url" content="http://line.com/2019/07/31/2019-07-31-pre-integration/index.html">
+<meta property="og:site_name" content="Line&#39;s Blog">
+<meta property="og:description" content="在vio中会经常看到预积分这个词，vins中有，okvis中也有，所以，这个东西到底有什么作用呢？ 预积分的由来首先，一般imu的频率是比相机高的，所以在两个图像帧之间，会有很多imu采集的数据。如下图：     此处假设IMU的真实值是$\omega, \mathbf{a}$，测量值为$\tilde{\boldsymbol{\omega}}, \tilde{\mathbf{a}}$，则有： $$">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://line.com/assets/img/vio/pre-inte.PNG">
+<meta property="article:published_time" content="2019-07-30T17:07:24.000Z">
+<meta property="article:modified_time" content="2023-01-08T16:21:28.853Z">
+<meta property="article:author" content="Line">
+<meta property="article:tag" content="多传感器融合">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://line.com/assets/img/vio/pre-inte.PNG">
+  
+  
+  
+  <title>IMU预积分 - Line&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"line.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Line</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default2.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="IMU预积分"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-07-31 01:07" pubdate>
+          2019年7月31日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          10k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          84 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">IMU预积分</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>在vio中会经常看到预积分这个词，vins中有，okvis中也有，所以，这个东西到底有什么作用呢？</p>
+<h1 id="预积分的由来"><a href="#预积分的由来" class="headerlink" title="预积分的由来"></a>预积分的由来</h1><p>首先，一般imu的频率是比相机高的，所以在两个图像帧之间，会有很多imu采集的数据。如下图：</p>
+<div style="text-align: center">
+<img src="/assets/img/vio/pre-inte.PNG" srcset="/img/loading.gif" lazyload/>
+</div>
+
+<p>此处假设IMU的真实值是$\omega, \mathbf{a}$，测量值为$\tilde{\boldsymbol{\omega}}, \tilde{\mathbf{a}}$，则有：</p>
+<p>$$<br>\begin{aligned} \tilde{\omega}^{b} &amp;&#x3D;\omega^{b}+\mathbf{b}^{g}+\mathbf{n}^{g} \ \tilde{\mathbf{a}}^{b} &amp;&#x3D;\mathbf{q}_{b w}\left(\mathbf{a}^{w}+\mathbf{g}^{w}\right)+\mathbf{b}^{a}+\mathbf{n}^{a} \end{aligned}<br>$$</p>
+<p>其中上标$g$表示gyro（陀螺仪坐标系），$a$表示acc（加速度计坐标系），$w$表示在世界坐标系world，$b$表示imu机体坐标系body。</p>
+<p>根据运动学方程，位置、速度、姿态（PVQ）的导数有如下：</p>
+<p>$$<br>\begin{array}{l}{\dot{\mathbf{p}}<em>{w b</em>{t}}&#x3D;\mathbf{v}<em>{t}^{w}} \ {\dot{\mathbf{v}}</em>{t}^{w}&#x3D;\mathbf{a}<em>{t}^{w}} \ {\dot{\mathbf{q}}</em>{w b_{t}}&#x3D;\mathbf{q}<em>{w b</em>{t}} \otimes\left[\begin{array}{c}{0} \ {\frac{1}{2} \boldsymbol{\omega}^{b_{t}}}\end{array}\right]}\end{array}<br>$$</p>
+<p>从第i时刻的PVQ对IMU的测量值进行积分得到第j时刻的PVQ：</p>
+<p>$$<br>\begin{array}{l}{\mathbf{p}<em>{w b</em>{j}}&#x3D;\mathbf{p}<em>{w b</em>{i}}+\mathbf{v}<em>{i}^{w} \Delta t+\iint</em>{t \in[i, j]}\left(\mathbf{q}<em>{w b</em>{t}} \mathbf{a}^{b_{t}}-\mathbf{g}^{w}\right) \delta t^{2}} \ {\mathbf{v}<em>{j}^{w}&#x3D;\mathbf{v}</em>{i}^{w}+\int_{t \in[i, j]}\left(\mathbf{q}<em>{w b</em>{t}} \mathbf{a}^{b_{t}}-\mathbf{g}^{w}\right) \delta t} \ {\mathbf{q}<em>{w b</em>{j}}&#x3D;\int_{t \in[i, j]} \mathbf{q}<em>{w b</em>{t}} \otimes\left[\begin{array}{c}{0} \ {\frac{1}{2} \boldsymbol{\omega}^{b_{t}}}\end{array}\right] \delta t}\end{array}<br>$$</p>
+<blockquote>
+<p>此时我们发现，在积分项中存在全局姿态$q_{wb_{t}}$，同时在$\mathbf{a}^{b_{t}}$等测量值中还会引入bias。这样每次在迭代优化过后，由于$q_{wb_{t}}$与bias都会更新，因此此时就需要重新进行积分操作。这个计算量是非常巨大的。</p>
+</blockquote>
+<h2 id="预积分消减计算量"><a href="#预积分消减计算量" class="headerlink" title="预积分消减计算量"></a>预积分消减计算量</h2><p>为了消减计算量，有人提出了通过如下的简单变换，<strong>将上述积分模型转换成预积分模型</strong>。这个变换是：</p>
+<p>$$<br>\mathbf{q}<em>{w b</em>{t}}&#x3D;\mathbf{q}<em>{w b</em>{i}} \otimes \mathbf{q}<em>{b</em>{i} b_{t}}<br>$$</p>
+<p>转换后，整个PVQ的积分形式变为：</p>
+<p>$$<br>\begin{array}{l}{\mathbf{p}<em>{w b</em>{j}}&#x3D;\mathbf{p}<em>{w b</em>{i}}+\mathbf{v}<em>{i}^{w} \Delta t-\frac{1}{2} \mathbf{g}^{w} \Delta t^{2}+\mathbf{q}</em>{w b_{i}} \iint_{t \in[i, j]}\left(\mathbf{q}<em>{b</em>{i} b_{t}} \mathbf{a}^{b_{t}}\right) \delta t^{2}} \ {\mathbf{v}<em>{j}^{w}&#x3D;\mathbf{v}</em>{i}^{w}-\mathbf{g}^{w} \Delta t+\mathbf{q}<em>{w b</em>{i}} \int_{t \in[i, j]}\left(\mathbf{q}<em>{b</em>{i} b_{t}} \mathbf{a}^{b_{t}}\right) \delta t} \ {\mathbf{q}<em>{w b</em>{j}}&#x3D;\mathbf{q}<em>{w b</em>{i}} \int_{t \in[i, j]} \mathbf{q}<em>{b</em>{i} b_{t}} \otimes\left[\begin{array}{c}{0} \ {\frac{1}{2} \boldsymbol{\omega}^{b_{t}}}\end{array}\right] \delta t}\end{array}<br>$$</p>
+<p>上面公式中，我们可以将其中一部分提取出来，叫做<strong>预积分量</strong>：</p>
+<p>$$<br>\begin{aligned} \boldsymbol{\alpha}<em>{b</em>{i} b_{j}} &amp;&#x3D;\iint_{t \in[i, j]}\left(\mathbf{q}<em>{b</em>{i} b_{t}} \mathbf{a}^{b_{t}}\right) \delta t^{2} \ \boldsymbol{\beta}<em>{b</em>{i} b_{j}} &amp;&#x3D;\int_{t \in[i, j]}\left(\mathbf{q}<em>{b</em>{i} b_{t}} \mathbf{a}^{b_{t}}\right) \delta t \ \mathbf{q}<em>{b</em>{i} b_{j}} &amp;&#x3D;\int_{t \in[i, j]} \mathbf{q}<em>{b</em>{i} b_{t}} \otimes\left[\begin{array}{c}{0} \ {\frac{1}{2} \boldsymbol{\omega}^{b_{t}}}\end{array}\right] \delta t \end{aligned}<br>$$</p>
+<blockquote>
+<p>如上，我们发现，其实预积分就是将原本的积分变成了相邻两帧中相对运动的积分。这使得<strong>预积分量</strong>只与IMU的测量有关，即只要imu测量不变，预积分的结果也不会变化。如果不考虑更新IMU的bias，那么我们只需要进行一次预积分，以后就无需在重新计算了。</p>
+</blockquote>
+<h2 id="基于预积分的状态变换"><a href="#基于预积分的状态变换" class="headerlink" title="基于预积分的状态变换"></a>基于预积分的状态变换</h2><p>此时状态量（世界位姿与bias等）和预积分的映射关系如下：</p>
+<p>$$<br>\left[\begin{array}{c}{\mathbf{p}<em>{w b</em>{j}}} \ {\mathbf{q}<em>{w b</em>{j}}} \ {\mathbf{v}<em>{j}^{w}} \ {\mathbf{b}</em>{j}^{a}} \ {\mathbf{b}<em>{j}^{g}}\end{array}\right]&#x3D;\left[\begin{array}{cc}{\mathbf{p}</em>{w b_{i}}+\mathbf{v}<em>{i}^{w} \Delta t-\frac{1}{2} \mathbf{g}^{w} \Delta t^{2}+\mathbf{q}</em>{w b_{i}} \mathbf{\alpha}<em>{b</em>{i} b_{j}}} \ {\mathbf{q}<em>{w b</em>{i}}  \mathbf{q}<em>{b_i b_j}} \ {\mathbf{v}</em>{i}^{w}-\mathbf{g}^{w} \Delta t+\mathbf{q}<em>{w b</em>{i}} \boldsymbol{\beta}<em>{b</em>{i} b_{j}}} \ {\mathbf{b}<em>{i}^{a}} \ {\mathbf{b}</em>{i}^{g}}\end{array}\right]<br>$$</p>
+<p>此时，如果我们想要建立基于目前状态的预积分误差，则是如下形式（其中表示位姿的四元数我们取其虚部并乘以2恢复出旋转向量）：</p>
+<p>$$<br>\left[\begin{array}{c}{\mathbf{r}<em>{p}} \ {\mathbf{r}</em>{q}} \ {\mathbf{r}<em>{v}} \ {\mathbf{r}</em>{b a}} \ {\mathbf{r}<em>{b g}}\end{array}\right]</em>{15 \times 1}&#x3D;\left[\begin{array}{c}{\mathbf{q}<em>{b</em>{i} w}\left(\mathbf{p}<em>{w b</em>{j}}-\mathbf{p}<em>{w b</em>{i}}-\mathbf{v}<em>{i}^{w} \Delta t+\frac{1}{2} \mathbf{g}^{w} \Delta t^{2}\right)-\boldsymbol{\alpha}</em>{b_{i} b_{j}}} \ {2\left[\mathbf{q}<em>{b</em>{j} b_{i}} \otimes\left(\mathbf{q}<em>{b</em>{i} w} \otimes \mathbf{q}<em>{w b</em>{j}}\right)\right]<em>{x y z}} \ {\mathbf{q}</em>{b_{i} w}\left(\mathbf{v}<em>{j}^{w}-\mathbf{v}</em>{i}^{w}+\mathbf{g}^{w} \Delta t\right)-\beta_{b_{i} b_{j}}} \ {\mathbf{b}<em>{j}^{a}-\mathbf{b}</em>{i}^{a}} \ {\mathbf{b}<em>{j}^{g}-\mathbf{b}</em>{i}^{g}}\end{array}\right]<br>$$</p>
+<p>由于k+1帧段的预积分受其他变量的影响，为了以后方便处理，可以推导出其雅克比矩阵，整体形式如下：</p>
+<p>$$<br>\left[\begin{array}{c}{\delta \boldsymbol{\alpha}<em>{b</em>{k+1} b_{k+1}^{\prime}}} \ {\delta \boldsymbol{\theta}<em>{b</em>{k+1} b_{k+1}^{\prime}}} \ {\delta \boldsymbol{\beta}<em>{b</em>{k+1} b_{k+1}^{\prime}}} \ {\delta \mathbf{b}<em>{k+1}^{a}} \ {\delta \mathbf{b}</em>{k+1}^{g}}\end{array}\right]&#x3D;\mathbf{F}\left[\begin{array}{c}{\delta \boldsymbol{\alpha}<em>{b</em>{k} b_{k}^{\prime}}} \ {\delta \boldsymbol{\theta}<em>{b</em>{k} b_{k}^{\prime}}} \ {\delta \boldsymbol{\beta}<em>{b</em>{k} b_{k}^{\prime}}} \ {\delta \mathbf{b}<em>{k}^{a}} \ {\delta \mathbf{b}</em>{k}^{g}}\end{array}\right]+\mathbf{G}\left[\begin{array}{c}{\mathbf{n}<em>{k}^{a}} \ {\mathbf{n}</em>{k}^{g}} \ {\mathbf{n}<em>{k+1}^{a}} \ {\mathbf{n}</em>{k+1}^{g}} \ {\mathbf{n}<em>{\mathbf{b}</em>{k}^{a}}} \ {\mathbf{n}<em>{\mathbf{b}</em>{k}^{g}}^{g}}\end{array}\right]<br>$$</p>
+<p>其中部分雅克比系数的推导如下：</p>
+<p>$$<br>\mathbf{f}<em>{12}&#x3D;\frac{\partial \boldsymbol{\alpha}</em>{b_{i} b_{k+1}}}{\partial \delta \boldsymbol{\theta}<em>{b</em>{k} b_{k}^{\prime}}}&#x3D;-\frac{1}{4}\left(\mathbf{R}<em>{b</em>{i} b_{k}}\left[\mathbf{a}^{b_{k}}-\mathbf{b}<em>{k}^{a}\right]</em>{ \times} \delta t^{2}+\mathbf{R}<em>{b</em>{i} b_{k+1}}\left[\left(\mathbf{a}^{b_{k+1}}-\mathbf{b}<em>{k}^{a}\right)\right]</em>{ \times}\left(\mathbf{I}-[\boldsymbol{\omega}]_{ \times} \boldsymbol{\delta} t\right) \delta t^{2}\right)<br>$$</p>
+<p>$$<br>\mathbf{f}<em>{32}&#x3D;\frac{\partial \boldsymbol{\beta}</em>{b_{i} b_{k+1}}}{\partial \delta \boldsymbol{\theta}<em>{b</em>{k} b_{k}^{\prime}}}&#x3D;-\frac{1}{2}\left(\mathbf{R}<em>{b</em>{i} b_{k}}\left[\mathbf{a}^{b_{k}}-\mathbf{b}<em>{k}^{a}\right]</em>{ \times} \delta t+\mathbf{R}<em>{b</em>{i} b_{k+1}}\left[\left(\mathbf{a}^{b_{k+1}}-\mathbf{b}<em>{k}^{a}\right)\right]</em>{ \times}\left(\mathbf{I}-[\boldsymbol{\omega}]_{ \times} \delta t\right) \delta t\right)<br>$$</p>
+<p>$$<br>\mathbf{f}<em>{15}&#x3D;\frac{\partial \boldsymbol{\alpha}</em>{b_{i} b_{k+1}}}{\partial \delta \mathbf{b}<em>{k}^{g}}&#x3D;-\frac{1}{4}\left(\mathbf{R}</em>{b_{i} b_{k+1}}\left[\left(\mathbf{a}^{b_{k+1}}-\mathbf{b}_{k}^{a}\right)\right] \times \delta t^{2}\right)(-\delta t)<br>$$</p>
+<p>$$<br>\mathbf{f}<em>{35}&#x3D;\frac{\partial \boldsymbol{\beta}</em>{b_{i} b_{k+1}}}{\partial \delta \mathbf{b}<em>{k}^{g}}&#x3D;-\frac{1}{2}\left(\mathbf{R}</em>{b_{i} b_{k+1}}\left[\left(\mathbf{a}^{b_{k+1}}-\mathbf{b}_{k}^{a}\right)\right] \times \delta t\right)(-\delta t)<br>$$</p>
+<p>$$<br>\mathbf{g}<em>{12}&#x3D;\frac{\partial \boldsymbol{\alpha}</em>{b_{i} b_{k+1}}}{\partial \mathbf{n}<em>{k}^{g}}&#x3D;\mathbf{g}</em>{14}&#x3D;\frac{\partial \boldsymbol{\alpha}<em>{b</em>{i} b_{k+1}}}{\partial \mathbf{n}<em>{k+1}^{g}}&#x3D;-\frac{1}{4}\left(\mathbf{R}</em>{b_{i} b_{k+1}}\left[\left(\mathbf{a}^{b_{k+1}}-\mathbf{b}_{k}^{a}\right)\right] \times \delta t^{2}\right)\left(\frac{1}{2} \delta t\right)<br>$$</p>
+<p>$$<br>\mathbf{g}<em>{32}&#x3D;\frac{\partial \boldsymbol{\beta}</em>{b_{i} b_{k+1}}}{\partial \mathbf{n}<em>{k}^{g}}&#x3D;\mathbf{g}</em>{34}&#x3D;\frac{\partial \boldsymbol{\beta}<em>{b</em>{i} b_{k+1}}}{\partial \mathbf{n}<em>{k+1}^{g}}&#x3D;-\frac{1}{2}\left(\mathbf{R}</em>{b_{i} b_{k+1}}\left[\left(\mathbf{a}^{b_{k+1}}-\mathbf{b}_{k}^{a}\right)\right] \times \delta t\right)\left(\frac{1}{2} \delta t\right)<br>$$</p>
+<h2 id="基于中值积分的预积分"><a href="#基于中值积分的预积分" class="headerlink" title="基于中值积分的预积分"></a>基于中值积分的预积分</h2><p>首先，对于姿态变化的中值积分首先进行</p>
+<p>$$<br>\begin{aligned} \boldsymbol{\omega} &amp;&#x3D;\frac{1}{2}\left(\left(\boldsymbol{\omega}^{b_{k}}+\mathbf{n}<em>{k}^{g}-\mathbf{b}</em>{k}^{g}\right)+\left(\boldsymbol{\omega}^{b_{k+1}}+\mathbf{n}<em>{k+1}^{g}-\mathbf{b}</em>{k}^{g}\right)\right) \ \mathbf{q}<em>{b</em>{i} b_{k+1}} &amp;&#x3D;\mathbf{q}<em>{b</em>{i} b_{k}} \otimes\left[\begin{array}{c}{1} \ {\frac{1}{2} \boldsymbol{\omega} \delta t}\end{array}\right] \end{aligned}<br>$$</p>
+<p>然后，会完成位置变化的中值积分</p>
+<p>$$<br>\begin{aligned} \mathbf{a} &amp;&#x3D;\frac{1}{2}\left(\mathbf{q}<em>{b</em>{i} b_{k}}\left(\mathbf{a}^{b_{k}}+\mathbf{n}<em>{k}^{a}-\mathbf{b}</em>{k}^{a}\right)+\mathbf{q}<em>{b</em>{i} b_{k+1}}\left(\mathbf{a}^{b_{k+1}}+\mathbf{n}<em>{k+1}^{a}-\mathbf{b}</em>{k}^{a}\right)\right) \ \boldsymbol{\alpha}<em>{b</em>{i} b_{k+1}} &amp;&#x3D;\boldsymbol{\alpha}<em>{b</em>{i} b_{k}}+\boldsymbol{\beta}<em>{b</em>{i} b_{k}} \delta t+\frac{1}{2} \mathbf{a} \delta t^{2} \ \boldsymbol{\beta}<em>{b</em>{i} b_{k+1}} &amp;&#x3D;\boldsymbol{\beta}<em>{b</em>{i} b_{k}}+\mathbf{a} \delta t \end{aligned}<br>$$</p>
+<p>最后是bias的更新：</p>
+<p>$$<br>\begin{aligned} \mathbf{b}<em>{k+1}^{a} &amp;&#x3D;\mathbf{b}</em>{k}^{a} \ \mathbf{b}<em>{k+1}^{g} &amp;&#x3D;\mathbf{b}</em>{k}^{g} \end{aligned}<br>$$</p>
+<h2 id="在vins中，这部分的代码如下（vins-estimator模块中factor文件夹下的头文件integration-base-h中的midPointIntegration函数）："><a href="#在vins中，这部分的代码如下（vins-estimator模块中factor文件夹下的头文件integration-base-h中的midPointIntegration函数）：" class="headerlink" title="在vins中，这部分的代码如下（vins_estimator模块中factor文件夹下的头文件integration_base.h中的midPointIntegration函数）："></a>在vins中，这部分的代码如下（<code>vins_estimator</code>模块中<code>factor</code>文件夹下的头文件<code>integration_base.h</code>中的<code>midPointIntegration</code>函数）：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">//此处预积分也就是在相邻两帧之间的相对积分，得到的是相对的位姿变换</span><br><br><span class="hljs-comment">//ROS_INFO(&quot;midpoint integration&quot;); 加速度中值测量前一个测量</span><br>Vector3d un_acc_0 = delta_q * (_acc_0 - linearized_ba);<br><span class="hljs-comment">//陀螺仪中值测量</span><br>Vector3d un_gyr = <span class="hljs-number">0.5</span> * (_gyr_0 + _gyr_1) - linearized_bg;<br><span class="hljs-comment">//旋转预积分</span><br>result_delta_q = delta_q * <span class="hljs-built_in">Quaterniond</span>(<span class="hljs-number">1</span>, <span class="hljs-built_in">un_gyr</span>(<span class="hljs-number">0</span>) * _dt / <span class="hljs-number">2</span>, <span class="hljs-built_in">un_gyr</span>(<span class="hljs-number">1</span>) * _dt / <span class="hljs-number">2</span>, <span class="hljs-built_in">un_gyr</span>(<span class="hljs-number">2</span>) * _dt / <span class="hljs-number">2</span>);<br><span class="hljs-comment">//加速度中值测量的后一个测量</span><br>Vector3d un_acc_1 = result_delta_q * (_acc_1 - linearized_ba);<br><span class="hljs-comment">//加速度计中值测量</span><br>Vector3d un_acc = <span class="hljs-number">0.5</span> * (un_acc_0 + un_acc_1);<br><span class="hljs-comment">//位置预积分</span><br>result_delta_p = delta_p + delta_v * _dt + <span class="hljs-number">0.5</span> * un_acc * _dt * _dt;<br><span class="hljs-comment">//速度预积分</span><br>result_delta_v = delta_v + un_acc * _dt;<br><span class="hljs-comment">//bias默认不变（预积分时）</span><br>result_linearized_ba = linearized_ba;<br>result_linearized_bg = linearized_bg;         <br></code></pre></td></tr></table></figure></h2><h1 id="预积分更新问题"><a href="#预积分更新问题" class="headerlink" title="预积分更新问题"></a>预积分更新问题</h1><p>我们知道，在vins的非线性优化中不止进行了相机姿态还有路标的优化，也将imu的bias加入了优化的变量中。这样在一次优化更新后，其实bias是会发生改变的，这样预积分量也就需要更新，那么积分就还需要重新计算？</p>
+<p>其实在vins中为了解决这个问题，是这样做的(当更新前后bias变化比较小时)：</p>
+<p>$$<br>\begin{aligned} \boldsymbol{\alpha}<em>{b</em>{k+1}}^{b_{k}} &amp; \approx \hat{\boldsymbol{\alpha}}<em>{b</em>{k+1}}^{b_{k}}+\mathbf{J}<em>{b</em>{a}}^{\alpha} \delta \mathbf{b}<em>{a</em>{k}}+\mathbf{J}<em>{b</em>{w}}^{\alpha} \delta \mathbf{b}<em>{w</em>{k}} \ \boldsymbol{\beta}<em>{b</em>{k+1}}^{b_{k}} &amp; \approx \hat{\boldsymbol{\beta}}<em>{b</em>{k+1}}^{b_{k}}+\mathbf{J}<em>{b</em>{a}}^{\beta} \delta \mathbf{b}<em>{a</em>{k}}+\mathbf{J}<em>{b</em>{w}}^{\beta} \delta \mathbf{b}<em>{w</em>{k}} \ \boldsymbol{\gamma}<em>{b</em>{k+1}}^{b_{k}} &amp; \approx \hat{\boldsymbol{\gamma}}<em>{b</em>{k+1}}^{b_{k}} \otimes\left[\begin{array}{c}{1} \ {\frac{1}{2} \mathbf{J}<em>{b</em>{w}}^{\gamma} \delta \mathbf{b}<em>{w</em>{k}}}\end{array}\right] \end{aligned}<br>$$</p>
+<blockquote>
+<p>当一次非线性优化后，<strong>如果bias的变化比较小</strong>，会使用一阶展开来近似更新<strong>从k帧到k+1帧</strong>的预积分量。<strong>当bias变化比较大时</strong>，近似效果会不好，此时需要重新进行积分。（此处假设使用欧拉积分）这样做可以很大的消减基于优化的方法的计算量。</p>
+</blockquote>
+<h1 id="vins中预积分的实现"><a href="#vins中预积分的实现" class="headerlink" title="vins中预积分的实现"></a>vins中预积分的实现</h1><p>vins中的预积分功能，主要是在<code>vins_estimator</code>模块中<code>factor</code>文件夹下的头文件<code>integration_base.h</code>中实现。</p>
+<p>在vins程序代码中，对于每两帧图像之间都会使用一个<code>integrationBase</code>对象维护此两帧之间的预积分。其中主要有以下几个值得注意的地方：</p>
+<ol>
+<li><p>代码中对于图像与imu数据的时间戳对齐问题使用线性插值的方法进行处理（线性插值获得图像帧时间戳时的imu测量）；</p>
+</li>
+<li><p>预积分使用中值积分进行；</p>
+</li>
+<li><p>在预积分是可以叠加的，每次读入新的imu测量数据，就会进行一个中值预积分操作；</p>
+</li>
+<li><p>每次中值预积分完成后，会更新其雅克比矩阵与方差矩阵（此处的雅克比矩阵在imu的bias变化后，可以直接拿来更新预积分，不用重新积分）</p>
+</li>
+</ol>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ul>
+<li>[1] 深蓝学院vio课程讲义</li>
+<li>[2] Leutenegger S, Furgale P, Rabaud V, et al. Keyframe-based visual-inertial slam using nonlinear optimization[J]. Proceedings of Robotis Science and Systems (RSS) 2013, 2013.</li>
+<li>[3] Qin T, Li P, Shen S. Vins-mono: A robust and versatile monocular visual-inertial state estimator[J]. IEEE Transactions on Robotics, 2018, 34(4): 1004-1020.</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%A4%9A%E4%BC%A0%E6%84%9F%E5%99%A8%E8%9E%8D%E5%90%88/">#多传感器融合</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>IMU预积分</div>
+      <div>http://line.com/2019/07/31/2019-07-31-pre-integration/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Line</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年7月31日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/08/23/2019-08-23-vins-gyro-bias/" title="vins初始化中的陀螺仪偏置标定">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">vins初始化中的陀螺仪偏置标定</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/07/28/2019-07-28-sliding-window/" title="slam中的滑动窗口法">
+                        <span class="hidden-mobile">slam中的滑动窗口法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
