@@ -30,7 +30,7 @@
 <meta property="og:image" content="http://line.com/img/mbr_gpt/gparted.png">
 <meta property="og:image" content="http://line.com/img/mbr_gpt/parted-blkid.png">
 <meta property="article:published_time" content="2018-12-01T17:07:24.000Z">
-<meta property="article:modified_time" content="2023-01-10T13:34:16.007Z">
+<meta property="article:modified_time" content="2023-02-27T12:42:25.818Z">
 <meta property="article:author" content="Line">
 <meta property="article:tag" content="计算机基础">
 <meta name="twitter:card" content="summary_large_image">
@@ -227,7 +227,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.3k 字
+          3.7k 字
         
       </span>
     
@@ -238,7 +238,7 @@
         
         
         
-          28 分钟
+          31 分钟
         
       </span>
     
@@ -351,8 +351,27 @@
 <pre><code class="hljs">sudo apt install gparted</code></pre><p>运行后如下界面</p>
 <p><img src="/img/mbr_gpt/gparted.png" srcset="/img/loading.gif" lazyload alt="gparted"></p>
 <p>这是我虚拟机的分区情况，首先有一个主分区<code>/dev/sda1</code>，挂载在<code>/</code>目录下，与一个扩展分区<code>/dev/sda2</code>，扩展分区只分了一个逻辑分区<code>/dev/sda5</code>作为内存的交换分区。</p>
+<blockquote>
+<p>一般这种图形界面的分区软件都是分区与文件系统初始化同时进行的。十分周到到位，下面讲的命令行分区命令一般都是仅仅进行分区操作（即只对分区表进行填写），文件系统初始化需要专用的命令进行。</p>
+</blockquote>
+<h1 id="分区命令行"><a href="#分区命令行" class="headerlink" title="分区命令行"></a>分区命令行</h1><ul>
+<li><code>lsblk</code>列出计算机硬盘与分区情况 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">xhy@ubuntu:~$ lsblk<br>NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT<br>sr0     11:0    1 1024M  0 rom <br>sda      8:0    0   50G  0 disk <br>├─sda2   8:2    0    1K  0 part <br>├─sda5   8:5    0    2G  0 part <br>└─sda1   8:1    0   48G  0 part /<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
 <ul>
-<li>交换分区一般并没有挂载，可以在觉得内存不足时再进行挂载。如下使用<code>free</code>命令查看内存是否挂载<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">xhy@ubuntu:~$ free<br>              total        used        free      shared  buff/cache   available<br>Mem:        2017308      894012      362524       24756      760772      892696<br>Swap:             0           0           0<br></code></pre></td></tr></table></figure>
+<li><code>blkid</code>查看一个分区的文件系统，UUId等</li>
+<li>使用<code>parted</code>可以列出磁盘的分区表类型与分区信息（其实它的功能十分强大），也可以使用这个命令来进行磁盘分区操作（两种分区表格式都支持）。</li>
+</ul>
+<p><img src="/img/mbr_gpt/parted-blkid.png" srcset="/img/loading.gif" lazyload alt="parted-blkid"></p>
+<ul>
+<li>分区操作命令<code>gdisk</code>与<code>fdisk</code>（前一个针对gpt分区表的磁盘，后一个针对mbr分区表的磁盘）</li>
+</ul>
+<h1 id="linux交换分区的设置"><a href="#linux交换分区的设置" class="headerlink" title="linux交换分区的设置"></a>linux交换分区的设置</h1><h2 id="第一种方法：分区挂载"><a href="#第一种方法：分区挂载" class="headerlink" title="第一种方法：分区挂载"></a>第一种方法：分区挂载</h2><ul>
+<li><p>使用上述分区方法得到一个<code>/dev/sda5</code>的分区</p>
+</li>
+<li><p>交换分区一般并没有挂载，可以在觉得内存不足时再进行挂载。如下使用<code>free</code>命令查看内存是否挂载</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">xhy@ubuntu:~$ free<br>              total        used        free      shared  buff/cache   available<br>Mem:        2017308      894012      362524       24756      760772      892696<br>Swap:             0           0           0<br></code></pre></td></tr></table></figure>
 </li>
 </ul>
 <hr>
@@ -368,25 +387,20 @@
 <li><p>然后先使用<code>swapoff /dev/sda5</code>即可将前面的挂载的交换分区卸载。然后<code>swapon -a</code>执行一下，不用重启即可自动挂载。</p>
 </li>
 <li><p>最后使用<code>swapon -s</code>查看交换分区挂载情况</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">xhy@ubuntu:~$ swapon -s<br>Filename				Type		Size	Used	Priority<br>/dev/sda5                              	partition	2046972	0	-2<br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">xhy@ubuntu:~$ swapon -s<br>Filename                Type        Size    Used    Priority<br>/dev/sda5                               partition   2046972 0   -2<br></code></pre></td></tr></table></figure>
 </li>
 </ul>
 <hr>
-<blockquote>
-<p>一般这种图形界面的分区软件都是分区与文件系统初始化同时进行的。十分周到到位，下面讲的命令行分区命令一般都是仅仅进行分区操作（即只对分区表进行填写），文件系统初始化需要专用的命令进行。</p>
-</blockquote>
-<h1 id="分区命令行"><a href="#分区命令行" class="headerlink" title="分区命令行"></a>分区命令行</h1><ul>
-<li><code>lsblk</code>列出计算机硬盘与分区情况 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">xhy@ubuntu:~$ lsblk<br>NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT<br>sr0     11:0    1 1024M  0 rom <br>sda      8:0    0   50G  0 disk <br>├─sda2   8:2    0    1K  0 part <br>├─sda5   8:5    0    2G  0 part <br>└─sda1   8:1    0   48G  0 part /<br></code></pre></td></tr></table></figure>
+<h2 id="第二种方法：文件挂载"><a href="#第二种方法：文件挂载" class="headerlink" title="第二种方法：文件挂载"></a>第二种方法：文件挂载</h2><ul>
+<li><p>具体思路</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 创建16g交换空间文件</span><br>sudo fallocate -l 16G /swapfile<br><span class="hljs-comment"># 修改交换空间文件权限</span><br>sudo <span class="hljs-built_in">chmod</span> 600 /swapfile<br><span class="hljs-comment"># 格式化交换空间文件</span><br>sudo mkswap /swapfile<br><span class="hljs-comment"># 设置开机自动挂载</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;/swapfile swap swap defaults 0 0&quot;</span> | sudo <span class="hljs-built_in">tee</span> -a /etc/fstab<br><br></code></pre></td></tr></table></figure>
+</li>
+<li><p>如果fallocate报错<code>fallocate: fallocate failed: Text file busy</code>，表示目前已经有交换空间，并且在使用中，可以通过<code>sudo swapoff -a</code>先关闭交换空间</p>
+</li>
+<li><p>如果不想重启，也可以直接<code>sudo swapon /swapfile</code>直接挂载交换空间文件</p>
 </li>
 </ul>
-<hr>
-<ul>
-<li><code>blkid</code>查看一个分区的文件系统，UUId等</li>
-<li>使用<code>parted</code>可以列出磁盘的分区表类型与分区信息（其实它的功能十分强大），也可以使用这个命令来进行磁盘分区操作（两种分区表格式都支持）。</li>
-</ul>
-<p><img src="/img/mbr_gpt/parted-blkid.png" srcset="/img/loading.gif" lazyload alt="parted-blkid"></p>
-<ul>
-<li>分区操作命令<code>gdisk</code>与<code>fdisk</code>（前一个针对gpt分区表的磁盘，后一个针对mbr分区表的磁盘），<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1></li>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
 <li>[1] 鸟哥的linux私房菜（第四版）</li>
 <li>[2] <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%89%A9%E5%B1%95%E5%88%86%E5%8C%BA">https://baike.baidu.com/item/%E6%89%A9%E5%B1%95%E5%88%86%E5%8C%BA</a></li>
 <li>[3] <a target="_blank" rel="noopener" href="https://gparted.org/">https://gparted.org/</a></li>
