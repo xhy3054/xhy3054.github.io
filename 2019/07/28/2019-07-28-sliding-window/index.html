@@ -23,17 +23,17 @@
 <meta property="og:site_name" content="Line&#39;s Blog">
 <meta property="og:description" content="随着VSLAM系统不断往新环境探索，就会有新的相机姿态以及看到新的环境特征，最小二乘残差就会越来越多，信息矩阵越来越大，计算量也会越来越大。 为了保持优化变量的个数在一定范围内，需要使用滑动窗口算法动态增加或移除优化变量。 滑动窗口算法流程 增加新的变量进入最小二乘系统优化  如果变量数目达到了一定的维度，则移除老的变量  系统不断循环前面两步   信息矩阵一般对于最小二乘问题，对应的高斯牛顿求解">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://line.com/assets/img/math/sample3_all.PNG">
-<meta property="og:image" content="http://line.com/assets/img/math/sample4_all.PNG">
-<meta property="og:image" content="http://line.com/assets/img/math/example3_4.PNG">
-<meta property="og:image" content="http://line.com/assets/img/math/example3_1.PNG">
-<meta property="og:image" content="http://line.com/assets/img/math/example3_2.PNG">
+<meta property="og:image" content="http://line.com/img/math/sample3_all.PNG">
+<meta property="og:image" content="http://line.com/img/math/sample4_all.PNG">
+<meta property="og:image" content="http://line.com/img/math/example3_4.PNG">
+<meta property="og:image" content="http://line.com/img/math/example3_1.PNG">
+<meta property="og:image" content="http://line.com/img/math/example3_2.PNG">
 <meta property="article:published_time" content="2019-07-27T17:07:24.000Z">
-<meta property="article:modified_time" content="2023-01-08T16:21:28.853Z">
+<meta property="article:modified_time" content="2023-02-27T13:15:04.573Z">
 <meta property="article:author" content="Line">
 <meta property="article:tag" content="数学">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://line.com/assets/img/math/sample3_all.PNG">
+<meta name="twitter:image" content="http://line.com/img/math/sample3_all.PNG">
   
   
   
@@ -226,7 +226,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.6k 字
+          3.5k 字
         
       </span>
     
@@ -291,7 +291,7 @@
 </li>
 </ol>
 <h2 id="信息矩阵"><a href="#信息矩阵" class="headerlink" title="信息矩阵"></a>信息矩阵</h2><p>一般对于最小二乘问题，对应的高斯牛顿求解为：</p>
-<p>$$<br>\underbrace{\mathbf{J}^{\top} \boldsymbol{\Sigma}^{-1} \mathbf{J}}<em>{\mathbf{H} \text { or } \Lambda} \delta \boldsymbol{\xi}&#x3D;\underbrace{-\mathbf{J}^{\top} \boldsymbol{\Sigma}^{-1} \mathbf{r}}</em>{\mathbf{b}}<br>$$</p>
+<p>$$<br>\underbrace{\mathbf{J}^{\top} \boldsymbol{\Sigma}^{-1} \mathbf{J}}<em>{\mathbf{H} \text { or } \Lambda} \delta \boldsymbol{\xi}=\underbrace{-\mathbf{J}^{\top} \boldsymbol{\Sigma}^{-1} \mathbf{r}}</em>{\mathbf{b}}<br>$$</p>
 <p>其中$\Sigma$对应的是测量的协方差矩阵（它的逆是测量的信息矩阵），而$H$是优化变量的信息矩阵。</p>
 <blockquote>
 <p>为啥会多出$\Sigma$呢？待续</p>
@@ -300,48 +300,32 @@
 <p>直接丢弃变量和对应的测量值，会损失信息。正确的做法是使用边际概率，将丢弃变量所携带的信息传递给剩余变量。</p>
 </blockquote>
 <p>下面，本文使用一个例子A来演示一下，下面这个例子中，我们使用边界概率移除变量$\xi_{1}$。信息矩阵的变化过程如下：</p>
-<div style="text-align: center">
-<img src="/assets/img/math/sample3_all.PNG" srcset="/img/loading.gif" lazyload  width="750" height="350"/>
-</div>
-
-
+<p><img src="/img/math/sample3_all.PNG" srcset="/img/loading.gif" lazyload alt="window"></p>
 <p>接下来，再通过一个例子B，这个例子中，我们先加入一个$x_{t+1}$变量，然后再移除$x_{t}$变量，整个变化过程如下：</p>
-<div style="text-align: center">
-<img src="/assets/img/math/sample4_all.PNG" srcset="/img/loading.gif" lazyload  width="750" height="500"/>
-</div>
-
+<p><img src="/img/math/sample4_all.PNG" srcset="/img/loading.gif" lazyload alt="window"></p>
 <blockquote>
 <p>我们可以发现，marginalization会使得信息矩阵变稠密，原先条件独立的变量，可能变得相关。这个原因是因为信息矩阵中会包含间接相关性。</p>
 </blockquote>
 <h2 id="移除旧变量，添加新变量"><a href="#移除旧变量，添加新变量" class="headerlink" title="移除旧变量，添加新变量"></a>移除旧变量，添加新变量</h2><p>这里还是使用这个例子，完整过程如下：</p>
-<div style="text-align: center">
-<img src="/assets/img/math/example3_4.PNG" srcset="/img/loading.gif" lazyload  width="750" height="450"/>
-</div>
-
+<p><img src="/img/math/example3_4.PNG" srcset="/img/loading.gif" lazyload alt="window"></p>
 <p>此例中，其实对于这么一个高斯牛顿问题：</p>
-<p>$$<br>\underbrace{\mathbf{J}^{\top} \boldsymbol{\Sigma}^{-1} \mathbf{J}}<em>{\mathbf{H} \text { or } \Lambda} \delta \boldsymbol{\xi}&#x3D;\underbrace{-\mathbf{J}^{\top} \boldsymbol{\Sigma}^{-1} \mathbf{r}}</em>{\mathbf{b}}<br>$$</p>
+<p>$$<br>\underbrace{\mathbf{J}^{\top} \boldsymbol{\Sigma}^{-1} \mathbf{J}}<em>{\mathbf{H} \text { or } \Lambda} \delta \boldsymbol{\xi}=\underbrace{-\mathbf{J}^{\top} \boldsymbol{\Sigma}^{-1} \mathbf{r}}</em>{\mathbf{b}}<br>$$</p>
 <p>在marg之前，被marg的变量$x_m$以及对应的测量$\mathcal{S}_{m}$，它们构建的那部分最小二乘信息矩阵为：</p>
-<p>$$<br>\begin{aligned} \mathbf{b}<em>{m}(k) &amp;&#x3D;\left[\begin{array}{c}{\mathbf{b}</em>{m m}(k)} \ {\mathbf{b}<em>{m r}(k)}\end{array}\right]&#x3D;-\sum</em>{(i, j) \in \mathcal{S}<em>{m}} \mathbf{J}</em>{i j}^{\top}(k) \mathbf{\Sigma}<em>{i j}^{-1} \mathbf{r}</em>{i j} \ \boldsymbol{\Lambda}<em>{m}(k) &amp;&#x3D;\left[\begin{array}{cc}{\boldsymbol{\Lambda}</em>{m r}(k)} &amp; {\boldsymbol{\Lambda}<em>{m r}(k)} \ {\boldsymbol{\Lambda}</em>{r m}(k)} &amp; {\boldsymbol{\Lambda}<em>{r r}(k)}\end{array}\right]&#x3D;\sum</em>{(i, j) \in \mathcal{S}<em>{m}} \mathbf{J}</em>{i j}^{\top}(k) \boldsymbol{\Sigma}<em>{i j}^{-1} \mathbf{J}</em>{i j}(k) \end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned} \mathbf{b}<em>{m}(k) &amp;=\left[\begin{array}{c}{\mathbf{b}</em>{m m}(k)} \\ {\mathbf{b}<em>{m r}(k)}\end{array}\right]=-\sum</em>{(i, j) \in \mathcal{S}<em>{m}} \mathbf{J}</em>{i j}^{\top}(k) \mathbf{\Sigma}<em>{i j}^{-1} \mathbf{r}</em>{i j} \\ \boldsymbol{\Lambda}<em>{m}(k) &amp;=\left[\begin{array}{cc}{\boldsymbol{\Lambda}</em>{m r}(k)} &amp; {\boldsymbol{\Lambda}<em>{m r}(k)} \\ {\boldsymbol{\Lambda}</em>{r m}(k)} &amp; {\boldsymbol{\Lambda}<em>{r r}(k)}\end{array}\right]=\sum</em>{(i, j) \in \mathcal{S}<em>{m}} \mathbf{J}</em>{i j}^{\top}(k) \boldsymbol{\Sigma}<em>{i j}^{-1} \mathbf{J}</em>{i j}(k) \end{aligned}<br>$$</p>
 <p>marg之后，变量$x_{m}$的测量信息是这样传递给剩下的变量$x_{r}$的：</p>
-<p>$$<br>\begin{array}{l}{\mathbf{b}<em>{p}(k)&#x3D;\mathbf{b}</em>{m r}(k)-\boldsymbol{\Lambda}<em>{r m}(k) \boldsymbol{\Lambda}</em>{m m}^{-1}(k) \mathbf{b}<em>{m m}(k)} \ {\boldsymbol{\Lambda}</em>{p}(k)&#x3D;\boldsymbol{\Lambda}<em>{r r}(k)-\boldsymbol{\Lambda}</em>{r m}(k) \boldsymbol{\Lambda}<em>{m m}^{-1}(k) \boldsymbol{\Lambda}</em>{m r}(k)}\end{array}<br>$$</p>
+<p>$$<br>\begin{array}{l}{\mathbf{b}<em>{p}(k)=\mathbf{b}</em>{m r}(k)-\boldsymbol{\Lambda}<em>{r m}(k) \boldsymbol{\Lambda}</em>{m m}^{-1}(k) \mathbf{b}<em>{m m}(k)} \\ {\boldsymbol{\Lambda}</em>{p}(k)=\boldsymbol{\Lambda}<em>{r r}(k)-\boldsymbol{\Lambda}</em>{r m}(k) \boldsymbol{\Lambda}<em>{m m}^{-1}(k) \boldsymbol{\Lambda}</em>{m r}(k)}\end{array}<br>$$</p>
 <p>其中下标$p$表示prior，即这些信息将构建一个关于$x_{r}$的先验信息。</p>
 <p>在$k^{\prime}$时刻，新残差$r_{27}$和先验信息$b_{p}(k)，\Lambda_{p}(k)$以及残差$r_{56}$构建新的最小二乘问题：</p>
-<p>$$<br>\begin{array}{c}{\mathbf{b}\left(k^{\prime}\right)&#x3D;\mathbf{\Pi}^{\top} \mathbf{b}<em>{p}(k)-\sum</em>{(i, j) \in \mathcal{S}<em>{a}\left(k^{\prime}\right)} \mathbf{J}</em>{i j}^{\top}\left(k^{\prime}\right) \mathbf{\Sigma}<em>{i j}^{-1} \mathbf{r}</em>{i j}\left(k^{\prime}\right)} \ {\mathbf{\Lambda}\left(k^{\prime}\right)&#x3D;\mathbf{\Pi}^{\top} \mathbf{\Lambda}<em>{p}(k) \mathbf{\Pi}+\sum</em>{(i, j) \in \mathcal{S}<em>{a}\left(k^{\prime}\right)} \mathbf{J}</em>{i j}^{\top}\left(k^{\prime}\right) \mathbf{\Sigma}<em>{i j}^{-1} \mathbf{J}</em>{i j}\left(k^{\prime}\right)}\end{array}<br>$$</p>
-<p>$$\mathbf{\Pi}&#x3D;\left[\begin{array}{ll}{\mathbf{I}<em>{\operatorname{dim} \mathbf{x}</em>{r}}} &amp; {\mathbf{0}}\end{array}\right]$$</p>
+<p>$$<br>\begin{array}{c}{\mathbf{b}\left(k^{\prime}\right)=\mathbf{\Pi}^{\top} \mathbf{b}<em>{p}(k)-\sum</em>{(i, j) \in \mathcal{S}<em>{a}\left(k^{\prime}\right)} \mathbf{J}</em>{i j}^{\top}\left(k^{\prime}\right) \mathbf{\Sigma}<em>{i j}^{-1} \mathbf{r}</em>{i j}\left(k^{\prime}\right)} \\ {\mathbf{\Lambda}\left(k^{\prime}\right)=\mathbf{\Pi}^{\top} \mathbf{\Lambda}<em>{p}(k) \mathbf{\Pi}+\sum</em>{(i, j) \in \mathcal{S}<em>{a}\left(k^{\prime}\right)} \mathbf{J}</em>{i j}^{\top}\left(k^{\prime}\right) \mathbf{\Sigma}<em>{i j}^{-1} \mathbf{J}</em>{i j}\left(k^{\prime}\right)}\end{array}<br>$$</p>
+<p>$$\mathbf{\Pi}=\left[\begin{array}{ll}{\mathbf{I}<em>{\operatorname{dim} \mathbf{x}</em>{r}}} &amp; {\mathbf{0}}\end{array}\right]$$</p>
 <p>其中$\mathbf{\Pi}$用来将矩阵的维度进行扩张。$S_{a}$用来表示除被marg掉的测量以外的其他测量，如$r_{56}，r_{27}$。</p>
 <blockquote>
 <p>此处和被marg掉的变量相关的边（测量）也被丢弃了，所以先验信息中它们关于剩下的变量$x_{r}$的雅克比在后续求解中不能更新。而保留下来的边关于剩下的变量$x_{r}$的雅克比在后续求解中是不断更新的（在最新的线性化点处计算）</p>
 </blockquote>
 <h2 id="First-Estimate-Jacobians"><a href="#First-Estimate-Jacobians" class="headerlink" title="First Estimate Jacobians"></a>First Estimate Jacobians</h2><p>就在上面这个例子中</p>
-<div style="text-align: center">
-<img src="/assets/img/math/example3_1.PNG" srcset="/img/loading.gif" lazyload/>
-</div>
-
+<p><img src="/img/math/example3_1.PNG" srcset="/img/loading.gif" lazyload alt="window"></p>
 <p>它在添加新的节点中信息矩阵的更新过程如下：</p>
-<div style="text-align: center">
-<img src="/assets/img/math/example3_2.PNG" srcset="/img/loading.gif" lazyload  width="750" height="250"/>
-</div>
-
+<p><img src="/img/math/example3_2.PNG" srcset="/img/loading.gif" lazyload alt="window"></p>
 <p>此时，我们会发现$\xi_{2}$自身的信息矩阵部分是由两部分组成的，此时如果这两部分的计算时使用的$\xi_{2}$（线性化点）的状态不一样，就可能会导致信息矩阵的零空间发生变化，引入错误信息。</p>
 <p>之所以线性化点会不一样，是因为在marg掉$\xi_{1}$时，新得到的蓝色的小一维雅克比矩阵是直接通过舒尔补计算得到的，所以此时当时计算这个雅克比的$\xi_{2}$点的状态是迭代更新前的，此时新加入的粉红部分的雅克比要想保持与其一致，其在对$\xi_{2}$进行偏导计算时，也需要使用迭代更新前的状态才行。</p>
 <blockquote>

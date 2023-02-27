@@ -23,15 +23,15 @@
 <meta property="og:site_name" content="Line&#39;s Blog">
 <meta property="og:description" content="在图像分割领域，最近几年基于深度学习的方法占据了绝对领先的地位。但是相对于黑匣子的深度学习，传统的方法更有几分味道。这次要介绍的是图割算法，这是一种基于能量优化的方法，在前景背景分割上很有效果。 1. 最大流与最小割 在了解图割之前，首先需要了解最大流与最小割的概念。  1.1 最小割min-cut举例说明，如下一个有向加权图所示，从顶点S(source)到顶点T(sink)有三条路径，每条路径的">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://line.com/assets/img/graph_cut/graphcut001.jpg">
-<meta property="og:image" content="http://line.com/assets/img/graph_cut/graphcut002.jpg">
-<meta property="og:image" content="http://line.com/assets/img/graph_cut/graphcut004.jpg">
+<meta property="og:image" content="http://line.com/img/graph_cut/graphcut001.jpg">
+<meta property="og:image" content="http://line.com/img/graph_cut/graphcut002.jpg">
+<meta property="og:image" content="http://line.com/img/graph_cut/graphcut004.jpg">
 <meta property="article:published_time" content="2021-01-23T17:07:24.000Z">
-<meta property="article:modified_time" content="2023-01-08T16:21:28.853Z">
+<meta property="article:modified_time" content="2023-02-27T12:54:27.329Z">
 <meta property="article:author" content="Line">
 <meta property="article:tag" content="计算机视觉">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://line.com/assets/img/graph_cut/graphcut001.jpg">
+<meta name="twitter:image" content="http://line.com/img/graph_cut/graphcut001.jpg">
   
   
   
@@ -283,10 +283,7 @@
 <p>在了解图割之前，首先需要了解最大流与最小割的概念。</p>
 </blockquote>
 <h2 id="1-1-最小割min-cut"><a href="#1-1-最小割min-cut" class="headerlink" title="1.1 最小割min-cut"></a>1.1 最小割min-cut</h2><p>举例说明，如下一个有向加权图所示，从顶点<code>S(source)</code>到顶点<code>T(sink)</code>有三条路径，每条路径的代价<code>c(cost)</code>是该路径上所有边的权重之和。最小割的意思就是说通过割断边将图中所有节点划分为两个不相交的集合，<code>S</code>与<code>T</code>分别在其中一个集合中。并且最小割保证所割断的边的权重之和最小：</p>
-<div style="text-align: center">
-<img src="/assets/img/graph_cut/graphcut001.jpg" srcset="/img/loading.gif" lazyload   width="750" height="400"/>
-</div>
-
+<p><img src="/img/graph_cut/graphcut001.jpg" srcset="/img/loading.gif" lazyload alt="gc"></p>
 <p>可以很明显的发现割断的边是<code>s-&gt;a</code>与<code>b-&gt;t</code>时是最小割。</p>
 <h2 id="1-2-最大流max-flow"><a href="#1-2-最大流max-flow" class="headerlink" title="1.2 最大流max-flow"></a>1.2 最大流max-flow</h2><p>我们将边想象成管道，权重表示流量，那么从<code>S</code>能流入<code>T</code>的最大流量就是<code>2+3=5</code>，而在计算最大流量的过程中，我们可以发现起到约束作用的边是<code>s-&gt;a</code>与<code>b-&gt;t</code>。这也就是最大流。</p>
 <blockquote>
@@ -297,12 +294,7 @@
 <p>图割算法其实就是将最大流最小割的理论应用到了图像分割的领域。</p>
 </blockquote>
 <p>比如说前景背景分割问题，可以将图像表示为一张无向图<code>G=(V,E)</code>，其中<code>V</code>是顶点集合，<code>E</code>是边集合。在这个图上多添加两个顶点，一个代表前景的<code>S(Source,源)</code>节点，一个代表背景的<code>T(Sink,汇)</code>节点。在初始构造的图中，每个像素顶点都和<code>S</code>与<code>T</code>连接，并且它们之间的边被叫做<code>t-links</code>。如下图：</p>
-<div style="text-align: center">
-<img src="/assets/img/graph_cut/graphcut002.jpg" srcset="/img/loading.gif" lazyload   width="750" height="400"/>
-</div>
-
-
-
+<p><img src="/img/graph_cut/graphcut002.jpg" srcset="/img/loading.gif" lazyload alt="gc"></p>
 <ul>
 <li><p><code>t-links</code>：每个像素节点与类别节点（<code>S/T</code>，t是terminal的缩写）相连的边；</p>
 </li>
@@ -327,14 +319,9 @@
 <li>建立一个图，图中边的粗细表示对应权重的大小；</li>
 <li>找到最大流或最小割的边的组合，完成图像分割；</li>
 </ol>
-<div style="text-align: center">
-<img src="/assets/img/graph_cut/graphcut004.jpg" srcset="/img/loading.gif" lazyload   width="600" height="650"/>
-</div>
-
-
-
+<p><img src="/img/graph_cut/graphcut004.jpg" srcset="/img/loading.gif" lazyload alt="gc"></p>
 <h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ul>
-<li><p>[1] Boykov Y ,  Kolmogorov V . An experimental comparison of min-cut&#x2F;max-  flow algorithms for energy minimization in vision[J]. IEEE Transactions  on Pattern Analysis and Machine Intelligence, 2004, 26(9):1124-1137.</p>
+<li><p>[1] Boykov Y ,  Kolmogorov V . An experimental comparison of min-cut/max-  flow algorithms for energy minimization in vision[J]. IEEE Transactions  on Pattern Analysis and Machine Intelligence, 2004, 26(9):1124-1137.</p>
 </li>
 <li><p>[2] <a target="_blank" rel="noopener" href="https://pengyizhang.github.io/2020/04/07/graphcut/">https://pengyizhang.github.io/2020/04/07/graphcut/</a></p>
 </li>

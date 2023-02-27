@@ -23,13 +23,13 @@
 <meta property="og:site_name" content="Line&#39;s Blog">
 <meta property="og:description" content="之前写过一篇讲解BA的博客，不过那篇主要侧重于讲解BA在slam中的应用与求解方式，但是忽略了对于细节的边的构造与jacobian矩阵的计算的讲解，前几天有人提醒我这一点，所以今天抽出来时间补充一下。 BA优化中的边（重投影误差）Bundle Adjustment，中文翻译有捆集调整、光束法平差。它的主要思想是最小化重投影误差。 BA优化的误差边也就是重投影误差边。  投影过程是将一个地图点（三维">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://line.com/assets/img/math/raodong.PNG">
+<meta property="og:image" content="http://line.com/img/math/raodong.PNG">
 <meta property="article:published_time" content="2019-10-31T17:07:24.000Z">
-<meta property="article:modified_time" content="2023-01-08T16:21:28.853Z">
+<meta property="article:modified_time" content="2023-02-27T13:08:17.291Z">
 <meta property="article:author" content="Line">
 <meta property="article:tag" content="数学">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://line.com/assets/img/math/raodong.PNG">
+<meta name="twitter:image" content="http://line.com/img/math/raodong.PNG">
   
   
   
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          4.3k 字
+          4.2k 字
         
       </span>
     
@@ -285,7 +285,7 @@
 <li><p>误差边的定义是测量坐标（该帧上提取到的此地图点的位置$(u_m,v_m)$）减去投影得到坐标$(u,v)$</p>
 </li>
 </ul>
-<p>$$ e &#x3D; [u_m,v_m]^T - [u,v]^T $$</p>
+<p>$$ e = [u_m,v_m]^T - [u,v]^T $$</p>
 <h2 id="BA优化中的节点（投影点与关键帧）"><a href="#BA优化中的节点（投影点与关键帧）" class="headerlink" title="BA优化中的节点（投影点与关键帧）"></a>BA优化中的节点（投影点与关键帧）</h2><p>通常我们最经常放入BA中进行优化的节点有两个</p>
 <ol>
 <li><p>地图点的三维坐标为$(X,Y,Z)$</p>
@@ -297,41 +297,38 @@
 <p>当然了，BA优化时只要观测到的约束足够多，方程就足够多，因此可以优化更多节点。比如我们还可以放入的节点有相机内参等。</p>
 </blockquote>
 <h2 id="jacobian的推导"><a href="#jacobian的推导" class="headerlink" title="jacobian的推导"></a>jacobian的推导</h2><p>前面已经列出来了<strong>重投影误差</strong>的定义为：</p>
-<p>$$ e &#x3D; [u_m,v_m]^T - [u,v]^T $$</p>
+<p>$$ e = [u_m,v_m]^T - [u,v]^T $$</p>
 <p>然后被投影帧的位姿为$$T_{wc}$$，地图点在世界坐标系中的位置为$P$，则将其<strong>变换到该帧的相机坐标系下的坐标</strong>为</p>
-<p>$$ P’ &#x3D; T_{wc} * P  &#x3D; [X’, Y’, Z’]^T$$</p>
+<p>$$ P’ = T_{wc} * P  = [X’, Y’, Z’]^T$$</p>
 <p>然后将这个点<strong>投影到像素平面</strong>上的操作为</p>
-<p>$$ \left[\begin{array}{c}{Z’ u} \ {Z’ v} \ {Z’}\end{array}\right]&#x3D;\left[\begin{array}{ccc}{f_{x}} &amp; {0} &amp; {c_{x}} \ {0} &amp; {f_{y}} &amp; {c_{y}} \ {0} &amp; {0} &amp; {1}\end{array}\right]\left[\begin{array}{c}{X^{\prime}} \ {Y^{\prime}} \ {Z^{\prime}}\end{array}\right] $$</p>
+<p>$$ \left[\begin{array}{c}{Z’ u} \\ {Z’ v} \\ {Z’}\end{array}\right]=\left[\begin{array}{ccc}{f_{x}} &amp; {0} &amp; {c_{x}} \\ {0} &amp; {f_{y}} &amp; {c_{y}} \\ {0} &amp; {0} &amp; {1}\end{array}\right]\left[\begin{array}{c}{X^{\prime}} \\ {Y^{\prime}} \\ {Z^{\prime}}\end{array}\right] $$</p>
 <p>即</p>
-<p>$$<br>u&#x3D;f_{x} \frac{X^{\prime}}{Z^{\prime}}+c_{x}, \quad v&#x3D;f_{y} \frac{Y^{\prime}}{Z^{\prime}}+c_{y}<br>$$</p>
+<p>$$<br>u=f_{x} \frac{X^{\prime}}{Z^{\prime}}+c_{x}, \quad v=f_{y} \frac{Y^{\prime}}{Z^{\prime}}+c_{y}<br>$$</p>
 <h3 id="重投影误差对地图点三维坐标的jacobian"><a href="#重投影误差对地图点三维坐标的jacobian" class="headerlink" title="重投影误差对地图点三维坐标的jacobian"></a>重投影误差对地图点三维坐标的jacobian</h3><p>由上，我们首先计算重投影误差对地图点相机坐标系下坐标$$P^{\prime}$$的偏导，</p>
-<p>$$<br>\frac{\partial e}{\partial P^{\prime}}&#x3D;-\left[\begin{array}{ccc}{\frac{\partial u}{\partial X^{\prime}}} &amp; {\frac{\partial u}{\partial Y^{\prime}}} &amp; {\frac{\partial u}{\partial Z^{\prime}}} \ {\frac{\partial v}{\partial X^{\prime}}} &amp; {\frac{\partial v}{\partial Y^{\prime}}} &amp; {\frac{\partial v}{\partial Z^{\prime}}}\end{array}\right]&#x3D;-\left[\begin{array}{ccc}{\frac{f_{x}}{Z^{\prime}}} &amp; {0} &amp; {-\frac{f_{x^{\prime}} X^{\prime}}{Z^{\prime 2}}} \ {0} &amp; {\frac{f_{y}}{Z^{\prime}}} &amp; {-\frac{f_{y} Y^{\prime}}{Z^{\prime 2}}}\end{array}\right]<br>$$</p>
+<p>$$<br>\frac{\partial e}{\partial P^{\prime}}=-\left[\begin{array}{ccc}{\frac{\partial u}{\partial X^{\prime}}} &amp; {\frac{\partial u}{\partial Y^{\prime}}} &amp; {\frac{\partial u}{\partial Z^{\prime}}} \\ {\frac{\partial v}{\partial X^{\prime}}} &amp; {\frac{\partial v}{\partial Y^{\prime}}} &amp; {\frac{\partial v}{\partial Z^{\prime}}}\end{array}\right]=-\left[\begin{array}{ccc}{\frac{f_{x}}{Z^{\prime}}} &amp; {0} &amp; {-\frac{f_{x^{\prime}} X^{\prime}}{Z^{\prime 2}}} \\ {0} &amp; {\frac{f_{y}}{Z^{\prime}}} &amp; {-\frac{f_{y} Y^{\prime}}{Z^{\prime 2}}}\end{array}\right]<br>$$</p>
 <p>接着根据如下链式法则与坐标变换关系</p>
-<p>$$<br>\frac{\partial e}{\partial \boldsymbol{P}}&#x3D;\frac{\partial \boldsymbol{e}}{\partial \boldsymbol{P}^{\prime}} \frac{\partial \boldsymbol{P}^{\prime}}{\partial \boldsymbol{P}}<br>$$</p>
-<p>$$<br>\boldsymbol{P}^{\prime} &#x3D; \boldsymbol{R} \boldsymbol{P} + t<br>$$</p>
+<p>$$<br>\frac{\partial e}{\partial \boldsymbol{P}}=\frac{\partial \boldsymbol{e}}{\partial \boldsymbol{P}^{\prime}} \frac{\partial \boldsymbol{P}^{\prime}}{\partial \boldsymbol{P}}<br>$$</p>
+<p>$$<br>\boldsymbol{P}^{\prime} = \boldsymbol{R} \boldsymbol{P} + t<br>$$</p>
 <p>可以得到最终的<strong>重投影误差对地图点三维坐标的jacobian</strong></p>
-<p>$$<br>\frac{\partial e}{\partial \boldsymbol{P}} &#x3D; -\left[\begin{array}{ccc}{\frac{f_{x}}{Z^{\prime}}} &amp; {0} &amp; {-\frac{f_{x^{\prime}} X^{\prime}}{Z^{\prime 2}}} \ {0} &amp; {\frac{f_{y}}{Z^{\prime}}} &amp; {-\frac{f_{y} Y^{\prime}}{Z^{\prime 2}}}\end{array}\right] \boldsymbol{R}<br>$$</p>
+<p>$$<br>\frac{\partial e}{\partial \boldsymbol{P}} = -\left[\begin{array}{ccc}{\frac{f_{x}}{Z^{\prime}}} &amp; {0} &amp; {-\frac{f_{x^{\prime}} X^{\prime}}{Z^{\prime 2}}} \\ {0} &amp; {\frac{f_{y}}{Z^{\prime}}} &amp; {-\frac{f_{y} Y^{\prime}}{Z^{\prime 2}}}\end{array}\right] \boldsymbol{R}<br>$$</p>
 <h3 id="重投影误差对被投影帧位姿的jacobian"><a href="#重投影误差对被投影帧位姿的jacobian" class="headerlink" title="重投影误差对被投影帧位姿的jacobian"></a>重投影误差对被投影帧位姿的jacobian</h3><blockquote>
 <p>此处需要说明的是，对于位姿变换（对应的李群是$SE(3)$）的求导我们一般将其变换到$SE(3)$对应的李代数$$\xi$$上使用扰动模型来求导。</p>
 </blockquote>
 <p>根据前面的推导我们可以发现，重投影误差项$e$中与位姿$T_{wc}$相关的只有$\boldsymbol{P}^{\prime}$，因此可以将求解过程分解为如下两步</p>
-<p>$$<br>\frac{\partial e}{\partial \delta \xi}&#x3D;\frac{\partial e}{\partial P^{\prime}} \frac{\partial P^{\prime}}{\partial \delta \xi}<br>$$</p>
+<p>$$<br>\frac{\partial e}{\partial \delta \xi}=\frac{\partial e}{\partial P^{\prime}} \frac{\partial P^{\prime}}{\partial \delta \xi}<br>$$</p>
 <p>其中第一部分$$\frac{\partial e}{\partial P^{\prime}}$$在前面已经求解出来了，第二部分可以通过使用扰动模型左乘扰动量来求得（具体步骤见附录1）</p>
-<p>$$<br>\frac{\partial(\boldsymbol{T} \boldsymbol{P})}{\partial \delta \boldsymbol{\xi}}&#x3D;(\boldsymbol{T} \boldsymbol{P})^{\odot}&#x3D;\left[\begin{array}{cc}{\boldsymbol{I}} &amp; {-\boldsymbol{P}^{\prime \wedge}} \ {\boldsymbol{0}^{\mathrm{T}}} &amp; {\boldsymbol{0}^{\mathrm{T}}}\end{array}\right]<br>$$</p>
+<p>$$<br>\frac{\partial(\boldsymbol{T} \boldsymbol{P})}{\partial \delta \boldsymbol{\xi}}=(\boldsymbol{T} \boldsymbol{P})^{\odot}=\left[\begin{array}{cc}{\boldsymbol{I}} &amp; {-\boldsymbol{P}^{\prime \wedge}} \\ {\boldsymbol{0}^{\mathrm{T}}} &amp; {\boldsymbol{0}^{\mathrm{T}}}\end{array}\right]<br>$$</p>
 <p>由于上面是使用的$$\boldsymbol{P}$$的齐次坐标形式，所以从上式结果中取出前三维就是（这是一个$3*6$大小的矩阵）</p>
-<p>$$<br>\frac{\partial \boldsymbol{P}^{\prime}}{\partial \delta \boldsymbol{\xi}}&#x3D;\left[\boldsymbol{I},-\boldsymbol{P}^{\prime \wedge}\right]<br>$$</p>
+<p>$$<br>\frac{\partial \boldsymbol{P}^{\prime}}{\partial \delta \boldsymbol{\xi}}=\left[\boldsymbol{I},-\boldsymbol{P}^{\prime \wedge}\right]<br>$$</p>
 <p>然后将两项相乘就可以得到我们想要的结果–<strong>重投影误差对被投影帧位姿的jacobian</strong></p>
-<p>$$<br>\frac{\partial e}{\partial \delta \xi}&#x3D;-\left[\begin{array}{lllll}{\frac{f_{x}}{Z^{\prime}}} &amp; {0} &amp; {-\frac{f_{x} X^{\prime}}{Z^{\prime 2}}} &amp; {-\frac{f_{x} X^{\prime} Y^{\prime}}{Z^{\prime 2}}} &amp; {f_{x}+\frac{f_{x} X^{2}}{Z^{\prime 2}}} &amp; {-\frac{f_{x} Y^{\prime}}{Z^{\prime}}} \ {0} &amp; {\frac{f_{y}}{Z^{\prime}}} &amp; {-\frac{f_{y Y^{\prime}}}{Z^{\prime 2}}} &amp; {-f_{y}-\frac{f_{y} Y^{\prime 2}}{Z^{\prime 2}}} &amp; {\frac{f_{y} X^{\prime Y^{\prime}}}{Z^{\prime 2}}} &amp; {\frac{f_{y} X^{\prime}}{Z^{\prime}}}\end{array}\right]<br>$$</p>
-<h3 id="附录1"><a href="#附录1" class="headerlink" title="附录1"></a>附录1</h3><p>假设如下求导中的左乘的扰动项的李代数为$$\delta \boldsymbol{\xi}&#x3D;[\delta \boldsymbol{\rho}, \delta \phi]^{\mathrm{T}}$$，那么：</p>
-<div style="text-align: center">
-<img src="/assets/img/math/raodong.PNG" srcset="/img/loading.gif" lazyload/>
-</div>
-
+<p>$$<br>\frac{\partial e}{\partial \delta \xi}=-\left[\begin{array}{lllll}{\frac{f_{x}}{Z^{\prime}}} &amp; {0} &amp; {-\frac{f_{x} X^{\prime}}{Z^{\prime 2}}} &amp; {-\frac{f_{x} X^{\prime} Y^{\prime}}{Z^{\prime 2}}} &amp; {f_{x}+\frac{f_{x} X^{2}}{Z^{\prime 2}}} &amp; {-\frac{f_{x} Y^{\prime}}{Z^{\prime}}} \\ {0} &amp; {\frac{f_{y}}{Z^{\prime}}} &amp; {-\frac{f_{y Y^{\prime}}}{Z^{\prime 2}}} &amp; {-f_{y}-\frac{f_{y} Y^{\prime 2}}{Z^{\prime 2}}} &amp; {\frac{f_{y} X^{\prime Y^{\prime}}}{Z^{\prime 2}}} &amp; {\frac{f_{y} X^{\prime}}{Z^{\prime}}}\end{array}\right]<br>$$</p>
+<h3 id="附录1"><a href="#附录1" class="headerlink" title="附录1"></a>附录1</h3><p>假设如下求导中的左乘的扰动项的李代数为$$\delta \boldsymbol{\xi}=[\delta \boldsymbol{\rho}, \delta \phi]^{\mathrm{T}}$$，那么：</p>
+<p><img src="/img/math/raodong.PNG" srcset="/img/loading.gif" lazyload alt="math"></p>
 <blockquote>
 <p>上面最后一行矩阵除法，与矩阵乘法规则类似，只是乘号变成了除号。其使用一个$4×1$矩阵除以一个$1×6$矩阵得到一个$4×6$矩阵</p>
 </blockquote>
 <h3 id="附录2"><a href="#附录2" class="headerlink" title="附录2"></a>附录2</h3><p><strong>雅克比矩阵即是偏导数矩阵</strong>，由于一般待求导的目标函数的因变量是列向量，自变量也是列向量，在求雅克比矩阵时遵循如下规则：</p>
-<p>$$<br>\frac{\mathrm{d}\left[\begin{array}{l}{a} \ {b}\end{array}\right]}{\mathrm{d}\left[\begin{array}{l}{x} \ {y}\end{array}\right]}&#x3D;\left[\begin{array}{cc}{\frac{\mathrm{d} a}{\mathrm{d} x}} &amp; {\frac{\mathrm{d} a}{\mathrm{d} y}} \ {\frac{\mathrm{d} b}{\mathrm{d} x}} &amp; {\frac{\mathrm{d} b}{\mathrm{d} y}}\end{array}\right]<br>$$</p>
+<p>$$<br>\frac{\mathrm{d}\left[\begin{array}{l}{a} \\ {b}\end{array}\right]}{\mathrm{d}\left[\begin{array}{l}{x} \\ {y}\end{array}\right]}=\left[\begin{array}{cc}{\frac{\mathrm{d} a}{\mathrm{d} x}} &amp; {\frac{\mathrm{d} a}{\mathrm{d} y}} \\ {\frac{\mathrm{d} b}{\mathrm{d} x}} &amp; {\frac{\mathrm{d} b}{\mathrm{d} y}}\end{array}\right]<br>$$</p>
 <blockquote>
 <p>其实只需要明确一点，上述公式便很容易记起来了。对于输入为n维向量，输出为m维向量的变换（即从$R^n$到$R^m$的变换），它的雅克比矩阵为$m*n$维。即行数由输出向量的维度决定，列数由输入向量的维度决定</p>
 </blockquote>
