@@ -67,6 +67,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -84,7 +88,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -222,7 +230,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.8k 字
+          4.1k 字
         
       </span>
     
@@ -233,7 +241,7 @@
         
         
         
-          32 分钟
+          34 分钟
         
       </span>
     
@@ -279,54 +287,50 @@
                 <p>线性判别分析(Linear Discriminant Analysis，简称LDA)是一种经典的<strong>有监督线性学习</strong>方法，最早在1936年由fisher在二分类问题上提出。这种方法主要用于分类与降维。此处需要说明的是，LDA常常还会是隐含狄利克雷分布(Latent Dirichlet Allocation)的简称，这是自然语言处理领域一种处理文档的主题模型，与本文讲的线性判别分析关系不大。</p>
 <h1 id="基本思想"><a href="#基本思想" class="headerlink" title="基本思想"></a>基本思想</h1><p>LDA的思想及其朴素，这是一种<strong>有监督</strong>学习的技术。给定训练样例集合，设法将样例投影到低维度的空间里，使得同类样例的投影点尽可能接近、异类样例的投影点尽可能远离。概括一下为<strong>投影后类内方差最小，类间方差最大。</strong></p>
 <blockquote>
-<p>一般广义线性模型可表示为$y = g^{-1}(W^{T}x)$,其中W完成线性映射，g函数为联系函数，可以完成非线性转换（比如分类时将回归连续值转换成离散值）。LDA要做的其实是首先使用W将样本从高维空间映射到低维空间，然后根据y的真值将样本分成一群群，通过最大化样本的类间距离、最小化样本的类内方差原则来估计出W。</p>
+<p>一般广义线性模型可表示为$y &#x3D; g^{-1}(W^{T}x)$,其中W完成线性映射，g函数为联系函数，可以完成非线性转换（比如分类时将回归连续值转换成离散值）。LDA要做的其实是首先使用W将样本从高维空间映射到低维空间，然后根据y的真值将样本分成一群群，通过最大化样本的类间距离、最小化样本的类内方差原则来估计出W。</p>
 </blockquote>
 <p>为了尽量表达清楚，先从最简单的二分类的LDA进行讲解。如下图：</p>
 <p><img src="/img/lda/2lda.png" srcset="/img/loading.gif" lazyload alt="2lda"></p>
 <h2 id="二分类LDA"><a href="#二分类LDA" class="headerlink" title="二分类LDA"></a>二分类LDA</h2><ul>
-<li><p>假设有数据集$ D=\{(x_1,y_1), (x_2,y_2), …,((x_m,y_m))\} $，其中$x_i$为n维向量，$ y_i \in \{0,1\} $。我们定义</p>
+<li><p>假设有数据集$ D&#x3D;{(x_1,y_1), (x_2,y_2), …,((x_m,y_m))} $，其中$x_i$为n维向量，$ y_i \in {0,1} $。我们定义</p>
 <ul>
-<li>$N_j(j=0,1)$为第j类样本的个数;</li>
-<li>$X_j(j=0,1)$为第j类样本的集合;</li>
-<li>$u_j(j=0,1)$为第j类样本的均值向量，即$ \mu_j = \frac{1}{N_j}\sum\limits_{x \in X_j}x;;(j=0,1) $;</li>
-<li>$\Sigma_j(j=0,1)$为第j类样本的协方差矩阵，即$ \Sigma_j = \sum\limits_{x \in X_j}(x-\mu_j)(x-\mu_j)^T;;(j=0,1) $；</li>
+<li>$N_j(j&#x3D;0,1)$为第j类样本的个数;</li>
+<li>$X_j(j&#x3D;0,1)$为第j类样本的集合;</li>
+<li>$u_j(j&#x3D;0,1)$为第j类样本的均值向量，即$ \mu_j &#x3D; \frac{1}{N_j}\sum\limits_{x \in X_j}x;;(j&#x3D;0,1) $;</li>
+<li>$\Sigma_j(j&#x3D;0,1)$为第j类样本的协方差矩阵，即$ \Sigma_j &#x3D; \sum\limits_{x \in X_j}(x-\mu_j)(x-\mu_j)^T;;(j&#x3D;0,1) $；</li>
 </ul>
 </li>
 <li><p>由于两类，所以只需要将数据投影到一条直线上即可。投影到一条直线上，则：</p>
 <ul>
-<li><p>投影矩阵是一个向量，假设为w</p>
-</li>
-<li><p>样本$x_i$投影后为$w^Tx_i$</p>
-</li>
-<li><p>投影后的样本中心为$w^Tu_i$</p>
-</li>
-<li><p>投影后类间方差为$ w^T\Sigma_0w $与$ w^T\Sigma_1w $，类内方差为</p>
-<p>$$ ||w^T\mu_0-w^T\mu_1||_2^2 =  w^T(\mu_0-\mu_1)(\mu_0-\mu_1)^Tw $$</p>
-</li>
+<li>投影矩阵是一个向量，假设为w</li>
+<li>样本$x_i$投影后为$w^Tx_i$</li>
+<li>投影后的样本中心为$w^Tu_i$</li>
+<li>投影后类间方差为$ w^T\Sigma_0w $与$ w^T\Sigma_1w $，类内方差为</li>
 </ul>
+<p>  $$ ||w^T\mu_0-w^T\mu_1||_2^2 &#x3D;  w^T(\mu_0-\mu_1)(\mu_0-\mu_1)^Tw $$</p>
 </li>
 <li><p>我们的目标是投影后类内方差最小，类间方差最大，即：</p>
-<p>   $$ \underbrace{arg;max}_w;;J(w) = \frac{||w^T\mu_0-w^T\mu_1||_2^2}{w^T\Sigma_0w+w^T\Sigma_1w} = \frac{w^T(\mu_0-\mu_1)(\mu_0-\mu_1)^Tw}{w^T(\Sigma_0+\Sigma_1)w} $$</p>
+<p>   $$ \underbrace{arg;max}_w;;J(w) &#x3D; \frac{||w^T\mu_0-w^T\mu_1||_2^2}{w^T\Sigma_0w+w^T\Sigma_1w} &#x3D; \frac{w^T(\mu_0-\mu_1)(\mu_0-\mu_1)^Tw}{w^T(\Sigma_0+\Sigma_1)w} $$</p>
 </li>
 <li><p>一般我们定义类内散度为$S_w$为：</p>
-<p>  $$ S_w = \Sigma_0 + \Sigma_1 = \sum\limits_{x \in X_0}(x-\mu_0)(x-\mu_0)^T + \sum\limits_{x \in X_1}(x-\mu_1)(x-\mu_1)^T $$</p>
+<p>  $$ S_w &#x3D; \Sigma_0 + \Sigma_1 &#x3D; \sum\limits_{x \in X_0}(x-\mu_0)(x-\mu_0)^T + \sum\limits_{x \in X_1}(x-\mu_1)(x-\mu_1)^T $$</p>
 </li>
 <li><p>类间散度为$S_b$为：</p>
-<p>  $$ S_b = (\mu_0-\mu_1)(\mu_0-\mu_1)^T $$</p>
+<p>  $$ S_b &#x3D; (\mu_0-\mu_1)(\mu_0-\mu_1)^T $$</p>
 </li>
 <li><p>最后，我们将优化目标重写为</p>
-<p>  $$ \underbrace{arg;max}_w;;J(w) = \frac{w^TS_bw}{w^TS_ww} $$</p>
+<p>  $$ \underbrace{arg;max}_w;;J(w) &#x3D; \frac{w^TS_bw}{w^TS_ww} $$</p>
 </li>
 </ul>
 <blockquote>
 <p>最后的这个优化结果其实是一个<strong>广义瑞利商</strong></p>
 </blockquote>
 <h2 id="瑞利商与广义瑞利商"><a href="#瑞利商与广义瑞利商" class="headerlink" title="瑞利商与广义瑞利商"></a>瑞利商与广义瑞利商</h2><h3 id="瑞利商"><a href="#瑞利商" class="headerlink" title="瑞利商"></a>瑞利商</h3><p>瑞利商是指这样的函数$ R(A,x) $</p>
-<p>$$ R(A,x) = \frac{x^HAx}{x^Hx} $$</p>
+<p>$$ R(A,x) &#x3D; \frac{x^HAx}{x^Hx} $$</p>
 <p>其中：</p>
 <ul>
 <li>x为非零向量</li>
-<li>A为<code>n*n</code>的Hermitan矩阵(共轭转置等于自身的矩阵)，即$A^H = A$，只要A为实矩阵，并且满足$ A^T=A $,即为一个Hermitan矩阵。</li>
+<li>A为<code>n*n</code>的Hermitan矩阵(共轭转置等于自身的矩阵)，即$A^H &#x3D; A$，只要A为实矩阵，并且满足$ A^T&#x3D;A $,即为一个Hermitan矩阵。</li>
 </ul>
 <p>瑞利商$R(A,x)$有一个非常重要的性质，即它的最大值等于矩阵A最大的特征值（此时x为对应的特征向量），而最小值等于矩阵A的最小的特征值，也就满足</p>
 <p>$$ \lambda_{min} \leq \frac{x^HAx}{x^Hx} \leq \lambda_{max} $$</p>
@@ -334,42 +338,42 @@
 <p>我们可以发现瑞利商的分子分母都是x的二次项，所以最后的结果肯定是与x的长度无关的，只会与x的方向有关，这个结论刚好体现了这样一点。</p>
 </blockquote>
 <h3 id="广义瑞利商"><a href="#广义瑞利商" class="headerlink" title="广义瑞利商"></a>广义瑞利商</h3><p>广义瑞利商是指这样的函数$R(A,B,x)$;</p>
-<p>$$ R(A,x) = \frac{x^HAx}{x^HBx} $$</p>
+<p>$$ R(A,x) &#x3D; \frac{x^HAx}{x^HBx} $$</p>
 <p>其中：</p>
 <ul>
 <li>x为非零向量</li>
 <li>而A,B为<code>n*n</code>的Hermitan矩阵。B为正定矩阵。</li>
 </ul>
-<p>另$x = B^{-1/2}x’ $,此处分母可以转换成：</p>
-<p>$$ x^HBx = x’^H(B^{-1/2})^HBB^{-1/2}x’ = x’^HB^{-1/2}BB^{-1/2}x’ = x’^Hx’ $$</p>
+<p>另$x &#x3D; B^{-1&#x2F;2}x’ $,此处分母可以转换成：</p>
+<p>$$ x^HBx &#x3D; x’^H(B^{-1&#x2F;2})^HBB^{-1&#x2F;2}x’ &#x3D; x’^HB^{-1&#x2F;2}BB^{-1&#x2F;2}x’ &#x3D; x’^Hx’ $$</p>
 <p>分子可以转换成：</p>
-<p>$$ x^HAx =  x’^HB^{-1/2}AB^{-1/2}x’ $$</p>
+<p>$$ x^HAx &#x3D;  x’^HB^{-1&#x2F;2}AB^{-1&#x2F;2}x’ $$</p>
 <p>此时我们的$R(A,B,x)$转化为 $ R(A,B,x’) $</p>
-<p>$$ R(A,B,x’) = \frac{x’^HB^{-1/2}AB^{-1/2}x’}{x’^Hx’} $$</p>
-<p>利用前面的瑞利商的性质，我们可以很快的知道，$R(A,B,x)$的最大值为矩阵$ B^{-1/2}AB^{-1/2} $的最大特征值，而最小值为矩阵$ B^{-1/2}AB^{-1/2} $的最小特征值。或者说是$B^{-1}A$的最大特征值。</p>
+<p>$$ R(A,B,x’) &#x3D; \frac{x’^HB^{-1&#x2F;2}AB^{-1&#x2F;2}x’}{x’^Hx’} $$</p>
+<p>利用前面的瑞利商的性质，我们可以很快的知道，$R(A,B,x)$的最大值为矩阵$ B^{-1&#x2F;2}AB^{-1&#x2F;2} $的最大特征值，而最小值为矩阵$ B^{-1&#x2F;2}AB^{-1&#x2F;2} $的最小特征值。或者说是$B^{-1}A$的最大特征值。</p>
 <h3 id="二类LDA的广义瑞利商结果"><a href="#二类LDA的广义瑞利商结果" class="headerlink" title="二类LDA的广义瑞利商结果"></a>二类LDA的广义瑞利商结果</h3><p>接下来回到二类LDA的优化目标</p>
-<p>$$ \underbrace{arg;max}_w;;J(w) = \frac{w^TS_bw}{w^TS_ww} $$</p>
-<p>这个广义瑞利商的最大值为矩阵$ S^{−\frac{1}{2}}_wS_bS^{−\frac{1}{2}}_w $的最大特征值，对应的w为其对应的特征向量。而$S_w^{-1}S_b$的特征值和$S^{−\frac{1}{2}}_wS_bS^{−\frac{1}{2}}_w$的特征值相同，$S_w^{-1}S_b$的特征向量w’和$S^{−\frac{1}{2}}_wS_bS^{−\frac{1}{2}}_w$的特征向量满足$w’ = S^{−\frac{1}{2}}_ww$的关系。
+<p>$$ \underbrace{arg;max}_w;;J(w) &#x3D; \frac{w^TS_bw}{w^TS_ww} $$</p>
+<p>这个广义瑞利商的最大值为矩阵$ S^{−\frac{1}{2}}_wS_bS^{−\frac{1}{2}}_w $的最大特征值，对应的w为其对应的特征向量。而$S_w^{-1}S_b$的特征值和$S^{−\frac{1}{2}}_wS_bS^{−\frac{1}{2}}_w$的特征值相同，$S_w^{-1}S_b$的特征向量w’和$S^{−\frac{1}{2}}_wS_bS^{−\frac{1}{2}}_w$的特征向量满足$w’ &#x3D; S^{−\frac{1}{2}}_ww$的关系。
 　　　　</p>
 <h2 id="多类LDA"><a href="#多类LDA" class="headerlink" title="多类LDA"></a>多类LDA</h2><ul>
-<li>数据集$ D=\{(x_1,y_1), (x_2,y_2), …,((x_m,y_m))\} $，其中$x_i$为n维向量，$y_i \in \{C_1,C_2,…,C_k\}$为所属类别</li>
+<li>数据集$ D&#x3D;{(x_1,y_1), (x_2,y_2), …,((x_m,y_m))} $，其中$x_i$为n维向量，$y_i \in {C_1,C_2,…,C_k}$为所属类别</li>
 <li>我们定义$N_i$为第i类样本个数，$X_i$为第i类样本的集合</li>
 <li>$\mu_i$为第i类样本的均值向量，$\Sigma_i$为第i类样本的协方差矩阵。</li>
 </ul>
-<p>此时为多类向低维度空间的投影，我们假设投影到的低维度空间的维度为d，对应的基向量为$(w_1,w_2,…w_d)$，基向量组成的投影矩阵为W，它是一个<code>n*d</code>的矩阵(d==1为二分类情况)。</p>
+<p>此时为多类向低维度空间的投影，我们假设投影到的低维度空间的维度为d，对应的基向量为$(w_1,w_2,…w_d)$，基向量组成的投影矩阵为W，它是一个<code>n*d</code>的矩阵(d&#x3D;&#x3D;1为二分类情况)。</p>
 <p>此时优化目标是：</p>
 <p>$$ \frac{W^TS_bW}{W^TS_wW} $$</p>
 <p>其中，</p>
 <ul>
-<li>$ S_b = \sum\limits_{j=1}^{k}N_j(\mu_j-\mu)(\mu_j-\mu)^T $,代表类间散度(u为所有样本均值向量)</li>
-<li>$ S_w =  \sum\limits_{j=1}^{k}S_{wj} = \sum\limits_{j=1}^{k}\sum\limits_{x \in X_j}(x-\mu_j)(x-\mu_j)^T $，代表类内散度之和</li>
+<li>$ S_b &#x3D; \sum\limits_{j&#x3D;1}^{k}N_j(\mu_j-\mu)(\mu_j-\mu)^T $,代表类间散度(u为所有样本均值向量)</li>
+<li>$ S_w &#x3D;  \sum\limits_{j&#x3D;1}^{k}S_{wj} &#x3D; \sum\limits_{j&#x3D;1}^{k}\sum\limits_{x \in X_j}(x-\mu_j)(x-\mu_j)^T $，代表类内散度之和</li>
 </ul>
 <p>此时，$W^TS_bW$与$W^TS_wW$都是矩阵，不是标量，无法作为一个标量函数进行优化。</p>
 <p>可以将上式进行分解(与奇异值分解压缩形式类似)</p>
-<p>$$ J(W) = \frac{W^TS_bW}{W^TS_wW} = \frac{\prod\limits_{i=1}^dw_i^TS_bw_i}{\prod\limits_{i=1}^dw_i^TS_ww_i} = \prod\limits_{i=1}^d\frac{w_i^TS_bw_i}{w_i^TS_ww_i} $$</p>
+<p>$$ J(W) &#x3D; \frac{W^TS_bW}{W^TS_wW} &#x3D; \frac{\prod\limits_{i&#x3D;1}^dw_i^TS_bw_i}{\prod\limits_{i&#x3D;1}^dw_i^TS_ww_i} &#x3D; \prod\limits_{i&#x3D;1}^d\frac{w_i^TS_bw_i}{w_i^TS_ww_i} $$</p>
 <p>此时右边又变成了广义瑞利商。每个乘积项最大值是矩阵$S_w^{-1}S_b$的最大特征值，最大的乘积就是矩阵$S_w^{-1}S_b$的最大的d个特征值的乘积。此时对应的投影矩阵W就对应着最大的d个特征值对应的特征向量张成的矩阵。</p>
 <h2 id="LDA算法流程"><a href="#LDA算法流程" class="headerlink" title="LDA算法流程"></a>LDA算法流程</h2><ul>
-<li>输入：数据集$ D=\{(x_1,y_1), (x_2,y_2), …,((x_m,y_m))\} $，其中任意样本$x_i$为n维向量，$ y_i \in \{C_1,C_2,…,C_k\} $，降维到的维度d。</li>
+<li>输入：数据集$ D&#x3D;{(x_1,y_1), (x_2,y_2), …,((x_m,y_m))} $，其中任意样本$x_i$为n维向量，$ y_i \in {C_1,C_2,…,C_k} $，降维到的维度d。</li>
 <li>输出：投影矩阵W与降维后的样本集D’</li>
 </ul>
 <ol>
@@ -377,8 +381,8 @@
 <li>计算类间散度矩阵$S_b$</li>
 <li>计算矩阵$S_w^{-1}S_b$</li>
 <li>计算$S_w^{-1}S_b$最大的d个特征值和对应的d个特征向量$(w_1,w_2,…w_d)$，得到投影矩阵W(二分类时是向量)</li>
-<li>对样本集中的每一个样本特征$x_i$，转化成新的样本$z_i = W^Tx_i$;</li>
-<li>得到输出样本集$ D’=\{(z_1,y_1), (z_2,y_2), …,((z_m,y_m))\} $</li>
+<li>对样本集中的每一个样本特征$x_i$，转化成新的样本$z_i &#x3D; W^Tx_i$;</li>
+<li>得到输出样本集$ D’&#x3D;{(z_1,y_1), (z_2,y_2), …,((z_m,y_m))} $</li>
 </ol>
 <h2 id="LDA与PCA的比较"><a href="#LDA与PCA的比较" class="headerlink" title="LDA与PCA的比较"></a>LDA与PCA的比较</h2><ol>
 <li>这两种方法都有降维的思想</li>
@@ -485,6 +489,28 @@
   
     <article id="comments" lazyload>
       
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
 
     </article>
   
@@ -588,7 +614,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -782,6 +808,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 

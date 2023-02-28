@@ -16,12 +16,12 @@
   <meta name="author" content="Line">
   <meta name="keywords" content="">
   
-    <meta name="description" content="哈希表(hash table，也叫散列表)，是可以根据键(key)直接访问值(value)在内存中存储位置的一种数据结构。哈希表的核心是哈希函数(hash function)，正是哈希函数完成了从key到value存储位置的映射。 在计算机科学中的应用哈希算法在计算机科学中应用广泛。例如git的版本管理、IP协议中的checksum都有它的身影。  其中在git的版本管理中，文件内容是key，通过">
+    <meta name="description" content="**哈希表(hash table，也叫散列表)，是可以根据键(key)直接访问值(value)在内存中存储位置的一种数据结构。哈希表的核心是哈希函数(hash function)**，正是哈希函数完成了从key到value存储位置的映射。 在计算机科学中的应用哈希算法在计算机科学中应用广泛。例如git的版本管理、IP协议中的checksum都有它的身影。  其中在git的版本管理中，文件内容是ke">
 <meta property="og:type" content="article">
 <meta property="og:title" content="哈希表的原理与实现">
 <meta property="og:url" content="http://line.com/2019/01/15/2019-01-15-hash-table/index.html">
 <meta property="og:site_name" content="Line&#39;s Blog">
-<meta property="og:description" content="哈希表(hash table，也叫散列表)，是可以根据键(key)直接访问值(value)在内存中存储位置的一种数据结构。哈希表的核心是哈希函数(hash function)，正是哈希函数完成了从key到value存储位置的映射。 在计算机科学中的应用哈希算法在计算机科学中应用广泛。例如git的版本管理、IP协议中的checksum都有它的身影。  其中在git的版本管理中，文件内容是key，通过">
+<meta property="og:description" content="**哈希表(hash table，也叫散列表)，是可以根据键(key)直接访问值(value)在内存中存储位置的一种数据结构。哈希表的核心是哈希函数(hash function)**，正是哈希函数完成了从key到value存储位置的映射。 在计算机科学中的应用哈希算法在计算机科学中应用广泛。例如git的版本管理、IP协议中的checksum都有它的身影。  其中在git的版本管理中，文件内容是ke">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://line.com/img/hash/hash1.png">
 <meta property="og:image" content="http://line.com/img/hash/hash2.png">
@@ -69,6 +69,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -86,7 +90,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -278,7 +286,7 @@
             
               <div class="markdown-body">
                 
-                <p><strong>哈希表(hash table，也叫散列表)</strong>，是可以根据键(key)直接访问值(value)在内存中存储位置的一种数据结构。哈希表的核心是<strong>哈希函数(hash function)</strong>，正是哈希函数完成了从key到value存储位置的映射。</p>
+                <p>**哈希表(hash table，也叫散列表)<strong>，是可以根据键(key)直接访问值(value)在内存中存储位置的一种数据结构。哈希表的核心是</strong>哈希函数(hash function)**，正是哈希函数完成了从key到value存储位置的映射。</p>
 <h1 id="在计算机科学中的应用"><a href="#在计算机科学中的应用" class="headerlink" title="在计算机科学中的应用"></a>在计算机科学中的应用</h1><p>哈希算法在计算机科学中应用广泛。例如git的版本管理、IP协议中的checksum都有它的身影。</p>
 <ul>
 <li><p>其中在<strong>git的版本管理</strong>中，文件内容是key，通过SHA算法(一种哈希函数)将文件内容对应为固定长度的字符串（hash值）。如果文件内容发生变化，那其所对应的字符串就会发生变化。git通过比较比较短hash值(字符串)，就可以知道文件内容是否发生了变动。</p>
@@ -416,6 +424,28 @@
   
     <article id="comments" lazyload>
       
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
 
     </article>
   
@@ -519,7 +549,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -713,6 +743,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 

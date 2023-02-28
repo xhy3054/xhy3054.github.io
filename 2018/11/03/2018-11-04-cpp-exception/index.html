@@ -16,20 +16,18 @@
   <meta name="author" content="Line">
   <meta name="keywords" content="">
   
-    <meta name="description" content="c++是一门复杂的语言，程序的运行环境也是千奇百怪。因此总会有异常出现，本文主要就是讨论一下c++程序中的异常处理问题。 异常对象讲到异常，这里就要说明一下，什么是异常？在c++中，异常就是指异常对象。而异常对象是异常类的实例化，异常类是我们定义的用来表示程序错误信息的数据抽象。下图便是标准库异常类的继承体系。 由上图我们可以看到，异常类的继承体系中基类是exception类。整个关系可以看成是按">
+    <meta name="description" content="c++是一门复杂的语言，程序的运行环境也是千奇百怪。因此总会有异常出现，本文主要就是讨论一下c++程序中的异常处理问题。 异常对象讲到异常，这里就要说明一下，什么是异常？在c++中，异常就是指异常对象。而异常对象是异常类的实例化，异常类是我们定义的用来表示程序错误信息的数据抽象。下图便是标准库异常类的继承体系。![exception](&#x2F;assets&#x2F;img&#x2F;exce">
 <meta property="og:type" content="article">
 <meta property="og:title" content="c++中的异常处理">
 <meta property="og:url" content="http://line.com/2018/11/03/2018-11-04-cpp-exception/index.html">
 <meta property="og:site_name" content="Line&#39;s Blog">
-<meta property="og:description" content="c++是一门复杂的语言，程序的运行环境也是千奇百怪。因此总会有异常出现，本文主要就是讨论一下c++程序中的异常处理问题。 异常对象讲到异常，这里就要说明一下，什么是异常？在c++中，异常就是指异常对象。而异常对象是异常类的实例化，异常类是我们定义的用来表示程序错误信息的数据抽象。下图便是标准库异常类的继承体系。 由上图我们可以看到，异常类的继承体系中基类是exception类。整个关系可以看成是按">
+<meta property="og:description" content="c++是一门复杂的语言，程序的运行环境也是千奇百怪。因此总会有异常出现，本文主要就是讨论一下c++程序中的异常处理问题。 异常对象讲到异常，这里就要说明一下，什么是异常？在c++中，异常就是指异常对象。而异常对象是异常类的实例化，异常类是我们定义的用来表示程序错误信息的数据抽象。下图便是标准库异常类的继承体系。![exception](&#x2F;assets&#x2F;img&#x2F;exce">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://line.com/2018/11/03/2018-11-04-cpp-exception/%3C!--swig%EF%BF%BC2--%3E/assets/img/exception/exception.jpg">
 <meta property="article:published_time" content="2018-11-02T17:07:24.000Z">
 <meta property="article:modified_time" content="2023-01-10T13:24:53.439Z">
 <meta property="article:author" content="Line">
 <meta property="article:tag" content="c与c++">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://line.com/2018/11/03/2018-11-04-cpp-exception/%3C!--swig%EF%BF%BC2--%3E/assets/img/exception/exception.jpg">
   
   
   
@@ -67,6 +65,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -84,7 +86,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -233,7 +239,7 @@
         
         
         
-          15 分钟
+          16 分钟
         
       </span>
     
@@ -277,7 +283,7 @@
               <div class="markdown-body">
                 
                 <p>c++是一门复杂的语言，程序的运行环境也是千奇百怪。因此总会有异常出现，本文主要就是讨论一下c++程序中的异常处理问题。</p>
-<h2 id="异常对象"><a href="#异常对象" class="headerlink" title="异常对象"></a>异常对象</h2><p>讲到异常，这里就要说明一下，什么是异常？<strong>在c++中，异常就是指异常对象</strong>。而异常对象是异常类的实例化，<strong>异常类是我们定义的用来表示程序错误信息的数据抽象</strong>。下图便是标准库异常类的继承体系。<br><img src="%3C!--swig%EF%BF%BC2--%3E/assets/img/exception/exception.jpg" srcset="/img/loading.gif" lazyload alt="exception"></p>
+<h2 id="异常对象"><a href="#异常对象" class="headerlink" title="异常对象"></a>异常对象</h2><p>讲到异常，这里就要说明一下，什么是异常？<strong>在c++中，异常就是指异常对象</strong>。而异常对象是异常类的实例化，<strong>异常类是我们定义的用来表示程序错误信息的数据抽象</strong>。下图便是标准库异常类的继承体系。<br>![exception](&#x2F;assets&#x2F;img&#x2F;exception&#x2F;exception.jpg)</p>
 <p>由上图我们可以看到，异常类的继承体系中基类是<code>exception</code>类。整个关系可以看成是按照层次关系组织的，层次越低，表示的异常情况就越特殊。</p>
 <p>一般情况下，每个异常类都定义的有：</p>
 <ol>
@@ -290,7 +296,9 @@
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">try</span>&#123;<br>	<span class="hljs-comment">//program-statements</span><br>&#125;	<br><span class="hljs-built_in">catch</span>(exception-declaration)&#123;<br>	<span class="hljs-comment">//handler-statements</span><br>&#125;<br></code></pre></td></tr></table></figure>
 <hr>
 <h3 id="抛出异常（throw）"><a href="#抛出异常（throw）" class="headerlink" title="抛出异常（throw）"></a>抛出异常（throw）</h3><p><strong>抛出异常一般指的是抛出一个异常对象</strong>。一般使用如下语句进行异常的抛出。</p>
-<pre><code class="hljs">throw exception1;    //其中，exception1是一个异常对象。</code></pre><p>这样的形式特别像<code>return</code>语句。它们的作用机理也会有些许相似，都提供一个待接收的对象。</p>
+<pre><code class="hljs">throw exception1;	//其中，exception1是一个异常对象。
+</code></pre>
+<p>这样的形式特别像<code>return</code>语句。它们的作用机理也会有些许相似，都提供一个待接收的对象。</p>
 <h3 id="捕获异常（catch）"><a href="#捕获异常（catch）" class="headerlink" title="捕获异常（catch）"></a>捕获异常（catch）</h3><p><strong>捕获异常也是指捕获一个异常对象</strong>。捕获的过程也就是<strong>参数匹配</strong>的过程。一般捕获异常使用如下形式进行：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">//exception-declaration通常与函数形参的声明形式一样，可以与throw抛出的异常对象进行参数匹配。</span><br><span class="hljs-built_in">catch</span>(exception-declaration)&#123;<br>	<span class="hljs-comment">//handler-statements</span><br>&#125;<br></code></pre></td></tr></table></figure>
 <h3 id="异常匹配过程解析"><a href="#异常匹配过程解析" class="headerlink" title="异常匹配过程解析"></a>异常匹配过程解析</h3><p>通常最完美的一个异常处理过程如下：</p>
@@ -410,6 +418,28 @@
   
     <article id="comments" lazyload>
       
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
 
     </article>
   
@@ -513,7 +543,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -707,6 +737,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 

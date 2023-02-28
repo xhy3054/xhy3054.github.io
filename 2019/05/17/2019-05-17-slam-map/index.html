@@ -69,6 +69,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -86,7 +90,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -308,19 +316,19 @@
 </li>
 </ol>
 <h3 id="块匹配"><a href="#块匹配" class="headerlink" title="块匹配"></a>块匹配</h3><p>其实极线搜索我们一般都是采用了<strong>块匹配</strong>的方式。所谓的块匹配就是说对于极线上的一个点，我们判断它与参考点的相关性，是通过在点周围取一个$w \times w$的小块，然后在基线上也取很多同样大小的小块进行比较。比较的方法有很多，主要是衡量两个小块的相似性。</p>
-<p>此处，我们假设对于一个像素点$p_{1}$，我们将其周围的小块记成$\boldsymbol{A} \in \mathbb{R}^{w \times w}$，把极线上的每个点的小块记为$\boldsymbol{B}_{i}, i=1, \dots, n$。那么，下列方法都可以用来计算小块之间的差异。</p>
+<p>此处，我们假设对于一个像素点$p_{1}$，我们将其周围的小块记成$\boldsymbol{A} \in \mathbb{R}^{w \times w}$，把极线上的每个点的小块记为$\boldsymbol{B}_{i}, i&#x3D;1, \dots, n$。那么，下列方法都可以用来计算小块之间的差异。</p>
 <ul>
 <li>SAD(Sum of Absolute Difference)。取两个小块的差的绝对值之和（这个结果越大，说明越不匹配，越接近0，块的相似度越高）：</li>
 </ul>
-<p>$$<br>S(\boldsymbol{A}, \boldsymbol{B})<em>{S A D}=\sum</em>{i, j}|\boldsymbol{A}(i, j)-\boldsymbol{B}(i, j)|<br>$$</p>
+<p>$$<br>S(\boldsymbol{A}, \boldsymbol{B})<em>{S A D}&#x3D;\sum</em>{i, j}|\boldsymbol{A}(i, j)-\boldsymbol{B}(i, j)|<br>$$</p>
 <ul>
 <li>SSD(Sum of Squared Distance)。即取两个小块的差的平方和（这个结果越大，说明越不匹配，越接近0，块的相似度越高）：</li>
 </ul>
-<p>$$<br>S(\boldsymbol{A}, \boldsymbol{B})<em>{S S D}=\sum</em>{i, j}(\boldsymbol{A}(i, j)-\boldsymbol{B}(i, j))^{2}<br>$$</p>
+<p>$$<br>S(\boldsymbol{A}, \boldsymbol{B})<em>{S S D}&#x3D;\sum</em>{i, j}(\boldsymbol{A}(i, j)-\boldsymbol{B}(i, j))^{2}<br>$$</p>
 <ul>
 <li>NCC(Normalized Cross Correlation)。即计算两个小块的归一化互相关（这个结果越大，说明相似度越高，0时代表完全不相关）：</li>
 </ul>
-<p>$$<br>S(\boldsymbol{A}, \boldsymbol{B})<em>{N C C}=\frac{\sum</em>{i, j} \boldsymbol{A}(i, j) \boldsymbol{B}(i, j)}{\sqrt{\sum_{i, j} \boldsymbol{A}(i, j)^{2} \sum_{i, j} \boldsymbol{B}(i, j)^{2}}}<br>$$</p>
+<p>$$<br>S(\boldsymbol{A}, \boldsymbol{B})<em>{N C C}&#x3D;\frac{\sum</em>{i, j} \boldsymbol{A}(i, j) \boldsymbol{B}(i, j)}{\sqrt{\sum_{i, j} \boldsymbol{A}(i, j)^{2} \sum_{i, j} \boldsymbol{B}(i, j)^{2}}}<br>$$</p>
 <blockquote>
 <p>上述三种方法是比较常见的三种方法，现实中我们使用的方法可能要更复杂一点，比如在$svo$中使用的是$ZMSSD$对$8 \times 8$的矩形$patch$计算相似性，与此同时，通常我们在计算小块的差异之前，还需要做一些预处理操作，比如去均值（减小亮度影响）、根据参考帧与当前帧间的运动首先将块进行对应的仿射变换再进行匹配等。</p>
 </blockquote>
@@ -443,6 +451,28 @@
   
     <article id="comments" lazyload>
       
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
 
     </article>
   
@@ -546,7 +576,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -740,6 +770,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 

@@ -65,6 +65,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -82,7 +86,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -274,7 +282,7 @@
             
               <div class="markdown-body">
                 
-                <p><strong>光流(optical　flow)</strong>，字面意思描述的是图像中像素强度的流动。光流法的<strong>目的</strong>是根据图像中像素点的灰度值强度变化估计出物体移动速度与方向。</p>
+                <p><strong>光流(optical　flow)<strong>，字面意思描述的是图像中像素强度的流动。光流法的</strong>目的</strong>是根据图像中像素点的灰度值强度变化估计出物体移动速度与方向。</p>
 <h1 id="光流"><a href="#光流" class="headerlink" title="光流"></a>光流</h1><h2 id="光流的假设"><a href="#光流的假设" class="headerlink" title="光流的假设"></a>光流的假设</h2><p>首先，光流估计指的是利用时间上相邻的两帧图像内<strong>像素强度的变化</strong>来计算点的运动。原理决定了这种方法是建立在一系列假设上的。</p>
 <ul>
 <li>前后两帧中点的位移不大</li>
@@ -285,19 +293,19 @@
 <p>好像这么多假设有些不靠谱，但是其实光流的输入图像一般时间间隔极小，这使得这么短的时间内，位移，光照强度等都变化极小。这样的假设其实是可以接受的。</p>
 </blockquote>
 <h2 id="光流的原理"><a href="#光流的原理" class="headerlink" title="光流的原理"></a>光流的原理</h2><p>上述假设中的核心是第二条，灰度不变假设。</p>
-<p>$$ I(x,y,t) = I(x+dx, y+dy, t+dt) $$</p>
+<p>$$ I(x,y,t) &#x3D; I(x+dx, y+dy, t+dt) $$</p>
 <p>将上式右项进行泰勒展开，可以得到</p>
 <p>$$ I(x+dx, y+dy, t+dt) \approx I(x,y,t) + \frac{\partial I}{\partial x}dx + \frac{\partial I}{\partial y}dy + \frac{\partial I}{\partial t}dt $$</p>
 <p>由于我们假设灰度不变，所以即</p>
 <p>$$ \frac{\partial I}{\partial x}dx + \frac{\partial I}{\partial y}dy + \frac{\partial I}{\partial t}dt \approx 0 $$</p>
 <p>上式同时除以$dt$得：</p>
-<p>$$ \frac{\partial I}{\partial x}\frac{dx}{dt} + \frac{\partial I}{\partial y}\frac{dy}{dt} = - \frac{\partial I}{\partial t} $$</p>
+<p>$$ \frac{\partial I}{\partial x}\frac{dx}{dt} + \frac{\partial I}{\partial y}\frac{dy}{dt} &#x3D; - \frac{\partial I}{\partial t} $$</p>
 <ul>
 <li>上式中$\frac{dx}{dt}$代表的是像素在ｘ轴上的运动速度，$\frac{dy}{dt}$代表的是像素在ｙ轴上的运动速度，此处我们将其分别记为$u,v$。</li>
 <li>上式中$\frac{\partial I}{\partial x}$代表的是像素在x方向上的梯度，$\frac{\partial I}{\partial y}$代表的是像素在y方向上的梯度，我们将其记为$I_x,I_y$</li>
 </ul>
 <p>上式可写成如下形式</p>
-<p>$$ \begin{bmatrix} I_x &amp; I_y \end{bmatrix} \begin{bmatrix} u \\ v \end{bmatrix} = -I_t $$</p>
+<p>$$ \begin{bmatrix} I_x &amp; I_y \end{bmatrix} \begin{bmatrix} u \ v \end{bmatrix} &#x3D; -I_t $$</p>
 <ul>
 <li>其中$I_x,I_y$我们可以通过简单的求梯度卷积操作计算得到</li>
 <li>$ I_t $可以通过图像序列得到</li>
@@ -427,6 +435,28 @@
   
     <article id="comments" lazyload>
       
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
 
     </article>
   
@@ -530,7 +560,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -724,6 +754,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 

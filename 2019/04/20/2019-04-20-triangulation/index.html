@@ -67,6 +67,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -84,7 +88,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -222,7 +230,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          7.3k 字
+          7.4k 字
         
       </span>
     
@@ -233,7 +241,7 @@
         
         
         
-          61 分钟
+          63 分钟
         
       </span>
     
@@ -291,36 +299,33 @@
 <p>注意，三角测量依据的是<strong>同一个空间点</strong>在不同时刻的投影到相机成像平面上的位置来确定这两个时刻时这个点的深度。</p>
 </blockquote>
 <h2 id="第一种思路"><a href="#第一种思路" class="headerlink" title="第一种思路"></a>第一种思路</h2><p>由<a target="_blank" rel="noopener" href="https://xhy3054.github.io/camerca-module/">相机成像的几何描述</a>我们可以理解如下的公式(世界坐标到像素坐标的转换)：</p>
-<p>$$ Z_1p_{uv1} = K_1P_w   $$</p>
-<p>$$ Z_2p_{uv2} = K_2(RP_w + t)   $$</p>
+<p>$$ Z_1p_{uv1} &#x3D; K_1P_w   $$</p>
+<p>$$ Z_2p_{uv2} &#x3D; K_2(RP_w + t)   $$</p>
 <p>其中K是相机内参，R与t是第二个相机在第一个相机的相机坐标系下的外参，$P_w$是此空间点在第一个相机的相机坐标系下的坐标。Z是空间点到相机光心的距离(也是相机坐标系下的z轴坐标)。$p_{uv1}$与$p_{uv2}$是空间点$P_w$在两个相机平面上的投影点。</p>
 <ul>
-<li>首先做出如下定义（其中$x_1$与$x_2$是归一化的相机坐标（X/Z,Y/Z,1））：</li>
+<li>首先做出如下定义（其中$x_1$与$x_2$是归一化的相机坐标（X&#x2F;Z,Y&#x2F;Z,1））：</li>
 </ul>
-<p>$$ x_1 = K_1^{-1}p_{uv1} $$</p>
-<p>$$ x_2 = K_2^{-1}p_{uv2} $$ </p>
+<p>$$ x_1 &#x3D; K_1^{-1}p_{uv1} $$</p>
+<p>$$ x_2 &#x3D; K_2^{-1}p_{uv2} $$ </p>
 <ul>
 <li>带入如上定义可得：</li>
 </ul>
-<p>$$ Z_2 x_2 = Z_1 Rx_1 + t $$</p>
+<p>$$ Z_2 x_2 &#x3D; Z_1 Rx_1 + t $$</p>
 <ul>
 <li>由于我们已经通过本质矩阵分解或者单应矩阵分解获得了R与t，此时想求的是两个特征点的深度，即上式中的$Z_1$与$Z_2$，此时，可通过如下操作分别求出，首先求解$Z_1$，上式两边同时左乘<code>x2^</code>，也就是两侧同时与$x_2$做外积：</li>
 </ul>
-<p>$$ Z_2 x_2^{\land} x_2 = 0 = Z_1 x_2^{\land}Rx_1 + x_1^{\land}t $$</p>
+<p>$$ Z_2 x_2^{\land} x_2 &#x3D; 0 &#x3D; Z_1 x_2^{\land}Rx_1 + x_1^{\land}t $$</p>
 <p>如上，可以直接求出$p_{uv1}$的深度$Z_1$了，然后$Z_1$也可以很轻松地求出。</p>
-<h2 id="代码实现（自己实现）"><a href="#代码实现（自己实现）" class="headerlink" title="代码实现（自己实现）"></a>代码实现（自己实现）</h2><p>首先是上述思路的解法</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">depthFromTriangulation</span><span class="hljs-params">(</span></span><br><span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">const</span> SE3&amp; T_search_ref,</span></span><br><span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">const</span> Vector3d&amp; f_ref,</span></span><br><span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">const</span> Vector3d&amp; f_cur,</span></span><br><span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">double</span>&amp; depth)</span></span><br><span class="hljs-function"></span>&#123;<br>    Matrix&lt;<span class="hljs-type">double</span>,<span class="hljs-number">3</span>,<span class="hljs-number">2</span>&gt; A;<br>    A &lt;&lt; T_search_ref.<span class="hljs-built_in">rotation_matrix</span>()*f_ref, f_cur;<br>    <span class="hljs-type">const</span> Matrix2d AtA = A.<span class="hljs-built_in">transpose</span>()*A;<br>    <span class="hljs-keyword">if</span>(AtA.<span class="hljs-built_in">determinant</span>() &lt; <span class="hljs-number">0.000001</span>)<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>    <span class="hljs-type">const</span> Vector2d depth2 = - AtA.<span class="hljs-built_in">inverse</span>()*A.<span class="hljs-built_in">transpose</span>()*T_search_ref.<span class="hljs-built_in">translation</span>();<br>    depth = <span class="hljs-built_in">fabs</span>(depth2[<span class="hljs-number">0</span>]);<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-<hr>
-<h2 id="第二种思路"><a href="#第二种思路" class="headerlink" title="第二种思路"></a>第二种思路</h2><p>然后此处使用的求解方法是$Cramer’s$法则。这是另一种求解三角化的方式，推导如下：</p>
-<p>$$ Z_{2} x_{2} - Z_{1} Rx_{1} = t $$</p>
+<h2 id="代码实现（自己实现）"><a href="#代码实现（自己实现）" class="headerlink" title="代码实现（自己实现）"></a>代码实现（自己实现）</h2><h2 id="首先是上述思路的解法"><a href="#首先是上述思路的解法" class="headerlink" title="首先是上述思路的解法"></a>首先是上述思路的解法<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">depthFromTriangulation</span><span class="hljs-params">(</span></span><br><span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">const</span> SE3&amp; T_search_ref,</span></span><br><span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">const</span> Vector3d&amp; f_ref,</span></span><br><span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">const</span> Vector3d&amp; f_cur,</span></span><br><span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">double</span>&amp; depth)</span></span><br><span class="hljs-function"></span>&#123;<br>    Matrix&lt;<span class="hljs-type">double</span>,<span class="hljs-number">3</span>,<span class="hljs-number">2</span>&gt; A;<br>    A &lt;&lt; T_search_ref.<span class="hljs-built_in">rotation_matrix</span>()*f_ref, f_cur;<br>    <span class="hljs-type">const</span> Matrix2d AtA = A.<span class="hljs-built_in">transpose</span>()*A;<br>    <span class="hljs-keyword">if</span>(AtA.<span class="hljs-built_in">determinant</span>() &lt; <span class="hljs-number">0.000001</span>)<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>    <span class="hljs-type">const</span> Vector2d depth2 = - AtA.<span class="hljs-built_in">inverse</span>()*A.<span class="hljs-built_in">transpose</span>()*T_search_ref.<span class="hljs-built_in">translation</span>();<br>    depth = <span class="hljs-built_in">fabs</span>(depth2[<span class="hljs-number">0</span>]);<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>&#125;<br></code></pre></td></tr></table></figure></h2><h2 id="第二种思路"><a href="#第二种思路" class="headerlink" title="第二种思路"></a>第二种思路</h2><p>然后此处使用的求解方法是$Cramer’s$法则。这是另一种求解三角化的方式，推导如下：</p>
+<p>$$ Z_{2} x_{2} - Z_{1} Rx_{1} &#x3D; t $$</p>
 <p>对公式两侧同时乘以$x_{2}^T$，得到：</p>
-<p>$$ Z_{2} x_{2}^T x_{2} - Z_{1} x_{2}^T R x_{1} = x_{2}^T t $$</p>
+<p>$$ Z_{2} x_{2}^T x_{2} - Z_{1} x_{2}^T R x_{1} &#x3D; x_{2}^T t $$</p>
 <p>公式两侧同时乘以$(Rx_{1})^T$，得到：</p>
-<p>$$ Z_{2} (Rx_{1})^T x_{2} - Z_{1} (Rx_{1})^T Rx_{1} = (Rx_{1})^Tt $$</p>
+<p>$$ Z_{2} (Rx_{1})^T x_{2} - Z_{1} (Rx_{1})^T Rx_{1} &#x3D; (Rx_{1})^Tt $$</p>
 <p>对于上述两个公式组成的方程组，利用克莱默法则求解</p>
-<p>$$<br>\left[ \begin{array}{cc}{\mathrm{x}<em>{2}^{T} x</em>{2}} &amp; {-\mathrm{x}<em>{2}^{T} R x</em>{1}} \ {\left(R x_{1}\right)^{\mathrm{T}} x_{2}} &amp; {-\left(R x_{1}\right)^{\mathrm{T}}\left(R x_{1}\right)}\end{array}\right] \left[ \begin{array}{c}{Z_{2}} \ {Z_{1}}\end{array}\right]=\left[ \begin{array}{c}{\mathrm{x}<em>{2}^{T} t} \ {\left(R x</em>{1}\right)^{\mathrm{T}} t}\end{array}\right]<br>$$</p>
-<p>克莱默法则是，对于$Ax=b$这样的方程，如果$A$的行列式不为0，方程可以通过如下方式求解：</p>
-<p>$$<br>x_{1}=\frac{\operatorname{det} B_{1}}{\operatorname{det} A} \quad x_{2}=\frac{\operatorname{det} B_{2}}{\operatorname{det} A} \quad x_{n}=\frac{\operatorname{det} B_{n}}{\operatorname{det} A}<br>$$</p>
+<p>$$<br>\left[ \begin{array}{cc}{\mathrm{x}<em>{2}^{T} x</em>{2}} &amp; {-\mathrm{x}<em>{2}^{T} R x</em>{1}} \ {\left(R x_{1}\right)^{\mathrm{T}} x_{2}} &amp; {-\left(R x_{1}\right)^{\mathrm{T}}\left(R x_{1}\right)}\end{array}\right] \left[ \begin{array}{c}{Z_{2}} \ {Z_{1}}\end{array}\right]&#x3D;\left[ \begin{array}{c}{\mathrm{x}<em>{2}^{T} t} \ {\left(R x</em>{1}\right)^{\mathrm{T}} t}\end{array}\right]<br>$$</p>
+<p>克莱默法则是，对于$Ax&#x3D;b$这样的方程，如果$A$的行列式不为0，方程可以通过如下方式求解：</p>
+<p>$$<br>x_{1}&#x3D;\frac{\operatorname{det} B_{1}}{\operatorname{det} A} \quad x_{2}&#x3D;\frac{\operatorname{det} B_{2}}{\operatorname{det} A} \quad x_{n}&#x3D;\frac{\operatorname{det} B_{n}}{\operatorname{det} A}<br>$$</p>
 <p>其中$B_{j}$是$A$的第$j$列被$b$替换后得到的新的矩阵。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// 方程</span><br>    <span class="hljs-comment">// d_ref * f_ref = d_cur * ( R_RC * f_cur ) + t_RC</span><br>    <span class="hljs-comment">// =&gt; [ f_ref^T f_ref, -f_ref^T f_cur ] [d_ref] = [f_ref^T t]</span><br>    <span class="hljs-comment">//    [ f_cur^T f_ref, -f_cur^T f_cur ] [d_cur] = [f_cur^T t]</span><br>    <span class="hljs-comment">// 二阶方程用克莱默法则求解并解之</span><br>    Vector3d t = T_R_C.<span class="hljs-built_in">translation</span>();<br>    Vector3d f2 = T_R_C.<span class="hljs-built_in">rotation_matrix</span>() * f_curr; <br>    Vector2d b = <span class="hljs-built_in">Vector2d</span> ( t.<span class="hljs-built_in">dot</span> ( f_ref ), t.<span class="hljs-built_in">dot</span> ( f2 ) );<br>    <span class="hljs-comment">// 此处计算出系数矩阵A</span><br>    <span class="hljs-type">double</span> A[<span class="hljs-number">4</span>];<br>    A[<span class="hljs-number">0</span>] = f_ref.<span class="hljs-built_in">dot</span> ( f_ref );<br>    A[<span class="hljs-number">2</span>] = f_ref.<span class="hljs-built_in">dot</span> ( f2 );<br>    A[<span class="hljs-number">1</span>] = -A[<span class="hljs-number">2</span>];<br>    A[<span class="hljs-number">3</span>] = - f2.<span class="hljs-built_in">dot</span> ( f2 );<br>    <span class="hljs-comment">// 此处计算A的行列式</span><br>    <span class="hljs-type">double</span> d = A[<span class="hljs-number">0</span>]*A[<span class="hljs-number">3</span>]-A[<span class="hljs-number">1</span>]*A[<span class="hljs-number">2</span>];<br>    Vector2d lambdavec = <br>        <span class="hljs-built_in">Vector2d</span> (  A[<span class="hljs-number">3</span>] * <span class="hljs-built_in">b</span> ( <span class="hljs-number">0</span>,<span class="hljs-number">0</span> ) - A[<span class="hljs-number">1</span>] * <span class="hljs-built_in">b</span> ( <span class="hljs-number">1</span>,<span class="hljs-number">0</span> ),<br>                    -A[<span class="hljs-number">2</span>] * <span class="hljs-built_in">b</span> ( <span class="hljs-number">0</span>,<span class="hljs-number">0</span> ) + A[<span class="hljs-number">0</span>] * <span class="hljs-built_in">b</span> ( <span class="hljs-number">1</span>,<span class="hljs-number">0</span> )) /d;<br>    Vector3d xm = <span class="hljs-built_in">lambdavec</span> ( <span class="hljs-number">0</span>,<span class="hljs-number">0</span> ) * f_ref;<br>    Vector3d xn = t + <span class="hljs-built_in">lambdavec</span> ( <span class="hljs-number">1</span>,<span class="hljs-number">0</span> ) * f2;<br>    Vector3d d_esti = ( xm+xn ) / <span class="hljs-number">2.0</span>;  <span class="hljs-comment">// 三角化算得的深度向量</span><br>    <span class="hljs-type">double</span> depth_estimation = d_esti.<span class="hljs-built_in">norm</span>();   <span class="hljs-comment">// 深度值</span><br></code></pre></td></tr></table></figure>
 <hr>
@@ -332,28 +337,28 @@
 <h2 id="第三种思路（最小二乘法求解深度）"><a href="#第三种思路（最小二乘法求解深度）" class="headerlink" title="第三种思路（最小二乘法求解深度）"></a>第三种思路（最小二乘法求解深度）</h2><ul>
 <li><p>对于某个路标点y,在若干个关键帧$k(0,1,2,…)$中可以观测到</p>
 </li>
-<li><p>首先，对于$\mathbf{y} \in \mathbb{R}^{4}$，是空间点在世界坐标系中的齐次坐标。每次观测为$x_{k} = \left[u_{k}, v_{k}, 1\right]^{T}$，这个是相机成像平面的归一化坐标</p>
+<li><p>首先，对于$\mathbf{y} \in \mathbb{R}^{4}$，是空间点在世界坐标系中的齐次坐标。每次观测为$x_{k} &#x3D; \left[u_{k}, v_{k}, 1\right]^{T}$，这个是相机成像平面的归一化坐标</p>
 </li>
-<li><p>我们假设投影矩阵为$P_{k}=\left[R_{k}, \mathbf{t}_{k}\right] \in \mathbb{R}^{3 \times 4}$，这个是从world系到camera系的投影</p>
+<li><p>我们假设投影矩阵为$P_{k}&#x3D;\left[R_{k}, \mathbf{t}_{k}\right] \in \mathbb{R}^{3 \times 4}$，这个是从world系到camera系的投影</p>
 </li>
 <li><p>所以，投影关系为：</p>
 </li>
 </ul>
-<p>$$\forall k, \lambda_{k} \mathbf{x}<em>{k}=\mathbf{P}</em>{k} \mathbf{y}$$</p>
+<p>$$\forall k, \lambda_{k} \mathbf{x}<em>{k}&#x3D;\mathbf{P}</em>{k} \mathbf{y}$$</p>
 <p>其中$\lambda_{k}$为观测点的深度值</p>
 <ul>
 <li>根据上面我们可以知道下式:</li>
 </ul>
-<p>$$\lambda_{k}=\mathbf{P}_{k, 3}^{\top} \mathbf{y}$$</p>
+<p>$$\lambda_{k}&#x3D;\mathbf{P}_{k, 3}^{\top} \mathbf{y}$$</p>
 <p>其中$P_{k, 3}^{\top}$是$P_{k}$的第三行（其中角标T仅仅代表是一个横向量）</p>
 <ul>
 <li>我们再将上式带入投影变换的前两行，就得到：</li>
 </ul>
-<p>$$<br>\begin{aligned} u_{k} \mathbf{P}<em>{k, 3}^{\top} \mathbf{y} &amp;=\mathbf{P}</em>{k, 1}^{\top} \mathbf{y} \ v_{k} \mathbf{P}<em>{k, 3}^{\top} \mathbf{y} &amp;=\mathbf{P}</em>{k, 2}^{\top} \mathbf{y} \end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned} u_{k} \mathbf{P}<em>{k, 3}^{\top} \mathbf{y} &amp;&#x3D;\mathbf{P}</em>{k, 1}^{\top} \mathbf{y} \ v_{k} \mathbf{P}<em>{k, 3}^{\top} \mathbf{y} &amp;&#x3D;\mathbf{P}</em>{k, 2}^{\top} \mathbf{y} \end{aligned}<br>$$</p>
 <ul>
 <li>每次观测都可以提供两个这样的方程，将y看做未知量，并将其移到等式一侧，可以得到下式：</li>
 </ul>
-<p>$$<br>\left[\begin{array}{c}{u_{1} \mathbf{P}<em>{1,3}^{\top}-\mathbf{P}</em>{1,1}^{\top}} \ {v_{1} \mathbf{P}<em>{1,3}^{\top}-\mathbf{P}</em>{1,2}^{\top}} \ {\vdots} \ {u_{n} \mathbf{P}<em>{n, 3}^{\top}-\mathbf{P}</em>{n, 1}^{\top}} \ {v_{n} \mathbf{P}<em>{n, 3}^{\top}-\mathbf{P}</em>{n, 2}^{\top}}\end{array}\right] \mathbf{y}=\mathbf{0} \rightarrow \mathbf{D y}=\mathbf{0}<br>$$</p>
+<p>$$<br>\left[\begin{array}{c}{u_{1} \mathbf{P}<em>{1,3}^{\top}-\mathbf{P}</em>{1,1}^{\top}} \ {v_{1} \mathbf{P}<em>{1,3}^{\top}-\mathbf{P}</em>{1,2}^{\top}} \ {\vdots} \ {u_{n} \mathbf{P}<em>{n, 3}^{\top}-\mathbf{P}</em>{n, 1}^{\top}} \ {v_{n} \mathbf{P}<em>{n, 3}^{\top}-\mathbf{P}</em>{n, 2}^{\top}}\end{array}\right] \mathbf{y}&#x3D;\mathbf{0} \rightarrow \mathbf{D y}&#x3D;\mathbf{0}<br>$$</p>
 <ul>
 <li>于是，y为D零空间的一个非零元素。</li>
 </ul>
@@ -361,11 +366,11 @@
 <ul>
 <li>此时我们会寻找上式的最小二乘解：</li>
 </ul>
-<p>$$<br>\min <em>{\mathbf{y}}|\mathbf{D} \mathbf{y}|</em>{2}^{2}, \quad \text { s.t. }|\mathbf{y}|=1<br>$$</p>
+<p>$$<br>\min <em>{\mathbf{y}}|\mathbf{D} \mathbf{y}|</em>{2}^{2}, \quad \text { s.t. }|\mathbf{y}|&#x3D;1<br>$$</p>
 <ul>
 <li>求解上述这个最小二乘问题$y^{T}D^{T}Dy$，我们可以通过对$D^{T}D$进行奇异值分解来求解。</li>
 </ul>
-<p>$$<br>\mathbf{D}^{\top} \mathbf{D}=\sum_{i=1}^{4} \sigma_{i}^{2} \mathbf{u}<em>{i} \mathbf{u}</em>{j}^{\top}<br>$$</p>
+<p>$$<br>\mathbf{D}^{\top} \mathbf{D}&#x3D;\sum_{i&#x3D;1}^{4} \sigma_{i}^{2} \mathbf{u}<em>{i} \mathbf{u}</em>{j}^{\top}<br>$$</p>
 <ul>
 <li>其中$\sigma_{i}$为奇异值，并且会由大到小排列（它们对应的特征向量是一组单位正交基），我们找到最小（后面）的那个奇异值，它对应的特征向量，将其转换为齐次坐标，前三维就是y坐标的解了。</li>
 </ul>
@@ -395,7 +400,7 @@
 </ol>
 <h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ul>
 <li>[1] 《视觉slam十四讲》</li>
-<li>[2] <a target="_blank" rel="noopener" href="https://ewenwan.github.io">https://ewenwan.github.io</a></li>
+<li>[2] <a target="_blank" rel="noopener" href="https://ewenwan.github.io/">https://ewenwan.github.io</a></li>
 </ul>
 
                 
@@ -492,6 +497,28 @@
   
     <article id="comments" lazyload>
       
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
 
     </article>
   
@@ -595,7 +622,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -789,6 +816,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 

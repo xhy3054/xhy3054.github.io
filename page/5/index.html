@@ -56,6 +56,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -73,7 +77,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -314,7 +322,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2019/04/15/2019-04-15-sort/" target="_self">
         <div>
-          排序问题是一个基础问题，这篇博客主要总结一下各种经典常用的有特色的排序算法。 冒泡排序(bubble sort) 原理：每次从左向右两两进行比较，将较大/小的交换到后面。每一个循环可以确定排好一个数，循环n-1次，完全排序完毕。  1234567891011void bubble_sort(vector&lt;int&gt; &amp; nums)&#123;    for(int i=0; i&
+          排序问题是一个基础问题，这篇博客主要总结一下各种经典常用的有特色的排序算法。 冒泡排序(bubble sort) 原理：每次从左向右两两进行比较，将较大&#x2F;小的交换到后面。每一个循环可以确定排好一个数，循环n-1次，完全排序完毕。  1234567891011void bubble_sort(vector&lt;int&gt; &amp; nums)&#123;    for(int i=
         </div>
       </a>
 
@@ -594,7 +602,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2019/01/26/2019-01-26-ransac/" target="_self">
         <div>
-          随机抽样一致算法(random sample consensus, RANSAC)，其实就是采用迭代的方法从一组包含离群的被观测数据中估算出数学模型的参数。(比如通过一群点拟合一条直线等) 基本假设 模型假设：事先知道真实数据满足的数学模型，不知道的只是模型的具体参数；  输入假设：输入数据中包含正确数据（即inliers，可以被假设模型描述的数据）；同时也包含异常数据（即outliers，偏离正
+          **随机抽样一致算法(random sample consensus, RANSAC)**，其实就是采用迭代的方法从一组包含离群的被观测数据中估算出数学模型的参数。(比如通过一群点拟合一条直线等) 基本假设 模型假设：事先知道真实数据满足的数学模型，不知道的只是模型的具体参数；  输入假设：输入数据中包含正确数据（即inliers，可以被假设模型描述的数据）；同时也包含异常数据（即outliers
         </div>
       </a>
 
@@ -676,7 +684,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -734,6 +742,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 

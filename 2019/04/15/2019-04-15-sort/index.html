@@ -16,12 +16,12 @@
   <meta name="author" content="Line">
   <meta name="keywords" content="">
   
-    <meta name="description" content="排序问题是一个基础问题，这篇博客主要总结一下各种经典常用的有特色的排序算法。 冒泡排序(bubble sort) 原理：每次从左向右两两进行比较，将较大&#x2F;小的交换到后面。每一个循环可以确定排好一个数，循环n-1次，完全排序完毕。  1234567891011void bubble_sort(vector&lt;int&gt; &amp; nums)&amp;#123;    for(int i&#x3D;0; i&amp;">
+    <meta name="description" content="排序问题是一个基础问题，这篇博客主要总结一下各种经典常用的有特色的排序算法。 冒泡排序(bubble sort) 原理：每次从左向右两两进行比较，将较大&#x2F;小的交换到后面。每一个循环可以确定排好一个数，循环n-1次，完全排序完毕。  1234567891011void bubble_sort(vector&lt;int&gt; &amp; nums)&amp;#123;    for(int i&#x3D;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="排序算法总结">
 <meta property="og:url" content="http://line.com/2019/04/15/2019-04-15-sort/index.html">
 <meta property="og:site_name" content="Line&#39;s Blog">
-<meta property="og:description" content="排序问题是一个基础问题，这篇博客主要总结一下各种经典常用的有特色的排序算法。 冒泡排序(bubble sort) 原理：每次从左向右两两进行比较，将较大&#x2F;小的交换到后面。每一个循环可以确定排好一个数，循环n-1次，完全排序完毕。  1234567891011void bubble_sort(vector&lt;int&gt; &amp; nums)&amp;#123;    for(int i&#x3D;0; i&amp;">
+<meta property="og:description" content="排序问题是一个基础问题，这篇博客主要总结一下各种经典常用的有特色的排序算法。 冒泡排序(bubble sort) 原理：每次从左向右两两进行比较，将较大&#x2F;小的交换到后面。每一个循环可以确定排好一个数，循环n-1次，完全排序完毕。  1234567891011void bubble_sort(vector&lt;int&gt; &amp; nums)&amp;#123;    for(int i&#x3D;">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://line.com/img/sort/merge.png">
 <meta property="og:image" content="http://line.com/img/sort/merge1.png">
@@ -70,6 +70,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -87,7 +91,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -281,7 +289,7 @@
                 
                 <p>排序问题是一个基础问题，这篇博客主要总结一下各种经典常用的有特色的排序算法。</p>
 <h2 id="冒泡排序-bubble-sort"><a href="#冒泡排序-bubble-sort" class="headerlink" title="冒泡排序(bubble sort)"></a>冒泡排序(bubble sort)</h2><blockquote>
-<p>原理：每次从左向右两两进行比较，将较大/小的交换到后面。每一个循环可以确定排好一个数，循环n-1次，完全排序完毕。</p>
+<p>原理：每次从左向右两两进行比较，将较大&#x2F;小的交换到后面。每一个循环可以确定排好一个数，循环n-1次，完全排序完毕。</p>
 </blockquote>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">bubble_sort</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt; &amp; nums)</span></span>&#123;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>; i&lt;nums.<span class="hljs-built_in">size</span>()<span class="hljs-number">-1</span>; ++i)&#123;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">0</span>; j&lt;nums.<span class="hljs-built_in">size</span>()<span class="hljs-number">-1</span>-i; ++j)&#123;<br>            <span class="hljs-keyword">if</span>(nums[j]&gt;nums[j+<span class="hljs-number">1</span>])&#123;<br>                <span class="hljs-type">int</span> temp = nums[j];<br>                nums[j] = nums[j+<span class="hljs-number">1</span>];<br>                nums[j+<span class="hljs-number">1</span>] = temp;<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 <hr>
@@ -372,10 +380,7 @@
 <blockquote>
 <p>原理：利用<strong>堆</strong>这种数据结构进行排序，将待排序序列构造成一个<strong>大顶堆</strong>，此时整个序列的最大值就是堆顶的根节点。将其与末尾元素进行交换，此时末尾就为最大值。然后将剩余n-1个元素重新构造成一个大顶堆，得到n-1个元素中的最大值…如此反复，就能得到一个有序序列了。</p>
 </blockquote>
-<p>在一个数组上构造大顶堆时，只需要调整父节点就可以了（如果子节点中有比自己大的，选择最大的子节点与自己交换值）。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">heap_sort</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt; &amp;nums)</span></span>&#123;<br>    <span class="hljs-comment">//构建大顶堆</span><br>    <span class="hljs-type">int</span> size = nums.<span class="hljs-built_in">size</span>();<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=size/<span class="hljs-number">2</span><span class="hljs-number">-1</span>; i&gt;<span class="hljs-number">0</span>; --i)&#123;<br>        <span class="hljs-comment">//从最后一个非叶子节点开始调整</span><br>        <span class="hljs-built_in">heap_adjust</span>(nums, i, size<span class="hljs-number">-1</span>)<br>    &#125;<br><br>    <span class="hljs-comment">//交换堆顶与末尾元素并重新调整堆结构</span><br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=len<span class="hljs-number">-1</span>; i&gt;<span class="hljs-number">0</span>; ++i)&#123;<br>        <span class="hljs-built_in">swap</span>(nums[<span class="hljs-number">0</span>], nums[i]);<br>        <span class="hljs-built_in">heap_adjust</span>(nums, <span class="hljs-number">0</span>, i<span class="hljs-number">-1</span>);<br>    &#125;<br>    <br>&#125;<br><span class="hljs-comment">//这个函数是调整堆，只是为了服务上面函数，所以并不是一个完整的构造堆的函数</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">heap_adjust</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt; &amp;nums, <span class="hljs-type">int</span> b, <span class="hljs-type">int</span> e)</span></span>&#123;<br>    <span class="hljs-type">int</span> father = i;<br>    <span class="hljs-type">int</span> son = <span class="hljs-number">2</span>*father+<span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">while</span>(son&lt;=e)&#123;<br>        <span class="hljs-keyword">if</span>(son+<span class="hljs-number">1</span>&lt;=e &amp;&amp; nums[son]&lt;nums[son+<span class="hljs-number">1</span>])   son++;<br>        <span class="hljs-keyword">if</span>(nums[father]&lt;nums[son])&#123;<br>            <span class="hljs-built_in">swap</span>(nums[father], nums[son]);<br>            father=son;<br>            son=<span class="hljs-number">2</span>*father+<span class="hljs-number">1</span>;<br>        &#125;<br>        <span class="hljs-keyword">else</span>    <span class="hljs-keyword">break</span>;  <span class="hljs-comment">//此处break是因为下面的本来是调整过的都，如果这一步已经满足了，下面就没有继续的必要了</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-<hr>
-<blockquote>
+<h2 id="在一个数组上构造大顶堆时，只需要调整父节点就可以了（如果子节点中有比自己大的，选择最大的子节点与自己交换值）。"><a href="#在一个数组上构造大顶堆时，只需要调整父节点就可以了（如果子节点中有比自己大的，选择最大的子节点与自己交换值）。" class="headerlink" title="在一个数组上构造大顶堆时，只需要调整父节点就可以了（如果子节点中有比自己大的，选择最大的子节点与自己交换值）。"></a>在一个数组上构造大顶堆时，只需要调整父节点就可以了（如果子节点中有比自己大的，选择最大的子节点与自己交换值）。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">heap_sort</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt; &amp;nums)</span></span>&#123;<br>    <span class="hljs-comment">//构建大顶堆</span><br>    <span class="hljs-type">int</span> size = nums.<span class="hljs-built_in">size</span>();<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=size/<span class="hljs-number">2</span><span class="hljs-number">-1</span>; i&gt;<span class="hljs-number">0</span>; --i)&#123;<br>        <span class="hljs-comment">//从最后一个非叶子节点开始调整</span><br>        <span class="hljs-built_in">heap_adjust</span>(nums, i, size<span class="hljs-number">-1</span>)<br>    &#125;<br><br>    <span class="hljs-comment">//交换堆顶与末尾元素并重新调整堆结构</span><br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=len<span class="hljs-number">-1</span>; i&gt;<span class="hljs-number">0</span>; ++i)&#123;<br>        <span class="hljs-built_in">swap</span>(nums[<span class="hljs-number">0</span>], nums[i]);<br>        <span class="hljs-built_in">heap_adjust</span>(nums, <span class="hljs-number">0</span>, i<span class="hljs-number">-1</span>);<br>    &#125;<br>    <br>&#125;<br><span class="hljs-comment">//这个函数是调整堆，只是为了服务上面函数，所以并不是一个完整的构造堆的函数</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">heap_adjust</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt; &amp;nums, <span class="hljs-type">int</span> b, <span class="hljs-type">int</span> e)</span></span>&#123;<br>    <span class="hljs-type">int</span> father = i;<br>    <span class="hljs-type">int</span> son = <span class="hljs-number">2</span>*father+<span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">while</span>(son&lt;=e)&#123;<br>        <span class="hljs-keyword">if</span>(son+<span class="hljs-number">1</span>&lt;=e &amp;&amp; nums[son]&lt;nums[son+<span class="hljs-number">1</span>])   son++;<br>        <span class="hljs-keyword">if</span>(nums[father]&lt;nums[son])&#123;<br>            <span class="hljs-built_in">swap</span>(nums[father], nums[son]);<br>            father=son;<br>            son=<span class="hljs-number">2</span>*father+<span class="hljs-number">1</span>;<br>        &#125;<br>        <span class="hljs-keyword">else</span>    <span class="hljs-keyword">break</span>;  <span class="hljs-comment">//此处break是因为下面的本来是调整过的都，如果这一步已经满足了，下面就没有继续的必要了</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></h2><blockquote>
 <p>评价：堆排序是不稳定排序，堆执行一次调整需要<code>o(logn)</code>时间，在排序过程中需要遍历所有元素执行堆调整，所以最终时间复杂度是<code>o(nlogn)</code>。</p>
 </blockquote>
 <h1 id="稳定排序与不稳定排序"><a href="#稳定排序与不稳定排序" class="headerlink" title="稳定排序与不稳定排序"></a>稳定排序与不稳定排序</h1><p>相信大家都看到了，上面有一些排序是稳定排序，有一些是不稳定排序。那么它们有什么区别呢？</p>
@@ -490,6 +495,28 @@
   
     <article id="comments" lazyload>
       
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
 
     </article>
   
@@ -593,7 +620,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -787,6 +814,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 

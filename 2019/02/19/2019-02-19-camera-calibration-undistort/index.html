@@ -69,6 +69,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -86,7 +90,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -224,7 +232,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.4k 字
+          2.5k 字
         
       </span>
     
@@ -235,7 +243,7 @@
         
         
         
-          20 分钟
+          21 分钟
         
       </span>
     
@@ -301,7 +309,7 @@
 <ul>
 <li>一般径向畸变对于二维平面上一个坐标(x,y)（如上图畸变最小的点为坐标原点，一般在图像中心，r是点到原点的距离）的影响可以使用如下公式表述：</li>
 </ul>
-<p>$$ x_{distorted} = x( 1 + k_1 r^2 + k_2 r^4 + k_3 r^6)　 \\ y_{distorted} = y( 1 + k_1 r^2 + k_2 r^4 + k_3 r^6) $$</p>
+<p>$$ x_{distorted} &#x3D; x( 1 + k_1 r^2 + k_2 r^4 + k_3 r^6)　 \ y_{distorted} &#x3D; y( 1 + k_1 r^2 + k_2 r^4 + k_3 r^6) $$</p>
 <blockquote>
 <p>无论是桶形畸变还是枕形畸变，由于他们都是随着与中心之间的距离增加而增加，因此可以使用一个<strong>多项式函数</strong>来描述畸变前后的像素坐标变化。这个公式中，对于畸变较小的图像中心区域，畸变主要是$k_1$在起作用；而对于畸变较大的边缘区域，主要是$k_2$在起作用。一般的普通摄像头用这两个系数就已经可以很好地纠正径向畸变了。但是对于一部分畸变很大的摄像头，比如说鱼眼镜头等，还需要加入$k_3$畸变项才能比较好的表述畸变情况。</p>
 </blockquote>
@@ -315,22 +323,22 @@
 <ul>
 <li>一般切向畸变对于二维平面上的坐标(x,y)的影响可以使用如下公式进行表述：</li>
 </ul>
-<p>$$ x_{distorted} = x + [ 2p_1xy + p_2(r^2+2x^2)]  \\ y_{distorted} = y + [ p_1(r^2+ 2y^2)+ 2p_2xy]  $$</p>
+<p>$$ x_{distorted} &#x3D; x + [ 2p_1xy + p_2(r^2+2x^2)]  \ y_{distorted} &#x3D; y + [ p_1(r^2+ 2y^2)+ 2p_2xy]  $$</p>
 <h2 id="加入畸变的成像-理想情况下"><a href="#加入畸变的成像-理想情况下" class="headerlink" title="加入畸变的成像(理想情况下)"></a>加入畸变的成像(理想情况下)</h2><ul>
 <li><p>首先，世界坐标系下有一个固定的点P，<strong>世界坐标</strong>是 $P_w$</p>
 </li>
-<li><p>获得点P的<strong>相机坐标系坐标</strong>，可以利用相机外参R与t得到 $ P_c = RP_w + t $</p>
+<li><p>获得点P的<strong>相机坐标系坐标</strong>，可以利用相机外参R与t得到 $ P_c &#x3D; RP_w + t $</p>
 </li>
-<li><p>在2中获得的 $P_c$ 仍然是三维的 (X,Y,Z) ，将其投影到归一化平面 $Z=1$ 上，得到<strong>归一化相机坐标</strong>：$ P_C = [X/Z, Y/Z, 1]^T $</p>
+<li><p>在2中获得的 $P_c$ 仍然是三维的 (X,Y,Z) ，将其投影到归一化平面 $Z&#x3D;1$ 上，得到<strong>归一化相机坐标</strong>：$ P_C &#x3D; [X&#x2F;Z, Y&#x2F;Z, 1]^T $</p>
 </li>
-<li><p>此处加入<strong>畸变</strong>因素，畸变公式如下(其中，$x=X/Z, y=Y/Z$)：</p>
+<li><p>此处加入<strong>畸变</strong>因素，畸变公式如下(其中，$x&#x3D;X&#x2F;Z, y&#x3D;Y&#x2F;Z$)：</p>
 </li>
 </ul>
-<p>$$ x_{distorted} = x( 1 + k_1 r^2 + k_2 r^4 + k_3 r^6) + [ 2p_1xy + p_2(r^2+2x^2)]  \\ y_{distorted} = y( 1 + k_1 r^2 + k_2 r^4 + k_3 r^6) + [ p_1(r^2+ 2y^2)+ 2p_2xy]   $$</p>
+<p>$$ x_{distorted} &#x3D; x( 1 + k_1 r^2 + k_2 r^4 + k_3 r^6) + [ 2p_1xy + p_2(r^2+2x^2)]  \ y_{distorted} &#x3D; y( 1 + k_1 r^2 + k_2 r^4 + k_3 r^6) + [ p_1(r^2+ 2y^2)+ 2p_2xy]   $$</p>
 <ul>
-<li>最后一步，利用内参K，将归一化相机坐标转换成<strong>像素坐标</strong>： $ P_{uv} = KP_{distorted} $</li>
+<li>最后一步，利用内参K，将归一化相机坐标转换成<strong>像素坐标</strong>： $ P_{uv} &#x3D; KP_{distorted} $</li>
 </ul>
-<p>$$ u = f_x x_{distorted} + c_x \\ v = f_y y_{distorted} + c_y  $$</p>
+<p>$$ u &#x3D; f_x x_{distorted} + c_x \ v &#x3D; f_y y_{distorted} + c_y  $$</p>
 <blockquote>
 <p>此处之所以将畸变放在内参前面作用，是因为上面已经说过了这个畸变模型假设的原点是图像中心，也就是未经过内参作用时符合。</p>
 </blockquote>
@@ -346,13 +354,13 @@
 <li>通过非线性优化即可求出外参、内参、畸变参数；</li>
 </ol>
 <p>对于一个具有N个格点的棋盘，假设我们拍摄K的角度的照片，则可以得到$2NK$个方程，如果我们想要求解出相机参数，则需要满足方程数量大于参数数量：（下面中K个角度有K组外参）</p>
-<p>$$2NK &gt;= 4 + 6K + 5 $$</p>
+<p>$$2NK &gt;&#x3D; 4 + 6K + 5 $$</p>
 <blockquote>
 <p>此处需要说明的是，按照上述理解，只要一个棋盘上点足够多那不就一个视角就够了吗？这么做其实是不好的，因为在某个视角下，如果我们知道了其中一个格子的四个端点，那我们只需要继续延伸就可以得到其他的格点，那些多余的格点其实是不可以提供额外信息的，因次一个角度最好只利用四个点。这样上面的方程就可以变为</p>
 </blockquote>
-<p>$$ 8K &gt;= 4+6K+5 $$</p>
+<p>$$ 8K &gt;&#x3D; 4+6K+5 $$</p>
 <p>即</p>
-<p>$$ 2K &gt;= 9 $$</p>
+<p>$$ 2K &gt;&#x3D; 9 $$</p>
 <blockquote>
 <p>理论上是这样，但是实际上当然是角度越多，可利用的路标点越多越好。</p>
 </blockquote>
@@ -365,7 +373,7 @@
 </ol>
 <h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
 <li>[1] 《视觉SLAM十四讲》，高翔著；</li>
-<li>[2] <a target="_blank" rel="noopener" href="https://docs.opencv.org">https://docs.opencv.org</a></li>
+<li>[2] <a target="_blank" rel="noopener" href="https://docs.opencv.org/">https://docs.opencv.org</a></li>
 <li>[3] 《学习OpenCV3》,O’REILLY著；</li>
 </ul>
 
@@ -463,6 +471,28 @@
   
     <article id="comments" lazyload>
       
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
 
     </article>
   
@@ -566,7 +596,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -760,6 +790,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 

@@ -68,6 +68,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -85,7 +89,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -223,7 +231,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.9k 字
+          2k 字
         
       </span>
     
@@ -297,29 +305,29 @@
 <li>将这些行向量放入一个单一的矩阵x，矩阵维度是<code>m*n</code></li>
 </ul>
 <h2 id="2-2-计算经验均值"><a href="#2-2-计算经验均值" class="headerlink" title="2.2 计算经验均值"></a>2.2 计算经验均值</h2><ul>
-<li>计算每一个维度的经验均值，维度总共有$j = 1, …, n$</li>
+<li>计算每一个维度的经验均值，维度总共有$j &#x3D; 1, …, n$</li>
 <li>将计算出来的n个经验均值放入一个向量u，这个向量维度是<code>n*1</code></li>
 </ul>
-<p>$$ \mathbf{u[j]} = \frac{1}{m}\sum_{i=1}^{m}\mathbf{X[i,j]} $$</p>
+<p>$$ \mathbf{u[j]} &#x3D; \frac{1}{m}\sum_{i&#x3D;1}^{m}\mathbf{X[i,j]} $$</p>
 <h2 id="2-3-计算离均值的偏差矩阵"><a href="#2-3-计算离均值的偏差矩阵" class="headerlink" title="2.3 计算离均值的偏差矩阵"></a>2.3 计算离均值的偏差矩阵</h2><p>我们计算均值的原因是我们想把数据搬移到原点附近，让原点处于这些数据的中心，这样可以使得均方误差最小。所以这一步要做的就是：</p>
 <ul>
 <li>将矩阵x的每一行都减去均值向量u</li>
 <li>得到一个新的均值矩阵B，维度也是<code>m*n</code></li>
 </ul>
 <p>上述操作可以使用如下方式完成</p>
-<p>$$ \mathbf{B} = \mathbf{X} - \mathbf{h}\mathbf{u^{T}} $$</p>
+<p>$$ \mathbf{B} &#x3D; \mathbf{X} - \mathbf{h}\mathbf{u^{T}} $$</p>
 <p>其中，h是一个<code>m*1</code>的列向量，并且值为全1。</p>
 <h2 id="2-4-计算上述偏差矩阵的协方差矩阵"><a href="#2-4-计算上述偏差矩阵的协方差矩阵" class="headerlink" title="2.4 计算上述偏差矩阵的协方差矩阵"></a>2.4 计算上述偏差矩阵的协方差矩阵</h2><ul>
 <li>这一步是计算B矩阵的协方差矩阵C，C矩阵的维度会是<code>n*n</code>。可以使用下式实现</li>
 </ul>
-<p>$$ \mathbf{C} = \frac{1}{m-1} \mathbf{B^{*}} \cdot \mathbf{B} $$</p>
+<p>$$ \mathbf{C} &#x3D; \frac{1}{m-1} \mathbf{B^{*}} \cdot \mathbf{B} $$</p>
 <p>上式中<code>*</code>是共轭转置运算符。不过由于一般B中包含的都是实数，所以在大部分情况下这个操作相当于一个转置运算符。</p>
 <h2 id="2-5-由特征值分解求得上一步中协方差矩阵的特征值与特征向量"><a href="#2-5-由特征值分解求得上一步中协方差矩阵的特征值与特征向量" class="headerlink" title="2.5 由特征值分解求得上一步中协方差矩阵的特征值与特征向量"></a>2.5 由特征值分解求得上一步中协方差矩阵的特征值与特征向量</h2><p>首先说明一下，特征值与特征向量还有矩阵之间的关系。</p>
 <blockquote>
 <p>特征向量是<strong>矩阵空间的基向量</strong>，长度为1，特征向量之间互相正交，特征值是矩阵在对应特征向量上的投影。将矩阵理解成一种变换，则每个特征向量就是这个变换的一个方向，对应的特征值就是在这个方向上的变换速度。</p>
 </blockquote>
 <p>一般对于一个矩阵C(维度为<code>n*n</code>)，会存在n个特征向量(每个维度都是n)，与n个特征值，每个特征值对应一个特征向量。它们之间的关系如下：</p>
-<p>$$ \mathbf{V^{-1}} \mathbf{C} \mathbf{V} = \mathbf{D} 　也可以写成　 \mathbf{C} = \mathbf{V} \mathbf{D} \mathbf{V^{-1}} $$</p>
+<p>$$ \mathbf{V^{-1}} \mathbf{C} \mathbf{V} &#x3D; \mathbf{D} 　也可以写成　 \mathbf{C} &#x3D; \mathbf{V} \mathbf{D} \mathbf{V^{-1}} $$</p>
 <p>其中，</p>
 <ul>
 <li>V是n个特征向量组成的<code>n*n</code>维矩阵</li>
@@ -430,6 +438,28 @@
   
     <article id="comments" lazyload>
       
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
 
     </article>
   
@@ -533,7 +563,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -727,6 +757,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 

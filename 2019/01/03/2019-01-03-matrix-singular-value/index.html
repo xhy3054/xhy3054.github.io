@@ -71,6 +71,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -88,7 +92,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -226,7 +234,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.9k 字
+          4.3k 字
         
       </span>
     
@@ -237,7 +245,7 @@
         
         
         
-          33 分钟
+          36 分钟
         
       </span>
     
@@ -283,13 +291,13 @@
                 <p>矩阵的本质可以是代表着一定维度空间上的线性变换。矩阵分解的本质是将原本<code>m*n</code>复杂的矩阵分解成对应的几个简单矩阵的乘积的形式。使得矩阵分析起来更加简单。</p>
 <p>前面写过一篇博客讲的是矩阵的特征值分解，但是我们知道很多矩阵都是不能够进行特征值分解的。这种情况下，如果我们想通过矩阵分解的形式将原本比较复杂的矩阵问题分解成比较简单的矩阵相乘的形式，会对其进行<strong>奇异值分解</strong>。</p>
 <h1 id="简单回顾特征值分解"><a href="#简单回顾特征值分解" class="headerlink" title="简单回顾特征值分解"></a>简单回顾特征值分解</h1><p>如果一个<code>n*n</code>矩阵A有n个特征值，并且这n个特征值所对应的n个特征向量线性无关，则矩阵A可以使用下式进行特征值分解：</p>
-<p>$$ A=W\Sigma W^{-1} $$</p>
+<p>$$ A&#x3D;W\Sigma W^{-1} $$</p>
 <p>其中，W是n个特征向量所张成的<code>n*n</code>维矩阵，而$Sigma$是一个对角矩阵，对角线上是矩阵A的n个特征值。</p>
 <blockquote>
-<p>一般情况下，我们会将特征向量标准化（即令他们是单位向量），此时矩阵W的n个特征向量为标准正交基，所以会有$W^TW=I$，即$W^T=W^{-1}$，也就是说W为<strong>酉矩阵</strong>。所以特征值分解也可以写成$A=W\Sigma W^T$</p>
+<p>一般情况下，我们会将特征向量标准化（即令他们是单位向量），此时矩阵W的n个特征向量为标准正交基，所以会有$W^TW&#x3D;I$，即$W^T&#x3D;W^{-1}$，也就是说W为<strong>酉矩阵</strong>。所以特征值分解也可以写成$A&#x3D;W\Sigma W^T$</p>
 </blockquote>
 <h1 id="奇异值分解"><a href="#奇异值分解" class="headerlink" title="奇异值分解"></a>奇异值分解</h1><p>奇异值分解并没有特征值分解那么苛刻的要求，对于任意一个<code>m*n</code>的矩阵A，可以对其进行如下奇异值分解：</p>
-<p>$$  A = U\Sigma V^T $$</p>
+<p>$$  A &#x3D; U\Sigma V^T $$</p>
 <p>其中，</p>
 <ul>
 <li>U是一个<code>m*m</code>的矩阵；</li>
@@ -302,50 +310,50 @@
 </li>
 <li><p>然后，利用A乘以A的转置得到<code>m*m</code>的矩阵$AA^T$，对这个矩阵进行特征值分解，得到的m个特征向量张成的<code>m*m</code>矩阵就是<strong>U矩阵</strong>，在这里我们将每一个特征向量叫做<strong>左奇异向量</strong>；</p>
 </li>
-<li><p>最后，利用下式求得每个<strong>奇异值</strong><br>$$A=U\Sigma V^T \Rightarrow AV=U\Sigma V^TV \Rightarrow AV=U\Sigma \Rightarrow  Av_i = \sigma_i u_i  \Rightarrow  \sigma_i =  Av_i / u_i$$</p>
+<li><p>最后，利用下式求得每个<strong>奇异值</strong><br>$$A&#x3D;U\Sigma V^T \Rightarrow AV&#x3D;U\Sigma V^TV \Rightarrow AV&#x3D;U\Sigma \Rightarrow  Av_i &#x3D; \sigma_i u_i  \Rightarrow  \sigma_i &#x3D;  Av_i &#x2F; u_i$$</p>
 </li>
 </ol>
 <h3 id="上述奇异值分解步骤的依据"><a href="#上述奇异值分解步骤的依据" class="headerlink" title="上述奇异值分解步骤的依据"></a>上述奇异值分解步骤的依据</h3><p>在上面，我们说矩阵$A^TA$的特征向量组成的就是SVD的V矩阵，矩阵$AA^T$的特征向量组成的就是SVD的U矩阵，可以通过如下推导证明(以V矩阵为例)：</p>
-<p>$$ A=U\Sigma V^T \Rightarrow A^T=V\Sigma^T U^T \Rightarrow A^TA = V\Sigma^T U^TU\Sigma V^T = V\Sigma^2V^T $$</p>
+<p>$$ A&#x3D;U\Sigma V^T \Rightarrow A^T&#x3D;V\Sigma^T U^T \Rightarrow A^TA &#x3D; V\Sigma^T U^TU\Sigma V^T &#x3D; V\Sigma^2V^T $$</p>
 <blockquote>
-<p>上式中我们还发现矩阵$A^TA$特征值矩阵等于A奇异值矩阵的平方，即$\sigma_i = \sqrt{\lambda_i}$，所以其实在第三步中我们求奇异值的方式其实也可以通过求出矩阵$A^TA$的特征值取平方根来求奇异值。</p>
+<p>上式中我们还发现矩阵$A^TA$特征值矩阵等于A奇异值矩阵的平方，即$\sigma_i &#x3D; \sqrt{\lambda_i}$，所以其实在第三步中我们求奇异值的方式其实也可以通过求出矩阵$A^TA$的特征值取平方根来求奇异值。</p>
 </blockquote>
 <h2 id="SVD求解实例"><a href="#SVD求解实例" class="headerlink" title="SVD求解实例"></a>SVD求解实例</h2><ul>
 <li>对于一个矩阵A:</li>
 </ul>
-<p>$$ \mathbf{A} = \left( \begin{array}{ccc} 0&amp; 1\\  1&amp; 1\\   1&amp; 0 \end{array} \right) $$</p>
+<p>$$ \mathbf{A} &#x3D; \left( \begin{array}{ccc} 0&amp; 1\  1&amp; 1\   1&amp; 0 \end{array} \right) $$</p>
 <ul>
 <li>首先计算出$A^TA$和$AA^T$</li>
 </ul>
-<p>$$ \mathbf{A^TA} = \left( \begin{array}{ccc} 0&amp; 1 &amp;1\\ 1&amp;1&amp; 0 \end{array} \right) \left( \begin{array}{ccc} 0&amp; 1\\  1&amp; 1\\   1&amp; 0 \end{array} \right) = \left( \begin{array}{ccc} 2&amp; 1 \\ 1&amp; 2 \end{array} \right) $$</p>
-<p>$$ \mathbf{AA^T} =  \left( \begin{array}{ccc} 0&amp; 1\\  1&amp; 1\\   1&amp; 0 \end{array} \right) \left( \begin{array}{ccc} 0&amp; 1 &amp;1\\ 1&amp;1&amp; 0 \end{array} \right) = \left( \begin{array}{ccc} 1&amp; 1 &amp; 0\\ 1&amp; 2 &amp; 1\\ 0&amp; 1&amp; 1 \end{array} \right) $$</p>
+<p>$$ \mathbf{A^TA} &#x3D; \left( \begin{array}{ccc} 0&amp; 1 &amp;1\ 1&amp;1&amp; 0 \end{array} \right) \left( \begin{array}{ccc} 0&amp; 1\  1&amp; 1\   1&amp; 0 \end{array} \right) &#x3D; \left( \begin{array}{ccc} 2&amp; 1 \ 1&amp; 2 \end{array} \right) $$</p>
+<p>$$ \mathbf{AA^T} &#x3D;  \left( \begin{array}{ccc} 0&amp; 1\  1&amp; 1\   1&amp; 0 \end{array} \right) \left( \begin{array}{ccc} 0&amp; 1 &amp;1\ 1&amp;1&amp; 0 \end{array} \right) &#x3D; \left( \begin{array}{ccc} 1&amp; 1 &amp; 0\ 1&amp; 2 &amp; 1\ 0&amp; 1&amp; 1 \end{array} \right) $$</p>
 <ul>
 <li>求出$A^TA$的特征值与特征向量</li>
 </ul>
-<p>$$ \lambda_1= 3; v_1 = \left( \begin{array}{ccc} 1/\sqrt{2} \\ 1/\sqrt{2} \end{array} \right); \lambda_2= 1; v_2 = \left( \begin{array}{ccc} -1/\sqrt{2} \\ 1/\sqrt{2} \end{array} \right) $$</p>
+<p>$$ \lambda_1&#x3D; 3; v_1 &#x3D; \left( \begin{array}{ccc} 1&#x2F;\sqrt{2} \ 1&#x2F;\sqrt{2} \end{array} \right); \lambda_2&#x3D; 1; v_2 &#x3D; \left( \begin{array}{ccc} -1&#x2F;\sqrt{2} \ 1&#x2F;\sqrt{2} \end{array} \right) $$</p>
 <ul>
 <li>求出$AA^T$的特征值与特征向量</li>
 </ul>
-<p>$$ \lambda_1= 3; u_1 = \left( \begin{array}{ccc} 1/\sqrt{6} \\ 2/\sqrt{6} \\ 1/\sqrt{6} \end{array} \right); \lambda_2= 1; u_2 = \left( \begin{array}{ccc} 1/\sqrt{2} \\ 0 \\ -1/\sqrt{2} \end{array} \right);  \lambda_3= 0; u_3 = \left( \begin{array}{ccc} 1/\sqrt{3} \\ -1/\sqrt{3} \\ 1/\sqrt{3} \end{array} \right) $$</p>
+<p>$$ \lambda_1&#x3D; 3; u_1 &#x3D; \left( \begin{array}{ccc} 1&#x2F;\sqrt{6} \ 2&#x2F;\sqrt{6} \ 1&#x2F;\sqrt{6} \end{array} \right); \lambda_2&#x3D; 1; u_2 &#x3D; \left( \begin{array}{ccc} 1&#x2F;\sqrt{2} \ 0 \ -1&#x2F;\sqrt{2} \end{array} \right);  \lambda_3&#x3D; 0; u_3 &#x3D; \left( \begin{array}{ccc} 1&#x2F;\sqrt{3} \ -1&#x2F;\sqrt{3} \ 1&#x2F;\sqrt{3} \end{array} \right) $$</p>
 <ul>
-<li>利用$ Av_i = \sigma_i u_i, i=1,2 $求得奇异值，我们会发现求得的结果与$ \sigma_i = \sqrt{\lambda_i} $的结果相同;</li>
+<li>利用$ Av_i &#x3D; \sigma_i u_i, i&#x3D;1,2 $求得奇异值，我们会发现求得的结果与$ \sigma_i &#x3D; \sqrt{\lambda_i} $的结果相同;</li>
 </ul>
-<p>$$ \left( \begin{array}{ccc} 0&amp; 1\\  1&amp; 1\\   1&amp; 0 \end{array} \right) \left( \begin{array}{ccc} 1/\sqrt{2} \\ 1/\sqrt{2} \end{array} \right) = \sigma_1 \left( \begin{array}{ccc} 1/\sqrt{6} \\ 2/\sqrt{6} \\ 1/\sqrt{6} \end{array} \right) \Rightarrow  \sigma_1=\sqrt{3} $$</p>
-<p>$$ \left( \begin{array}{ccc} 0&amp; 1\\  1&amp; 1\\   1&amp; 0 \end{array} \right) \left( \begin{array}{ccc} -1/\sqrt{2} \\ 1/\sqrt{2} \end{array} \right) = \sigma_2 \left( \begin{array}{ccc} 1/\sqrt{2} \\ 0 \\ -1/\sqrt{2} \end{array} \right) \Rightarrow  \sigma_2=1 $$</p>
+<p>$$ \left( \begin{array}{ccc} 0&amp; 1\  1&amp; 1\   1&amp; 0 \end{array} \right) \left( \begin{array}{ccc} 1&#x2F;\sqrt{2} \ 1&#x2F;\sqrt{2} \end{array} \right) &#x3D; \sigma_1 \left( \begin{array}{ccc} 1&#x2F;\sqrt{6} \ 2&#x2F;\sqrt{6} \ 1&#x2F;\sqrt{6} \end{array} \right) \Rightarrow  \sigma_1&#x3D;\sqrt{3} $$</p>
+<p>$$ \left( \begin{array}{ccc} 0&amp; 1\  1&amp; 1\   1&amp; 0 \end{array} \right) \left( \begin{array}{ccc} -1&#x2F;\sqrt{2} \ 1&#x2F;\sqrt{2} \end{array} \right) &#x3D; \sigma_2 \left( \begin{array}{ccc} 1&#x2F;\sqrt{2} \ 0 \ -1&#x2F;\sqrt{2} \end{array} \right) \Rightarrow  \sigma_2&#x3D;1 $$</p>
 <ul>
 <li>最终得到A的奇异值分解为</li>
 </ul>
-<p>$$ A=U\Sigma V^T = \left( \begin{array}{ccc} 1/\sqrt{6} &amp; 1/\sqrt{2} &amp; 1/\sqrt{3} \\ 2/\sqrt{6} &amp; 0 &amp; -1/\sqrt{3}\\ 1/\sqrt{6} &amp; -1/\sqrt{2} &amp; 1/\sqrt{3} \end{array} \right) \left( \begin{array}{ccc} \sqrt{3} &amp; 0 \\  0 &amp; 1\\ 0 &amp; 0 \end{array} \right) \left( \begin{array}{ccc} 1/\sqrt{2}  &amp; 1/\sqrt{2}  \\ -1/\sqrt{2}  &amp; 1/\sqrt{2}  \end{array} \right) $$</p>
+<p>$$ A&#x3D;U\Sigma V^T &#x3D; \left( \begin{array}{ccc} 1&#x2F;\sqrt{6} &amp; 1&#x2F;\sqrt{2} &amp; 1&#x2F;\sqrt{3} \ 2&#x2F;\sqrt{6} &amp; 0 &amp; -1&#x2F;\sqrt{3}\ 1&#x2F;\sqrt{6} &amp; -1&#x2F;\sqrt{2} &amp; 1&#x2F;\sqrt{3} \end{array} \right) \left( \begin{array}{ccc} \sqrt{3} &amp; 0 \  0 &amp; 1\ 0 &amp; 0 \end{array} \right) \left( \begin{array}{ccc} 1&#x2F;\sqrt{2}  &amp; 1&#x2F;\sqrt{2}  \ -1&#x2F;\sqrt{2}  &amp; 1&#x2F;\sqrt{2}  \end{array} \right) $$</p>
 <h1 id="奇异值分解用于压缩"><a href="#奇异值分解用于压缩" class="headerlink" title="奇异值分解用于压缩"></a>奇异值分解用于压缩</h1><ul>
-<li>首先，对于奇异值分解$ A = U\Sigma V^T $，我们也可以写成如下形式，我们假设奇异值大小顺序排列，即$\sigma_1 \geq \sigma_2 \geq…\geq \sigma_n&gt;0$，并且其中每一项的$uv^T$都是秩为1的(m*n)矩阵。</li>
+<li>首先，对于奇异值分解$ A &#x3D; U\Sigma V^T $，我们也可以写成如下形式，我们假设奇异值大小顺序排列，即$\sigma_1 \geq \sigma_2 \geq…\geq \sigma_n&gt;0$，并且其中每一项的$uv^T$都是秩为1的(m*n)矩阵。</li>
 </ul>
-<p>$$ A = \sigma_1u_1v_1^T + \sigma_2u_2v_2^T + … + \sigma_nu_nv_n^T $$</p>
+<p>$$ A &#x3D; \sigma_1u_1v_1^T + \sigma_2u_2v_2^T + … + \sigma_nu_nv_n^T $$</p>
 <ul>
 <li>对于如下一幅图像，像素（矩阵尺度）为<code>450*333</code></li>
 </ul>
 <p><img src="/img/matrix_singularvalue/compression1.jpg" srcset="/img/loading.gif" lazyload alt="compression1"></p>
 <ul>
-<li>我们如果只保留最大的奇异值那一项，即另$A_1 = \sigma_1u_1v_1^T$，然后保存这个矩阵，图像显示如下：</li>
+<li>我们如果只保留最大的奇异值那一项，即另$A_1 &#x3D; \sigma_1u_1v_1^T$，然后保存这个矩阵，图像显示如下：</li>
 </ul>
 <p><img src="/img/matrix_singularvalue/compression2.jpg" srcset="/img/loading.gif" lazyload alt="compression2"></p>
 <ul>
@@ -366,7 +374,7 @@
 </li>
 <li><p>如果将矩阵看做是线性变换的话，特征值分解与奇异值分解都是将矩阵分解成三个线性变换的叠加（两个旋转，一个拉伸）</p>
 </li>
-<li><p>特征值分解与奇异值分解都可以用于压缩矩阵（通过抛弃较小的奇异值/特征值）,pca降维时的计算方式就与其很相关。</p>
+<li><p>特征值分解与奇异值分解都可以用于压缩矩阵（通过抛弃较小的奇异值&#x2F;特征值）,pca降维时的计算方式就与其很相关。</p>
 </li>
 </ul>
 <blockquote>
@@ -473,6 +481,28 @@
   
     <article id="comments" lazyload>
       
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
 
     </article>
   
@@ -576,7 +606,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -770,6 +800,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 

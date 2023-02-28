@@ -24,7 +24,7 @@
 <meta property="og:description" content="前面已经讲了很多vins里的细节操作，今天来谈谈将整个系统最核心的后端优化部分。 vins的后端优化一般在vins系统中，视觉与imu数据经过预处理后，此时如果已经完成初始化，则会在滑窗中进行非线性优化操作。整个过程一般会是如下过程：  对滑窗中所有特征点进行三角化操作  针对现有的窗口中的数据，构建非线性优化问题，并为该问题添加优化参数与待优化残差项，然后进行优化；  优化完成后进行滑窗操作（根">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2019-09-02T17:07:24.000Z">
-<meta property="article:modified_time" content="2023-02-27T13:12:22.764Z">
+<meta property="article:modified_time" content="2023-02-28T05:56:49.402Z">
 <meta property="article:author" content="Line">
 <meta property="article:tag" content="多传感器融合">
 <meta name="twitter:card" content="summary_large_image">
@@ -65,6 +65,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -82,7 +86,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -220,7 +228,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          9.9k 字
+          10k 字
         
       </span>
     
@@ -231,7 +239,7 @@
         
         
         
-          83 分钟
+          84 分钟
         
       </span>
     
@@ -320,42 +328,42 @@
 <p>在下面讲到优化过程时，涉及到很多求导雅克比矩阵的操作，这些求导操作是有明显的流程的。首先需要明确被求导的因变量，与求导的自变量。然后如果是关于姿态（四元数）的求导，就先将旋转变换到李群上，使用扰动模型去推导。其他的比较简单直接推就行了。</p>
 </blockquote>
 <h2 id="imu测量的预积分残差"><a href="#imu测量的预积分残差" class="headerlink" title="imu测量的预积分残差"></a>imu测量的预积分残差</h2><p>在滑窗中，首先被添加到问题中的残差项就是imu的残差。imu残差其实就是imu预积分的误差，计算方式如下（此处计算的残差是i帧与j帧之间的预积分残差）：</p>
-<p>$$<br>\left[\begin{array}{c}{\mathbf{r}<em>{p}} \\ {\mathbf{r}</em>{q}} \\ {\mathbf{r}<em>{v}} \\ {\mathbf{r}</em>{b a}} \\ {\mathbf{r}<em>{b g}}\end{array}\right]</em>{15 \times 1}=\left[\begin{array}{c}{\mathbf{q}<em>{b</em>{i} w}\left(\mathbf{p}<em>{w b</em>{j}}-\mathbf{p}<em>{w b</em>{i}}-\mathbf{v}<em>{i}^{w} \Delta t+\frac{1}{2} \mathbf{g}^{w} \Delta t^{2}\right)-\boldsymbol{\alpha}</em>{b_{i} b_{j}}} \\ {2\left[\mathbf{q}<em>{b</em>{j} b_{i}} \otimes\left(\mathbf{q}<em>{b</em>{i} w} \otimes \mathbf{q}<em>{w b</em>{j}}\right)\right]<em>{x y z}} \\ {\mathbf{q}</em>{b_{i} w}\left(\mathbf{v}<em>{j}^{w}-\mathbf{v}</em>{i}^{w}+\mathbf{g}^{w} \Delta t\right)-\beta_{b_{i} b_{j}}} \\ {\mathbf{b}<em>{j}^{a}-\mathbf{b}</em>{i}^{a}} \\ {\mathbf{b}<em>{j}^{g}-\mathbf{b}</em>{i}^{g}}\end{array}\right]<br>$$</p>
+<p>$$<br>\left[\begin{array}{c}{\mathbf{r}<em>{p}} \ {\mathbf{r}</em>{q}} \ {\mathbf{r}<em>{v}} \ {\mathbf{r}</em>{b a}} \ {\mathbf{r}<em>{b g}}\end{array}\right]</em>{15 \times 1}&#x3D;\left[\begin{array}{c}{\mathbf{q}<em>{b</em>{i} w}\left(\mathbf{p}<em>{w b</em>{j}}-\mathbf{p}<em>{w b</em>{i}}-\mathbf{v}<em>{i}^{w} \Delta t+\frac{1}{2} \mathbf{g}^{w} \Delta t^{2}\right)-\boldsymbol{\alpha}</em>{b_{i} b_{j}}} \ {2\left[\mathbf{q}<em>{b</em>{j} b_{i}} \otimes\left(\mathbf{q}<em>{b</em>{i} w} \otimes \mathbf{q}<em>{w b</em>{j}}\right)\right]<em>{x y z}} \ {\mathbf{q}</em>{b_{i} w}\left(\mathbf{v}<em>{j}^{w}-\mathbf{v}</em>{i}^{w}+\mathbf{g}^{w} \Delta t\right)-\beta_{b_{i} b_{j}}} \ {\mathbf{b}<em>{j}^{a}-\mathbf{b}</em>{i}^{a}} \ {\mathbf{b}<em>{j}^{g}-\mathbf{b}</em>{i}^{g}}\end{array}\right]<br>$$</p>
 <blockquote>
 <p>在vins中，这个残差块与i帧时刻位姿、速度、bias还有j帧时刻的位姿、速度、bias相关，也就是最小化这个残差块需要不断优化以上的参数块。</p>
 </blockquote>
 <h3 id="imu残差的雅克比"><a href="#imu残差的雅克比" class="headerlink" title="imu残差的雅克比"></a>imu残差的雅克比</h3><blockquote>
-<p>此处我们发现，上面的imu残差一共有五维，因此在计算雅克比时，可以对五个维度的残差分别对待优化参数块进行求导。由于此处如果全部进行求导，实在会太多公式，因此，此处仅仅以$$r_v$$为例，列举几个求导过程</p>
+<p>此处我们发现，上面的imu残差一共有五维，因此在计算雅克比时，可以对五个维度的残差分别对待优化参数块进行求导。由于此处如果全部进行求导，实在会太多公式，因此，此处仅仅以$r_v$为例，列举几个求导过程</p>
 </blockquote>
 <ul>
-<li>$$r_v$$对i时刻位置求导</li>
+<li>$r_v$对i时刻位置求导</li>
 </ul>
-<p>$$<br>\frac{\partial \mathbf{r}<em>{v}}{\partial \delta \mathbf{p}</em>{b_{i} b_{i}^{\prime}}}=\mathbf{0}<br>$$</p>
+<p>$$<br>\frac{\partial \mathbf{r}<em>{v}}{\partial \delta \mathbf{p}</em>{b_{i} b_{i}^{\prime}}}&#x3D;\mathbf{0}<br>$$</p>
 <ul>
-<li>$$r_v$$对i时刻角度求导</li>
+<li>$r_v$对i时刻角度求导</li>
 </ul>
-<p>$$<br>\begin{aligned} \frac{\partial \mathbf{r}<em>{v}}{\partial \delta \boldsymbol{\theta}</em>{b_{i} b_{i}^{\prime}}} &amp;=\frac{\partial\left(\mathbf{q}<em>{w b</em>{i}} \otimes\left[\begin{array}{c}{1} \\ {\frac{1}{2} \delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}}\end{array}\right]\right)^{-1}\left(\mathbf{v}<em>{j}^{w}-\mathbf{v}</em>{i}^{w}+\mathbf{g}^{w} \Delta t\right)}{\partial \delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}} \\ &amp;=\frac{\partial\left(\mathbf{R}<em>{w b</em>{i}} \exp \left(\left[\delta \boldsymbol{\theta}<em>{b</em>{i}}^{\prime}\right] \times\right)\right)^{-1}\left(\mathbf{v}<em>{j}^{w}-\mathbf{v}</em>{i}^{w}+\mathbf{g}^{w} \Delta t\right)}{\partial \delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}} \\ &amp;=\frac{\partial \exp \left(\left[-\delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}\right]<em>{\mathbf{X}}\right) \mathbf{R}</em>{b_{i} w}\left(\mathbf{v}<em>{j}^{w}-\mathbf{v}</em>{i}^{w}+\mathbf{g}^{w} \Delta t\right)}{\partial \delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}} \end{aligned}<br>$$</p>
-<p>$$<br>\begin{aligned} &amp;=\frac{\partial\left(\mathbf{I}-\left[\delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}\right] \times\right) \mathbf{R}<em>{b</em>{i} w}\left(\mathbf{v}<em>{j}^{w}-\mathbf{v}</em>{i}^{w}+\mathbf{g}^{w} \Delta t\right)}{\partial \delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}} \=&amp; \frac{\partial-\left[\delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}\right] \times \boldsymbol{R}<em>{b</em>{i} w}\left(\mathbf{v}<em>{j}^{w}-\mathbf{v}</em>{i}^{w}+\mathbf{g}^{w} \Delta t\right)}{\partial \delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}} \=&amp; \frac{\partial\left[\mathbf{R}<em>{b</em>{i} w}\left(\mathbf{v}<em>{j}^{w}-\mathbf{v}</em>{i}^{w}+\mathbf{g}^{w} \Delta t\right]<em>{ \times}\right) \delta \boldsymbol{\theta}</em>{b_{i} b_{i}^{\prime}}}{\partial \delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}} \=&amp;\left[\mathbf{R}<em>{b</em>{i} w}\left(\mathbf{v}<em>{j}^{w}-\mathbf{v}</em>{i}^{w}+\mathbf{g}^{w} \Delta t\right)\right]_{\mathbf{x}} \end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned} \frac{\partial \mathbf{r}<em>{v}}{\partial \delta \boldsymbol{\theta}</em>{b_{i} b_{i}^{\prime}}} &amp;&#x3D;\frac{\partial\left(\mathbf{q}<em>{w b</em>{i}} \otimes\left[\begin{array}{c}{1} \ {\frac{1}{2} \delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}}\end{array}\right]\right)^{-1}\left(\mathbf{v}<em>{j}^{w}-\mathbf{v}</em>{i}^{w}+\mathbf{g}^{w} \Delta t\right)}{\partial \delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}} \ &amp;&#x3D;\frac{\partial\left(\mathbf{R}<em>{w b</em>{i}} \exp \left(\left[\delta \boldsymbol{\theta}<em>{b</em>{i}}^{\prime}\right] \times\right)\right)^{-1}\left(\mathbf{v}<em>{j}^{w}-\mathbf{v}</em>{i}^{w}+\mathbf{g}^{w} \Delta t\right)}{\partial \delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}} \ &amp;&#x3D;\frac{\partial \exp \left(\left[-\delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}\right]<em>{\mathbf{X}}\right) \mathbf{R}</em>{b_{i} w}\left(\mathbf{v}<em>{j}^{w}-\mathbf{v}</em>{i}^{w}+\mathbf{g}^{w} \Delta t\right)}{\partial \delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}} \end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned} &amp;&#x3D;\frac{\partial\left(\mathbf{I}-\left[\delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}\right] \times\right) \mathbf{R}<em>{b</em>{i} w}\left(\mathbf{v}<em>{j}^{w}-\mathbf{v}</em>{i}^{w}+\mathbf{g}^{w} \Delta t\right)}{\partial \delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}} \&#x3D;&amp; \frac{\partial-\left[\delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}\right] \times \boldsymbol{R}<em>{b</em>{i} w}\left(\mathbf{v}<em>{j}^{w}-\mathbf{v}</em>{i}^{w}+\mathbf{g}^{w} \Delta t\right)}{\partial \delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}} \&#x3D;&amp; \frac{\partial\left[\mathbf{R}<em>{b</em>{i} w}\left(\mathbf{v}<em>{j}^{w}-\mathbf{v}</em>{i}^{w}+\mathbf{g}^{w} \Delta t\right]<em>{ \times}\right) \delta \boldsymbol{\theta}</em>{b_{i} b_{i}^{\prime}}}{\partial \delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}} \&#x3D;&amp;\left[\mathbf{R}<em>{b</em>{i} w}\left(\mathbf{v}<em>{j}^{w}-\mathbf{v}</em>{i}^{w}+\mathbf{g}^{w} \Delta t\right)\right]_{\mathbf{x}} \end{aligned}<br>$$</p>
 <ul>
-<li>$$r_v$$对i时刻速度求导</li>
+<li>$r_v$对i时刻速度求导</li>
 </ul>
-<p>$$<br>\frac{\partial \mathbf{r}<em>{v}}{\partial \delta \mathbf{v}</em>{i}^{w}}=-\mathbf{R}<em>{b</em>{i} w}<br>$$</p>
+<p>$$<br>\frac{\partial \mathbf{r}<em>{v}}{\partial \delta \mathbf{v}</em>{i}^{w}}&#x3D;-\mathbf{R}<em>{b</em>{i} w}<br>$$</p>
 <ul>
-<li>$$r_v$$对i时刻bias求导（注意，此处预积分对bias的导数在初始化时就已经求过了）</li>
+<li>$r_v$对i时刻bias求导（注意，此处预积分对bias的导数在初始化时就已经求过了）</li>
 </ul>
-<p>$$<br>\frac{\partial \mathbf{r}<em>{v}}{\partial \delta \mathbf{b}</em>{i}^{a}}=-\frac{\partial \boldsymbol{\beta}<em>{b</em>{i} b_{j}}}{\partial \delta \mathbf{b}<em>{i}^{a}}=-\mathbf{J}</em>{b_{i}^{a}}^{\beta}<br>$$</p>
+<p>$$<br>\frac{\partial \mathbf{r}<em>{v}}{\partial \delta \mathbf{b}</em>{i}^{a}}&#x3D;-\frac{\partial \boldsymbol{\beta}<em>{b</em>{i} b_{j}}}{\partial \delta \mathbf{b}<em>{i}^{a}}&#x3D;-\mathbf{J}</em>{b_{i}^{a}}^{\beta}<br>$$</p>
 <blockquote>
 <p>其实在计算imu残差的雅克比矩阵时，会多次用到链式法则，因为在另外一篇讲解<a target="_blank" rel="noopener" href="https://xhy3054.github.io/2019/07/31/2019-07-31-pre-integration/">imu预积分</a>的博客中，已经计算出了imu预积分相对于bias的雅克比。</p>
 </blockquote>
 <h3 id="imu残差的协方差"><a href="#imu残差的协方差" class="headerlink" title="imu残差的协方差"></a>imu残差的协方差</h3><p>上文中给出了残差与雅克比的计算，我们知道如果想使用高斯牛顿或者LM算法，最好还需要给出准确的协方差。此处由于在imu积分中，协方差是一直传递的。我们知道imu增量的递推公式可以写为：</p>
-<p>$$\delta z_{k+1}^{15 \times 1}=F^{15 \times 15} \delta z_{k}^{15 \times 1} + V^{15 \times 18} n^{18 \times 1}$$</p>
+<p>$$\delta z_{k+1}^{15 \times 1}&#x3D;F^{15 \times 15} \delta z_{k}^{15 \times 1} + V^{15 \times 18} n^{18 \times 1}$$</p>
 <p>由上式我们知道，协方差的传递公式为：</p>
-<p>$$ P_{k+1} = F P_k F^T + V Q V^T, P_0 = 0 $$</p>
+<p>$$ P_{k+1} &#x3D; F P_k F^T + V Q V^T, P_0 &#x3D; 0 $$</p>
 <p>此处我们假设初始值是为0，噪声项的<strong>对角协方差矩阵Q</strong>可以通过艾伦方差标定得到(此处前两项是k时刻的加速度与角速度的高斯白噪方差，中间两项是k+1时刻的高斯白噪方差，最后两项是k时刻的bias随机游走方差，它们之间互相不相关，所以是对角矩阵)。</p>
-<p>$$ Q^{18 \times 18} = \left(\sigma_{a}^2 , \sigma_{w}^2 , \sigma_{a}^2 , \sigma_{w}^2 , \sigma_{ba}^2 , \sigma_{bw}^2 \right) $$</p>
+<p>$$ Q^{18 \times 18} &#x3D; \left(\sigma_{a}^2 , \sigma_{w}^2 , \sigma_{a}^2 , \sigma_{w}^2 , \sigma_{ba}^2 , \sigma_{bw}^2 \right) $$</p>
 <h2 id="视觉观测的重投影误差"><a href="#视觉观测的重投影误差" class="headerlink" title="视觉观测的重投影误差"></a>视觉观测的重投影误差</h2><p>视觉残差也就是特征点的重投影误差，vins中的视觉残差是由每个特征点从观测到它的第一帧，到所有可以观测到它的其他帧的重投影误差组成的。</p>
-<p>拿其中任意一项举例，比如这项是一个特征点从i帧到j帧的重投影误差，这个特征点在i帧相机平面的归一化坐标为$$(u_{ci}, v_{ci})$$，深度为$$\lambda$$，在j帧相机平面的归一化坐标为$$(u_{cj}, v_{cj})$$。假设将这个点从i帧投影到j帧的相机坐标系，则过程如下：</p>
-<p>$$<br>\left[\begin{array}{c}{x_{c_{j}}} \\ {y_{c_{j}}} \\ {z_{c_{j}}} \\ {1}\end{array}\right]=\mathbf{T}<em>{b c}^{-1} \mathbf{T}</em>{w b_{j}}^{-1} \mathbf{T}<em>{w b</em>{i}} \mathbf{T}<em>{b c}\left[\begin{array}{c}{\frac{1}{\lambda} u</em>{c_{i}}} \\ {\frac{1}{\lambda} v_{c_{i}}} \\ {\frac{1}{\lambda}} \\ {1}\end{array}\right]<br>$$</p>
+<p>拿其中任意一项举例，比如这项是一个特征点从i帧到j帧的重投影误差，这个特征点在i帧相机平面的归一化坐标为$(u_{ci}, v_{ci})$，深度为$\lambda$，在j帧相机平面的归一化坐标为$(u_{cj}, v_{cj})$。假设将这个点从i帧投影到j帧的相机坐标系，则过程如下：</p>
+<p>$$<br>\left[\begin{array}{c}{x_{c_{j}}} \ {y_{c_{j}}} \ {z_{c_{j}}} \ {1}\end{array}\right]&#x3D;\mathbf{T}<em>{b c}^{-1} \mathbf{T}</em>{w b_{j}}^{-1} \mathbf{T}<em>{w b</em>{i}} \mathbf{T}<em>{b c}\left[\begin{array}{c}{\frac{1}{\lambda} u</em>{c_{i}}} \ {\frac{1}{\lambda} v_{c_{i}}} \ {\frac{1}{\lambda}} \ {1}\end{array}\right]<br>$$</p>
 <p>整个投影过程比较长，依次是将特征点</p>
 <ol>
 <li><p>从i帧相机坐标系变换到i帧body坐标系</p>
@@ -368,54 +376,56 @@
 </li>
 </ol>
 <p>将上面这个变换拆分成3维坐标形式，变换形式如下：</p>
-<p>$$<br>\begin{aligned} \mathbf{f}<em>{c</em>{j}}=\left[\begin{array}{c}{x_{c_{j}}} \\ {y_{c_{j}}} \\ {z_{c_{j}}}\end{array}\right] &amp;=\mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top} \mathbf{R}<em>{w b</em>{i}} \mathbf{R}<em>{b c} \frac{1}{\lambda}\left[\begin{array}{c}{u</em>{c_{i}}} \\ {v_{c_{i}}} \\ {1}\end{array}\right] \\ &amp;+\mathbf{R}<em>{b c}^{\top}\left(\mathbf{R}</em>{w b_{j}}^{\top}\left(\left(\mathbf{R}<em>{w b</em>{i}} \mathbf{p}<em>{b c}+\mathbf{p}</em>{w b_{i}}\right)-\mathbf{p}<em>{w b</em>{j}}\right)-\mathbf{p}_{b c}\right) \end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned} \mathbf{f}<em>{c</em>{j}}&#x3D;\left[\begin{array}{c}{x_{c_{j}}} \ {y_{c_{j}}} \ {z_{c_{j}}}\end{array}\right] &amp;&#x3D;\mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top} \mathbf{R}<em>{w b</em>{i}} \mathbf{R}<em>{b c} \frac{1}{\lambda}\left[\begin{array}{c}{u</em>{c_{i}}} \ {v_{c_{i}}} \ {1}\end{array}\right] \ &amp;+\mathbf{R}<em>{b c}^{\top}\left(\mathbf{R}</em>{w b_{j}}^{\top}\left(\left(\mathbf{R}<em>{w b</em>{i}} \mathbf{p}<em>{b c}+\mathbf{p}</em>{w b_{i}}\right)-\mathbf{p}<em>{w b</em>{j}}\right)-\mathbf{p}_{b c}\right) \end{aligned}<br>$$</p>
 <p>而视觉残差就是</p>
-<p>$$<br>\mathbf{r}<em>{c}=\left[\begin{array}{c}{\frac{x</em>{c_{j}}}{z_{c_{j}}}-u_{c_{j}}} \\ {\frac{y_{c_{j}}}{z_{c_{j}}}-v_{c_{j}}}\end{array}\right]<br>$$</p>
+<p>$$<br>\mathbf{r}<em>{c}&#x3D;\left[\begin{array}{c}{\frac{x</em>{c_{j}}}{z_{c_{j}}}-u_{c_{j}}} \ {\frac{y_{c_{j}}}{z_{c_{j}}}-v_{c_{j}}}\end{array}\right]<br>$$</p>
 <h3 id="视觉残差的雅克比"><a href="#视觉残差的雅克比" class="headerlink" title="视觉残差的雅克比"></a>视觉残差的雅克比</h3><blockquote>
-<p>此处推导视觉残差的雅克比遵循了链式法则，首先求视觉残差对$$\mathbf{f}<em>{c</em>{j}}$$的导数，然后由$$\mathbf{f}<em>{c</em>{j}}$$开始求其对待优化参数的偏导数。</p>
+<p>此处推导视觉残差的雅克比遵循了链式法则，首先求视觉残差对$\mathbf{f}<em>{c</em>{j}}$的导数，然后由$\mathbf{f}<em>{c</em>{j}}$开始求其对待优化参数的偏导数。</p>
 </blockquote>
 <ul>
-<li>首先，残差对$$\mathbf{f}<em>{c</em>{j}}$$求导；</li>
+<li>首先，残差对$\mathbf{f}<em>{c</em>{j}}$求导；</li>
 </ul>
-<p>$$<br>\frac{\partial \mathbf{r}<em>{c}}{\partial \mathbf{f}</em>{c_{j}}}=\left[\begin{array}{ccc}{\frac{1}{z_{c_{j}}}} &amp; {0} &amp; {-\frac{x_{c_{j}}}{z_{c_{j}}^{2}}} \\ {0} &amp; {\frac{1}{z_{c_{j}}}} &amp; {-\frac{y_{c_{j}}}{z_{c_{j}}^{2}}}\end{array}\right]<br>$$</p>
+<p>$$<br>\frac{\partial \mathbf{r}<em>{c}}{\partial \mathbf{f}</em>{c_{j}}}&#x3D;\left[\begin{array}{ccc}{\frac{1}{z_{c_{j}}}} &amp; {0} &amp; {-\frac{x_{c_{j}}}{z_{c_{j}}^{2}}} \ {0} &amp; {\frac{1}{z_{c_{j}}}} &amp; {-\frac{y_{c_{j}}}{z_{c_{j}}^{2}}}\end{array}\right]<br>$$</p>
 <ul>
-<li><p>其次，$$\mathbf{f}<em>{c</em>{j}}$$对各状态量求导；</p>
+<li><p>其次，$\mathbf{f}<em>{c</em>{j}}$对各状态量求导；</p>
 </li>
-<li><p>$$\mathbf{f}<em>{c</em>{j}}$$对i时刻位置求导；</p>
+<li><p>$\mathbf{f}<em>{c</em>{j}}$对i时刻位置求导；</p>
 </li>
 </ul>
-<p>$$<br>\frac{\partial \mathbf{f}<em>{c</em>{j}}}{\partial \delta \mathbf{p}<em>{b</em>{i} b_{i}^{\prime}}}=\mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top}<br>$$</p>
+<p>$$<br>\frac{\partial \mathbf{f}<em>{c</em>{j}}}{\partial \delta \mathbf{p}<em>{b</em>{i} b_{i}^{\prime}}}&#x3D;\mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top}<br>$$</p>
 <ul>
-<li>$$\mathbf{f}<em>{c</em>{j}}$$对i时刻姿态求导；</li>
+<li>$\mathbf{f}<em>{c</em>{j}}$对i时刻姿态求导；</li>
 </ul>
-<p>$$<br>\mathbf{f}<em>{c</em>{j}}=\mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top} \mathbf{R}<em>{w b</em>{i}} \mathbf{R}<em>{b c} \mathbf{f}</em>{c_{i}}+\mathbf{R}<em>{b c}^{\top}\left(\mathbf{R}</em>{w b_{j}}^{\top}\left(\left(\mathbf{R}<em>{w b</em>{i} \mathbf{p}<em>{b c}}+\mathbf{p}</em>{w b_{i}}\right)-\mathbf{p}<em>{w b</em>{j}}\right)-\mathbf{p}_{b c}\right)<br>$$</p>
-<p>$$<br>\begin{aligned} \frac{\partial \mathbf{f}<em>{c</em>{j}}}{\partial \delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}} &amp;=\frac{\partial \mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top} \mathbf{R}<em>{w b</em>{i}}\left(\mathbf{I}+\left[\delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}\right]<em>{\mathbf{x}}\right) \mathbf{f}</em>{b_{i}}}{\partial \delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}} \\ &amp;=-\mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top} \mathbf{R}<em>{w b</em>{i}}\left[\mathbf{f}<em>{b</em>{i}}\right]_{ \times} \end{aligned}<br>$$</p>
+<p>$$<br>\mathbf{f}<em>{c</em>{j}}&#x3D;\mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top} \mathbf{R}<em>{w b</em>{i}} \mathbf{R}<em>{b c} \mathbf{f}</em>{c_{i}}+\mathbf{R}<em>{b c}^{\top}\left(\mathbf{R}</em>{w b_{j}}^{\top}\left(\left(\mathbf{R}<em>{w b</em>{i} \mathbf{p}<em>{b c}}+\mathbf{p}</em>{w b_{i}}\right)-\mathbf{p}<em>{w b</em>{j}}\right)-\mathbf{p}_{b c}\right)<br>$$</p>
+<p>$$<br>\begin{aligned} \frac{\partial \mathbf{f}<em>{c</em>{j}}}{\partial \delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}} &amp;&#x3D;\frac{\partial \mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top} \mathbf{R}<em>{w b</em>{i}}\left(\mathbf{I}+\left[\delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}\right]<em>{\mathbf{x}}\right) \mathbf{f}</em>{b_{i}}}{\partial \delta \boldsymbol{\theta}<em>{b</em>{i} b_{i}^{\prime}}} \ &amp;&#x3D;-\mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top} \mathbf{R}<em>{w b</em>{i}}\left[\mathbf{f}<em>{b</em>{i}}\right]_{ \times} \end{aligned}<br>$$</p>
 <ul>
-<li>$$\mathbf{f}<em>{c</em>{j}}$$对j时刻位置求导；</li>
+<li>$\mathbf{f}<em>{c</em>{j}}$对j时刻位置求导；</li>
 </ul>
-<p>$$<br>\frac{\partial \mathbf{f}<em>{c</em>{j}}}{\partial \delta \mathbf{p}<em>{b</em>{j} b_{j}^{\prime}}}= - \mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top}<br>$$</p>
+<p>$$<br>\frac{\partial \mathbf{f}<em>{c</em>{j}}}{\partial \delta \mathbf{p}<em>{b</em>{j} b_{j}^{\prime}}}&#x3D; - \mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top}<br>$$</p>
 <ul>
-<li>$$\mathbf{f}<em>{c</em>{j}}$$对j时刻姿态求导；</li>
+<li>$\mathbf{f}<em>{c</em>{j}}$对j时刻姿态求导；</li>
 </ul>
-<p>$$<br>\begin{aligned} \mathbf{f}<em>{c</em>{j}} &amp;=\mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top} \mathbf{R}<em>{w b</em>{i}} \mathbf{R}<em>{b c} \mathbf{f}</em>{c_{i}}+\mathbf{R}<em>{b c}^{\top}\left(\mathbf{R}</em>{w b_{j}}^{\top}\left(\left(\mathbf{R}<em>{w b</em>{i} \mathbf{p}<em>{b c}}+\mathbf{p}</em>{w b_{i}}\right)-\mathbf{p}<em>{w b</em>{j}}\right)-\mathbf{p}<em>{b c}\right) \\ &amp;=\mathbf{R}</em>{b c}^{\top} \mathbf{R}<em>{w b</em>{j}}^{\top}\left(\mathbf{R}<em>{w b</em>{i}}\left(\mathbf{R}<em>{b c} \mathbf{f}</em>{c_{i}}+\mathbf{p}<em>{b c}\right)+\mathbf{p}</em>{w b_{i}}-\mathbf{p}<em>{w b</em>{j}}\right)+(\ldots) \\ &amp;=\mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top}\left(\mathbf{f}<em>{w}-\mathbf{p}</em>{w b_{j}}\right)+(\ldots) \end{aligned}<br>$$</p>
-<p>$$<br>\begin{aligned} \frac{\partial \mathbf{f}<em>{c</em>{j}}}{\partial \delta \boldsymbol{\theta}<em>{b</em>{j} b_{j}^{\prime}}} &amp;=\frac{\partial \mathbf{R}<em>{b c}^{\top}\left(\mathbf{I}-\left[\delta \boldsymbol{\theta}</em>{b_{j} b_{j}^{\prime}}\right] \times\right) \mathbf{R}<em>{w b</em>{j}}^{\top}\left(\mathbf{f}<em>{w}-\mathbf{p}</em>{w b_{j}}\right)}{\partial \delta \boldsymbol{\theta}<em>{b</em>{j} b_{j}^{\prime}}} \\ &amp;=\frac{\partial \mathbf{R}<em>{b c}^{\top}\left(\mathbf{I}-\left[\delta \boldsymbol{\theta}</em>{b_{j} b_{j}^{\prime}}\right] \times\right) \mathbf{f}<em>{b</em>{j}}}{\partial \delta \boldsymbol{\theta}<em>{b</em>{j} b_{j}^{\prime}}} \\ &amp;=\mathbf{R}<em>{b c}^{\top}\left[\mathbf{f}</em>{b_{j}}\right]_{ \times} \end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned} \mathbf{f}<em>{c</em>{j}} &amp;&#x3D;\mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top} \mathbf{R}<em>{w b</em>{i}} \mathbf{R}<em>{b c} \mathbf{f}</em>{c_{i}}+\mathbf{R}<em>{b c}^{\top}\left(\mathbf{R}</em>{w b_{j}}^{\top}\left(\left(\mathbf{R}<em>{w b</em>{i} \mathbf{p}<em>{b c}}+\mathbf{p}</em>{w b_{i}}\right)-\mathbf{p}<em>{w b</em>{j}}\right)-\mathbf{p}<em>{b c}\right) \ &amp;&#x3D;\mathbf{R}</em>{b c}^{\top} \mathbf{R}<em>{w b</em>{j}}^{\top}\left(\mathbf{R}<em>{w b</em>{i}}\left(\mathbf{R}<em>{b c} \mathbf{f}</em>{c_{i}}+\mathbf{p}<em>{b c}\right)+\mathbf{p}</em>{w b_{i}}-\mathbf{p}<em>{w b</em>{j}}\right)+(\ldots) \ &amp;&#x3D;\mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top}\left(\mathbf{f}<em>{w}-\mathbf{p}</em>{w b_{j}}\right)+(\ldots) \end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned} \frac{\partial \mathbf{f}<em>{c</em>{j}}}{\partial \delta \boldsymbol{\theta}<em>{b</em>{j} b_{j}^{\prime}}} &amp;&#x3D;\frac{\partial \mathbf{R}<em>{b c}^{\top}\left(\mathbf{I}-\left[\delta \boldsymbol{\theta}</em>{b_{j} b_{j}^{\prime}}\right] \times\right) \mathbf{R}<em>{w b</em>{j}}^{\top}\left(\mathbf{f}<em>{w}-\mathbf{p}</em>{w b_{j}}\right)}{\partial \delta \boldsymbol{\theta}<em>{b</em>{j} b_{j}^{\prime}}} \ &amp;&#x3D;\frac{\partial \mathbf{R}<em>{b c}^{\top}\left(\mathbf{I}-\left[\delta \boldsymbol{\theta}</em>{b_{j} b_{j}^{\prime}}\right] \times\right) \mathbf{f}<em>{b</em>{j}}}{\partial \delta \boldsymbol{\theta}<em>{b</em>{j} b_{j}^{\prime}}} \ &amp;&#x3D;\mathbf{R}<em>{b c}^{\top}\left[\mathbf{f}</em>{b_{j}}\right]_{ \times} \end{aligned}<br>$$</p>
 <ul>
-<li>$$\mathbf{f}<em>{c</em>{j}}$$对imu与相机之间的外参位移求导；</li>
+<li>$\mathbf{f}<em>{c</em>{j}}$对imu与相机之间的外参位移求导；</li>
 </ul>
-<p>$$<br>\frac{\partial \mathbf{f}<em>{c</em>{j}}}{\partial \delta \mathbf{p}<em>{c c^{\prime}}}=\mathbf{R}</em>{b c}^{\top}\left(\mathbf{R}<em>{w b</em>{j}}^{\top} \mathbf{R}<em>{w b</em>{i}}-\mathbf{I}_{3 \times 3}\right)<br>$$</p>
+<p>$$<br>\frac{\partial \mathbf{f}<em>{c</em>{j}}}{\partial \delta \mathbf{p}<em>{c c^{\prime}}}&#x3D;\mathbf{R}</em>{b c}^{\top}\left(\mathbf{R}<em>{w b</em>{j}}^{\top} \mathbf{R}<em>{w b</em>{i}}-\mathbf{I}_{3 \times 3}\right)<br>$$</p>
 <ul>
-<li>$$\mathbf{f}<em>{c</em>{j}}$$对imu与相机之间的外参角度求导；</li>
+<li>$\mathbf{f}<em>{c</em>{j}}$对imu与相机之间的外参角度求导；</li>
 </ul>
-<p>$$<br>\frac{\partial \mathbf{f}<em>{c</em>{j}}}{\partial \delta \boldsymbol{\theta}<em>{c c^{\prime}}}=-\mathbf{R}</em>{b c}^{\top} \mathbf{R}<em>{w b</em>{j}}^{\top} \mathbf{R}<em>{w b</em>{i}} \mathbf{R}<em>{b c}\left[\mathbf{f}</em>{c_{i}}\right]<em>{\mathbf{x}}+\left[\mathbf{R}</em>{b c}^{\top} \mathbf{R}<em>{w b</em>{j}}^{\top} \mathbf{R}<em>{w b</em>{i}} \mathbf{R}<em>{b c} \mathbf{f}</em>{c_{i}}\right]<em>{ \times} +<br>\left[\mathbf{R}</em>{b c}^{\top}\left(\mathbf{R}<em>{w b</em>{j}}^{\top}\left(\left(\mathbf{R}<em>{w b</em>{i}} \mathbf{p}<em>{b c}+\mathbf{p}</em>{w b_{i}}\right)-\mathbf{p}<em>{w b</em>{j}}\right)-\mathbf{p}_{b c}\right)\right] \times<br>$$</p>
+<p>$$<br>\frac{\partial \mathbf{f}<em>{c</em>{j}}}{\partial \delta \boldsymbol{\theta}<em>{c c^{\prime}}}&#x3D;-\mathbf{R}</em>{b c}^{\top} \mathbf{R}<em>{w b</em>{j}}^{\top} \mathbf{R}<em>{w b</em>{i}} \mathbf{R}<em>{b c}\left[\mathbf{f}</em>{c_{i}}\right]<em>{\mathbf{x}}+\left[\mathbf{R}</em>{b c}^{\top} \mathbf{R}<em>{w b</em>{j}}^{\top} \mathbf{R}<em>{w b</em>{i}} \mathbf{R}<em>{b c} \mathbf{f}</em>{c_{i}}\right]<em>{ \times} +<br>\left[\mathbf{R}</em>{b c}^{\top}\left(\mathbf{R}<em>{w b</em>{j}}^{\top}\left(\left(\mathbf{R}<em>{w b</em>{i}} \mathbf{p}<em>{b c}+\mathbf{p}</em>{w b_{i}}\right)-\mathbf{p}<em>{w b</em>{j}}\right)-\mathbf{p}_{b c}\right)\right] \times<br>$$</p>
 <ul>
-<li>$$\mathbf{f}<em>{c</em>{j}}$$对特征在i帧相机坐标系中的逆深度求导；</li>
+<li>$\mathbf{f}<em>{c</em>{j}}$对特征在i帧相机坐标系中的逆深度求导；</li>
 </ul>
-<p>$$<br>\begin{aligned} \frac{\partial \mathbf{f}<em>{c</em>{j}}}{\partial \delta \lambda} &amp;=\frac{\partial \mathbf{f}<em>{c</em>{j}}}{\partial \mathbf{f}<em>{c</em>{i}}} \frac{\partial \mathbf{f}<em>{c</em>{i}}}{\partial \delta \lambda} \\ &amp;=\mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top} \mathbf{R}<em>{w b</em>{i}} \mathbf{R}<em>{b c}\left(-\frac{1}{\lambda^{2}}\left[\begin{array}{c}{u</em>{c_{i}}} \\ {v_{c_{i}}} \\ {1}\end{array}\right]\right) \\ &amp;=-\frac{1}{\lambda} \mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top} \mathbf{R}<em>{w b</em>{i}} \mathbf{R}<em>{b c} \mathbf{f}</em>{c_{i}} \end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned} \frac{\partial \mathbf{f}<em>{c</em>{j}}}{\partial \delta \lambda} &amp;&#x3D;\frac{\partial \mathbf{f}<em>{c</em>{j}}}{\partial \mathbf{f}<em>{c</em>{i}}} \frac{\partial \mathbf{f}<em>{c</em>{i}}}{\partial \delta \lambda} \ &amp;&#x3D;\mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top} \mathbf{R}<em>{w b</em>{i}} \mathbf{R}<em>{b c}\left(-\frac{1}{\lambda^{2}}\left[\begin{array}{c}{u</em>{c_{i}}} \ {v_{c_{i}}} \ {1}\end{array}\right]\right) \ &amp;&#x3D;-\frac{1}{\lambda} \mathbf{R}<em>{b c}^{\top} \mathbf{R}</em>{w b_{j}}^{\top} \mathbf{R}<em>{w b</em>{i}} \mathbf{R}<em>{b c} \mathbf{f}</em>{c_{i}} \end{aligned}<br>$$</p>
 <blockquote>
 <p>上面的推导公式中，有一些推导步骤实在太过繁琐复杂，因此被我舍去了，如果大家想看，可以自己手动推导或者查看一些vio论文，会有详细推导过程。</p>
 </blockquote>
 <h3 id="视觉约束的协方差"><a href="#视觉约束的协方差" class="headerlink" title="视觉约束的协方差"></a>视觉约束的协方差</h3><p>在vins代码中假设重投影到像素平面上时的<code>sqrt_info</code>为1.5个像素，对应到归一化平面上需要除以焦距f。这个是假设视觉投影时投影点的位置在理论值附近呈均值为0，标准差为1.5个像素的高斯分布。代码部分如下：</p>
-<pre><code class="hljs">ProjectionFactor::sqrt_info = FOCAL_LENGTH / 1.5 * Matrix2d::Identity();</code></pre><h2 id="先验残差"><a href="#先验残差" class="headerlink" title="先验残差"></a>先验残差</h2><h2 id="marg掉最老的关键帧"><a href="#marg掉最老的关键帧" class="headerlink" title="marg掉最老的关键帧"></a>marg掉最老的关键帧</h2><h2 id="marg掉次新的关键帧"><a href="#marg掉次新的关键帧" class="headerlink" title="marg掉次新的关键帧"></a>marg掉次新的关键帧</h2>
+<pre><code class="hljs">ProjectionFactor::sqrt_info = FOCAL_LENGTH / 1.5 * Matrix2d::Identity();
+</code></pre>
+<h2 id="先验残差"><a href="#先验残差" class="headerlink" title="先验残差"></a>先验残差</h2><h2 id="marg掉最老的关键帧"><a href="#marg掉最老的关键帧" class="headerlink" title="marg掉最老的关键帧"></a>marg掉最老的关键帧</h2><h2 id="marg掉次新的关键帧"><a href="#marg掉次新的关键帧" class="headerlink" title="marg掉次新的关键帧"></a>marg掉次新的关键帧</h2>
                 
               </div>
             
@@ -510,6 +520,28 @@
   
     <article id="comments" lazyload>
       
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
 
     </article>
   
@@ -613,7 +645,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -807,6 +839,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 

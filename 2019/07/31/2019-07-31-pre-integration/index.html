@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://line.com/assets/img/vio/pre-inte.PNG">
 <meta property="article:published_time" content="2019-07-30T17:07:24.000Z">
-<meta property="article:modified_time" content="2023-01-08T16:21:28.853Z">
+<meta property="article:modified_time" content="2023-02-28T06:09:21.153Z">
 <meta property="article:author" content="Line">
 <meta property="article:tag" content="多传感器融合">
 <meta name="twitter:card" content="summary_large_image">
@@ -67,6 +67,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -84,7 +88,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -320,7 +328,10 @@
 <p>$$<br>\begin{aligned} \mathbf{a} &amp;&#x3D;\frac{1}{2}\left(\mathbf{q}<em>{b</em>{i} b_{k}}\left(\mathbf{a}^{b_{k}}+\mathbf{n}<em>{k}^{a}-\mathbf{b}</em>{k}^{a}\right)+\mathbf{q}<em>{b</em>{i} b_{k+1}}\left(\mathbf{a}^{b_{k+1}}+\mathbf{n}<em>{k+1}^{a}-\mathbf{b}</em>{k}^{a}\right)\right) \ \boldsymbol{\alpha}<em>{b</em>{i} b_{k+1}} &amp;&#x3D;\boldsymbol{\alpha}<em>{b</em>{i} b_{k}}+\boldsymbol{\beta}<em>{b</em>{i} b_{k}} \delta t+\frac{1}{2} \mathbf{a} \delta t^{2} \ \boldsymbol{\beta}<em>{b</em>{i} b_{k+1}} &amp;&#x3D;\boldsymbol{\beta}<em>{b</em>{i} b_{k}}+\mathbf{a} \delta t \end{aligned}<br>$$</p>
 <p>最后是bias的更新：</p>
 <p>$$<br>\begin{aligned} \mathbf{b}<em>{k+1}^{a} &amp;&#x3D;\mathbf{b}</em>{k}^{a} \ \mathbf{b}<em>{k+1}^{g} &amp;&#x3D;\mathbf{b}</em>{k}^{g} \end{aligned}<br>$$</p>
-<h2 id="在vins中，这部分的代码如下（vins-estimator模块中factor文件夹下的头文件integration-base-h中的midPointIntegration函数）："><a href="#在vins中，这部分的代码如下（vins-estimator模块中factor文件夹下的头文件integration-base-h中的midPointIntegration函数）：" class="headerlink" title="在vins中，这部分的代码如下（vins_estimator模块中factor文件夹下的头文件integration_base.h中的midPointIntegration函数）："></a>在vins中，这部分的代码如下（<code>vins_estimator</code>模块中<code>factor</code>文件夹下的头文件<code>integration_base.h</code>中的<code>midPointIntegration</code>函数）：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">//此处预积分也就是在相邻两帧之间的相对积分，得到的是相对的位姿变换</span><br><br><span class="hljs-comment">//ROS_INFO(&quot;midpoint integration&quot;); 加速度中值测量前一个测量</span><br>Vector3d un_acc_0 = delta_q * (_acc_0 - linearized_ba);<br><span class="hljs-comment">//陀螺仪中值测量</span><br>Vector3d un_gyr = <span class="hljs-number">0.5</span> * (_gyr_0 + _gyr_1) - linearized_bg;<br><span class="hljs-comment">//旋转预积分</span><br>result_delta_q = delta_q * <span class="hljs-built_in">Quaterniond</span>(<span class="hljs-number">1</span>, <span class="hljs-built_in">un_gyr</span>(<span class="hljs-number">0</span>) * _dt / <span class="hljs-number">2</span>, <span class="hljs-built_in">un_gyr</span>(<span class="hljs-number">1</span>) * _dt / <span class="hljs-number">2</span>, <span class="hljs-built_in">un_gyr</span>(<span class="hljs-number">2</span>) * _dt / <span class="hljs-number">2</span>);<br><span class="hljs-comment">//加速度中值测量的后一个测量</span><br>Vector3d un_acc_1 = result_delta_q * (_acc_1 - linearized_ba);<br><span class="hljs-comment">//加速度计中值测量</span><br>Vector3d un_acc = <span class="hljs-number">0.5</span> * (un_acc_0 + un_acc_1);<br><span class="hljs-comment">//位置预积分</span><br>result_delta_p = delta_p + delta_v * _dt + <span class="hljs-number">0.5</span> * un_acc * _dt * _dt;<br><span class="hljs-comment">//速度预积分</span><br>result_delta_v = delta_v + un_acc * _dt;<br><span class="hljs-comment">//bias默认不变（预积分时）</span><br>result_linearized_ba = linearized_ba;<br>result_linearized_bg = linearized_bg;         <br></code></pre></td></tr></table></figure></h2><h1 id="预积分更新问题"><a href="#预积分更新问题" class="headerlink" title="预积分更新问题"></a>预积分更新问题</h1><p>我们知道，在vins的非线性优化中不止进行了相机姿态还有路标的优化，也将imu的bias加入了优化的变量中。这样在一次优化更新后，其实bias是会发生改变的，这样预积分量也就需要更新，那么积分就还需要重新计算？</p>
+<p>在vins中，这部分的代码如下（<code>vins_estimator</code>模块中<code>factor</code>文件夹下的头文件<code>integration_base.h</code>中的<code>midPointIntegration</code>函数）：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">//此处预积分也就是在相邻两帧之间的相对积分，得到的是相对的位姿变换</span><br><br><span class="hljs-comment">//ROS_INFO(&quot;midpoint integration&quot;); 加速度中值测量前一个测量</span><br>Vector3d un_acc_0 = delta_q * (_acc_0 - linearized_ba);<br><span class="hljs-comment">//陀螺仪中值测量</span><br>Vector3d un_gyr = <span class="hljs-number">0.5</span> * (_gyr_0 + _gyr_1) - linearized_bg;<br><span class="hljs-comment">//旋转预积分</span><br>result_delta_q = delta_q * <span class="hljs-built_in">Quaterniond</span>(<span class="hljs-number">1</span>, <span class="hljs-built_in">un_gyr</span>(<span class="hljs-number">0</span>) * _dt / <span class="hljs-number">2</span>, <span class="hljs-built_in">un_gyr</span>(<span class="hljs-number">1</span>) * _dt / <span class="hljs-number">2</span>, <span class="hljs-built_in">un_gyr</span>(<span class="hljs-number">2</span>) * _dt / <span class="hljs-number">2</span>);<br><span class="hljs-comment">//加速度中值测量的后一个测量</span><br>Vector3d un_acc_1 = result_delta_q * (_acc_1 - linearized_ba);<br><span class="hljs-comment">//加速度计中值测量</span><br>Vector3d un_acc = <span class="hljs-number">0.5</span> * (un_acc_0 + un_acc_1);<br><span class="hljs-comment">//位置预积分</span><br>result_delta_p = delta_p + delta_v * _dt + <span class="hljs-number">0.5</span> * un_acc * _dt * _dt;<br><span class="hljs-comment">//速度预积分</span><br>result_delta_v = delta_v + un_acc * _dt;<br><span class="hljs-comment">//bias默认不变（预积分时）</span><br>result_linearized_ba = linearized_ba;<br>result_linearized_bg = linearized_bg;         <br></code></pre></td></tr></table></figure>
+<hr>
+<h1 id="预积分更新问题"><a href="#预积分更新问题" class="headerlink" title="预积分更新问题"></a>预积分更新问题</h1><p>我们知道，在vins的非线性优化中不止进行了相机姿态还有路标的优化，也将imu的bias加入了优化的变量中。这样在一次优化更新后，其实bias是会发生改变的，这样预积分量也就需要更新，那么积分就还需要重新计算？</p>
 <p>其实在vins中为了解决这个问题，是这样做的(当更新前后bias变化比较小时)：</p>
 <p>$$<br>\begin{aligned} \boldsymbol{\alpha}<em>{b</em>{k+1}}^{b_{k}} &amp; \approx \hat{\boldsymbol{\alpha}}<em>{b</em>{k+1}}^{b_{k}}+\mathbf{J}<em>{b</em>{a}}^{\alpha} \delta \mathbf{b}<em>{a</em>{k}}+\mathbf{J}<em>{b</em>{w}}^{\alpha} \delta \mathbf{b}<em>{w</em>{k}} \ \boldsymbol{\beta}<em>{b</em>{k+1}}^{b_{k}} &amp; \approx \hat{\boldsymbol{\beta}}<em>{b</em>{k+1}}^{b_{k}}+\mathbf{J}<em>{b</em>{a}}^{\beta} \delta \mathbf{b}<em>{a</em>{k}}+\mathbf{J}<em>{b</em>{w}}^{\beta} \delta \mathbf{b}<em>{w</em>{k}} \ \boldsymbol{\gamma}<em>{b</em>{k+1}}^{b_{k}} &amp; \approx \hat{\boldsymbol{\gamma}}<em>{b</em>{k+1}}^{b_{k}} \otimes\left[\begin{array}{c}{1} \ {\frac{1}{2} \mathbf{J}<em>{b</em>{w}}^{\gamma} \delta \mathbf{b}<em>{w</em>{k}}}\end{array}\right] \end{aligned}<br>$$</p>
 <blockquote>
@@ -438,6 +449,28 @@
   
     <article id="comments" lazyload>
       
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
 
     </article>
   
@@ -541,7 +574,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -735,6 +768,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 

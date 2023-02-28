@@ -68,6 +68,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -85,7 +89,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -223,7 +231,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.8k 字
+          2.9k 字
         
       </span>
     
@@ -297,20 +305,20 @@
 </li>
 </ol>
 <h2 id="三维空间中的变换"><a href="#三维空间中的变换" class="headerlink" title="三维空间中的变换"></a>三维空间中的变换</h2><ul>
-<li><p>欧式变换: 6个自由度，长度、夹角、体积不变<br>$$ \left[ {\begin{array}{*{20}{c}} \mathbf{R} &amp; \mathbf{t} \\ {\mathbf{0}^T} &amp; 1 \end{array}} \right] $$</p>
+<li><p>欧式变换: 6个自由度，长度、夹角、体积不变<br>$$ \left[ {\begin{array}{*{20}{c}} \mathbf{R} &amp; \mathbf{t} \ {\mathbf{0}^T} &amp; 1 \end{array}} \right] $$</p>
 </li>
-<li><p>相似变换: 7个自由度， 体积比不变<br>$$ \left[ {\begin{array}{*{20}{c}} \mathbf{sR} &amp; \mathbf{t} \\ {\mathbf{0}^T} &amp; 1 \end{array}} \right] $$</p>
+<li><p>相似变换: 7个自由度， 体积比不变<br>$$ \left[ {\begin{array}{*{20}{c}} \mathbf{sR} &amp; \mathbf{t} \ {\mathbf{0}^T} &amp; 1 \end{array}} \right] $$</p>
 </li>
-<li><p>仿射变换: 12个自由度，平行性、体积比不变<br>$$ \left[ {\begin{array}{*{20}{c}} \mathbf{A} &amp; \mathbf{t} \\ {\mathbf{0}^T} &amp; 1 \end{array}} \right] $$</p>
+<li><p>仿射变换: 12个自由度，平行性、体积比不变<br>$$ \left[ {\begin{array}{*{20}{c}} \mathbf{A} &amp; \mathbf{t} \ {\mathbf{0}^T} &amp; 1 \end{array}} \right] $$</p>
 </li>
-<li><p>射影变换: 15个自由度，接触平面的相交与相切不变<br>$$ \left[ {\begin{array}{*{20}{c}} \mathbf{A} &amp; \mathbf{t} \\ {\mathbf{a}^T} &amp; \mathbf{v} \end{array}} \right] $$</p>
+<li><p>射影变换: 15个自由度，接触平面的相交与相切不变<br>$$ \left[ {\begin{array}{*{20}{c}} \mathbf{A} &amp; \mathbf{t} \ {\mathbf{a}^T} &amp; \mathbf{v} \end{array}} \right] $$</p>
 </li>
 </ul>
 <h1 id="单应变换"><a href="#单应变换" class="headerlink" title="单应变换"></a>单应变换</h1><p>如下面公式，实际上单应变换实现的是两个平面之间的映射关系。(意思是<strong>只要是从一个平面到另一个平面的映射都可以用单应矩阵表示</strong>)</p>
-<p>$$ s \begin{bmatrix} x^{‘} \\ y^{‘} \\ 1 \end{bmatrix} = H \begin{bmatrix} x \\ y \\ 1 \end{bmatrix} = \begin{bmatrix} h_{11} &amp; h_{12} &amp; h_{13} \\ h_{21} &amp; h_{22} &amp; h_{23} \\ h_{31} &amp; h_{32} &amp; h_{33} \end{bmatrix} \begin{bmatrix} x \\ y \\ 1 \end{bmatrix} $$</p>
-<p>单应矩阵的维度是<code>3*3</code>，却只有8个自由度，这是因为齐次坐标的<strong>尺度等价性</strong>。一般求出的单应矩阵会进行归一化，要求为$h_{33} = 1$或$h_{11}^2 + h_{12}^2 + h_{13}^2 + h_{21}^2 + h_{22}^2 + h_{23}^2 + h_{31}^2 + h_{32}^2 + h_{33}^2 = 1$</p>
+<p>$$ s \begin{bmatrix} x^{‘} \ y^{‘} \ 1 \end{bmatrix} &#x3D; H \begin{bmatrix} x \ y \ 1 \end{bmatrix} &#x3D; \begin{bmatrix} h_{11} &amp; h_{12} &amp; h_{13} \ h_{21} &amp; h_{22} &amp; h_{23} \ h_{31} &amp; h_{32} &amp; h_{33} \end{bmatrix} \begin{bmatrix} x \ y \ 1 \end{bmatrix} $$</p>
+<p>单应矩阵的维度是<code>3*3</code>，却只有8个自由度，这是因为齐次坐标的<strong>尺度等价性</strong>。一般求出的单应矩阵会进行归一化，要求为$h_{33} &#x3D; 1$或$h_{11}^2 + h_{12}^2 + h_{13}^2 + h_{21}^2 + h_{22}^2 + h_{23}^2 + h_{31}^2 + h_{32}^2 + h_{33}^2 &#x3D; 1$</p>
 <blockquote>
-<p>同理，在<a target="_blank" rel="noopener" href="https://xhy3054.github.io/epipolar-geometry/">理解对极几何与基本矩阵</a>中我们有得出结论，本质矩阵$E = t^{\land} R$，由于平移与旋转共有6个自由度。但是由于其次坐标的的尺度等价性，<strong>本质矩阵实际上有5个自由度</strong>。</p>
+<p>同理，在<a target="_blank" rel="noopener" href="https://xhy3054.github.io/epipolar-geometry/">理解对极几何与基本矩阵</a>中我们有得出结论，本质矩阵$E &#x3D; t^{\land} R$，由于平移与旋转共有6个自由度。但是由于其次坐标的的尺度等价性，<strong>本质矩阵实际上有5个自由度</strong>。</p>
 </blockquote>
 <h1 id="单应变换的作用"><a href="#单应变换的作用" class="headerlink" title="单应变换的作用"></a>单应变换的作用</h1><ol>
 <li>相机位姿的估计</li>
@@ -319,15 +327,15 @@
 </ol>
 <h2 id="使用单应变换进行相机位姿估计"><a href="#使用单应变换进行相机位姿估计" class="headerlink" title="使用单应变换进行相机位姿估计"></a>使用单应变换进行相机位姿估计</h2><p><img src="/img/epipolar_geometry/jihe.png" srcset="/img/loading.gif" lazyload alt="jihe"></p>
 <p>这个功能与使用基础矩阵对相机的位姿进行估计是类似的。首先：</p>
-<p>$$ Z_1p_{uv1} = KP_w \\ Z_2p_{uv2} = K(RP_w + t) 　\tag{1}$$</p>
+<p>$$ Z_1p_{uv1} &#x3D; KP_w \ Z_2p_{uv2} &#x3D; K(RP_w + t) 　\tag{1}$$</p>
 <p>其中K是相机内参，R与t是相机的位姿变换，$P_w$是一个空间点在第一个相机坐标系下的坐标。Z是空间点到相机光心的距离，$p_{uv}$是空间点在两个位置的相机的像素平面上的像素坐标。</p>
 <p>我们假设有一个参照物平面，平面方程如下：</p>
-<p>$$ n^{T} P_w　+ d = 0 　\tag{2}$$</p>
+<p>$$ n^{T} P_w　+ d &#x3D; 0 　\tag{2}$$</p>
 <p>稍加整理可得：</p>
-<p>$$ -\frac{n^{T}P_w}{d} = 1 \tag{3} $$</p>
-<p>所以，由公式1我们可以得到：<br>$$<br>\begin{equation}<br>\begin{split}<br>p_{uv2} &amp;= K(RP_w + t)/Z_2 \<br>&amp;= K(RP_w + t \cdot -\frac{n^{T}P_w}{d})/Z_2 \<br>&amp;= K(R + t \cdot -\frac{n^{T}}{d})P_w/Z_2 \<br>&amp;= K(R + t \cdot -\frac{n^{T}}{d}) K^{-1}p_{uv1}<br>\end{split}<br>\end{equation}<br>$$</p>
+<p>$$ -\frac{n^{T}P_w}{d} &#x3D; 1 \tag{3} $$</p>
+<p>所以，由公式1我们可以得到：<br>$$<br>\begin{equation}<br>\begin{split}<br>p_{uv2} &amp;&#x3D; K(RP_w + t)&#x2F;Z_2 \<br>&amp;&#x3D; K(RP_w + t \cdot -\frac{n^{T}P_w}{d})&#x2F;Z_2 \<br>&amp;&#x3D; K(R + t \cdot -\frac{n^{T}}{d})P_w&#x2F;Z_2 \<br>&amp;&#x3D; K(R + t \cdot -\frac{n^{T}}{d}) K^{-1}p_{uv1}<br>\end{split}<br>\end{equation}<br>$$</p>
 <p>如上，上述得到了第一个相机平面上的点到第二个相机平面上的点的映射变换，这部分可以使用下式表示(s是一个齐次坐标的归一系数，为了数学等式的成立)：</p>
-<p>$$ sp_{uv2} = Hp_{uv1} \\ H = K(R + t \cdot -\frac{n^{T}}{d}) K^{-1} $$</p>
+<p>$$ sp_{uv2} &#x3D; Hp_{uv1} \ H &#x3D; K(R + t \cdot -\frac{n^{T}}{d}) K^{-1} $$</p>
 <blockquote>
 <p>我们发现这个单应矩阵H的定义与旋转、平移、还有平面的参数有关。</p>
 </blockquote>
@@ -444,6 +452,28 @@
   
     <article id="comments" lazyload>
       
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
 
     </article>
   
@@ -547,7 +577,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -741,6 +771,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 

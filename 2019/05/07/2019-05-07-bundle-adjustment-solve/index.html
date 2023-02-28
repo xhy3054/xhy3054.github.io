@@ -71,6 +71,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -88,7 +92,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -226,7 +234,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          6.6k 字
+          6.8k 字
         
       </span>
     
@@ -237,7 +245,7 @@
         
         
         
-          56 分钟
+          57 分钟
         
       </span>
     
@@ -288,46 +296,46 @@
 <ul>
 <li><p>首先，世界坐标系下有一个固定的点P，<strong>世界坐标</strong>是 $P_{w}$</p>
 </li>
-<li><p>获得点P的<strong>相机坐标系坐标</strong>，可以利用相机外参R与t得到 $ P_{c} = RP_{w} + t $</p>
+<li><p>获得点P的<strong>相机坐标系坐标</strong>，可以利用相机外参R与t得到 $ P_{c} &#x3D; RP_{w} + t $</p>
 </li>
-<li><p>在2中获得的 $P_c$ 仍然是三维的 (X,Y,Z) ，将其投影到归一化平面 $Z=1$ 上，得到<strong>归一化相机坐标</strong>：$ P_{C} = [X/Z, Y/Z, 1]^T $</p>
+<li><p>在2中获得的 $P_c$ 仍然是三维的 (X,Y,Z) ，将其投影到归一化平面 $Z&#x3D;1$ 上，得到<strong>归一化相机坐标</strong>：$ P_{C} &#x3D; [X&#x2F;Z, Y&#x2F;Z, 1]^T $</p>
 </li>
-<li><p>此处加入<strong>畸变</strong>因素，畸变公式如下(其中，$x=X/Z, y=Y/Z$)：</p>
+<li><p>此处加入<strong>畸变</strong>因素，畸变公式如下(其中，$x&#x3D;X&#x2F;Z, y&#x3D;Y&#x2F;Z$)：</p>
 </li>
 </ul>
-<p>$$ x_{distorted} = x( 1 + k_{1} r^2 + k_{2} r^4 + k_{3} r^6) + [ 2p_{1}xy + p_{2}(r^2+2x^2)]  \\ y_{distorted} = y( 1 + k_{1} r^2 + k_{2} r^4 + k_{3} r^6) + [ p_{1}(r^2+ 2y^2)+ 2p_{2}xy]   $$</p>
+<p>$$ x_{distorted} &#x3D; x( 1 + k_{1} r^2 + k_{2} r^4 + k_{3} r^6) + [ 2p_{1}xy + p_{2}(r^2+2x^2)]  \ y_{distorted} &#x3D; y( 1 + k_{1} r^2 + k_{2} r^4 + k_{3} r^6) + [ p_{1}(r^2+ 2y^2)+ 2p_{2}xy]   $$</p>
 <ul>
-<li>最后一步，利用内参K，将归一化相机坐标转换成<strong>像素坐标</strong>： $ P_{uv} = KP_{distorted} $</li>
+<li>最后一步，利用内参K，将归一化相机坐标转换成<strong>像素坐标</strong>： $ P_{uv} &#x3D; KP_{distorted} $</li>
 </ul>
-<p>$$ u = f_{x} x_{distorted} + c_{x} \\ v = f_{y} y_{distorted} + c_{y}  $$</p>
+<p>$$ u &#x3D; f_{x} x_{distorted} + c_{x} \ v &#x3D; f_{y} y_{distorted} + c_{y}  $$</p>
 <blockquote>
-<p>上述过程就是前面<a target="_blank" rel="noopener" href="https://xhy3054.github.io/state-estimation-nonlinear-least-square/">状态估计之非线性最小二乘</a>中提到的<strong>观测方程</strong>。之前我们抽象的将其记作$z = h(x, y)$。</p>
+<p>上述过程就是前面<a target="_blank" rel="noopener" href="https://xhy3054.github.io/state-estimation-nonlinear-least-square/">状态估计之非线性最小二乘</a>中提到的<strong>观测方程</strong>。之前我们抽象的将其记作$z &#x3D; h(x, y)$。</p>
 </blockquote>
 <h1 id="BA的目标函数"><a href="#BA的目标函数" class="headerlink" title="BA的目标函数"></a>BA的目标函数</h1><p>在BA中，待优化的变量有相机的位姿$x$，即外参$R,t$，它对应的李代数为$\xi$；地图点y的三维坐标$p$。而观测数据是像素坐标$\boldsymbol{z} \triangleq\left[u, v\right]^{T}$。所以每次观测方程的误差是</p>
-<p>$$<br>e=z-h(\xi, p)<br>$$</p>
+<p>$$<br>e&#x3D;z-h(\xi, p)<br>$$</p>
 <p>我们将不同时刻对不同地图点的观测都考虑进来，比如$$\boldsymbol{z}<em>{i j}$$为在位姿$$\boldsymbol{\xi}</em>{i}$$处观察地图点$$\boldsymbol{p}_{j}$$产生的数据，那么整体的<strong>目标函数</strong>为：</p>
-<p>$$<br>\frac{1}{2} \sum_{i=1}^{m} \sum_{j=1}^{n}\left|\boldsymbol{e}<em>{i j}\right|^{2}=\frac{1}{2} \sum</em>{i=1}^{m} \sum_{j=1}^{n}\left|\boldsymbol{z}<em>{i j}-h\left(\boldsymbol{\xi}</em>{i}, \boldsymbol{p}_{j}\right)\right|^{2}<br>$$</p>
+<p>$$<br>\frac{1}{2} \sum_{i&#x3D;1}^{m} \sum_{j&#x3D;1}^{n}\left|\boldsymbol{e}<em>{i j}\right|^{2}&#x3D;\frac{1}{2} \sum</em>{i&#x3D;1}^{m} \sum_{j&#x3D;1}^{n}\left|\boldsymbol{z}<em>{i j}-h\left(\boldsymbol{\xi}</em>{i}, \boldsymbol{p}_{j}\right)\right|^{2}<br>$$</p>
 <blockquote>
 <p>BA的任务就是求解这个最小二乘问题。</p>
 </blockquote>
 <h1 id="BA的求解"><a href="#BA的求解" class="headerlink" title="BA的求解"></a>BA的求解</h1><p>由上面我们知道我们需要求解的是一个非线性优化问题，很自然的我们想到高斯牛顿等方法。使用这些方法，我们首先将所有待优化的变量组织成一个向量$x$，这个向量便是目标函数的自变量：</p>
-<p>$$<br>\boldsymbol{x}=\left[\boldsymbol{\xi}<em>{1}, \ldots, \boldsymbol{\xi}</em>{m}, \boldsymbol{p}<em>{1}, \ldots, \boldsymbol{p}</em>{n}\right]^{T}<br>$$</p>
+<p>$$<br>\boldsymbol{x}&#x3D;\left[\boldsymbol{\xi}<em>{1}, \ldots, \boldsymbol{\xi}</em>{m}, \boldsymbol{p}<em>{1}, \ldots, \boldsymbol{p}</em>{n}\right]^{T}<br>$$</p>
 <p>我们每次迭代时都需要寻找一个$$\Delta \boldsymbol{x}$$，它是自变量的迭代增量。利用高斯牛顿的原理，我们为自变量添加一个增量时，目标函数变为：</p>
-<p>$$<br>\frac{1}{2}|f(\boldsymbol{x}+\Delta \boldsymbol{x})|^{2} \approx \frac{1}{2} \sum_{i=1}^{m} \sum_{j=1}^{n}\left|\boldsymbol{e}<em>{i j}+\boldsymbol{F}</em>{i j} \Delta \boldsymbol{\xi}<em>{i}+\boldsymbol{E}</em>{i j} \Delta \boldsymbol{p}_{j}\right|^{2}<br>$$</p>
+<p>$$<br>\frac{1}{2}|f(\boldsymbol{x}+\Delta \boldsymbol{x})|^{2} \approx \frac{1}{2} \sum_{i&#x3D;1}^{m} \sum_{j&#x3D;1}^{n}\left|\boldsymbol{e}<em>{i j}+\boldsymbol{F}</em>{i j} \Delta \boldsymbol{\xi}<em>{i}+\boldsymbol{E}</em>{i j} \Delta \boldsymbol{p}_{j}\right|^{2}<br>$$</p>
 <p>其中$$\boldsymbol{F}<em>{i j}$$表示j地图点投影到i时刻相机像素平面投影残差对i时刻相机姿态的偏导数，而$\boldsymbol{E}</em>{i,j}$表示j地图点投影到i时刻相机像素平面上的投影残差对j地图点的三维世界坐标的偏导数。</p>
 <p>我们将相机位姿变量放在一起：</p>
-<p>$$<br>\boldsymbol{x}<em>{c}=\left[\boldsymbol{\xi}</em>{1}, \boldsymbol{\xi}<em>{2}, \ldots, \boldsymbol{\xi}</em>{m}\right]^{T} \in \mathbb{R}^{6 m}<br>$$</p>
+<p>$$<br>\boldsymbol{x}<em>{c}&#x3D;\left[\boldsymbol{\xi}</em>{1}, \boldsymbol{\xi}<em>{2}, \ldots, \boldsymbol{\xi}</em>{m}\right]^{T} \in \mathbb{R}^{6 m}<br>$$</p>
 <p>将地图点三维坐标变量放在一起：</p>
-<p>$$<br>\boldsymbol{x}<em>{p}=\left[\boldsymbol{p}</em>{1}, \boldsymbol{p}<em>{2}, \ldots, \boldsymbol{p}</em>{n}\right]^{T} \in \mathbb{R}^{3 n}<br>$$</p>
+<p>$$<br>\boldsymbol{x}<em>{p}&#x3D;\left[\boldsymbol{p}</em>{1}, \boldsymbol{p}<em>{2}, \ldots, \boldsymbol{p}</em>{n}\right]^{T} \in \mathbb{R}^{3 n}<br>$$</p>
 <p>然后使用大矩阵表示矩阵简化上面公式</p>
-<p>$$<br>\frac{1}{2}|f(\boldsymbol{x}+\Delta \boldsymbol{x})|^{2}=\frac{1}{2}\left|\boldsymbol{e}+\boldsymbol{F} \Delta \boldsymbol{x}<em>{c}+\boldsymbol{E} \Delta \boldsymbol{x}</em>{p}\right|^{2}<br>$$</p>
+<p>$$<br>\frac{1}{2}|f(\boldsymbol{x}+\Delta \boldsymbol{x})|^{2}&#x3D;\frac{1}{2}\left|\boldsymbol{e}+\boldsymbol{F} \Delta \boldsymbol{x}<em>{c}+\boldsymbol{E} \Delta \boldsymbol{x}</em>{p}\right|^{2}<br>$$</p>
 <p>此处我们将原本由很多小型二次项之和的形式变成了一个更整体的样子。此处$E$与$F$是整体目标函数对整体变量的导数，他们是比较大的偏导数矩阵，其中有很多项是0。</p>
 <h2 id="使用高斯牛顿进行求解"><a href="#使用高斯牛顿进行求解" class="headerlink" title="使用高斯牛顿进行求解"></a>使用高斯牛顿进行求解</h2><p>上面已经将投影误差进行了泰勒一阶展开，此时不论是使用高斯牛顿还是LM方法对其进行优化，都需要求解一个方程</p>
-<p>$$<br>\boldsymbol{H} \Delta \boldsymbol{x}=\boldsymbol{g}<br>$$</p>
+<p>$$<br>\boldsymbol{H} \Delta \boldsymbol{x}&#x3D;\boldsymbol{g}<br>$$</p>
 <p>如果使用$GN$法，则$H$取$\boldsymbol{J}^{T} \boldsymbol{J}$；如果使用$LM$法，则$H$取$\boldsymbol{J}^{T} \boldsymbol{J}+\lambda \boldsymbol{I}$。不管哪种方法，其中$J$都是</p>
-<p>$$<br>J=[\begin{array}{cc} \boldsymbol{F} &amp; \boldsymbol{E} \end{array}]<br>$$</p>
+<p>$$<br>J&#x3D;[\begin{array}{cc} \boldsymbol{F} &amp; \boldsymbol{E} \end{array}]<br>$$</p>
 <p>如果是高斯牛顿，则$H$矩阵为</p>
-<p>$$<br>\boldsymbol{H}=\boldsymbol{J}^{T} \boldsymbol{J}=\left[ \begin{array}{cc}{\boldsymbol{F}^{T} \boldsymbol{F}} &amp; {\boldsymbol{F}^{T} \boldsymbol{E}} \\ {\boldsymbol{E}^{T} \boldsymbol{F}} &amp; {\boldsymbol{E}^{T} \boldsymbol{E}}\end{array}\right]<br>$$</p>
+<p>$$<br>\boldsymbol{H}&#x3D;\boldsymbol{J}^{T} \boldsymbol{J}&#x3D;\left[ \begin{array}{cc}{\boldsymbol{F}^{T} \boldsymbol{F}} &amp; {\boldsymbol{F}^{T} \boldsymbol{E}} \ {\boldsymbol{E}^{T} \boldsymbol{F}} &amp; {\boldsymbol{E}^{T} \boldsymbol{E}}\end{array}\right]<br>$$</p>
 <blockquote>
 <p>其实无论是$GN$还是$LM$方法，我们都需要求上述的$H$矩阵。不过这个矩阵的维度非常大，直接计算很耗时。</p>
 </blockquote>
@@ -357,15 +365,15 @@
 <blockquote>
 <p>注意，这个矩阵的独特性质是，<strong>左上角的矩阵$B$与右下角的矩阵$C$是两个对角矩阵，E矩阵如何由图的性质决定。</strong>这种稀疏性是由这种图模型的连接属性决定的，这种图模型有一个特点，<strong>那就是每个相机位姿节点只与地图点节点关联，与其他相机节点不关联（因为没考虑运动方程）这使得$B$是对角矩阵，而地图点节点只与相机节点关联，与其他地图点不关联，这使得$C$是对角矩阵。</strong></p>
 </blockquote>
-<p>这样，对应的增量方程$H \Delta x=g$也就变为</p>
-<p>$$<br>\left[ \begin{array}{cc}{\boldsymbol{B}} &amp; {\boldsymbol{E}} \\ {\boldsymbol{E}^{T}} &amp; {\boldsymbol{C}}\end{array}\right] \left[ \begin{array}{c}{\Delta \boldsymbol{x}<em>{c}} \\ {\Delta \boldsymbol{x}</em>{p}}\end{array}\right]=\left[ \begin{array}{c}{\boldsymbol{v}} \\ {\boldsymbol{w}}\end{array}\right]<br>$$</p>
+<p>这样，对应的增量方程$H \Delta x&#x3D;g$也就变为</p>
+<p>$$<br>\left[ \begin{array}{cc}{\boldsymbol{B}} &amp; {\boldsymbol{E}} \ {\boldsymbol{E}^{T}} &amp; {\boldsymbol{C}}\end{array}\right] \left[ \begin{array}{c}{\Delta \boldsymbol{x}<em>{c}} \ {\Delta \boldsymbol{x}</em>{p}}\end{array}\right]&#x3D;\left[ \begin{array}{c}{\boldsymbol{v}} \ {\boldsymbol{w}}\end{array}\right]<br>$$</p>
 <p>我们可以<strong>利用$H$的稀疏性来加速求解这个方程</strong>。有很多方法，在slam中最常用的是：$Schur$消元，也叫作$Marginalization$（边缘化）</p>
 <p>B的维度是相机位姿节点的个数，C的维度是地图点的个数，通常前者远远小于后者。然后对角矩阵求逆的难度远远小于普通矩阵求逆，我们可以对上述方程组进行高斯消元，消去右上角的非对角部分$E$：</p>
-<p>$$<br>\left[ \begin{array}{cc}{\boldsymbol{I}} &amp; {-\boldsymbol{E} \boldsymbol{C}^{-1}} \\ {\mathbf{0}} &amp; {\boldsymbol{I}}\end{array}\right] \left[ \begin{array}{cc}{\boldsymbol{B}} &amp; {\boldsymbol{E}} \\ {\boldsymbol{E}^{T}} &amp; {\boldsymbol{C}}\end{array}\right] \left[ \begin{array}{c}{\Delta \boldsymbol{x}<em>{c}} \\ {\Delta \boldsymbol{x}</em>{p}}\end{array}\right]=\left[ \begin{array}{cc}{\boldsymbol{I}} &amp; {-\boldsymbol{E} C^{-1}} \\ {\mathbf{0}} &amp; {\boldsymbol{I}}\end{array}\right] \left[ \begin{array}{c}{\boldsymbol{v}} \\ {\boldsymbol{w}}\end{array}\right]<br>$$</p>
+<p>$$<br>\left[ \begin{array}{cc}{\boldsymbol{I}} &amp; {-\boldsymbol{E} \boldsymbol{C}^{-1}} \ {\mathbf{0}} &amp; {\boldsymbol{I}}\end{array}\right] \left[ \begin{array}{cc}{\boldsymbol{B}} &amp; {\boldsymbol{E}} \ {\boldsymbol{E}^{T}} &amp; {\boldsymbol{C}}\end{array}\right] \left[ \begin{array}{c}{\Delta \boldsymbol{x}<em>{c}} \ {\Delta \boldsymbol{x}</em>{p}}\end{array}\right]&#x3D;\left[ \begin{array}{cc}{\boldsymbol{I}} &amp; {-\boldsymbol{E} C^{-1}} \ {\mathbf{0}} &amp; {\boldsymbol{I}}\end{array}\right] \left[ \begin{array}{c}{\boldsymbol{v}} \ {\boldsymbol{w}}\end{array}\right]<br>$$</p>
 <p>整理可得</p>
-<p>$$<br>\left[ \begin{array}{cc}{\boldsymbol{B}-\boldsymbol{E} \boldsymbol{C}^{-1} \boldsymbol{E}^{T}} &amp; {\mathbf{0}} \\ {\boldsymbol{E}^{T}} &amp; {\boldsymbol{C}}\end{array}\right] \left[ \begin{array}{c}{\Delta \boldsymbol{x}<em>{c}} \\ {\Delta \boldsymbol{x}</em>{p}}\end{array}\right]=\left[ \begin{array}{c}{\boldsymbol{v}-\boldsymbol{E} \boldsymbol{C}^{-1} \boldsymbol{w}} \\ {\boldsymbol{w}}\end{array}\right]<br>$$</p>
+<p>$$<br>\left[ \begin{array}{cc}{\boldsymbol{B}-\boldsymbol{E} \boldsymbol{C}^{-1} \boldsymbol{E}^{T}} &amp; {\mathbf{0}} \ {\boldsymbol{E}^{T}} &amp; {\boldsymbol{C}}\end{array}\right] \left[ \begin{array}{c}{\Delta \boldsymbol{x}<em>{c}} \ {\Delta \boldsymbol{x}</em>{p}}\end{array}\right]&#x3D;\left[ \begin{array}{c}{\boldsymbol{v}-\boldsymbol{E} \boldsymbol{C}^{-1} \boldsymbol{w}} \ {\boldsymbol{w}}\end{array}\right]<br>$$</p>
 <p>这样，第一行方程组就变成与$\Delta x_{p}$无关了，此时我们将其单独拿出来，得到仅关于位姿部分的增量方程</p>
-<p>$$<br>\left[\boldsymbol{B}-\boldsymbol{E} \boldsymbol{C}^{-1} \boldsymbol{E}^{T}\right] \Delta \boldsymbol{x}_{c}=\boldsymbol{v}-\boldsymbol{E} \boldsymbol{C}^{-1} \boldsymbol{w}<br>$$</p>
+<p>$$<br>\left[\boldsymbol{B}-\boldsymbol{E} \boldsymbol{C}^{-1} \boldsymbol{E}^{T}\right] \Delta \boldsymbol{x}_{c}&#x3D;\boldsymbol{v}-\boldsymbol{E} \boldsymbol{C}^{-1} \boldsymbol{w}<br>$$</p>
 <p>这个线性方程组的维度与$B$矩阵一致。求解这个方程的计算量就会远远小于求解原方程了。最后再将这个方程的解$\Delta x_{c}$带入原方程，就可以求解出$\Delta x_{p}$了。<strong>这就是边缘化求解的整个过程</strong>了。</p>
 <p>上述方程左边的系数我们记为$S$，它是有其物理意义的。$S$矩阵的非对角线上的非零矩阵块，表示了该处对应的两个相机位姿节点之间存在共同观测的地图点。如下</p>
 <div style="text-align: center">
@@ -378,7 +386,7 @@
 <h3 id="Schur-消元的优势"><a href="#Schur-消元的优势" class="headerlink" title="$Schur$消元的优势"></a>$Schur$消元的优势</h3><ol>
 <li><p>在消元过程中，由于$C$为对角块，所以$C^{-1}$容易求解</p>
 </li>
-<li><p>求解了$\Delta x_{c}$之后，路标部分的增量方程可以通过$$\Delta \boldsymbol{x}<em>{p}=\boldsymbol{C}^{-1}\left(\boldsymbol{w}-\boldsymbol{E}^{T} \Delta \boldsymbol{x}</em>{c}\right)$$求得。这也用到了$C^{-1}$易于求解的特性。</p>
+<li><p>求解了$\Delta x_{c}$之后，路标部分的增量方程可以通过$$\Delta \boldsymbol{x}<em>{p}&#x3D;\boldsymbol{C}^{-1}\left(\boldsymbol{w}-\boldsymbol{E}^{T} \Delta \boldsymbol{x}</em>{c}\right)$$求得。这也用到了$C^{-1}$易于求解的特性。</p>
 </li>
 <li><p>我们发现上面的消元过程其实不需要$B$矩阵是对角矩阵，即考虑运动方程也可以。</p>
 </li>
@@ -388,7 +396,7 @@
 <h2 id="BA中的核函数"><a href="#BA中的核函数" class="headerlink" title="BA中的核函数"></a>BA中的核函数</h2><p>在上面的分析中，我们使用误差项的二范数平方和作为目标函数，这种做法会使得如果出现误匹配之类的情况，错误边对整体优化的影响会很大，因为错误边的误差的二范数平方增长太快了。</p>
 <p>此时我们可以使用一些核函数来代替二范数平方的操作，使得误差的增长不是那么快，同时可以保证自己的光滑性质。我们也叫它们<strong>鲁棒核函数</strong>。</p>
 <p>一种常见的核函数是$Huber$核：</p>
-<p>$$<br>H(e)=\left\{\begin{array}{ll}{\frac{1}{2} e^{2}} &amp; {\text { if }|e| \leq \delta} \\ {\delta\left(|e|-\frac{1}{2} \delta\right)} &amp; {\text { otherwise }}\end{array}\right.<br>$$</p>
+<p>$$<br>H(e)&#x3D;\left{\begin{array}{ll}{\frac{1}{2} e^{2}} &amp; {\text { if }|e| \leq \delta} \ {\delta\left(|e|-\frac{1}{2} \delta\right)} &amp; {\text { otherwise }}\end{array}\right.<br>$$</p>
 <blockquote>
 <p>还有一些其他的核函数，比如$Cauchy$核、$Tukey$核等等，在$g2o$与$Ceres$等优化库中都有提供。</p>
 </blockquote>
@@ -508,6 +516,28 @@
   
     <article id="comments" lazyload>
       
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
 
     </article>
   
@@ -611,7 +641,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -805,6 +835,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 

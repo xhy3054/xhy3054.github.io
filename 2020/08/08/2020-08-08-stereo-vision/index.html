@@ -69,6 +69,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -86,7 +90,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -284,9 +292,9 @@
 <p>双目相机一般由左眼和右眼两个<strong>水平放置</strong>的相机组成。上图中左右两个相机都是使用针孔相机模型，两个相机的成像平面在同一个水平面上，同时两个相机光心是水平放置的，因此对于一个P点，其在两个图像上的投影点的行坐标是相同的，我们通过对其纵坐标的处理便可以得到视差了。</p>
 <p>图中两个相机光心之间的距离b被成为双目相机的<strong>基线</strong>，是与焦距f一样重要的参数。</p>
 <p>根据上图，假设一个空间点P，在左右目各成一像$P_L$与$P_R$，分别以两个光心垂直的位置为二维坐标原点，则$P_L$的横坐标为$u_L$，$P_R$的横坐标为$u_R$，可以发现$u_R$是一个负数。根据上图中右侧三角形相似的原理，可以得到下面公式</p>
-<p>$$\frac{z-f}{z}=\frac{b-u_{L}+u_{R}}{b}$$</p>
+<p>$$\frac{z-f}{z}&#x3D;\frac{b-u_{L}+u_{R}}{b}$$</p>
 <p>经过整理，可以得到</p>
-<p>$$ z = \frac{fb}{d}, d= u_L -u_R $$</p>
+<p>$$ z &#x3D; \frac{fb}{d}, d&#x3D; u_L -u_R $$</p>
 <p>此处d为投影点在左右图上的横坐标之差，也叫作<strong>视差</strong>，因此，根据视差我们就可以估计出这个空间点的深度了。此处可以发现，视差最小也就是1个像素，因此双目可以测量的最大深度是有上限的，而这个值和$fb$有关，所以一般相机焦距f确定的时候，双目基线越大，可测量的最远深度也越大。</p>
 <blockquote>
 <p>由于以上双目相机模型的特殊，我们不仅可以方便的估计深度，也可以在双目匹配时很容易的进行极线（横坐标一致的水平线）搜索匹配，大大减小匹配计算量。</p>
@@ -303,7 +311,7 @@
 <p>这种方法也叫非标定方法也称为（Hartley)方法，有时候我们不知道相机的内参矩阵，而且也不用知道内参数具体是多少，因为我们仅关心如何得到两幅图像的稠密匹配，或者两幅图像之间的视差图或者深度图就足够了。因为不知道相机的内参数，所以只能借助对极约束来解决问题了，通过计算两幅图像的基础矩阵F，然后利用对极约束条件中对极线为平行且行对准，可以很好的实现目标。</p>
 <p><img src="/img/stereo/stereo_rectify1.PNG" srcset="/img/loading.gif" lazyload alt="stereo"></p>
 <p>第三个参数是本质矩阵可以通过<code>cv::findFundamentalMat</code>获得，需要说明一点，该函数的前两个参数<code>Mat&amp; points1, Mat&amp; points2</code>与<code>cv::findFundamentalMat</code>的前两个参数并不是相同的数据结构。它们虽然可以是同一个匹配点集，但是他们的数据结构是完全不同的！<code>cv::findFundamentalMat</code>中传入的匹配点集要求是2xN或者Nx2的矩阵，但是<code>cv::stereoRectifyUncalibrated</code>中要求传入的匹配点集必须是1x2N或者2Nx1的矩阵！在很多文档中都说他们的参数是一样的，这其实是一个天大的错误，如果用计算F的匹配点集直接传给图像矫正函数，程序将直接崩溃。正确的做法是利用cv::Mat的构造函数，直接从vector<Point2f>构造一个cv::Mat传入。</p>
-<p><code>cv::stereoRectifyUncalibrated</code>函数默认原始图像是没有径向畸变的，因此在矫正图像之前，最好先对原始图像做径向矫正。另外需要注意的一点，函数返回的单应变换矩阵H1和H2都是double类型，也即CV_64F类型，若不是该类型的矩阵，与之相乘会报错。    </p>
+<p><code>cv::stereoRectifyUncalibrated</code>函数默认原始图像是没有径向畸变的，因此在矫正图像之前，最好先对原始图像做径向矫正。另外需要注意的一点，函数返回的单应变换矩阵H1和H2都是double类型，也即CV_64F类型，若不是该类型的矩阵，与之相乘会报错。	</p>
 <h3 id="生成映射矩阵"><a href="#生成映射矩阵" class="headerlink" title="生成映射矩阵"></a>生成映射矩阵</h3><blockquote>
 <p>在双目立体标定之后，需要根据标定结果生成新的映射表，然后通过映射表完成矫正。</p>
 </blockquote>
@@ -415,6 +423,28 @@
   
     <article id="comments" lazyload>
       
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
 
     </article>
   
@@ -518,7 +548,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -712,6 +742,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 

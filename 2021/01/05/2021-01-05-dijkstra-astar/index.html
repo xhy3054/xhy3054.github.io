@@ -23,12 +23,18 @@
 <meta property="og:site_name" content="Line&#39;s Blog">
 <meta property="og:description" content="dijkstra算法和astar算法图搜索算法 图搜索算法指在一个类似图的数据结构上进行路径搜索的算法的总称。二维网格地图其实就是一种类似图的数据结构，每个网格代表一个图节点，它连接着自身周围的四个相邻网格（图节点）。  可以将图搜索的图结构转换成搜索树结构。那么最具代表性的两类图搜索算法就是深度优先与广度优先算法。  需要提前强调的一点是，为了不会形成环路，已经访问过的节点需要做标记，并且不再访">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://line.com/img/astar/dfs.png">
+<meta property="og:image" content="http://line.com/img/astar/bfs.png">
+<meta property="og:image" content="http://line.com/img/astar/dijkstra.png">
+<meta property="og:image" content="http://line.com/img/astar/astar.png">
+<meta property="og:image" content="http://line.com/img/astar/astar1.png">
 <meta property="article:published_time" content="2021-01-04T17:07:24.000Z">
-<meta property="article:modified_time" content="2023-01-08T16:21:28.853Z">
+<meta property="article:modified_time" content="2023-02-28T04:03:03.653Z">
 <meta property="article:author" content="Line">
 <meta property="article:tag" content="算法与数据结构">
 <meta property="article:tag" content="路径规划">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://line.com/img/astar/dfs.png">
   
   
   
@@ -66,6 +72,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -83,7 +93,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -221,7 +235,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.3k 字
+          3k 字
         
       </span>
     
@@ -232,7 +246,7 @@
         
         
         
-          28 分钟
+          25 分钟
         
       </span>
     
@@ -283,12 +297,12 @@
 <p>需要提前强调的一点是，为了不会形成环路，已经访问过的节点需要做标记，并且不再访问。</p>
 </blockquote>
 <h3 id="深度优先算法-Deep-First-Search"><a href="#深度优先算法-Deep-First-Search" class="headerlink" title="深度优先算法-Deep First Search"></a>深度优先算法-Deep First Search</h3><p>可以使用栈（先进后出）这种数据结构来实现。</p>
-<p>![dfs](&#x2F;assets&#x2F;img&#x2F;astar&#x2F;dfs.png)</p>
+<p><img src="/img/astar/dfs.png" srcset="/img/loading.gif" lazyload alt="dfs"></p>
 <blockquote>
 <p>可以使用栈结构实现，几乎不太可能找到最优解，因此更短的路径大部分没有试过。因此dfs算法实现简单、路径可能不是最优解、寻路时间比较长</p>
 </blockquote>
 <h3 id="广度优先算法-Breadth-First-Search"><a href="#广度优先算法-Breadth-First-Search" class="headerlink" title="广度优先算法-Breadth First Search"></a>广度优先算法-Breadth First Search</h3><p>可以使用队列（先进先出）这种数据结构来实现。</p>
-<p>![bfs](&#x2F;assets&#x2F;img&#x2F;astar&#x2F;bfs.png)</p>
+<p><img src="/img/astar/bfs.png" srcset="/img/loading.gif" lazyload alt="bfs"></p>
 <blockquote>
 <p>可以使用队列结构实现，由于是逐层遍历的，因此遍历到目标点时肯定可以得到一条最短路径，因此更短的所有路径都已经遍历了，不能到达目标点。因此BFS算法实现简单、路径能找到最优解、算法消耗时间比较大、遍历的点有点多。</p>
 </blockquote>
@@ -307,7 +321,7 @@
 <p>算法伪代码：</p>
 <figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs vbnet">Initial初始化: 初始节点g(X_s)=<span class="hljs-number">0</span>,其他所有节点g(n)=infinite;设计一个数据结构priority queue(自动对其中数据根据g(n)进行排序) <br><span class="hljs-symbol">Loop:</span><br>	- <span class="hljs-keyword">if</span> the queue <span class="hljs-built_in">is</span> empty, <span class="hljs-keyword">return</span> <span class="hljs-literal">FALSE</span>; break;<br>	- Remove the node <span class="hljs-string">&quot;n&quot;</span> <span class="hljs-keyword">with</span> the lowest g(n) <span class="hljs-keyword">from</span> the queue<br>	- Mark node <span class="hljs-string">&quot;n&quot;</span> <span class="hljs-keyword">as</span> expanded<br>	- <span class="hljs-keyword">if</span> the node <span class="hljs-string">&quot;n&quot;</span> <span class="hljs-built_in">is</span> the goal state, <span class="hljs-keyword">return</span> <span class="hljs-literal">TRUE</span>; break;<br>	- <span class="hljs-keyword">For</span> all unexpanded neighbors <span class="hljs-string">&quot;m&quot;</span> <span class="hljs-keyword">of</span> node <span class="hljs-string">&quot;n&quot;</span><br>		- <span class="hljs-keyword">if</span> g(m)=infinite<br>			- g(m) = g(n) + Cnm<br>			- Push node <span class="hljs-string">&quot;m&quot;</span> <span class="hljs-keyword">into</span> the queue<br>		- <span class="hljs-keyword">if</span> g(m) &gt; g(n) + Cnm<br>			- g(m) = g(n) + Cnm<br>	- <span class="hljs-keyword">end</span><br><span class="hljs-keyword">End</span> <span class="hljs-keyword">Loop</span>	<br></code></pre></td></tr></table></figure>
 
-<p>![Dijkstra](&#x2F;assets&#x2F;img&#x2F;astar&#x2F;dijkstra.png)</p>
+<p><img src="/img/astar/dijkstra.png" srcset="/img/loading.gif" lazyload alt="Dijkstra"></p>
 <blockquote>
 <p>优点：完备的，只要有解一定可以找到最优解。缺点：只利用了到目前为止的成本，没有利用目标位置的信息，这也导致了当图中每条边权重相同时，Dijkstra算法也就退化成了广度优先搜索算法。所以本算法其实就是对BFS的拓展使其可以用于有权图搜索。此类算法盲目穷举进行探索的，都不是启发式搜索算法。</p>
 </blockquote>
@@ -333,11 +347,11 @@
 <p>算法伪代码：</p>
 <figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs vbnet">Initial初始化: 初始节点g(X_s)=<span class="hljs-number">0</span>,其他所有节点g(n)=infinite;初始化所有节点h(n);设计一个数据结构priority queue(自动对其中数据根据g(n)进行排序) <br><span class="hljs-symbol">Loop:</span><br>	- <span class="hljs-keyword">if</span> the queue <span class="hljs-built_in">is</span> empty, <span class="hljs-keyword">return</span> <span class="hljs-literal">FALSE</span>; break;<br>	- Remove the node <span class="hljs-string">&quot;n&quot;</span> <span class="hljs-keyword">with</span> the lowest f(n) <span class="hljs-keyword">from</span> the queue<br>	- Mark node <span class="hljs-string">&quot;n&quot;</span> <span class="hljs-keyword">as</span> expanded<br>	- <span class="hljs-keyword">if</span> the node <span class="hljs-string">&quot;n&quot;</span> <span class="hljs-built_in">is</span> the goal state, <span class="hljs-keyword">return</span> <span class="hljs-literal">TRUE</span>; break;<br>	- <span class="hljs-keyword">For</span> all unexpanded neighbors <span class="hljs-string">&quot;m&quot;</span> <span class="hljs-keyword">of</span> node <span class="hljs-string">&quot;n&quot;</span><br>		- <span class="hljs-keyword">if</span> g(m)=infinite<br>			- g(m) = g(n) + Cnm<br>			- Push node <span class="hljs-string">&quot;m&quot;</span> <span class="hljs-keyword">into</span> the queue<br>		- <span class="hljs-keyword">if</span> g(m) &gt; g(n) + Cnm<br>			- g(m) = g(n) + Cnm<br>	- <span class="hljs-keyword">end</span><br><span class="hljs-keyword">End</span> <span class="hljs-keyword">Loop</span>	<br></code></pre></td></tr></table></figure>
 
-<p>![astar](&#x2F;assets&#x2F;img&#x2F;astar&#x2F;astar.png)</p>
+<p><img src="/img/astar/astar.png" srcset="/img/loading.gif" lazyload alt="astar"></p>
 <blockquote>
 <p>由于引入了启发函数h，如果启发函数不合理，A星算法有可能是找不到最优解的（如下图）。如果想保证a星算法可以找到最优解，需要满足任意 h(n)小于等于节点n到终点的实际cost。</p>
 </blockquote>
-<p>![astar_wrong](&#x2F;assets&#x2F;img&#x2F;astar&#x2F;astar1.png)</p>
+<p><img src="/img/astar/astar1.png" srcset="/img/loading.gif" lazyload alt="astar_wrong"></p>
 <ul>
 <li><strong>加权A星算法</strong>，即使用的$f(n)&#x3D;g(n)+\varepsilon h(n)$，当$\varepsilon &gt;1$时，代表着增加了h(n)的权重，这有可能导致不能得到最优解，但是可以更快的到达目标（有可能提升几十倍 ）。<ul>
 <li>这种方法其实是一种 最优性 vs 速度（贪心算法肯定是最快的，只是不能得到最优解）；</li>
@@ -455,6 +469,28 @@
   
     <article id="comments" lazyload>
       
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
 
     </article>
   
@@ -558,7 +594,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -752,6 +788,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 

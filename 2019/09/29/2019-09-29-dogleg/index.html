@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://line.com/img/math/dogleg.PNG">
 <meta property="article:published_time" content="2019-09-28T17:07:24.000Z">
-<meta property="article:modified_time" content="2023-02-27T13:10:28.120Z">
+<meta property="article:modified_time" content="2023-02-28T05:50:50.540Z">
 <meta property="article:author" content="Line">
 <meta property="article:tag" content="数学">
 <meta name="twitter:card" content="summary_large_image">
@@ -67,6 +67,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -84,7 +88,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -282,20 +290,20 @@
 </blockquote>
 <h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><p>dogleg的思想很简单，对于一个非线性优化问题，它的每次的迭代步骤可以归纳如下：</p>
 <ol>
-<li><p>首先计算当前其高斯牛顿方法的迭代步长$$H_{gn}$$，然后计算最速下降法的迭代步长$$H_{sd}$$。</p>
+<li><p>首先计算当前其高斯牛顿方法的迭代步长$H_{gn}$，然后计算最速下降法的迭代步长$H_{sd}$。</p>
 </li>
-<li><p>根据第一步中确定的$$H_{gn}$$与$$H_{sd}$$相对与当前信赖域半径$$r$$的大小确定本次dogleg更新的步长$$\delta$$；</p>
+<li><p>根据第一步中确定的$H_{gn}$与$H_{sd}$相对与当前信赖域半径$r$的大小确定本次dogleg更新的步长$\delta$；</p>
 </li>
-<li><p>使用第二步中确定的更新步长进行更新，然后计算$\rho$（与LM中相同），根据其大小判断是否执行本次迭代与如何更新信赖域半径$$r$$。</p>
+<li><p>使用第二步中确定的更新步长进行更新，然后计算$\rho$（与LM中相同），根据其大小判断是否执行本次迭代与如何更新信赖域半径$r$。</p>
 </li>
 </ol>
 <h3 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h3><p>第一步是计算高斯牛顿与最速下降两种方法的更新步长。</p>
 <ul>
-<li>高斯牛顿法步长$$H_{gn}$$可以通过求解如下方程组得到（推导可见<a target="_blank" rel="noopener" href="https://xhy3054.github.io/nonlinear-optimization/">非线性优化</a>）</li>
+<li>高斯牛顿法步长$H_{gn}$可以通过求解如下方程组得到（推导可见<a target="_blank" rel="noopener" href="https://xhy3054.github.io/nonlinear-optimization/">非线性优化</a>）</li>
 </ul>
-<p>$$\left(\mathbf{J}(\mathbf{x})^{\top} \mathbf{J}(\mathbf{x})\right) \mathbf{h}_{\mathrm{gn}}=-\mathbf{J}(\mathbf{x})^{\top} \mathbf{f}(\mathbf{x}) $$</p>
+<p>$$\left(\mathbf{J}(\mathbf{x})^{\top} \mathbf{J}(\mathbf{x})\right) \mathbf{h}_{\mathrm{gn}}&#x3D;-\mathbf{J}(\mathbf{x})^{\top} \mathbf{f}(\mathbf{x}) $$</p>
 <ul>
-<li>最速下降法步长$$H_{sd}$$，获得可以分为两步来获得<ul>
+<li>最速下降法步长$H_{sd}$，获得可以分为两步来获得<ul>
 <li>第一步是先获得最速下降的方向</li>
 <li>第二步是确定最速下降的步长</li>
 <li>最后综合方向与步长即可得到更新的向量</li>
@@ -303,25 +311,25 @@
 </li>
 </ul>
 <p>首先，最速下降法的方向即是梯度反方向，先不考虑模长，我们可以使用下面公式表示(其中ｇ表示梯度方向)</p>
-<p>$$ \mathbf{h}_{\mathrm{sd}} = -\mathbf{g} = -\mathbf{J}(\mathbf{x})^{\top} \mathbf{f}(\mathbf{x}) $$</p>
+<p>$$ \mathbf{h}_{\mathrm{sd}} &#x3D; -\mathbf{g} &#x3D; -\mathbf{J}(\mathbf{x})^{\top} \mathbf{f}(\mathbf{x}) $$</p>
 <p>然后我们知道利用雅克比矩阵可以得到下面模型：</p>
-<p>$$<br>\begin{aligned} \mathbf{f}\left(\mathbf{x}+\alpha \mathbf{h}<em>{\mathrm{sd}}\right) &amp; \simeq \mathbf{f}(\mathbf{x})+\alpha \mathbf{J}(\mathbf{x}) \mathbf{h}</em>{\mathrm{sd}} \\ F\left(\mathbf{x}+\alpha \mathbf{h}<em>{\mathrm{sd}}\right) &amp; \simeq \frac{1}{2}\left|\mathbf{f}(\mathbf{x})+\alpha \mathbf{J}(\mathbf{x}) \mathbf{h}</em>{\mathrm{sd}}\right|^{2} \\ &amp;=F(\mathbf{x})+\alpha \mathbf{h}<em>{\mathrm{sd}}^{\top} \mathbf{J}(\mathbf{x})^{\top} \mathbf{f}(\mathbf{x})+\frac{1}{2} \alpha^{2}\left|\mathbf{J}(\mathbf{x}) \mathbf{h}</em>{\mathrm{sd}}\right|^{2} \end{aligned}<br>$$</p>
-<p>我们对上述模型求最小值，此时$$\alpha$$应取值为：</p>
-<p>$$<br>\alpha=-\frac{\mathbf{h}<em>{\mathrm{sd}}^{\top} \mathbf{J}(\mathbf{x})^{\top} \mathbf{f}(\mathbf{x})}{\left|\mathbf{J}(\mathbf{x}) \mathbf{h}</em>{\mathrm{sd}}\right|^{2}}=\frac{|\mathbf{g}|^{2}}{|\mathbf{J}(\mathbf{x}) \mathbf{g}|^{2}}<br>$$</p>
+<p>$$<br>\begin{aligned} \mathbf{f}\left(\mathbf{x}+\alpha \mathbf{h}<em>{\mathrm{sd}}\right) &amp; \simeq \mathbf{f}(\mathbf{x})+\alpha \mathbf{J}(\mathbf{x}) \mathbf{h}</em>{\mathrm{sd}} \ F\left(\mathbf{x}+\alpha \mathbf{h}<em>{\mathrm{sd}}\right) &amp; \simeq \frac{1}{2}\left|\mathbf{f}(\mathbf{x})+\alpha \mathbf{J}(\mathbf{x}) \mathbf{h}</em>{\mathrm{sd}}\right|^{2} \ &amp;&#x3D;F(\mathbf{x})+\alpha \mathbf{h}<em>{\mathrm{sd}}^{\top} \mathbf{J}(\mathbf{x})^{\top} \mathbf{f}(\mathbf{x})+\frac{1}{2} \alpha^{2}\left|\mathbf{J}(\mathbf{x}) \mathbf{h}</em>{\mathrm{sd}}\right|^{2} \end{aligned}<br>$$</p>
+<p>我们对上述模型求最小值，此时$\alpha$应取值为：</p>
+<p>$$<br>\alpha&#x3D;-\frac{\mathbf{h}<em>{\mathrm{sd}}^{\top} \mathbf{J}(\mathbf{x})^{\top} \mathbf{f}(\mathbf{x})}{\left|\mathbf{J}(\mathbf{x}) \mathbf{h}</em>{\mathrm{sd}}\right|^{2}}&#x3D;\frac{|\mathbf{g}|^{2}}{|\mathbf{J}(\mathbf{x}) \mathbf{g}|^{2}}<br>$$</p>
 <p>所以，最后最速下降法的更新向量为</p>
-<p>$$ \mathbf{h}<em>{\mathrm{sd}} = \alpha \mathbf{h}</em>{\mathrm{sd}} $$　</p>
+<p>$$ \mathbf{h}<em>{\mathrm{sd}} &#x3D; \alpha \mathbf{h}</em>{\mathrm{sd}} $$　</p>
 <h3 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h3><p>通过当前的信赖域半径与上一步计算的两种步长结合计算处dogleg算法的更新步长更新规则如下：</p>
 <p><img src="/img/math/dogleg.PNG" srcset="/img/loading.gif" lazyload alt="dogleg"></p>
-<p>上图中的更新规则描述的较为清楚，但是代码实现尚有难度，主要是$$\beta$$的值较难确定。我在网上看到了一个更加明确的规则，将上述更新规则总结为一个统一的表达式。</p>
-<p>$$<br>h_{dl}=\left\{\begin{array}{ll}{\tau h_{sd},} &amp; {0 \leq \tau \leq 1} \\ {h_{sd}+(\tau-1)\left(h_{gn}-h_{sd}\right),} &amp; {1 \leq \tau \leq 2}\end{array}\right.<br>$$</p>
-<p>其中比较关键的是变量$$\tau$$的确定，我直接贴出代码(其中<code>delta_</code>是信赖区域的半径大小)</p>
+<p>上图中的更新规则描述的较为清楚，但是代码实现尚有难度，主要是$\beta$的值较难确定。我在网上看到了一个更加明确的规则，将上述更新规则总结为一个统一的表达式。</p>
+<p>$$<br>h_{dl}&#x3D;\left{\begin{array}{ll}{\tau h_{sd},} &amp; {0 \leq \tau \leq 1} \ {h_{sd}+(\tau-1)\left(h_{gn}-h_{sd}\right),} &amp; {1 \leq \tau \leq 2}\end{array}\right.<br>$$</p>
+<p>其中比较关键的是变量$\tau$的确定，我直接贴出代码(其中<code>delta_</code>是信赖区域的半径大小)</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">double</span> tau;<br><span class="hljs-keyword">if</span>(H_gn.<span class="hljs-built_in">norm</span>() &lt;= delta_)<br>    tau = <span class="hljs-number">2</span>;<br><span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(H_sd.<span class="hljs-built_in">norm</span>() &gt;= delta_)<br>    tau = delta_ / H_sd.<span class="hljs-built_in">norm</span>() ;<br><span class="hljs-keyword">else</span>&#123;<br>    VecX tmp = H_gn - H_sd ;<br>    tau = (- H_sd.<span class="hljs-built_in">transpose</span>() * tmp + <span class="hljs-built_in">sqrt</span>(<span class="hljs-built_in">pow</span>((H_sd.<span class="hljs-built_in">transpose</span>() * tmp),<span class="hljs-number">2</span>) - tmp.<span class="hljs-built_in">squaredNorm</span>() * (H_sd.<span class="hljs-built_in">squaredNorm</span>() - <span class="hljs-built_in">pow</span>(delta_,<span class="hljs-number">2</span>)))) / tmp.<span class="hljs-built_in">squaredNorm</span>()       ;<br>    tau += <span class="hljs-number">1</span>;     <br>&#125;<br></code></pre></td></tr></table></figure>
 <hr>
 <h3 id="第三步"><a href="#第三步" class="headerlink" title="第三步"></a>第三步</h3><p>判断改更新是否执行，并更新信赖域半径，此处的迭代策略比较简单，我是看的参考文献第一篇提供的策略，直接贴代码了。</p>
-<p>注意此处有个$$\rho$$的计算，其值为</p>
-<p>$$<br>\rho=\frac{F(\mathbf{x})-F\left(\mathbf{x}+\Delta \mathbf{x}<em>{\operatorname{dl}}\right)}{L(\mathbf{0})-L\left(\Delta \mathbf{x}</em>{\mathrm{dl}}\right)}<br>$$</p>
-<p>其中分母是此次更新后真实目标函数损失减少的量，分子是使用近似模型此次更新后目标函数损失应该减少的量。其中$$L(h)$$函数是如下线性函数模型</p>
-<p>$$L(\mathbf{h}) = \frac{1}{2}|\mathbf{f}(\mathbf{x})+\mathbf{J}(\mathbf{x}) \mathbf{h}|^{2}$$</p>
+<p>注意此处有个$\rho$的计算，其值为</p>
+<p>$$<br>\rho&#x3D;\frac{F(\mathbf{x})-F\left(\mathbf{x}+\Delta \mathbf{x}<em>{\operatorname{dl}}\right)}{L(\mathbf{0})-L\left(\Delta \mathbf{x}</em>{\mathrm{dl}}\right)}<br>$$</p>
+<p>其中分母是此次更新后真实目标函数损失减少的量，分子是使用近似模型此次更新后目标函数损失应该减少的量。其中$L(h)$函数是如下线性函数模型</p>
+<p>$$L(\mathbf{h}) &#x3D; \frac{1}{2}|\mathbf{f}(\mathbf{x})+\mathbf{J}(\mathbf{x}) \mathbf{h}|^{2}$$</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// 狗腿</span><br><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">Problem::IsGoodStep</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-comment">//此处是计算当前目标函数的损失</span><br>    <span class="hljs-type">double</span> tempChi = <span class="hljs-number">0.0</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">auto</span> edge:edges_)&#123;<br>        edge.second-&gt;<span class="hljs-built_in">ComputeResidual</span>();<br>        tempChi += edge.second-&gt;<span class="hljs-built_in">Chi2</span>();    <br>    &#125;<br> <br>    <span class="hljs-comment">//此处是计算近似使用dogleg步长更新理论上应该减小的损失</span><br>    <span class="hljs-type">double</span> scale = <span class="hljs-number">0</span>;<br>    scale = delta_x_.<span class="hljs-built_in">transpose</span>() * b_ ;<br>    std::cout&lt;&lt;<span class="hljs-string">&quot;第一部分scale为 &quot;</span>&lt;&lt;scale&lt;&lt;endl;<br>    scale -= <span class="hljs-number">0.5</span> * delta_x_.<span class="hljs-built_in">transpose</span>() * Hessian_ * delta_x_; <br>    scale += <span class="hljs-number">1e-3</span>;<br>    cout&lt;&lt;<span class="hljs-string">&quot;scale = &quot;</span>&lt;&lt;scale&lt;&lt;endl;<br><br>    <span class="hljs-type">double</span> rho = (currentChi_ - tempChi)/scale;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;rho: &quot;</span> &lt;&lt; rho &lt;&lt; <span class="hljs-string">&quot; , chi= &quot;</span> &lt;&lt; tempChi &lt;&lt; <span class="hljs-string">&quot; , delta= &quot;</span> &lt;&lt; delta_<br>                  &lt;&lt; std::endl;<br>    <span class="hljs-comment">//迭代策略</span><br>    <span class="hljs-keyword">if</span>(rho &gt; <span class="hljs-number">0</span> &amp;&amp; <span class="hljs-built_in">isfinite</span>(tempChi))&#123;<br>        <span class="hljs-keyword">if</span>(rho&gt;<span class="hljs-number">0.75</span>) delta_ = std::<span class="hljs-built_in">max</span>(delta_, <span class="hljs-number">3.</span>*delta_x_.<span class="hljs-built_in">norm</span>());<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(rho&lt;<span class="hljs-number">0.25</span>)   delta_ = delta_/<span class="hljs-number">2.</span>;<br>        currentChi_ = tempChi;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;    <br>    &#125;<br>    <span class="hljs-keyword">else</span>&#123;<br>        delta_ = delta_/<span class="hljs-number">2.</span>;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;    <br>    &#125;<br><br>&#125;<br><br></code></pre></td></tr></table></figure>
 
 
@@ -427,6 +435,28 @@
   
     <article id="comments" lazyload>
       
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
 
     </article>
   
@@ -530,7 +560,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -724,6 +754,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 

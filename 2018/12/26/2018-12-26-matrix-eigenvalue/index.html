@@ -78,6 +78,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -95,7 +99,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -244,7 +252,7 @@
         
         
         
-          16 分钟
+          17 分钟
         
       </span>
     
@@ -299,7 +307,7 @@
 <p><img src="/img/matrix_eigenvalue/p2.png" srcset="/img/loading.gif" lazyload alt="p2"></p>
 <p>奇妙的来了，如果调整一下被乘的向量$\vec{v_{}}$的方向到一个特定的方向，则会出现如下情况</p>
 <p><img src="/img/matrix_eigenvalue/p3.png" srcset="/img/loading.gif" lazyload alt="p3"></p>
-<p>可以观察到，调整后的$\vec{v_{}}$和$A\vec{v_{}}$在同一根直线上，只是$A\vec{v_{}}$的长度相对$\vec{v_{}}$的长度变长了。此时，我们就称$\vec{v_{}}$是$A$的<strong><em>特征向量</em></strong>，而$A\vec{v_{}}$的长度是$\vec{v_{}}$的长度的$\lambda$倍，$\lambda$就是<strong>特征值</strong>。</p>
+<p>可以观察到，调整后的$\vec{v_{}}$和$A\vec{v_{}}$在同一根直线上，只是$A\vec{v_{}}$的长度相对$\vec{v_{}}$的长度变长了。此时，我们就称$\vec{v_{}}$是$A$的<em><strong>特征向量</strong></em>，而$A\vec{v_{}}$的长度是$\vec{v_{}}$的长度的$\lambda$倍，$\lambda$就是<strong>特征值</strong>。</p>
 <p>从而，特征值与特征向量的定义式就是这样的：</p>
 <p><img src="/img/matrix_eigenvalue/p4.png" srcset="/img/loading.gif" lazyload alt="p4"></p>
 <p>特征向量所在的直线上的所有向量都满足特征向量的上述定义，我们称其为<strong>特征空间</strong>。不过一般每个特征向量通常定义为一个单位向量（因为主要的意义是用来表示方向的）。</p>
@@ -317,7 +325,7 @@
 <p>这个分解操作可以由下面的特征值分解进行解释</p>
 </blockquote>
 <h2 id="特征值分解其实是运动分解"><a href="#特征值分解其实是运动分解" class="headerlink" title="特征值分解其实是运动分解"></a>特征值分解其实是运动分解</h2><p>一个矩阵进行特征值分解，这是一种将矩阵分解表示的操作。可以通过只保留比较重要的特征向量（将其他置为零）来压缩矩阵。</p>
-<p>$$  \mathbf{A} = \mathbf{V} \mathbf{D} \mathbf{V^{-1}} $$</p>
+<p>$$  \mathbf{A} &#x3D; \mathbf{V} \mathbf{D} \mathbf{V^{-1}} $$</p>
 <p>其中，</p>
 <ul>
 <li>V是n个特征向量组成的<code>n*n</code>维矩阵</li>
@@ -328,7 +336,7 @@
 <p><img src="/img/matrix_eigenvalue/p5.png" srcset="/img/loading.gif" lazyload alt="p5"></p>
 <p>如果使用这个矩阵对向量进行变换操作，我们会发现</p>
 <p><img src="/img/matrix_eigenvalue/p6.png" srcset="/img/loading.gif" lazyload alt="p6"></p>
-<p>特征值分解其实就是将矩阵的变换操作分解了，将旋转与拉伸分离开来，最后达到上述<a href="#意义">意义</a>的效果。我们逐步解释</p>
+<p>特征值分解其实就是将矩阵的变换操作分解了，将旋转与拉伸分离开来，最后达到上述<a href="#%E6%84%8F%E4%B9%89">意义</a>的效果。我们逐步解释</p>
 <ul>
 <li>首选这是原本的基向量</li>
 </ul>
@@ -349,11 +357,11 @@
 <blockquote>
 <p>这是因为只有方阵才能够在矩阵空间提取出符合<strong>完全正交基</strong>的特征向量，这样对于任何一个目标向量进行变换时，才能使用特征向量对目标向量进行完全表示。如果不能提取出满足条件的特征向量，则特征值分解的公式是<strong>不成立</strong>的!</p>
 </blockquote>
-<p>$$  \mathbf{A} = \mathbf{V} \mathbf{D} \mathbf{V^{-1}} $$</p>
+<p>$$  \mathbf{A} &#x3D; \mathbf{V} \mathbf{D} \mathbf{V^{-1}} $$</p>
 <p>那不能特征值分解时怎么办呢？我们可以使用<strong>奇异值分解</strong></p>
 <h3 id="应用案例：压缩图像"><a href="#应用案例：压缩图像" class="headerlink" title="应用案例：压缩图像"></a>应用案例：压缩图像</h3><p>如下有一幅<code>512*512</code>的灰度图像(只有方阵才能压缩)</p>
 <p><img src="/img/matrix_eigenvalue/p11.jpg" srcset="/img/loading.gif" lazyload alt="p11"></p>
-<p>这个图片可以放到一个矩阵里面去，就是把每个像素的颜色值填入到一个$512 \times 512$的A矩阵中。<br>根据之前描述的有：<br>$$  \mathbf{A} = \mathbf{V} \mathbf{D} \mathbf{V^{-1}} $$</p>
+<p>这个图片可以放到一个矩阵里面去，就是把每个像素的颜色值填入到一个$512 \times 512$的A矩阵中。<br>根据之前描述的有：<br>$$  \mathbf{A} &#x3D; \mathbf{V} \mathbf{D} \mathbf{V^{-1}} $$</p>
 <p>其中，$ \mathbf{D} $是对角阵，对角线上是从大到小排列的特征值。</p>
 <p>我们在$ \mathbf{D} $中只保留前面50个的特征值（也就是最大的50个，其实也只占了所有特征值的百分之十），其它的都填0，重新计算矩阵后，恢复为下面这样的图像：</p>
 <p><img src="/img/matrix_eigenvalue/p12.jpg" srcset="/img/loading.gif" lazyload alt="p12"></p>
@@ -460,6 +468,28 @@
   
     <article id="comments" lazyload>
       
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
 
     </article>
   
@@ -563,7 +593,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -757,6 +787,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 

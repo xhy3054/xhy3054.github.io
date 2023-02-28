@@ -69,6 +69,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -86,7 +90,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -294,7 +302,7 @@
 
 <p>现在，Ａ、Ｆ、Ｇ三个Mat对象分别管理属于自己的图像矩阵内存，不会互相干扰。</p>
 <h2 id="Mat对象的存储方法"><a href="#Mat对象的存储方法" class="headerlink" title="Mat对象的存储方法"></a>Mat对象的存储方法</h2><blockquote>
-<p>使用<code>imread(&quot;1.png&quot;)</code>，默认参数是<code>IMREAD_COLOR</code>,即总是将硬盘中的图片转换为8位的3通道BGR彩色图然后读入内存，并返回一个3通道BGR的mat类型</p>
+<p>使用<code>imread(&quot;1.png&quot;)</code>，默认参数是<code>IMREAD_COLOR </code>,即总是将硬盘中的图片转换为8位的3通道BGR彩色图然后读入内存，并返回一个3通道BGR的mat类型</p>
 </blockquote>
 <p>存储方法主要受两个参数影响：</p>
 <ol>
@@ -304,7 +312,9 @@
 </li>
 </ol>
 <p>颜色空间主要有RGB、HSV、HLS、YCrCb等，想了解自己再查书吧。值得一提的是<strong>opencv标准显式中使用的RGB其实是BGR</strong>，即翻转了一下顺序。同时，RGB转灰度空间使用了如下公式：</p>
-<pre><code class="hljs">Gray = R*0.299 + G*0.587 + B*0.114</code></pre><blockquote>
+<pre><code class="hljs">Gray = R*0.299 + G*0.587 + B*0.114
+</code></pre>
+<blockquote>
 <p>关于颜色空间更多的知识可以查看<a target="_blank" rel="noopener" href="https://www.learnopencv.com/color-spaces-in-opencv-cpp-python/">这篇博文</a>，在opencv中提供了将不同颜色空间的Mat进行转换的函数<code>cv2.cvtColor</code></p>
 </blockquote>
 <h3 id="Mat中指针指向的矩阵中像素的组织形式（灰度空间与BGR空间）"><a href="#Mat中指针指向的矩阵中像素的组织形式（灰度空间与BGR空间）" class="headerlink" title="Mat中指针指向的矩阵中像素的组织形式（灰度空间与BGR空间）"></a>Mat中指针指向的矩阵中像素的组织形式（灰度空间与BGR空间）</h3><p>像素的组织形式主要依赖于颜色空间类型的选择，下图是<strong>灰度空间</strong>下像素的组织形式：<br><img src="/img/opencv-mat/tutorial_how_matrix_stored_1.png" srcset="/img/loading.gif" lazyload alt="tutorial_how_matrix_stored_1"></p>
@@ -410,6 +420,28 @@
   
     <article id="comments" lazyload>
       
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
 
     </article>
   
@@ -513,7 +545,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -707,6 +739,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 

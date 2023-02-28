@@ -16,12 +16,12 @@
   <meta name="author" content="Line">
   <meta name="keywords" content="">
   
-    <meta name="description" content="IMU数学模型加速度计首先，对于世界坐标系，一般我们会使用最常见的东北天(ENU)坐标系G（无关远点位置，只与姿态有关）。    在这个坐标系中，重力加速度为  $$g^G &#x3D; (0,0,-9.81)^T$$。 此时，假设IMU坐标系就是ENU坐标系，则$R_{IB}&#x3D;I$，静止时有（其中$a_{m}$是测量值）： $$a &#x3D; 0$$ $$a_{m} &#x3D; -g$$ 所以，不静止时：（此处对a和g符">
+    <meta name="description" content="IMU数学模型加速度计首先，对于世界坐标系，一般我们会使用最常见的东北天(ENU)坐标系G（无关远点位置，只与姿态有关）。    在这个坐标系中，重力加速度为  $$g^G &#x3D; (0,0,-9.81)^T$$。 此时，假设IMU坐标系就是ENU坐标系，则$R_{IB}&#x3D;I$，静止时有（其中$a_{m}$是测量值）： $$a &#x3D; 0$$ $$a_{m} &#x3D; -">
 <meta property="og:type" content="article">
 <meta property="og:title" content="imu的数学模型与误差标定问题">
 <meta property="og:url" content="http://line.com/2019/07/11/2019-07-11-imu-calibration/index.html">
 <meta property="og:site_name" content="Line&#39;s Blog">
-<meta property="og:description" content="IMU数学模型加速度计首先，对于世界坐标系，一般我们会使用最常见的东北天(ENU)坐标系G（无关远点位置，只与姿态有关）。    在这个坐标系中，重力加速度为  $$g^G &#x3D; (0,0,-9.81)^T$$。 此时，假设IMU坐标系就是ENU坐标系，则$R_{IB}&#x3D;I$，静止时有（其中$a_{m}$是测量值）： $$a &#x3D; 0$$ $$a_{m} &#x3D; -g$$ 所以，不静止时：（此处对a和g符">
+<meta property="og:description" content="IMU数学模型加速度计首先，对于世界坐标系，一般我们会使用最常见的东北天(ENU)坐标系G（无关远点位置，只与姿态有关）。    在这个坐标系中，重力加速度为  $$g^G &#x3D; (0,0,-9.81)^T$$。 此时，假设IMU坐标系就是ENU坐标系，则$R_{IB}&#x3D;I$，静止时有（其中$a_{m}$是测量值）： $$a &#x3D; 0$$ $$a_{m} &#x3D; -">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://line.com/img/vio/ENU.PNG">
 <meta property="og:image" content="http://line.com/img/vio/scale.PNG">
@@ -74,6 +74,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -91,7 +95,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -229,7 +237,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          9.1k 字
+          9.3k 字
         
       </span>
     
@@ -240,7 +248,7 @@
         
         
         
-          76 分钟
+          78 分钟
         
       </span>
     
@@ -289,22 +297,22 @@
 </div>
 在这个坐标系中，重力加速度为
 
-<p>$$g^G = (0,0,-9.81)^T$$。</p>
-<p>此时，<strong>假设IMU坐标系就是ENU坐标系</strong>，则$R_{IB}=I$，静止时有（其中$a_{m}$是测量值）：</p>
-<p>$$a = 0$$</p>
-<p>$$a_{m} = -g$$</p>
+<p>$$g^G &#x3D; (0,0,-9.81)^T$$。</p>
+<p>此时，<strong>假设IMU坐标系就是ENU坐标系</strong>，则$R_{IB}&#x3D;I$，静止时有（其中$a_{m}$是测量值）：</p>
+<p>$$a &#x3D; 0$$</p>
+<p>$$a_{m} &#x3D; -g$$</p>
 <p>所以，不静止时：（此处对a和g符号不做区分标记，因为假设body系与Global系一样）</p>
-<p>$$a_{m} = a - g $$</p>
+<p>$$a_{m} &#x3D; a - g $$</p>
 <blockquote>
 <p>由上可知，其实在物体做自由落体时imu测量的加速度才是0，静止时反而是$-g$，这个是由加速度计的测量原理决定的。</p>
 </blockquote>
 <p>上面讲的是在IMU坐标系也是ENU坐标系时的情况（此时位置无关，只关乎姿态）。大多数实际应用中，<strong>IMU坐标系（Body）一般是与ENU坐标系有一个姿态的变化</strong>的。此时，得到的理论测量值为：</p>
-<p>$$ a_{m}^{B} = R_{BG} (a^{G} - g^{G}) $$</p>
+<p>$$ a_{m}^{B} &#x3D; R_{BG} (a^{G} - g^{G}) $$</p>
 <blockquote>
 <p>此处$R_{BG}$是将Global坐标转换到Body坐标姿态的旋转矩阵。此处可以看出，global坐标系的位置与body坐标系的位置与在两个系下测量的加速度大小无关。但是，与姿态有关。</p>
 </blockquote>
 <h2 id="陀螺仪"><a href="#陀螺仪" class="headerlink" title="陀螺仪"></a>陀螺仪</h2><p>相比较于加速度计，陀螺仪相对简单。如果不考虑误差，则</p>
-<p>$$ w_{m}^{B} = w^{B} $$</p>
+<p>$$ w_{m}^{B} &#x3D; w^{B} $$</p>
 <blockquote>
 <p>我们会发现此处并没有向加速度计一样，将global坐标系下的角速度转换到陀螺仪的测量值，而是直接使用body系下的角速度。这是因为旋转叠加时（比如四元数和旋转矩阵表示姿态时），全局姿态是直接乘以body系下的更新量的就可以得到新的全局姿态的。</p>
 </blockquote>
@@ -312,19 +320,19 @@
 <p>下面会介绍两种离散积分的方法。<strong>欧拉法与中值法</strong>。</p>
 <p>这两种方法，都是已知了$k$时刻的位姿，$k$时刻与$k+1$时刻的测量值（加速度与角速度）。目的是求得$k+1$时刻的位姿。</p>
 <h3 id="欧拉法"><a href="#欧拉法" class="headerlink" title="欧拉法"></a>欧拉法</h3><p>欧拉法，是直接使用$k$时刻的测量值$a,w$来积分。</p>
-<p>$$<br>\mathbf{p}<em>{w b</em>{k+1}}=\mathbf{p}<em>{w b</em>{k}}+\mathbf{v}_{k}^{w} \Delta t+\frac{1}{2} \mathbf{a} \Delta t^{2}<br>$$</p>
-<p>$$<br>\mathbf{v}<em>{k+1}^{w}=\mathbf{v}</em>{k}^{w}+\mathbf{a} \Delta t<br>$$</p>
-<p>$$<br>\mathbf{q}<em>{w b</em>{k+1}}=\mathbf{q}<em>{w b</em>{k}} \otimes\left[\begin{array}{c}{1} \\ {\frac{1}{2} \omega \delta t}\end{array}\right]<br>$$</p>
+<p>$$<br>\mathbf{p}<em>{w b</em>{k+1}}&#x3D;\mathbf{p}<em>{w b</em>{k}}+\mathbf{v}_{k}^{w} \Delta t+\frac{1}{2} \mathbf{a} \Delta t^{2}<br>$$</p>
+<p>$$<br>\mathbf{v}<em>{k+1}^{w}&#x3D;\mathbf{v}</em>{k}^{w}+\mathbf{a} \Delta t<br>$$</p>
+<p>$$<br>\mathbf{q}<em>{w b</em>{k+1}}&#x3D;\mathbf{q}<em>{w b</em>{k}} \otimes\left[\begin{array}{c}{1} \ {\frac{1}{2} \omega \delta t}\end{array}\right]<br>$$</p>
 <p>其中</p>
-<p>$$<br>\mathbf{a} = \mathbf{q}<em>{w b</em>{k}} \mathbf{a}^{b_{k}} - \mathbf{g}^{w}<br>$$</p>
-<p>$$<br>\boldsymbol{\omega} = \boldsymbol{\omega}^{b_{k}}<br>$$</p>
+<p>$$<br>\mathbf{a} &#x3D; \mathbf{q}<em>{w b</em>{k}} \mathbf{a}^{b_{k}} - \mathbf{g}^{w}<br>$$</p>
+<p>$$<br>\boldsymbol{\omega} &#x3D; \boldsymbol{\omega}^{b_{k}}<br>$$</p>
 <h3 id="中值法"><a href="#中值法" class="headerlink" title="中值法"></a>中值法</h3><p>中值法，使用两个相邻时刻$k$到$k+1$的位姿是用两个时刻的测量值$a,w$的平均值来离散积分。</p>
-<p>$$<br>\mathbf{p}<em>{w b</em>{k+1}}=\mathbf{p}<em>{w b</em>{k}}+\mathbf{v}_{k}^{w} \Delta t+\frac{1}{2} \mathbf{a} \Delta t^{2}<br>$$</p>
-<p>$$<br>\mathbf{v}<em>{k+1}^{w}=\mathbf{v}</em>{k}^{w}+\mathbf{a} \Delta t<br>$$</p>
-<p>$$<br>\mathbf{q}<em>{w b</em>{k+1}}=\mathbf{q}<em>{w b</em>{k}} \otimes\left[\begin{array}{c}{1} \\ {\frac{1}{2} \omega \delta t}\end{array}\right]<br>$$</p>
+<p>$$<br>\mathbf{p}<em>{w b</em>{k+1}}&#x3D;\mathbf{p}<em>{w b</em>{k}}+\mathbf{v}_{k}^{w} \Delta t+\frac{1}{2} \mathbf{a} \Delta t^{2}<br>$$</p>
+<p>$$<br>\mathbf{v}<em>{k+1}^{w}&#x3D;\mathbf{v}</em>{k}^{w}+\mathbf{a} \Delta t<br>$$</p>
+<p>$$<br>\mathbf{q}<em>{w b</em>{k+1}}&#x3D;\mathbf{q}<em>{w b</em>{k}} \otimes\left[\begin{array}{c}{1} \ {\frac{1}{2} \omega \delta t}\end{array}\right]<br>$$</p>
 <p>其中</p>
-<p>$$<br>\mathbf{a} = \frac{1}{2} \left(\mathbf{q}<em>{w b</em>{k}} \mathbf{a}^{b_{k}} + \mathbf{q}<em>{w b</em>{k+1}} \mathbf{a}^{b_{k+1}} \right) - \mathbf{g}^{w}<br>$$</p>
-<p>$$<br>\boldsymbol{\omega} = \frac{1}{2} \left(\boldsymbol{\omega}^{b_{k}} + \boldsymbol{\omega}^{b_{k+1}} \right)<br>$$</p>
+<p>$$<br>\mathbf{a} &#x3D; \frac{1}{2} \left(\mathbf{q}<em>{w b</em>{k}} \mathbf{a}^{b_{k}} + \mathbf{q}<em>{w b</em>{k+1}} \mathbf{a}^{b_{k+1}} \right) - \mathbf{g}^{w}<br>$$</p>
+<p>$$<br>\boldsymbol{\omega} &#x3D; \frac{1}{2} \left(\boldsymbol{\omega}^{b_{k}} + \boldsymbol{\omega}^{b_{k+1}} \right)<br>$$</p>
 <h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs cpp">    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; imudata.<span class="hljs-built_in">size</span>()<span class="hljs-number">-1</span>; ++i) &#123;<br><br>        MotionData imupose = imudata[i];<br>        MotionData imupose1 = imudata[i+<span class="hljs-number">1</span>];<br><span class="hljs-comment">/*</span><br><span class="hljs-comment">        // 欧拉积分</span><br><span class="hljs-comment">        //delta_q = [1 , 1/2 * thetax , 1/2 * theta_y, 1/2 * theta_z]</span><br><span class="hljs-comment">        Eigen::Quaterniond dq;</span><br><span class="hljs-comment">        Eigen::Vector3d dtheta_half =  imupose.imu_gyro * dt /2.0;</span><br><span class="hljs-comment">        dq.w() = 1;</span><br><span class="hljs-comment">        dq.x() = dtheta_half.x();</span><br><span class="hljs-comment">        dq.y() = dtheta_half.y();</span><br><span class="hljs-comment">        dq.z() = dtheta_half.z();</span><br><span class="hljs-comment">        Eigen::Vector3d acc_w = Qwb * (imupose.imu_acc) + gw;</span><br><span class="hljs-comment">        Pwb = Pwb + Vw * dt + 0.5 * dt * dt * acc_w;</span><br><span class="hljs-comment">        Vw = acc_w * dt + Vw;</span><br><span class="hljs-comment">        Qwb = Qwb * dq;</span><br><span class="hljs-comment">        Qwb.normalize();</span><br><span class="hljs-comment">*/</span><br><br>        <span class="hljs-comment">/// 中值积分</span><br>        Eigen::Quaterniond dq;<br>        Eigen::Vector3d dtheta_half = (imupose.imu_gyro + imupose1.imu_gyro)*dt/<span class="hljs-number">4.0</span>;<br>        dq.<span class="hljs-built_in">w</span>() = <span class="hljs-number">1</span>;<br>        dq.<span class="hljs-built_in">x</span>() = dtheta_half.<span class="hljs-built_in">x</span>();<br>        dq.<span class="hljs-built_in">y</span>() = dtheta_half.<span class="hljs-built_in">y</span>();<br>        dq.<span class="hljs-built_in">z</span>() = dtheta_half.<span class="hljs-built_in">z</span>();<br>        Eigen::Quaterniond Qwb1 = Qwb * dq;<br>        Qwb1.<span class="hljs-built_in">normalize</span>();<br>        Eigen::Vector3d acc_w = (Qwb * imupose.imu_acc + Qwb1 * imupose1.imu_acc)*<span class="hljs-number">0.5</span> + gw;<br>        Pwb = Pwb + Vw * dt + <span class="hljs-number">0.5</span> * dt * dt * acc_w;<br>        Vw = acc_w * dt + Vw;  <br>        Qwb = Qwb1;<br><br>        <span class="hljs-comment">//存储位姿</span><br>        save_points&lt;&lt;imupose.timestamp&lt;&lt;<span class="hljs-string">&quot; &quot;</span><br>                   &lt;&lt;Qwb.<span class="hljs-built_in">w</span>()&lt;&lt;<span class="hljs-string">&quot; &quot;</span><br>                   &lt;&lt;Qwb.<span class="hljs-built_in">x</span>()&lt;&lt;<span class="hljs-string">&quot; &quot;</span><br>                   &lt;&lt;Qwb.<span class="hljs-built_in">y</span>()&lt;&lt;<span class="hljs-string">&quot; &quot;</span><br>                   &lt;&lt;Qwb.<span class="hljs-built_in">z</span>()&lt;&lt;<span class="hljs-string">&quot; &quot;</span><br>                   &lt;&lt;<span class="hljs-built_in">Pwb</span>(<span class="hljs-number">0</span>)&lt;&lt;<span class="hljs-string">&quot; &quot;</span><br>                   &lt;&lt;<span class="hljs-built_in">Pwb</span>(<span class="hljs-number">1</span>)&lt;&lt;<span class="hljs-string">&quot; &quot;</span><br>                   &lt;&lt;<span class="hljs-built_in">Pwb</span>(<span class="hljs-number">2</span>)&lt;&lt;<span class="hljs-string">&quot; &quot;</span><br>                   &lt;&lt;std::endl;<br>    &#125;<br></code></pre></td></tr></table></figure>
 
 <blockquote>
@@ -337,32 +345,31 @@
 <ul>
 <li>四元数的形式：</li>
 </ul>
-<p>$$<br>\mathbf{q}<em>{w b^{\prime}}=\mathbf{q}</em>{w b} \otimes\left[\begin{array}{c}{1} \\ {\frac{1}{2} \boldsymbol{\omega} \Delta t}\end{array}\right]<br>$$</p>
+<p>$$<br>\mathbf{q}<em>{w b^{\prime}}&#x3D;\mathbf{q}</em>{w b} \otimes\left[\begin{array}{c}{1} \ {\frac{1}{2} \boldsymbol{\omega} \Delta t}\end{array}\right]<br>$$</p>
 <ul>
 <li>$SO3$形式：</li>
 </ul>
-<p>$$<br>\mathbf{R}<em>{w b^{\prime}}=\mathbf{R}</em>{w b} \exp (\boldsymbol{\omega} \cdot \Delta t)<br>$$</p>
+<p>$$<br>\mathbf{R}<em>{w b^{\prime}}&#x3D;\mathbf{R}</em>{w b} \exp (\boldsymbol{\omega} \cdot \Delta t)<br>$$</p>
 <ul>
 <li>欧拉角形式：</li>
 </ul>
-<p>$$<br>\vartheta w b^{\prime}=\vartheta_{w b}+E_{w b} \cdot \omega \Delta t<br>$$</p>
+<p>$$<br>\vartheta w b^{\prime}&#x3D;\vartheta_{w b}+E_{w b} \cdot \omega \Delta t<br>$$</p>
 <blockquote>
 <p>我们可以发现，这三种方法，<strong>对于全局姿态的变化</strong>，旋转矩阵与四元数都是直接使用imu的测量（也就是局部角速度）进行更新的。只有在欧拉角的形式里，$E_{w b}$表示将IMU body坐标系下的角速度转化成欧拉角速度。此处可以推导出$E_{w b}$，这个是三种方法中唯一一个需要转换的地方。<strong>原因的话，我觉得这是因为累加与累乘的区别，欧拉角不支持乘法。如果使用角度来表示旋转矩阵与四元数，此时对角度的更新也得使用加法（原来角度加上角速度与时间的积即为新的角度），但是四元数与旋转矩阵本身是只支持乘法的，它们是直接乘以局部扰动即可</strong>。</p>
 </blockquote>
 <h3 id="欧拉角速度到imu输出角速度"><a href="#欧拉角速度到imu输出角速度" class="headerlink" title="欧拉角速度到imu输出角速度"></a>欧拉角速度到imu输出角速度</h3><p>这个挺有必要的，因为用欧拉角来表示姿态还是很方便的。</p>
 <ul>
-<li>step1:绕着惯性坐标系的z轴旋转，得到新的坐标系$b^{1}$</li>
-</ul>
-<ul>
-<li>step2:绕着新坐标系$b^{1}$的y轴旋转得到坐标系$b^{2}$</li>
-</ul>
-<ul>
-<li>step3:绕着新坐标系$b^{2}$的x轴旋转得到坐标系$b^{3}$，$b^{3}$就是我们的body坐标系</li>
+<li><p>step1:绕着惯性坐标系的z轴旋转，得到新的坐标系$b^{1}$</p>
+</li>
+<li><p>step2:绕着新坐标系$b^{1}$的y轴旋转得到坐标系$b^{2}$</p>
+</li>
+<li><p>step3:绕着新坐标系$b^{2}$的x轴旋转得到坐标系$b^{3}$，$b^{3}$就是我们的body坐标系</p>
+</li>
 </ul>
 <p>欧拉角速度到body角速度：</p>
-<p>$$<br>\begin{aligned} \boldsymbol{\omega} &amp;=R(\psi) R(\theta)\left\{\begin{array}{c}{0} \\ {0} \\ {\frac{d \phi}{d t}}\end{array}\right\}+R(\psi)\left\{\begin{array}{c}{0} \\ {\frac{d \theta}{d t}} \\ {0}\end{array}\right\}+\left\{\begin{array}{c}{\frac{d \psi}{d t}} \\ {0} \\ {0}\end{array}\right\} \\ &amp;=\left[\begin{array}{ccc}{1} &amp; {0} &amp; {-\sin \theta} \\ {0} &amp; {\cos \psi} &amp; {\sin \psi \cos \theta} \\ {0} &amp; {-\sin \psi} &amp; {\cos \psi \cos \theta}\end{array}\right]\left\{\begin{array}{l}{\frac{d \psi}{d t}} \\ {\frac{d \psi}{d t}} \\ {\frac{d \phi}{d t}}\end{array}\right\} \end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned} \boldsymbol{\omega} &amp;&#x3D;R(\psi) R(\theta)\left{\begin{array}{c}{0} \ {0} \ {\frac{d \phi}{d t}}\end{array}\right}+R(\psi)\left{\begin{array}{c}{0} \ {\frac{d \theta}{d t}} \ {0}\end{array}\right}+\left{\begin{array}{c}{\frac{d \psi}{d t}} \ {0} \ {0}\end{array}\right} \ &amp;&#x3D;\left[\begin{array}{ccc}{1} &amp; {0} &amp; {-\sin \theta} \ {0} &amp; {\cos \psi} &amp; {\sin \psi \cos \theta} \ {0} &amp; {-\sin \psi} &amp; {\cos \psi \cos \theta}\end{array}\right]\left{\begin{array}{l}{\frac{d \psi}{d t}} \ {\frac{d \psi}{d t}} \ {\frac{d \phi}{d t}}\end{array}\right} \end{aligned}<br>$$</p>
 <p>上面取逆就得到，如下body到欧拉角的变换：</p>
-<p>$$<br>\frac{d \boldsymbol{\vartheta}}{d t}=\left[\begin{array}{ccc}{1} &amp; {\sin \psi \tan \theta} &amp; {\cos \psi \tan \theta} \\ {0} &amp; {\cos \psi} &amp; {-\sin \psi} \\ {0} &amp; {\sin \psi / \cos \theta} &amp; {\cos \psi / \cos \theta}\end{array}\right] \vec{\omega}<br>$$</p>
+<p>$$<br>\frac{d \boldsymbol{\vartheta}}{d t}&#x3D;\left[\begin{array}{ccc}{1} &amp; {\sin \psi \tan \theta} &amp; {\cos \psi \tan \theta} \ {0} &amp; {\cos \psi} &amp; {-\sin \psi} \ {0} &amp; {\sin \psi &#x2F; \cos \theta} &amp; {\cos \psi &#x2F; \cos \theta}\end{array}\right] \vec{\omega}<br>$$</p>
 <h1 id="误差与标定"><a href="#误差与标定" class="headerlink" title="误差与标定"></a>误差与标定</h1><p>加速度计和陀螺仪的误差可以分为确定性误差与随机误差。</p>
 <h2 id="确定性误差"><a href="#确定性误差" class="headerlink" title="确定性误差"></a>确定性误差</h2><p>确定性误差可以事先标定确定，包括：bias，scale …</p>
 <h3 id="bias"><a href="#bias" class="headerlink" title="bias"></a>bias</h3><p>理论上，当没有外部作用时，IMU传感器的输出应该为0。但是，实际上数据存在一个偏置b。</p>
@@ -371,49 +378,49 @@
 <img src="/img/vio/scale.PNG" srcset="/img/loading.gif" lazyload/>
 </div>
 
-<h3 id="Nonorthogonality-Misalignment-Errors"><a href="#Nonorthogonality-Misalignment-Errors" class="headerlink" title="Nonorthogonality/Misalignment Errors"></a>Nonorthogonality/Misalignment Errors</h3><p>在多轴IMU传感器制作的时候，由于制作工艺的问题的问题，会使得$xyz$轴可能不垂直，这个也叫<strong>轴间误差</strong>。</p>
+<h3 id="Nonorthogonality-x2F-Misalignment-Errors"><a href="#Nonorthogonality-x2F-Misalignment-Errors" class="headerlink" title="Nonorthogonality&#x2F;Misalignment Errors"></a>Nonorthogonality&#x2F;Misalignment Errors</h3><p>在多轴IMU传感器制作的时候，由于制作工艺的问题的问题，会使得$xyz$轴可能不垂直，这个也叫<strong>轴间误差</strong>。</p>
 <div style="text-align: center">
 <img src="/assets/img/vio/misalign.PNG" srcset="/img/loading.gif" lazyload/>
 </div>
 
 <p>轴间误差使得本来x轴的分量会对测量到的y轴与z轴的分量有影响。将其与scale误差相结合，会得到如下的测量与实际的对应关系。</p>
-<p>$$\left[\begin{array}{l}{a_{m x}} \\ {a_{m y}} \\ {a_{m z}}\end{array}\right]=\left[\begin{array}{lll}{s_{x x}} &amp; {m_{x y}} &amp; {m_{x z}} \\ {m_{y x}} &amp; {s_{y y}} &amp; {m_{y z}} \\ {m_{z x}} &amp; {m_{z y}} &amp; {s_{z z}}\end{array}\right]\left[\begin{array}{l}{a_{x}} \\ {a_{y}} \\ {a_{z}}\end{array}\right]$$</p>
+<p>$$\left[\begin{array}{l}{a_{m x}} \ {a_{m y}} \ {a_{m z}}\end{array}\right]&#x3D;\left[\begin{array}{lll}{s_{x x}} &amp; {m_{x y}} &amp; {m_{x z}} \ {m_{y x}} &amp; {s_{y y}} &amp; {m_{y z}} \ {m_{z x}} &amp; {m_{z y}} &amp; {s_{z z}}\end{array}\right]\left[\begin{array}{l}{a_{x}} \ {a_{y}} \ {a_{z}}\end{array}\right]$$</p>
 <h3 id="其他确定性误差"><a href="#其他确定性误差" class="headerlink" title="其他确定性误差"></a>其他确定性误差</h3><p>bias与scale的误差是会受温度影响的，并且在运行中也许也会改变。</p>
 <h2 id="确定新误差的标定（六面法）"><a href="#确定新误差的标定（六面法）" class="headerlink" title="确定新误差的标定（六面法）"></a>确定新误差的标定（六面法）</h2><blockquote>
 <p>以加速度计为例，陀螺仪同理</p>
 </blockquote>
 <p>指将加速度计的3个轴分别朝上或者朝下水平放置一段时间（对于陀螺仪就是在三个旋转轴上正反旋转，不过需要高精度转台），采集六个面的数据完成标定。</p>
-<h3 id="3个轴都是正交时"><a href="#3个轴都是正交时" class="headerlink" title="3个轴都是正交时"></a>3个轴都是正交时</h3><p>$$ bias =  \frac{l_{f}^{up} + l_{f}^{down}}{2} $$</p>
-<p>$$ scale = \frac{l_{f}^{up} - l_{f}^{down}}{2*g} $$</p>
+<h3 id="3个轴都是正交时"><a href="#3个轴都是正交时" class="headerlink" title="3个轴都是正交时"></a>3个轴都是正交时</h3><p>$$ bias &#x3D;  \frac{l_{f}^{up} + l_{f}^{down}}{2} $$</p>
+<p>$$ scale &#x3D; \frac{l_{f}^{up} - l_{f}^{down}}{2*g} $$</p>
 <blockquote>
 <p>其中，$l$为加速度计某个轴的测量值，$g$为当地的重力加速度。</p>
 </blockquote>
 <h3 id="当具有轴间误差时"><a href="#当具有轴间误差时" class="headerlink" title="当具有轴间误差时"></a>当具有轴间误差时</h3><p>此时实际加速度和测量值之间的关系为：</p>
-<p>$$<br>\left[\begin{array}{l}{l_{a x}} \\ {l_{a y}} \\ {l_{a z}}\end{array}\right]=\left[\begin{array}{lll}{s_{x x}} &amp; {m_{x y}} &amp; {m_{x z}} \\ {m_{y x}} &amp; {s_{y y}} &amp; {m_{y z}} \\ {m_{z x}} &amp; {m_{z y}} &amp; {s_{z z}}\end{array}\right]\left[\begin{array}{l}{a_{x}} \\ {a_{y}} \\ {a_{z}}\end{array}\right]+\left[\begin{array}{l}{b_{a x}} \\ {b_{a y}} \\ {b_{a z}}\end{array}\right]<br>$$</p>
+<p>$$<br>\left[\begin{array}{l}{l_{a x}} \ {l_{a y}} \ {l_{a z}}\end{array}\right]&#x3D;\left[\begin{array}{lll}{s_{x x}} &amp; {m_{x y}} &amp; {m_{x z}} \ {m_{y x}} &amp; {s_{y y}} &amp; {m_{y z}} \ {m_{z x}} &amp; {m_{z y}} &amp; {s_{z z}}\end{array}\right]\left[\begin{array}{l}{a_{x}} \ {a_{y}} \ {a_{z}}\end{array}\right]+\left[\begin{array}{l}{b_{a x}} \ {b_{a y}} \ {b_{a z}}\end{array}\right]<br>$$</p>
 <p>水平静止放置6面的时候，加速度的理论值为：</p>
-<p>$$<br>a_{1}=\left[\begin{array}{l}{g} \\ {0} \\ {0}\end{array}\right], a_{2}=\left[\begin{array}{c}{-g} \\ {0} \\ {0}\end{array}\right], a_{3}=\left[\begin{array}{l}{0} \\ {g} \\ {0}\end{array}\right], a_{4}=\left[\begin{array}{c}{0} \\ {-g} \\ {0}\end{array}\right], a_{5}=\left[\begin{array}{l}{0} \\ {0} \\ {g}\end{array}\right], a_{6}=\left[\begin{array}{c}{0} \\ {0} \\ {-g}\end{array}\right]<br>$$</p>
+<p>$$<br>a_{1}&#x3D;\left[\begin{array}{l}{g} \ {0} \ {0}\end{array}\right], a_{2}&#x3D;\left[\begin{array}{c}{-g} \ {0} \ {0}\end{array}\right], a_{3}&#x3D;\left[\begin{array}{l}{0} \ {g} \ {0}\end{array}\right], a_{4}&#x3D;\left[\begin{array}{c}{0} \ {-g} \ {0}\end{array}\right], a_{5}&#x3D;\left[\begin{array}{l}{0} \ {0} \ {g}\end{array}\right], a_{6}&#x3D;\left[\begin{array}{c}{0} \ {0} \ {-g}\end{array}\right]<br>$$</p>
 <p>对应的测量值矩阵L:</p>
-<p>$$<br>\mathbf{L}=\left[\begin{array}{llllll}{\mathbf{l}<em>{1}} &amp; {\mathbf{l}</em>{2}} &amp; {\mathbf{l}<em>{3}} &amp; {\mathbf{l}</em>{4}} &amp; {\mathbf{l}<em>{5}} &amp; {\mathbf{l}</em>{6}}\end{array}\right]<br>$$</p>
+<p>$$<br>\mathbf{L}&#x3D;\left[\begin{array}{llllll}{\mathbf{l}<em>{1}} &amp; {\mathbf{l}</em>{2}} &amp; {\mathbf{l}<em>{3}} &amp; {\mathbf{l}</em>{4}} &amp; {\mathbf{l}<em>{5}} &amp; {\mathbf{l}</em>{6}}\end{array}\right]<br>$$</p>
 <p>利用最小二乘就能够把12个变量求出来。</p>
 <h2 id="随机误差"><a href="#随机误差" class="headerlink" title="随机误差"></a>随机误差</h2><p>随机误差主要有两部分，一个是高斯白噪声，一个是bias随机游走。</p>
 <h3 id="高斯白噪声"><a href="#高斯白噪声" class="headerlink" title="高斯白噪声"></a>高斯白噪声</h3><p>IMU数据连续时间上受到一个均值为0，方差为$\sigma$，各时刻之间相互独立的高斯过程$n(t)$:</p>
-<p>$$<br>\begin{array}{l}{E[n(t)] \equiv 0} \\ {E\left[n\left(t_{1}\right) n\left(t_{2}\right)\right]=\sigma^{2} \delta\left(t_{1}-t_{2}\right)}\end{array}<br>$$</p>
+<p>$$<br>\begin{array}{l}{E[n(t)] \equiv 0} \ {E\left[n\left(t_{1}\right) n\left(t_{2}\right)\right]&#x3D;\sigma^{2} \delta\left(t_{1}-t_{2}\right)}\end{array}<br>$$</p>
 <p>其中$\delta()$表示狄拉克函数。</p>
 <p>不过需要说明的是，实际上，IMU传感器获取的数据为离散采样，离散和连续高斯白噪声的方差之间存在如下转换关系：</p>
-<p>$$<br>\begin{aligned} n_{d}[k] &amp; \triangleq n\left(t_{0}+\Delta t\right) \simeq \frac{1}{\Delta t} \int_{t_{0}}^{t_{0}+\Delta t} n(\tau) d t \\ E\left(n_{d}[k]^{2}\right) &amp;=E\left(\frac{1}{\Delta t^{2}} \int_{t_{0}}^{t_{0}+\Delta t} \int_{t_{0}}^{t_{0}+\Delta t} n(\tau) n(t) d \tau d t\right) \\ &amp;=E\left(\frac{\sigma^{2}}{\Delta t^{2}} \int_{t_{0}}^{t_{0}+\Delta t} \int_{t_{0}}^{t_{0}+\Delta t} \delta(t-\tau) d \tau d t\right) \\ &amp;=E\left(\frac{\sigma^{2}}{\Delta t}\right) \end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned} n_{d}[k] &amp; \triangleq n\left(t_{0}+\Delta t\right) \simeq \frac{1}{\Delta t} \int_{t_{0}}^{t_{0}+\Delta t} n(\tau) d t \ E\left(n_{d}[k]^{2}\right) &amp;&#x3D;E\left(\frac{1}{\Delta t^{2}} \int_{t_{0}}^{t_{0}+\Delta t} \int_{t_{0}}^{t_{0}+\Delta t} n(\tau) n(t) d \tau d t\right) \ &amp;&#x3D;E\left(\frac{\sigma^{2}}{\Delta t^{2}} \int_{t_{0}}^{t_{0}+\Delta t} \int_{t_{0}}^{t_{0}+\Delta t} \delta(t-\tau) d \tau d t\right) \ &amp;&#x3D;E\left(\frac{\sigma^{2}}{\Delta t}\right) \end{aligned}<br>$$</p>
 <blockquote>
 <p>即离散的序列的方差是连续的方差除以$\Delta t$（传感器的采样时间），也就是乘以采样频率f。(下面$\sigma$是标准差，一般参数文件里写的也是标准差)</p>
 </blockquote>
-<p>$$<br>\sigma_{d} = \sigma \frac{1}{\sqrt{\Delta t}}<br>$$</p>
+<p>$$<br>\sigma_{d} &#x3D; \sigma \frac{1}{\sqrt{\Delta t}}<br>$$</p>
 <h3 id="bias-1"><a href="#bias-1" class="headerlink" title="bias"></a>bias</h3><h3 id="随机游走"><a href="#随机游走" class="headerlink" title="随机游走"></a>随机游走</h3><p>通常使用维纳过程来建模bias随时间连续变化的过程，离散时间下称之为随机游走。</p>
-<p>$$<br>\dot{b}(t)=n(t)=\sigma_{b} w(t)<br>$$</p>
+<p>$$<br>\dot{b}(t)&#x3D;n(t)&#x3D;\sigma_{b} w(t)<br>$$</p>
 <p>bias的变化的导数是其中$w$是方差为1的白噪声。</p>
 <p>同样，离散和连续之间的转换为：</p>
-<p>$$<br>\begin{aligned} b_{d}[k] \triangleq &amp; b\left(t_{0}\right)+\int_{t_{0}}^{t_{0}+\Delta t} n(t) d t \\ E\left(\left(b_{d}[k]-b_{d}[k-1]\right)^{2}\right) &amp;=E\left(\int_{t_{0}+\Delta t}^{t_{0}+\Delta t} \int_{t_{0}}^{t_{0}+\Delta t} n(t) n(\tau) d \tau d t\right) \\ &amp;=E\left(\sigma_{b}^{2} \int_{t_{0}}^{t_{0}+\Delta t} \int_{t_{0}}^{t_{0}+\Delta t} \delta(t-\tau) d \tau d t\right) \\ &amp;=E\left(\sigma_{b}^{2} \Delta t\right) \end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned} b_{d}[k] \triangleq &amp; b\left(t_{0}\right)+\int_{t_{0}}^{t_{0}+\Delta t} n(t) d t \ E\left(\left(b_{d}[k]-b_{d}[k-1]\right)^{2}\right) &amp;&#x3D;E\left(\int_{t_{0}+\Delta t}^{t_{0}+\Delta t} \int_{t_{0}}^{t_{0}+\Delta t} n(t) n(\tau) d \tau d t\right) \ &amp;&#x3D;E\left(\sigma_{b}^{2} \int_{t_{0}}^{t_{0}+\Delta t} \int_{t_{0}}^{t_{0}+\Delta t} \delta(t-\tau) d \tau d t\right) \ &amp;&#x3D;E\left(\sigma_{b}^{2} \Delta t\right) \end{aligned}<br>$$</p>
 <blockquote>
 <p>bias随机游走离散序列的噪声方差是连续的方差乘以$\Delta t$倍（传感器的采样时间），也就是除以采样频率f。</p>
 </blockquote>
-<p>$$<br>\sigma_{bd}=\sigma_{b}\sqrt{\Delta t}<br>$$</p>
+<p>$$<br>\sigma_{bd}&#x3D;\sigma_{b}\sqrt{\Delta t}<br>$$</p>
 <h2 id="随机误差的标定（艾伦方差标定）"><a href="#随机误差的标定（艾伦方差标定）" class="headerlink" title="随机误差的标定（艾伦方差标定）"></a>随机误差的标定（艾伦方差标定）</h2><p>Allan方差法是20世纪60年代由美国国家标准局的David Allan提出的，它是一种基于时域的分析方法。具体流程如下：</p>
 <ol>
 <li><p>保持传感器绝对静止获取数据</p>
@@ -438,9 +445,7 @@
 <li><p>忽略其他噪声的影响，Allan方差可以近似为各种噪声的和，化简为：</p>
 <div style="text-align: center">
 <img src="/img/vio/allan3.png" srcset="/img/loading.gif" lazyload  width="600" height="70"/>
-</div>
-
-</li>
+</div></li>
 </ul>
 <blockquote>
 <p>其中，Q:量化噪声误差系数；N：角速度随机游走误差系数；B：零偏不稳定性误差系数；K：速率随机游走误差系数；R：速率斜坡误差系数</p>
@@ -456,7 +461,7 @@
 </div>
 
 <blockquote>
-<p>其中t=1，斜率为-0.5处纵坐标的值为<strong>高斯白噪声方差</strong>，斜率为0.5，t=3处的纵坐标的值为<strong>随机游走方差</strong>。</p>
+<p>其中t&#x3D;1，斜率为-0.5处纵坐标的值为<strong>高斯白噪声方差</strong>，斜率为0.5，t&#x3D;3处的纵坐标的值为<strong>随机游走方差</strong>。</p>
 </blockquote>
 <p>下面给出两个github上的比较好用的标定工具。</p>
 <ol>
@@ -468,15 +473,15 @@
 <h2 id="加上误差模型后的理论测量值"><a href="#加上误差模型后的理论测量值" class="headerlink" title="加上误差模型后的理论测量值"></a>加上误差模型后的理论测量值</h2><ul>
 <li>加速度计</li>
 </ul>
-<p>$$<br>\mathbf{a}<em>{m}^{B}=\mathbf{S}</em>{a} \mathbf{R}<em>{B G}\left(\mathbf{a}^{G}-\mathbf{g}^{G}\right)+\mathbf{n}</em>{a}+\mathbf{b}_{a}<br>$$</p>
+<p>$$<br>\mathbf{a}<em>{m}^{B}&#x3D;\mathbf{S}</em>{a} \mathbf{R}<em>{B G}\left(\mathbf{a}^{G}-\mathbf{g}^{G}\right)+\mathbf{n}</em>{a}+\mathbf{b}_{a}<br>$$</p>
 <ul>
 <li>陀螺仪</li>
 </ul>
-<p>$$<br>\boldsymbol{\omega}<em>{m}^{B}=\mathbf{S}</em>{g} \boldsymbol{\omega}^{B}+\mathbf{n}<em>{g}+\mathbf{b}</em>{g}<br>$$</p>
+<p>$$<br>\boldsymbol{\omega}<em>{m}^{B}&#x3D;\mathbf{S}</em>{g} \boldsymbol{\omega}^{B}+\mathbf{n}<em>{g}+\mathbf{b}</em>{g}<br>$$</p>
 <ul>
 <li>低端传感器，可能会出现加速度影响陀螺仪的值的情况，也就是下面的第二项：</li>
 </ul>
-<p>$$<br>\boldsymbol{\omega}<em>{m}^{B}=\mathbf{S}</em>{g} \boldsymbol{\omega}^{B}+\mathbf{s}<em>{g a} \mathbf{a}^{B}+\mathbf{n}</em>{g}+\mathbf{b}_{g}<br>$$</p>
+<p>$$<br>\boldsymbol{\omega}<em>{m}^{B}&#x3D;\mathbf{S}</em>{g} \boldsymbol{\omega}^{B}+\mathbf{s}<em>{g a} \mathbf{a}^{B}+\mathbf{n}</em>{g}+\mathbf{b}_{g}<br>$$</p>
 <h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
 <li>[1] 深蓝学院vio课程</li>
 <li>[2] <a target="_blank" rel="noopener" href="https://blog.csdn.net/Diannie/article/details/88062687">https://blog.csdn.net/Diannie/article/details/88062687</a></li>
@@ -576,6 +581,28 @@
   
     <article id="comments" lazyload>
       
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
 
     </article>
   
@@ -679,7 +706,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -873,6 +900,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 

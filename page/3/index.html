@@ -56,6 +56,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -73,7 +77,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -274,7 +282,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2019/08/23/2019-08-23-vins-gyro-bias/" target="_self">
         <div>
-          vins是一个很好的开源工作，最近一直在熟悉它，其中大部分的内容之前已经或多多少提到过了，这篇博客主要讲一讲vins初始化中的视觉与imu联合初始化工作。  注意：$$T_{WI}$$指的是从I系到W系的变换矩阵。  陀螺仪偏置标定问题 这个工作主要是在vins/vins_estimator/src/initial/initial_aligment.cpp文件中的solveGyroscopeBia
+          vins是一个很好的开源工作，最近一直在熟悉它，其中大部分的内容之前已经或多多少提到过了，这篇博客主要讲一讲vins初始化中的视觉与imu联合初始化工作。  注意：$T_{WI}$指的是从I系到W系的变换矩阵。  陀螺仪偏置标定问题 这个工作主要是在vins/vins_estimator/src/initial/initial_aligment.cpp文件中的solveGyroscopeBias函
         </div>
       </a>
 
@@ -394,7 +402,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2019/07/27/2019-07-27-schur-complement-marginalization/" target="_self">
         <div>
-          在slam中经常会使用滑动窗口法来控制非线性优化的计算量级，此时当从现有的窗口中去除旧的变量时，如何调整信息矩阵就成为了一个棘手的问题。这篇博客就是要介绍如何使用舒尔补来简单的完成这个任务。 舒尔补给定任意的矩阵块M，如下所示： $$\mathbf{M}=\left[\begin{array}{ll}{\mathbf{A}} &amp; {\mathbf{B}} \\ {\mathbf{C}} &
+          在slam中经常会使用滑动窗口法来控制非线性优化的计算量级，此时当从现有的窗口中去除旧的变量时，如何调整信息矩阵就成为了一个棘手的问题。这篇博客就是要介绍如何使用舒尔补来简单的完成这个任务。 舒尔补给定任意的矩阵块M，如下所示： $$\mathbf{M}&#x3D;\left[\begin{array}{ll}{\mathbf{A}} &amp; {\mathbf{B}} \ {\mathbf{C
         </div>
       </a>
 
@@ -434,7 +442,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2019/07/25/2019-07-25-covariance-information-matrix/" target="_self">
         <div>
-          零均值的多元高斯分布有如下概率形式： $$p(\mathbf{x}) - \frac{1}{Z} \exp \left(-\frac{1}{2} \mathbf{x}^{\top} \mathbf{\Sigma}^{-1} \mathbf{x}\right)$$ 其中$\mathbf{\Sigma}$是协方差矩阵，协方差矩阵的逆可以记作$\mathbf{\Lambda}=\mathbf{\Sigm
+          零均值的多元高斯分布有如下概率形式： $$p(\mathbf{x}) - \frac{1}{Z} \exp \left(-\frac{1}{2} \mathbf{x}^{\top} \mathbf{\Sigma}^{-1} \mathbf{x}\right)$$ 其中$\mathbf{\Sigma}$是协方差矩阵，协方差矩阵的逆可以记作$\mathbf{\Lambda}&#x3D;\mathbf{
         </div>
       </a>
 
@@ -474,7 +482,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2019/07/11/2019-07-11-imu-calibration/" target="_self">
         <div>
-          IMU数学模型加速度计首先，对于世界坐标系，一般我们会使用最常见的东北天(ENU)坐标系G（无关远点位置，只与姿态有关）。    在这个坐标系中，重力加速度为  $$g^G = (0,0,-9.81)^T$$。 此时，假设IMU坐标系就是ENU坐标系，则$R_{IB}=I$，静止时有（其中$a_{m}$是测量值）： $$a = 0$$ $$a_{m} = -g$$ 所以，不静止时：（此处对a和g符
+          IMU数学模型加速度计首先，对于世界坐标系，一般我们会使用最常见的东北天(ENU)坐标系G（无关远点位置，只与姿态有关）。    在这个坐标系中，重力加速度为  $$g^G &#x3D; (0,0,-9.81)^T$$。 此时，假设IMU坐标系就是ENU坐标系，则$R_{IB}&#x3D;I$，静止时有（其中$a_{m}$是测量值）： $$a &#x3D; 0$$ $$a_{m} &#x3D; -
         </div>
       </a>
 
@@ -674,7 +682,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -732,6 +740,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 

@@ -72,6 +72,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -89,7 +93,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -343,20 +351,23 @@
 <p>  这部分记录了分区表本身的位置与大小，同时记录了备份用的GPT分区放置的位置。同时还有一个用来检测GPT分区表是否正常的校验码，如果检测结果是不正常，便可以获取前面记录的备份用的GPT分区信息使得可以获得正确的分区信息。</p>
 </li>
 <li><p>LBA2~LBA33(实际记录分区信息的地方)</p>
-<p>  这32个区块，每个记录了四组分区信息(512字节)，所以默认一共可以记录128组分区信息，每组分区信息使用128字节存储。这128字节的空间中有除去记录标识符之类的信息外，使用64位来记录分区开始/结束的扇区号码。所以可以寻址的空间是<code>2^64 * 512字节</code>也就是 $ 2^33 $TB的空间。</p>
+<p>  这32个区块，每个记录了四组分区信息(512字节)，所以默认一共可以记录128组分区信息，每组分区信息使用128字节存储。这128字节的空间中有除去记录标识符之类的信息外，使用64位来记录分区开始&#x2F;结束的扇区号码。所以可以寻址的空间是<code>2^64 * 512字节</code>也就是 $ 2^33 $TB的空间。</p>
 </li>
 </ul>
 <h1 id="linux界面分区软件gparted"><a href="#linux界面分区软件gparted" class="headerlink" title="linux界面分区软件gparted"></a>linux界面分区软件gparted</h1><p>启动软件</p>
-<pre><code class="hljs">sudo gparted</code></pre><p>如果没有安装，需要先安装</p>
-<pre><code class="hljs">sudo apt install gparted</code></pre><p>运行后如下界面</p>
+<pre><code class="hljs">sudo gparted
+</code></pre>
+<p>如果没有安装，需要先安装</p>
+<pre><code class="hljs">sudo apt install gparted
+</code></pre>
+<p>运行后如下界面</p>
 <p><img src="/img/mbr_gpt/gparted.png" srcset="/img/loading.gif" lazyload alt="gparted"></p>
 <p>这是我虚拟机的分区情况，首先有一个主分区<code>/dev/sda1</code>，挂载在<code>/</code>目录下，与一个扩展分区<code>/dev/sda2</code>，扩展分区只分了一个逻辑分区<code>/dev/sda5</code>作为内存的交换分区。</p>
 <blockquote>
 <p>一般这种图形界面的分区软件都是分区与文件系统初始化同时进行的。十分周到到位，下面讲的命令行分区命令一般都是仅仅进行分区操作（即只对分区表进行填写），文件系统初始化需要专用的命令进行。</p>
 </blockquote>
 <h1 id="分区命令行"><a href="#分区命令行" class="headerlink" title="分区命令行"></a>分区命令行</h1><ul>
-<li><code>lsblk</code>列出计算机硬盘与分区情况 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">xhy@ubuntu:~$ lsblk<br>NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT<br>sr0     11:0    1 1024M  0 rom <br>sda      8:0    0   50G  0 disk <br>├─sda2   8:2    0    1K  0 part <br>├─sda5   8:5    0    2G  0 part <br>└─sda1   8:1    0   48G  0 part /<br></code></pre></td></tr></table></figure>
-</li>
+<li><code>lsblk</code>列出计算机硬盘与分区情况 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">xhy@ubuntu:~$ lsblk<br>NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT<br>sr0     11:0    1 1024M  0 rom <br>sda      8:0    0   50G  0 disk <br>├─sda2   8:2    0    1K  0 part <br>├─sda5   8:5    0    2G  0 part <br>└─sda1   8:1    0   48G  0 part /<br></code></pre></td></tr></table></figure></li>
 </ul>
 <hr>
 <ul>
@@ -371,13 +382,11 @@
 <li><p>使用上述分区方法得到一个<code>/dev/sda5</code>的分区</p>
 </li>
 <li><p>交换分区一般并没有挂载，可以在觉得内存不足时再进行挂载。如下使用<code>free</code>命令查看内存是否挂载</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">xhy@ubuntu:~$ free<br>              total        used        free      shared  buff/cache   available<br>Mem:        2017308      894012      362524       24756      760772      892696<br>Swap:             0           0           0<br></code></pre></td></tr></table></figure>
-</li>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">xhy@ubuntu:~$ free<br>              total        used        free      shared  buff/cache   available<br>Mem:        2017308      894012      362524       24756      760772      892696<br>Swap:             0           0           0<br></code></pre></td></tr></table></figure></li>
 </ul>
 <hr>
 <ul>
-<li>如上，显示交换分区并没有挂载，可以使用<code>swapon</code>命令进行挂载<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">xhy@ubuntu:~$ sudo swapon /dev/sda5 <br>[sudo] xhy 的密码： <br>xhy@ubuntu:~$ free<br>              total        used        free      shared  buff/cache   available<br>Mem:        2017308      894712      360908       24756      761688      892008<br>Swap:       2046972           0     2046972<br></code></pre></td></tr></table></figure>
-</li>
+<li>如上，显示交换分区并没有挂载，可以使用<code>swapon</code>命令进行挂载<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">xhy@ubuntu:~$ sudo swapon /dev/sda5 <br>[sudo] xhy 的密码： <br>xhy@ubuntu:~$ free<br>              total        used        free      shared  buff/cache   available<br>Mem:        2017308      894712      360908       24756      761688      892008<br>Swap:       2046972           0     2046972<br></code></pre></td></tr></table></figure></li>
 </ul>
 <hr>
 <p>如上，挂载成功。</p>
@@ -387,8 +396,7 @@
 <li><p>然后先使用<code>swapoff /dev/sda5</code>即可将前面的挂载的交换分区卸载。然后<code>swapon -a</code>执行一下，不用重启即可自动挂载。</p>
 </li>
 <li><p>最后使用<code>swapon -s</code>查看交换分区挂载情况</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">xhy@ubuntu:~$ swapon -s<br>Filename                Type        Size    Used    Priority<br>/dev/sda5                               partition   2046972 0   -2<br></code></pre></td></tr></table></figure>
-</li>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">xhy@ubuntu:~$ swapon -s<br>Filename                Type        Size    Used    Priority<br>/dev/sda5                               partition   2046972 0   -2<br></code></pre></td></tr></table></figure></li>
 </ul>
 <hr>
 <h2 id="第二种方法：文件挂载"><a href="#第二种方法：文件挂载" class="headerlink" title="第二种方法：文件挂载"></a>第二种方法：文件挂载</h2><ul>
@@ -500,6 +508,28 @@
   
     <article id="comments" lazyload>
       
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
 
     </article>
   
@@ -603,7 +633,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -797,6 +827,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 

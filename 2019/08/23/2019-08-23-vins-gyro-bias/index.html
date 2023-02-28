@@ -16,15 +16,15 @@
   <meta name="author" content="Line">
   <meta name="keywords" content="">
   
-    <meta name="description" content="vins是一个很好的开源工作，最近一直在熟悉它，其中大部分的内容之前已经或多多少提到过了，这篇博客主要讲一讲vins初始化中的视觉与imu联合初始化工作。  注意：$$T_{WI}$$指的是从I系到W系的变换矩阵。  陀螺仪偏置标定问题 这个工作主要是在vins&#x2F;vins_estimator&#x2F;src&#x2F;initial&#x2F;initial_aligment.cpp文件中的solveGyroscopeBia">
+    <meta name="description" content="vins是一个很好的开源工作，最近一直在熟悉它，其中大部分的内容之前已经或多多少提到过了，这篇博客主要讲一讲vins初始化中的视觉与imu联合初始化工作。  注意：$T_{WI}$指的是从I系到W系的变换矩阵。  陀螺仪偏置标定问题 这个工作主要是在vins&#x2F;vins_estimator&#x2F;src&#x2F;initial&#x2F;initial_aligment.cpp文件中的solveGyroscopeBias函">
 <meta property="og:type" content="article">
 <meta property="og:title" content="vins初始化中的陀螺仪偏置标定">
 <meta property="og:url" content="http://line.com/2019/08/23/2019-08-23-vins-gyro-bias/index.html">
 <meta property="og:site_name" content="Line&#39;s Blog">
-<meta property="og:description" content="vins是一个很好的开源工作，最近一直在熟悉它，其中大部分的内容之前已经或多多少提到过了，这篇博客主要讲一讲vins初始化中的视觉与imu联合初始化工作。  注意：$$T_{WI}$$指的是从I系到W系的变换矩阵。  陀螺仪偏置标定问题 这个工作主要是在vins&#x2F;vins_estimator&#x2F;src&#x2F;initial&#x2F;initial_aligment.cpp文件中的solveGyroscopeBia">
+<meta property="og:description" content="vins是一个很好的开源工作，最近一直在熟悉它，其中大部分的内容之前已经或多多少提到过了，这篇博客主要讲一讲vins初始化中的视觉与imu联合初始化工作。  注意：$T_{WI}$指的是从I系到W系的变换矩阵。  陀螺仪偏置标定问题 这个工作主要是在vins&#x2F;vins_estimator&#x2F;src&#x2F;initial&#x2F;initial_aligment.cpp文件中的solveGyroscopeBias函">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2019-08-22T17:07:24.000Z">
-<meta property="article:modified_time" content="2023-01-08T16:21:28.853Z">
+<meta property="article:modified_time" content="2023-02-28T05:57:58.517Z">
 <meta property="article:author" content="Line">
 <meta property="article:tag" content="多传感器融合">
 <meta name="twitter:card" content="summary_large_image">
@@ -65,6 +65,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -82,7 +86,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -276,33 +284,33 @@
                 
                 <p>vins是一个很好的开源工作，最近一直在熟悉它，其中大部分的内容之前已经或多多少提到过了，这篇博客主要讲一讲vins初始化中的视觉与imu联合初始化工作。</p>
 <blockquote>
-<p>注意：$$T_{WI}$$指的是从I系到W系的变换矩阵。</p>
+<p>注意：$T_{WI}$指的是从I系到W系的变换矩阵。</p>
 </blockquote>
 <h1 id="陀螺仪偏置标定问题"><a href="#陀螺仪偏置标定问题" class="headerlink" title="陀螺仪偏置标定问题"></a>陀螺仪偏置标定问题</h1><blockquote>
 <p>这个工作主要是在<code>vins/vins_estimator/src/initial/initial_aligment.cpp</code>文件中的<code>solveGyroscopeBias</code>函数中实现的。此处之所以只对陀螺仪的bias进行标定，而不对加速度计的bias进行标定，原因是视觉sfm恢复出来的角度变换不受尺度影响，比较稳定准确。而sfm恢复出来的位移信息收到尺度影响，不似角度可以直接对齐。</p>
 </blockquote>
-<p>对于窗口中连续两帧图像$b_{k}$和$b_{k+1}$，之前已经通过视觉sfm得到了两帧相对于滑窗第一帧的旋转$$\mathbf{q}<em>{c</em>{0} b_{k}}$$和$$\mathbf{q}<em>{c</em>{0} b_{k+1}}$$，此时之前通过IMU预积分得到这两帧旋转的预积分$$\hat{\gamma}<em>{b_k b</em>{k+1}}$$（先前不带bias的预积分）。</p>
+<p>对于窗口中连续两帧图像$b_{k}$和$b_{k+1}$，之前已经通过视觉sfm得到了两帧相对于滑窗第一帧的旋转$\mathbf{q}<em>{c</em>{0} b_{k}}$和$\mathbf{q}<em>{c</em>{0} b_{k+1}}$，此时之前通过IMU预积分得到这两帧旋转的预积分$\hat{\gamma}<em>{b_k b</em>{k+1}}$（先前不带bias的预积分）。</p>
 <p>此时，我们可以建立约束方程，最小化代价函数，如下：</p>
 <p>$$<br>\arg \min <em>{\delta \mathbf{b}^{g}} \sum</em>{k \in B}\left|2\left\lfloor\mathbf{q}<em>{c</em>{0} b_{k+1}}^{-1} \otimes \mathbf{q}<em>{c</em>{0} b_{k}} \otimes {\gamma}<em>{b_k b</em>{k+1}}\right\rfloor_{x y z}\right|^{2}<br>$$</p>
 <blockquote>
-<p>其中$${\gamma}<em>{b_k b</em>{k+1}}$$表示的是算上陀螺仪bias的预积分值。</p>
+<p>其中${\gamma}<em>{b_k b</em>{k+1}}$表示的是算上陀螺仪bias的预积分值。</p>
 </blockquote>
 <p>$$<br>\gamma_{b_k b_{k+1}} \approx \hat{\gamma}<em>{b_k b</em>{k+1}} \otimes\left[\begin{array}{c}{1} \ {\frac{1}{2} J_{b_{g}}^{\gamma} \delta b_{g}}\end{array}\right]<br>$$</p>
 <h2 id="具体方法"><a href="#具体方法" class="headerlink" title="具体方法"></a>具体方法</h2><p>在上述问题的求解时，最理想的情况如下（其中等式右边的四元数代表的是旋转不变的四元数）：</p>
 <p>$$<br>\mathbf{q}<em>{c</em>{0} b_{k+1}}^{-1} \otimes \mathbf{q}<em>{c</em>{0} b_{k}} \otimes {\gamma}<em>{b_k b</em>{k+1}} &#x3D; \left[\begin{array}{l}{1} \ {0}\end{array}\right]<br>$$</p>
 <p>对上式进行变换可以得到</p>
 <p>$$<br>{\gamma}<em>{b_k b</em>{k+1}} &#x3D; \mathbf{q}<em>{c</em>{0} b_{k}}^{-1} \otimes \mathbf{q}<em>{c</em>{0} b_{k+1}} \otimes \left[\begin{array}{l}{1} \ {0}\end{array}\right]<br>$$</p>
-<p>将$$\delta b_{g}$$带入上式可以得到</p>
+<p>将$\delta b_{g}$带入上式可以得到</p>
 <p>$$<br>\hat{\gamma}<em>{b_k b</em>{k+1}} \otimes\left[\begin{array}{c}{1} \ {\frac{1}{2} J_{b_{g}}^{\gamma} \delta b_{g}}\end{array}\right] &#x3D; \mathbf{q}<em>{c</em>{0} b_{k}}^{-1} \otimes \mathbf{q}<em>{c</em>{0} b_{k+1}} \otimes \left[\begin{array}{l}{1} \ {0}\end{array}\right]<br>$$</p>
 <p>只考虑上式虚部，我们可以得到(其中$vec$代表取虚部)</p>
 <p>$$<br>J_{b_{g}}^{\gamma} \delta b_{g}&#x3D;2\left({\hat{\gamma}<em>{b_k b</em>{k+1}}}^{-1} \otimes \mathbf{q}<em>{c</em>{0} b_{k}}^{-1} \otimes \mathbf{q}<em>{c</em>{0} b_{k+1}}\right)_{v e c}<br>$$</p>
-<p>对于上式，我们想要做的是求解出$$\delta b_{g}$$的大小，此时我们可以使用如下办法：</p>
+<p>对于上式，我们想要做的是求解出$\delta b_{g}$的大小，此时我们可以使用如下办法：</p>
 <ul>
-<li>等式两侧同时乘以$$J_{b_{g}}^{\gamma T}$$（在使用cholesky分解求解矩阵，获取使目标函数达到最小的解时，需要将系数矩阵变为正定。），即得到</li>
+<li>等式两侧同时乘以$J_{b_{g}}^{\gamma T}$（在使用cholesky分解求解矩阵，获取使目标函数达到最小的解时，需要将系数矩阵变为正定。），即得到</li>
 </ul>
 <p>$$<br>J_{b_{g}}^{\gamma T} J_{b_{g}}^{\gamma} \delta b_{g}&#x3D;2 J_{b_{g}}^{\gamma T} \left({\hat{\gamma}<em>{b_k b</em>{k+1}}}^{-1} \otimes \mathbf{q}<em>{c</em>{0} b_{k}}^{-1} \otimes \mathbf{q}<em>{c</em>{0} b_{k+1}}\right)_{v e c}<br>$$</p>
 <ul>
-<li>使用LDLT分解即可求得 $$\delta b_{g}$$</li>
+<li>使用LDLT分解即可求得 $\delta b_{g}$</li>
 </ul>
 <h2 id="vins中代码实现"><a href="#vins中代码实现" class="headerlink" title="vins中代码实现"></a>vins中代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * @brief   陀螺仪偏置校正</span><br><span class="hljs-comment"> * @optional    根据视觉SFM的结果来校正陀螺仪Bias -&gt; Paper V-B-1</span><br><span class="hljs-comment"> *              主要是将相邻帧之间SFM求解出来的旋转矩阵与IMU预积分的旋转量对齐</span><br><span class="hljs-comment"> *              注意得到了新的Bias后对应的预积分需要repropagate</span><br><span class="hljs-comment"> * @param[in]   all_image_frame所有图像帧构成的map,图像帧保存了位姿、预积分量和关于角点的信息</span><br><span class="hljs-comment"> * @param[out]  Bgs 陀螺仪偏置</span><br><span class="hljs-comment"> * @return      void</span><br><span class="hljs-comment">*/</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">solveGyroscopeBias</span><span class="hljs-params">(map&lt;<span class="hljs-type">double</span>, ImageFrame&gt; &amp;all_image_frame, Vector3d* Bgs)</span></span><br><span class="hljs-function"></span>&#123;<br>    Matrix3d A;<br>    Vector3d b;<br>    Vector3d delta_bg;<br>    A.<span class="hljs-built_in">setZero</span>();<br>    b.<span class="hljs-built_in">setZero</span>();<br>    map&lt;<span class="hljs-type">double</span>, ImageFrame&gt;::iterator frame_i;<br>    map&lt;<span class="hljs-type">double</span>, ImageFrame&gt;::iterator frame_j;<br>    <span class="hljs-comment">//遍历所有图像帧</span><br>    <span class="hljs-keyword">for</span> (frame_i = all_image_frame.<span class="hljs-built_in">begin</span>(); <span class="hljs-built_in">next</span>(frame_i) != all_image_frame.<span class="hljs-built_in">end</span>(); frame_i++)<br>    &#123;<br>        <span class="hljs-comment">//下一帧</span><br>        frame_j = <span class="hljs-built_in">next</span>(frame_i);<br>        <span class="hljs-function">MatrixXd <span class="hljs-title">tmp_A</span><span class="hljs-params">(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>)</span></span>;<br>        tmp_A.<span class="hljs-built_in">setZero</span>();<br>        <span class="hljs-function">VectorXd <span class="hljs-title">tmp_b</span><span class="hljs-params">(<span class="hljs-number">3</span>)</span></span>;<br>        tmp_b.<span class="hljs-built_in">setZero</span>();<br><br>        <span class="hljs-comment">//两帧之间的旋转变换 </span><br>        <span class="hljs-comment">//R_ij = (R^c0_bk)^-1 * (R^c0_bk+1) 转换为四元数 q_ij = (q^c0_bk)^-1 * (q^c0_bk+1)</span><br>        <span class="hljs-function">Eigen::Quaterniond <span class="hljs-title">q_ij</span><span class="hljs-params">(frame_i-&gt;second.R.transpose() * frame_j-&gt;second.R)</span></span>;<br>        <span class="hljs-comment">//tmp_A = J_j_bw 雅可比 ，之前的预积分是没有算上陀螺仪bias的</span><br>        tmp_A = frame_j-&gt;second.pre_integration-&gt;jacobian.<span class="hljs-keyword">template</span> <span class="hljs-built_in">block</span>&lt;<span class="hljs-number">3</span>, <span class="hljs-number">3</span>&gt;(O_R, O_BG);<br>        <span class="hljs-comment">//tmp_b = 2 * (r^bk_bk+1)^-1 * (q^c0_bk)^-1 * (q^c0_bk+1)</span><br>        <span class="hljs-comment">//      = 2 * (r^bk_bk+1)^-1 * q_ij</span><br>        tmp_b = <span class="hljs-number">2</span> * (frame_j-&gt;second.pre_integration-&gt;delta_q.<span class="hljs-built_in">inverse</span>() * q_ij).<span class="hljs-built_in">vec</span>();<br>        <span class="hljs-comment">//tmp_A * delta_bg = tmp_b</span><br>        A += tmp_A.<span class="hljs-built_in">transpose</span>() * tmp_A;<br>        b += tmp_A.<span class="hljs-built_in">transpose</span>() * tmp_b;<br><br>    &#125;<br>    <span class="hljs-comment">//LDLT方法</span><br>    delta_bg = A.<span class="hljs-built_in">ldlt</span>().<span class="hljs-built_in">solve</span>(b);<br>    <span class="hljs-built_in">ROS_WARN_STREAM</span>(<span class="hljs-string">&quot;gyroscope bias initial calibration &quot;</span> &lt;&lt; delta_bg.<span class="hljs-built_in">transpose</span>());<br><br>    <span class="hljs-comment">//假设窗口中bgs值都相同</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt;= WINDOW_SIZE; i++)<br>        Bgs[i] += delta_bg;<br><br>    <span class="hljs-comment">//标定成功bias后需要重新进行预积分</span><br>    <span class="hljs-keyword">for</span> (frame_i = all_image_frame.<span class="hljs-built_in">begin</span>(); <span class="hljs-built_in">next</span>(frame_i) != all_image_frame.<span class="hljs-built_in">end</span>( ); frame_i++)<br>    &#123;<br>        frame_j = <span class="hljs-built_in">next</span>(frame_i);<br>        frame_j-&gt;second.pre_integration-&gt;<span class="hljs-built_in">repropagate</span>(Vector3d::<span class="hljs-built_in">Zero</span>(), Bgs[<span class="hljs-number">0</span>]);<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
 <hr>
@@ -405,6 +413,28 @@
   
     <article id="comments" lazyload>
       
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
 
     </article>
   
@@ -508,7 +538,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -702,6 +732,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 

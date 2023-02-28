@@ -70,6 +70,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -87,7 +91,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -236,7 +244,7 @@
         
         
         
-          55 分钟
+          56 分钟
         
       </span>
     
@@ -301,8 +309,7 @@
 <p>通常工作空间是我们开发某个项目的地方，在这里我们会新开发出一些专用的包来共我们当前的这个项目或应用（node）使用。如下，每个工作空间可以就是一个文件夹，该文件夹中必须存在一个src文件夹，然后使用<code>catkin_make</code>即可对工作空间进行初始化，或者编译。</p>
 </blockquote>
 <ul>
-<li>创建一个名叫<code>catkin_ws</code>的工作空间<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> -p ~/catkin_ws/src<br><span class="hljs-built_in">cd</span> ~/catkin_ws<br>catkin_make<br><span class="hljs-built_in">source</span> /devel/setup.bash<br></code></pre></td></tr></table></figure>
-</li>
+<li>创建一个名叫<code>catkin_ws</code>的工作空间<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> -p ~/catkin_ws/src<br><span class="hljs-built_in">cd</span> ~/catkin_ws<br>catkin_make<br><span class="hljs-built_in">source</span> /devel/setup.bash<br></code></pre></td></tr></table></figure></li>
 </ul>
 <hr>
 <div style="text-align: center">
@@ -313,8 +320,7 @@
 <p><strong>功能包（package）</strong>是构成一个ROS项目的基本单元。ROS应用程序是以功能包为单位开发的。功能包包括至少一个以上的节点或拥有用于运行其他功能包的节点的配置文件。它还包含功能包所需的所有文件，如用于运行各种进程的ROS依赖库、数据集和配置文件等。</p>
 </blockquote>
 <ul>
-<li>在工作空间中创建包<code>new_package</code>，依赖于包<code>depend_p1</code>与<code>depend_p2</code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> ~/catkin_ws/src<br>catkin_create_pkg new_package depend_p1 depend_p2 <br></code></pre></td></tr></table></figure>
-</li>
+<li>在工作空间中创建包<code>new_package</code>，依赖于包<code>depend_p1</code>与<code>depend_p2</code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> ~/catkin_ws/src<br>catkin_create_pkg new_package depend_p1 depend_p2 <br></code></pre></td></tr></table></figure></li>
 </ul>
 <hr>
 <ul>
@@ -323,8 +329,7 @@
 <li><p>查看一个包的所有依赖（包括直接与间接）<code>rospack depends new_package</code></p>
 </li>
 <li><p>编译包，直接编译整个工作空间就可以了</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> ~/catkin_ws<br>catkin_make<br></code></pre></td></tr></table></figure>
-</li>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> ~/catkin_ws<br>catkin_make<br></code></pre></td></tr></table></figure></li>
 </ul>
 <hr>
 <blockquote>
@@ -354,34 +359,25 @@
 <p>当启动ROS时，主节点将获取用户设置的<code>ROS_MASTER_URI</code>变量中列出的URI地址和端口。除非另外设置，默认情况下，URI地址使用当前的本地IP，端口使用11311。</p>
 <h3 id="普通节点"><a href="#普通节点" class="headerlink" title="普通节点"></a>普通节点</h3><p>节点（node）是指在ROS中运行的最小处理器单元。可以把它看作一个可执行程序。在ROS中，建议为一个目的创建一个节点，建议设计时注重可重用性。例如，在移动机器人的情况下，为了驱动机器人，将每个程序细分化。也就是说，使用传感器驱动、传感器数据转换、障碍物判断、电机驱动、编码器输入和导航等多个细分节点。</p>
 <p>节点在运行的同时，向主节点注册节点的名称，并且还注册发布者（publisher）、订阅者（subscriber）、服务服务器（service server）、服务客户端（service client）的名称，且注册消息形式、URI地址和端口。基于这些信息，每个节点可以使用话题和服务与其他节点交换消息。</p>
-<p>节点使用XMLRPC与主站进行通信，并使用TCP/IP通信系列的XMLRPC或TCPROS进行节点之间的通信。节点之间的连接请求和响应使用XMLRPC，而消息通信使用TCPROS，因为它是节点和节点之间的直接通信，与主节点无关。URI地址和端口则使用存储于运行当前节点的计算机上的名为<code>ROS_HOSTNAME</code>的环境变量作为URI地址，并将端口设置为任意的固有值。</p>
+<p>节点使用XMLRPC与主站进行通信，并使用TCP&#x2F;IP通信系列的XMLRPC或TCPROS进行节点之间的通信。节点之间的连接请求和响应使用XMLRPC，而消息通信使用TCPROS，因为它是节点和节点之间的直接通信，与主节点无关。URI地址和端口则使用存储于运行当前节点的计算机上的名为<code>ROS_HOSTNAME</code>的环境变量作为URI地址，并将端口设置为任意的固有值。</p>
 <p>ros节点是整个机器人控制系统的一个功能单元，运行起来一个ros节点，即运行一个ros程序包中的一个可执行文件。例如<code>rosrun turtlesim turtle_teleop_key</code></p>
 <blockquote>
 <p>ros系统在启动之前，首先需要运行<code>rosore</code>，我们可以将node看做ros操作系统上的应用软件。</p>
 </blockquote>
 <h3 id="roslaunch"><a href="#roslaunch" class="headerlink" title="roslaunch"></a>roslaunch</h3><p>使用<code>rosrun</code>每次只能启动一个节点，我们可以使用<code>roslaunch</code>来启动定义在$launch$文件中的多个节点。</p>
 <p>用法：<code>roslaunch [package] [filename.launch]</code></p>
-<p>launch文件语法解析，运行如下launch文件会启动两个节点</p>
-<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs abnf">&lt;launch&gt;<br><br>  &lt;group ns<span class="hljs-operator">=</span><span class="hljs-string">&quot;turtlesim1&quot;</span>&gt;<br>    &lt;node pkg<span class="hljs-operator">=</span><span class="hljs-string">&quot;turtlesim&quot;</span> name<span class="hljs-operator">=</span><span class="hljs-string">&quot;sim&quot;</span> type<span class="hljs-operator">=</span><span class="hljs-string">&quot;turtlesim_node&quot;</span>/&gt;<br>  &lt;/group&gt;<br><br>  &lt;group ns<span class="hljs-operator">=</span><span class="hljs-string">&quot;turtlesim2&quot;</span>&gt;<br>    &lt;node pkg<span class="hljs-operator">=</span><span class="hljs-string">&quot;turtlesim&quot;</span> name<span class="hljs-operator">=</span><span class="hljs-string">&quot;sim&quot;</span> type<span class="hljs-operator">=</span><span class="hljs-string">&quot;turtlesim_node&quot;</span>/&gt;<br>  &lt;/group&gt;<br><br>  &lt;node pkg<span class="hljs-operator">=</span><span class="hljs-string">&quot;turtlesim&quot;</span> name<span class="hljs-operator">=</span><span class="hljs-string">&quot;mimic&quot;</span> type<span class="hljs-operator">=</span><span class="hljs-string">&quot;mimic&quot;</span>&gt;<br>    &lt;remap from<span class="hljs-operator">=</span><span class="hljs-string">&quot;input&quot;</span> to<span class="hljs-operator">=</span><span class="hljs-string">&quot;turtlesim1/turtle1&quot;</span>/&gt;<br>    &lt;remap from<span class="hljs-operator">=</span><span class="hljs-string">&quot;output&quot;</span> to<span class="hljs-operator">=</span><span class="hljs-string">&quot;turtlesim2/turtle1&quot;</span>/&gt;<br>  &lt;/node&gt;<br><br>&lt;/launch&gt;<br></code></pre></td></tr></table></figure>
-<hr>
-<h2 id="ros通信（计算图级网络形式）"><a href="#ros通信（计算图级网络形式）" class="headerlink" title="ros通信（计算图级网络形式）"></a>ros通信（计算图级网络形式）</h2><p>了解ros的通信主要需要了解以下四个概念：节点（node）、消息（messages）、话题（topic）、服务（service）、动作（action）</p>
-<h3 id="ros消息（msg）"><a href="#ros消息（msg）" class="headerlink" title="ros消息（msg）"></a>ros消息（msg）</h3><p>节点之间通过消息（message）来发送和接收数据。消息是诸如integer、floating point和boolean等类型的变量。用户还可以使用诸如消息里包括消息的简单数据结构或列举消息的消息数组的结构。使用消息的通信方法包括TCPROS，UDPROS等，根据情况使用<strong>单向消息</strong>发送/接收方式的话题（topic）和<strong>双向消息</strong>请求（request）/响应（response）方式的服务（service）。</p>
+<h2 id="launch文件语法解析，运行如下launch文件会启动两个节点"><a href="#launch文件语法解析，运行如下launch文件会启动两个节点" class="headerlink" title="launch文件语法解析，运行如下launch文件会启动两个节点"></a>launch文件语法解析，运行如下launch文件会启动两个节点<br><figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs abnf">&lt;launch&gt;<br><br>  &lt;group ns<span class="hljs-operator">=</span><span class="hljs-string">&quot;turtlesim1&quot;</span>&gt;<br>    &lt;node pkg<span class="hljs-operator">=</span><span class="hljs-string">&quot;turtlesim&quot;</span> name<span class="hljs-operator">=</span><span class="hljs-string">&quot;sim&quot;</span> type<span class="hljs-operator">=</span><span class="hljs-string">&quot;turtlesim_node&quot;</span>/&gt;<br>  &lt;/group&gt;<br><br>  &lt;group ns<span class="hljs-operator">=</span><span class="hljs-string">&quot;turtlesim2&quot;</span>&gt;<br>    &lt;node pkg<span class="hljs-operator">=</span><span class="hljs-string">&quot;turtlesim&quot;</span> name<span class="hljs-operator">=</span><span class="hljs-string">&quot;sim&quot;</span> type<span class="hljs-operator">=</span><span class="hljs-string">&quot;turtlesim_node&quot;</span>/&gt;<br>  &lt;/group&gt;<br><br>  &lt;node pkg<span class="hljs-operator">=</span><span class="hljs-string">&quot;turtlesim&quot;</span> name<span class="hljs-operator">=</span><span class="hljs-string">&quot;mimic&quot;</span> type<span class="hljs-operator">=</span><span class="hljs-string">&quot;mimic&quot;</span>&gt;<br>    &lt;remap from<span class="hljs-operator">=</span><span class="hljs-string">&quot;input&quot;</span> to<span class="hljs-operator">=</span><span class="hljs-string">&quot;turtlesim1/turtle1&quot;</span>/&gt;<br>    &lt;remap from<span class="hljs-operator">=</span><span class="hljs-string">&quot;output&quot;</span> to<span class="hljs-operator">=</span><span class="hljs-string">&quot;turtlesim2/turtle1&quot;</span>/&gt;<br>  &lt;/node&gt;<br><br>&lt;/launch&gt;<br></code></pre></td></tr></table></figure></h2><h2 id="ros通信（计算图级网络形式）"><a href="#ros通信（计算图级网络形式）" class="headerlink" title="ros通信（计算图级网络形式）"></a>ros通信（计算图级网络形式）</h2><p>了解ros的通信主要需要了解以下四个概念：节点（node）、消息（messages）、话题（topic）、服务（service）、动作（action）</p>
+<h3 id="ros消息（msg）"><a href="#ros消息（msg）" class="headerlink" title="ros消息（msg）"></a>ros消息（msg）</h3><p>节点之间通过消息（message）来发送和接收数据。消息是诸如integer、floating point和boolean等类型的变量。用户还可以使用诸如消息里包括消息的简单数据结构或列举消息的消息数组的结构。使用消息的通信方法包括TCPROS，UDPROS等，根据情况使用<strong>单向消息</strong>发送&#x2F;接收方式的话题（topic）和<strong>双向消息</strong>请求（request）&#x2F;响应（response）方式的服务（service）。</p>
 <p>$msg$文件就是一个描述$ROS$中所使用消息类型的简单文本。通常$msg$文件存放在$package$的$msg$目录下</p>
 <blockquote>
 <p>ros中在一个包里消息$msg$与服务$srv$的创建教程详细可以查看<a target="_blank" rel="noopener" href="http://wiki.ros.org/cn/ROS/Tutorials/CreatingMsgAndSrv">官网教程</a></p>
 </blockquote>
 <h3 id="ros话题（topic）"><a href="#ros话题（topic）" class="headerlink" title="ros话题（topic）"></a>ros话题（topic）</h3><p>ros话题是ros中不同节点之间的一种通信方式，一个节点在一个话题上发布消息，另一个节点订阅该话题以接收该消息。</p>
-<p>我们通常使用rostopic来进行话题的相关操作</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs routeros">rostopic -h<br>rostopic is a command-line<span class="hljs-built_in"> tool </span><span class="hljs-keyword">for</span> printing information about ROS Topics.<br><br>Commands:<br>    rostopic bw display bandwidth used by topic<br>    rostopic delay  display delay of topic <span class="hljs-keyword">from</span> timestamp <span class="hljs-keyword">in</span> header<br>    rostopic echo   <span class="hljs-built_in">print</span> messages <span class="hljs-keyword">to</span><span class="hljs-built_in"> screen</span><br><span class="hljs-built_in"></span>    rostopic <span class="hljs-built_in">find</span>   <span class="hljs-built_in">find</span> topics by<span class="hljs-built_in"> type</span><br><span class="hljs-built_in"></span>    rostopic hz display publishing rate of topic    <br>    rostopic <span class="hljs-built_in">info</span>   <span class="hljs-built_in">print</span> information about active topic<br>    rostopic list   list active topics<br>    rostopic pub    publish data <span class="hljs-keyword">to</span> topic<br>    rostopic<span class="hljs-built_in"> type </span>  <span class="hljs-built_in">print</span> topic <span class="hljs-keyword">or</span> field<span class="hljs-built_in"> type</span><br><span class="hljs-built_in"></span><span class="hljs-built_in"></span><br><span class="hljs-built_in">Type </span>rostopic &lt;command&gt; -h <span class="hljs-keyword">for</span> more detailed usage, e.g. <span class="hljs-string">&#x27;rostopic echo -h&#x27;</span><br><br></code></pre></td></tr></table></figure>
-<hr>
-<blockquote>
+<h2 id="我们通常使用rostopic来进行话题的相关操作"><a href="#我们通常使用rostopic来进行话题的相关操作" class="headerlink" title="我们通常使用rostopic来进行话题的相关操作"></a>我们通常使用rostopic来进行话题的相关操作<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs routeros">rostopic -h<br>rostopic is a command-line<span class="hljs-built_in"> tool </span><span class="hljs-keyword">for</span> printing information about ROS Topics.<br><br>Commands:<br>    rostopic bw display bandwidth used by topic<br>    rostopic delay  display delay of topic <span class="hljs-keyword">from</span> timestamp <span class="hljs-keyword">in</span> header<br>    rostopic echo   <span class="hljs-built_in">print</span> messages <span class="hljs-keyword">to</span><span class="hljs-built_in"> screen</span><br><span class="hljs-built_in"></span>    rostopic <span class="hljs-built_in">find</span>   <span class="hljs-built_in">find</span> topics by<span class="hljs-built_in"> type</span><br><span class="hljs-built_in"></span>    rostopic hz display publishing rate of topic    <br>    rostopic <span class="hljs-built_in">info</span>   <span class="hljs-built_in">print</span> information about active topic<br>    rostopic list   list active topics<br>    rostopic pub    publish data <span class="hljs-keyword">to</span> topic<br>    rostopic<span class="hljs-built_in"> type </span>  <span class="hljs-built_in">print</span> topic <span class="hljs-keyword">or</span> field<span class="hljs-built_in"> type</span><br><span class="hljs-built_in"></span><span class="hljs-built_in"></span><br><span class="hljs-built_in">Type </span>rostopic &lt;command&gt; -h <span class="hljs-keyword">for</span> more detailed usage, e.g. <span class="hljs-string">&#x27;rostopic echo -h&#x27;</span><br><br></code></pre></td></tr></table></figure></h2><blockquote>
 <p>话题（topic）就是“故事”。在发布者（publisher）节点关于故事向主节点注册之后，它以消息形式发布关于该故事的广告。希望接收该故事的订阅者（subscriber）节点获得在主节点中以这个话题注册的那个发布者节点的信息。基于这个信息，订阅者节点直接连接到发布者节点，用话题发送和接收消息。</p>
 </blockquote>
 <h3 id="ros的服务"><a href="#ros的服务" class="headerlink" title="ros的服务"></a>ros的服务</h3><p>服务（service）是ros提供的一种同步双向消息通信。其中服务客户端请求对应于特定目的任务的服务，而服务服务器则负责服务响应。</p>
-<p>使用<code>rosservice</code>可以轻松使用ros客户端、服务器框架提供的服务。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">rosservice list         输出可用服务的信息<br>rosservice call         调用带参数的服务<br>rosservice <span class="hljs-built_in">type</span>         输出服务类型<br>rosservice find         依据类型寻找服务find services by service <span class="hljs-built_in">type</span><br>rosservice uri          输出服务的ROSRPC uri<br></code></pre></td></tr></table></figure>
-<hr>
-<blockquote>
+<h2 id="使用rosservice可以轻松使用ros客户端、服务器框架提供的服务。"><a href="#使用rosservice可以轻松使用ros客户端、服务器框架提供的服务。" class="headerlink" title="使用rosservice可以轻松使用ros客户端、服务器框架提供的服务。"></a>使用<code>rosservice</code>可以轻松使用ros客户端、服务器框架提供的服务。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">rosservice list         输出可用服务的信息<br>rosservice call         调用带参数的服务<br>rosservice <span class="hljs-built_in">type</span>         输出服务类型<br>rosservice find         依据类型寻找服务find services by service <span class="hljs-built_in">type</span><br>rosservice uri          输出服务的ROSRPC uri<br></code></pre></td></tr></table></figure></h2><blockquote>
 <p>一个$srv$文件描述一项服务。它包含两个部分：请求与响应。一般$srv$文件存放在$package$的$srv$目录下。</p>
 </blockquote>
 <div style="text-align: center">
@@ -400,10 +396,7 @@
 <blockquote>
 <p>发布者、订阅者、服务服务器、服务客户端、动作服务器和动作客户端都存在于不同的节点中，这些节点需要连接才能进行消息通信。这时候，主节点是帮助节点之间的连接。主节点就像节点名称、话题和服务、动作名称、URI地址和端口以及参数们的名称服务器。换句话说，节点同时向主节点注册自己的信息，并从主节点获取其他节点希望通过主节点访问的节点的信息。然后，节点和节点直接连接进行消息通信。</p>
 </blockquote>
-<h2 id="ros中的参数"><a href="#ros中的参数" class="headerlink" title="ros中的参数"></a>ros中的参数</h2><p>ros中还存在参数服务器（由主节点维护），上面存储一些服务的参数设置，参数可以看作是节点中使用的全局变量。可以使用<code>rosparam</code>进行如下操作</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">rosparam <span class="hljs-built_in">set</span>            设置参数<br>rosparam get            获取参数<br>rosparam load           从文件读取参数<br>rosparam dump           向文件中写入参数<br>rosparam delete         删除参数<br>rosparam list           列出参数名<br></code></pre></td></tr></table></figure>
-<hr>
-<h2 id="ros基础案例"><a href="#ros基础案例" class="headerlink" title="ros基础案例"></a>ros基础案例</h2><ul>
+<h2 id="ros中的参数"><a href="#ros中的参数" class="headerlink" title="ros中的参数"></a>ros中的参数</h2><h2 id="ros中还存在参数服务器（由主节点维护），上面存储一些服务的参数设置，参数可以看作是节点中使用的全局变量。可以使用rosparam进行如下操作"><a href="#ros中还存在参数服务器（由主节点维护），上面存储一些服务的参数设置，参数可以看作是节点中使用的全局变量。可以使用rosparam进行如下操作" class="headerlink" title="ros中还存在参数服务器（由主节点维护），上面存储一些服务的参数设置，参数可以看作是节点中使用的全局变量。可以使用rosparam进行如下操作"></a>ros中还存在参数服务器（由主节点维护），上面存储一些服务的参数设置，参数可以看作是节点中使用的全局变量。可以使用<code>rosparam</code>进行如下操作<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">rosparam <span class="hljs-built_in">set</span>            设置参数<br>rosparam get            获取参数<br>rosparam load           从文件读取参数<br>rosparam dump           向文件中写入参数<br>rosparam delete         删除参数<br>rosparam list           列出参数名<br></code></pre></td></tr></table></figure></h2><h2 id="ros基础案例"><a href="#ros基础案例" class="headerlink" title="ros基础案例"></a>ros基础案例</h2><ul>
 <li><p><a target="_blank" rel="noopener" href="http://wiki.ros.org/cn/ROS/Tutorials/WritingPublisherSubscriber%28c%2B%2B%29">编写消息发布器与订阅器c++版本</a></p>
 </li>
 <li><p><a target="_blank" rel="noopener" href="http://wiki.ros.org/cn/ROS/Tutorials/WritingPublisherSubscriber%28python%29">编写消息发布器与订阅器python版本</a></p>
@@ -414,7 +407,7 @@
 </li>
 <li><p><a target="_blank" rel="noopener" href="http://wiki.ros.org/cn/ROS/Tutorials/ExaminingServiceClient">验证流程可以查看这里，python节点无需编译，直接运行脚本即可</a></p>
 </li>
-<li><p><a target="_blank" rel="noopener" href="http://wiki.ros.org/cn/ROS/Tutorials/Recording%20and%20playing%20back%20data">录制话题数据，通过bag文件</a>   </p>
+<li><p><a target="_blank" rel="noopener" href="http://wiki.ros.org/cn/ROS/Tutorials/Recording%20and%20playing%20back%20data">录制话题数据，通过bag文件</a></p>
 </li>
 </ul>
 <blockquote>
@@ -519,6 +512,28 @@
   
     <article id="comments" lazyload>
       
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
 
     </article>
   
@@ -622,7 +637,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -816,6 +831,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 

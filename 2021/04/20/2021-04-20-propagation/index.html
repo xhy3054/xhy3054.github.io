@@ -24,7 +24,7 @@
 <meta property="og:description" content="欧拉积分 中值积分 龙格库塔积分  主要的应用场景一般是类似imu的积分传播中，为了更清楚的表达各种积分方式的主要思路，下面都会以简化的速度的传播进行举例。测量的到n时刻的加速度为$a_1$，n+1时刻的加速度为$a_2$，已知n时刻的速度$v_1$，目标是通过积分传播得到n+1时刻的速度$v_2$。（以下不考虑姿态重力等因素对加速度的影响）  欧拉积分 欧拉积分一般假设导数恒定，使用初始时刻的导">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-04-19T17:07:24.000Z">
-<meta property="article:modified_time" content="2023-01-08T16:21:28.853Z">
+<meta property="article:modified_time" content="2023-02-28T08:45:12.174Z">
 <meta property="article:author" content="Line">
 <meta property="article:tag" content="数学">
 <meta name="twitter:card" content="summary_large_image">
@@ -65,6 +65,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -82,7 +86,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -220,7 +228,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.2k 字
+          1.3k 字
         
       </span>
     
@@ -291,7 +299,10 @@
 <h2 id="龙格库塔积分"><a href="#龙格库塔积分" class="headerlink" title="龙格库塔积分"></a>龙格库塔积分</h2><blockquote>
 <p>一般常用的是4阶龙格库塔积分，也叫rk4积分。上面的速度传播太简单，不能很好说明。下面$t_0$为初始时刻，$y_0$为初始时刻的状态，$f$为导数函数（确定某一时刻，某个状态后，可以确定其导数。类比在imu传播中，获得加速度后，是需要将其转换到全局坐标系下，然后再减去重力向量才得到最终的加速度，也就是速度的导数是与系统状态–姿态相关的），主要思路如下：</p>
 </blockquote>
-<p>$$<br>{k_1} &#x3D; f({t_0}, y_0) \Delta t  \<br>{k_2} &#x3D; f( {t_0}+{\Delta t \over 2}, y_0 + {1 \over 2}{k_1} ) \Delta t \<br>{k_3} &#x3D; f( {t_0}+{\Delta t \over 2}, y_0 + {1 \over 2}{k_2} ) \Delta t \<br>{k_4} &#x3D; f( {t_0} + {\Delta t}, y_0 + {k_3} ) \Delta t \<br>y_{0+\Delta t} &#x3D; y_0 + \left( {\frac{1}{6} {k_1} + {1 \over 3}{k_2} + {1 \over 3}{k_3} + \frac{1}{6} {k_4}} \right)<br>$$</p>
+<p>$$<br>{k_1} &#x3D; f({t_0}, y_0) \Delta t<br>$$</p>
+<p>$$<br>{k_2} &#x3D; f( {t_0}+{\Delta t \over 2}, y_0 + {1 \over 2}{k_1} ) \Delta t<br>$$</p>
+<p>$$<br>{k_3} &#x3D; f( {t_0}+{\Delta t \over 2}, y_0 + {1 \over 2}{k_2} ) \Delta t $$</p>
+<p>$$<br>{k_4} &#x3D; f( {t_0} + {\Delta t}, y_0 + {k_3} ) \Delta t \<br>y_{0+\Delta t} &#x3D; y_0 + \left( {\frac{1}{6} {k_1} + {1 \over 3}{k_2} + {1 \over 3}{k_3} + \frac{1}{6} {k_4}} \right)<br>$$</p>
 <p>其中：</p>
 <ul>
 <li>$k_1$为以时间段开始时刻$t_0$下的导数进行积分得到的状态改变量；</li>
@@ -390,6 +401,28 @@
   
     <article id="comments" lazyload>
       
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
 
     </article>
   
@@ -493,7 +526,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -687,6 +720,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 

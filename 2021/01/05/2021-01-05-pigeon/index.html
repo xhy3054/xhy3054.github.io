@@ -24,7 +24,7 @@
 <meta property="og:description" content="鸽群优化 鸽子的导航工具  太阳：鸽子可记忆鸽巢位置不同时刻的太阳高度角和方位角，并通过太阳高度信息进行导航； 磁场：鸽子上喙结构含有磁感应结构，磁石粒子的信号是通过鼻子经三叉神经反馈给大脑，从而提高导航信息。 地标：鸽子依靠重力场进行空间定位，通过比较鸽房的陀螺仪设置与其所在地的陀螺仪数值，设定一个初始的返航方向。 导航工具切换：鸽子会在旅程不同阶段使用不同导航工具：前期依赖太阳和磁场，后期依赖">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-01-04T17:07:24.000Z">
-<meta property="article:modified_time" content="2023-01-08T16:21:28.853Z">
+<meta property="article:modified_time" content="2023-02-28T07:56:53.517Z">
 <meta property="article:author" content="Line">
 <meta property="article:tag" content="多机协同">
 <meta name="twitter:card" content="summary_large_image">
@@ -65,6 +65,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -82,7 +86,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -220,7 +228,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          958 字
+          968 字
         
       </span>
     
@@ -231,7 +239,7 @@
         
         
         
-          8 分钟
+          9 分钟
         
       </span>
     
@@ -286,17 +294,17 @@
 <p>鸽群优化：收敛速度快，不易陷入局部最优点等优势。</p>
 </blockquote>
 <p>初始（依赖磁场或太阳）</p>
-<p>$V_i^{Nc} &#x3D; V_i^{Nc-1}.e^{-R\times Nc} + rand.(X_{gbest} - X_i^{Nc-1})$</p>
-<p>$X_i^{Nc} &#x3D; X_i^{Nc-1} + V_i^{Nc}$</p>
+<p>$$V_i^{Nc} &#x3D; V_i^{Nc-1}.e^{-R\times Nc} + rand.(X_{gbest} - X_i^{Nc-1})$$</p>
+<p>$$X_i^{Nc} &#x3D; X_i^{Nc-1} + V_i^{Nc}$$</p>
 <blockquote>
 <p>1.此时的速度通过前一时刻速度还有当前最优位置与当前所在位置的差共同决定；根据速度更新位置。</p>
 <p>2.最优位置$X_{gbest}$是通过比较鸽群中每一个鸽子的位置查看哪个是最好的，然后所有鸽子将向拥有最好位置的鸽子进行方向的调整和飞行。</p>
 <p>3.R是地图和指南针因子，可认为设定为0~1之间的数；Nc是当前迭代次数；$X_{gbest}$是在Nc-1次迭代循环后通过比较所有鸽子的位置，得到的全局最优位置；</p>
 </blockquote>
 <p>后来（根据地标导航）</p>
-<p>$X_i^{Nc} &#x3D; X_i^{Nc-1} + rand.(X_{center}^{Nc-1} - X_i^{Nc-1}) $</p>
-<p>$X_{\text{center}}^{Nc-1} &#x3D; \frac{\sum_{i&#x3D;1}^{N^{Nc-1}} X_{i}^{Nc-1}\cdot F\left(X_i^{Nc-1}\right)}<br>{N^{Nc-1} \cdot \sum_{i&#x3D;1}^{N^{Nc-1}} F\left(X_i^{Nc-1}\right)} $</p>
-<p>$N^{Nc}&#x3D;\frac{N^{Nc-1}}{2}$</p>
+<p>$$X_i^{Nc} &#x3D; X_i^{Nc-1} + rand.(X_{center}^{Nc-1} - X_i^{Nc-1}) $$</p>
+<p>$$X_{\text{center}}^{Nc-1} &#x3D; \frac{\sum_{i&#x3D;1}^{N^{Nc-1}} X_{i}^{Nc-1}\cdot F\left(X_i^{Nc-1}\right)}<br>{N^{Nc-1} \cdot \sum_{i&#x3D;1}^{N^{Nc-1}} F\left(X_i^{Nc-1}\right)} $$</p>
+<p>$$N^{Nc}&#x3D;\frac{N^{Nc-1}}{2}$$</p>
 <blockquote>
 <p>1.每次迭代循环中将鸽子的总数N折半一次（第三个式子），根据每只鸽子的当前位置依据评价指标进行排序，排在后半段的鸽子被认为远离目的地并且不熟悉地标，从而被舍弃；</p>
 <p>2.将余下鸽子的中心位置（第二个式子，有甲醛）当成地标作为飞行的参考方向（第三个式子）；</p>
@@ -401,6 +409,28 @@
   
     <article id="comments" lazyload>
       
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
 
     </article>
   
@@ -504,7 +534,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -698,6 +728,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 

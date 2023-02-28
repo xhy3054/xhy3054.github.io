@@ -65,6 +65,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -82,7 +86,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -279,7 +287,7 @@
 <blockquote>
 <p>一般而言，移动操作的目的是将目标源对象管理的资源直接<strong>移动</strong>到本对象，即本对象接管了原本目标对象管理的资源（而拷贝操作一般只是将资源内容复制了一份），因此移动操作往往比拷贝操作效率更高。不过这也就意味着<strong>源目标对象的资源不再可用</strong>。所以一般情况下这种操作都要确保源目标对象在经历了资源被窃取的情况下依旧可以正常的<strong>生老病死</strong>，即依然可以正常进行赋值、析构等操作。</p>
 </blockquote>
-<p>也是因为上述拷贝与移动操作的差别，有一些特殊的对象（IO类对象、unique_ptr类对象等）<strong>只支持移动操作而不支持拷贝操作</strong>，比如标准输入输出对象cout与cin，这是因为输入/输出缓冲区只有一个，不可能有多个对象都管理它。</p>
+<p>也是因为上述拷贝与移动操作的差别，有一些特殊的对象（IO类对象、unique_ptr类对象等）<strong>只支持移动操作而不支持拷贝操作</strong>，比如标准输入输出对象cout与cin，这是因为输入&#x2F;输出缓冲区只有一个，不可能有多个对象都管理它。</p>
 <h2 id="移动构造函数与移动赋值运算符"><a href="#移动构造函数与移动赋值运算符" class="headerlink" title="移动构造函数与移动赋值运算符"></a>移动构造函数与移动赋值运算符</h2><p>相比于移动构造函数与移动赋值运算符，我们更熟悉的可能是拷贝构造函数与拷贝赋值运算符。其实二者函数名完全一样，不一样的是<strong>参数形式从左值引用换成了右值引用</strong>。也因此，一般移动操作都会搭配标准库函数<code>std::move()</code>使用，这个函数负责<strong>显式地将一个左值转换为对应的右值类型</strong>，它<strong>返回的是一个右值类型的值</strong>。关于右值引用与<code>std::move()</code>的使用我在<a target="_blank" rel="noopener" href="https://xhy3054.github.io/reference-cpp/">c++中的引用</a>这篇博客中有更系统的提到。</p>
 <p>如下是对一个对象同时定义拷贝与移动操作：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;utility&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">HasPtr</span><br>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">HasPtr</span>(<span class="hljs-type">const</span> string &amp;s = <span class="hljs-built_in">string</span>()) : <span class="hljs-built_in">ps</span>(<span class="hljs-keyword">new</span> std::<span class="hljs-built_in">string</span>(s)) &#123;cout&lt;&lt;<span class="hljs-string">&quot;调用HasPtr()&quot;</span>&lt;&lt;endl;&#125;<br>    <span class="hljs-comment">//拷贝</span><br>    <span class="hljs-built_in">HasPtr</span>(<span class="hljs-type">const</span> HasPtr&amp; hp) :<span class="hljs-built_in">ps</span>(<span class="hljs-keyword">new</span> std::<span class="hljs-built_in">string</span>(*hp.ps)) &#123;cout&lt;&lt;<span class="hljs-string">&quot;调用HasPtr(HasPtr&amp;)&quot;</span>&lt;&lt;endl;&#125;<br><br>    HasPtr&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> HasPtr&amp; hp)&#123;<br>        cout&lt;&lt;<span class="hljs-string">&quot;调用operator=(const HasPtr&amp;)&quot;</span>&lt;&lt;endl;<br>        <span class="hljs-keyword">auto</span> new_ptr = <span class="hljs-keyword">new</span> std::<span class="hljs-built_in">string</span>(*hp.ps); <span class="hljs-comment">//防止对自身进行赋值，不能先释放ps指向的内存</span><br>        <span class="hljs-keyword">delete</span> ps;<br>        ps = new_ptr;<br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    <span class="hljs-comment">//移动</span><br>    <span class="hljs-built_in">HasPtr</span>(HasPtr&amp;&amp; hp) <span class="hljs-keyword">noexcept</span>  <span class="hljs-comment">//移动过程中不应该抛出异常</span><br>    :<span class="hljs-built_in">ps</span>(hp.ps) &#123;<br>        cout&lt;&lt;<span class="hljs-string">&quot;调用HasPtr(HasPtr&amp;&amp;)&quot;</span>&lt;&lt;endl;<br>        hp.ps = <span class="hljs-literal">nullptr</span>;    <span class="hljs-comment">//这样可以使得hp被移动后依然可以正常析构</span><br>    &#125;<br><br>    HasPtr&amp; <span class="hljs-keyword">operator</span>=(HasPtr&amp;&amp; hp) <span class="hljs-keyword">noexcept</span>    <br>    &#123;<br>        cout&lt;&lt;<span class="hljs-string">&quot;调用operator=(HasPtr&amp;&amp;)&quot;</span>&lt;&lt;endl;<br>        <span class="hljs-comment">//直接检测自赋值</span><br>        <span class="hljs-keyword">if</span>(<span class="hljs-keyword">this</span> != &amp;hp)&#123;<br>            cout&lt;&lt;<span class="hljs-string">&quot;不是自赋值&quot;</span>&lt;&lt;endl;<br>            ps = hp.ps;                 <br>            hp.ps = <span class="hljs-literal">nullptr</span>;    <span class="hljs-comment">//使得hp可以正常析构</span><br>        &#125;<br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    ~<span class="hljs-built_in">HasPtr</span>()&#123;<span class="hljs-keyword">delete</span> ps;&#125;<br><br><span class="hljs-keyword">private</span>:<br>    std::string *ps;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    HasPtr a;<br>    <span class="hljs-function">HasPtr <span class="hljs-title">b</span><span class="hljs-params">(a)</span></span>;<br>    <span class="hljs-function">HasPtr <span class="hljs-title">c</span><span class="hljs-params">(std::move(a))</span></span>;<br>    b = std::<span class="hljs-built_in">move</span>(b);<br>    a = std::<span class="hljs-built_in">move</span>(c);<br>    <span class="hljs-comment">//HasPtr d(a);</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
@@ -287,13 +295,13 @@
 <p>如上代码输出结果为：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">xhy@ubuntu:~/cpp_learn/move$ ./move_copy <br>调用HasPtr()<br>调用HasPtr(HasPtr&amp;)<br>调用HasPtr(HasPtr&amp;&amp;)<br>调用operator=(HasPtr&amp;&amp;)　<br>调用operator=(HasPtr&amp;&amp;)　<br>不是自赋值　<br></code></pre></td></tr></table></figure>
 <hr>
-<p>我们会发现我们<strong>将移动操作声明成<code>noexcept</code></strong>，这个是因为移动操作通常只是<strong>窃取</strong>资源，本身并不分配资源，所以通常不会抛出任何异常。我们提前告诉编译器，可以使编译器可能会为了检测异常做一些额外的工作。</p>
+<p>我们会发现我们<strong>将移动操作声明成<code>noexcept</code><strong>，这个是因为移动操作通常只是</strong>窃取</strong>资源，本身并不分配资源，所以通常不会抛出任何异常。我们提前告诉编译器，可以使编译器可能会为了检测异常做一些额外的工作。</p>
 <p>同时移动操作需要<strong>使得自己的参数对象（源目标对象）在被窃取了资源后依然可以正常赋值、析构</strong>。这个操作必须是移动操作来完成，<code>std::move()</code>函数只是返回一个右值来表示源对象。使得移动操作可以顺利进行。</p>
 <h2 id="合成的移动操作"><a href="#合成的移动操作" class="headerlink" title="合成的移动操作"></a>合成的移动操作</h2><p>与拷贝操作相同，默认情况下，编译器也会<strong>自动生成移动操作</strong>。但是与默认生成拷贝操作的规则大不相同。</p>
 <blockquote>
 <p>通常只有在一个类<strong>没有定义任何自己版本的拷贝控制成员</strong>(包括拷贝构造、拷贝赋值、析构三种，并且将这些成员中的某个定义成删除的也算是定义了自己版本的拷贝控制成员)的情况下，并且此类中的<strong>所有数据成员都支持移动操作</strong>时，编译器才会自动合成移动操作。</p>
 </blockquote>
-<h2 id="如果没有移动操作，右值也可以被拷贝"><a href="#如果没有移动操作，右值也可以被拷贝" class="headerlink" title="如果没有移动操作，右值也可以被拷贝"></a>如果没有移动操作，右值也可以被拷贝</h2><p>上文中已经提过，也是因为上述拷贝与移动操作的差别，有一些特殊的对象（IO类对象、unique_ptr类对象等）<strong>只支持移动操作而不支持拷贝操作</strong>，比如标准输入输出对象cout与cin，这是因为输入/输出缓冲区只有一个，不可能有多个对象都管理它。此种情况下，在调用移动操作时<strong>必须传入右值，传入左值将会报错</strong>。 </p>
+<h2 id="如果没有移动操作，右值也可以被拷贝"><a href="#如果没有移动操作，右值也可以被拷贝" class="headerlink" title="如果没有移动操作，右值也可以被拷贝"></a>如果没有移动操作，右值也可以被拷贝</h2><p>上文中已经提过，也是因为上述拷贝与移动操作的差别，有一些特殊的对象（IO类对象、unique_ptr类对象等）<strong>只支持移动操作而不支持拷贝操作</strong>，比如标准输入输出对象cout与cin，这是因为输入&#x2F;输出缓冲区只有一个，不可能有多个对象都管理它。此种情况下，在调用移动操作时<strong>必须传入右值，传入左值将会报错</strong>。 </p>
 <p>同时，更常见的情况是一个类<strong>只支持拷贝操作，不支持移动操作</strong>，此时，<strong>传入右值依旧可以完成拷贝操作</strong>。</p>
 <blockquote>
 <p><strong>原因</strong>很好理解，我们在定义拷贝操作时，因为不会对源目标对象做更改，所以常将参数声明成<code>const &amp;</code>的类型，而这种类型是可以绑定到一个右值上的。而右值引用不能绑定到一个左值上。</p>
@@ -401,6 +409,28 @@
   
     <article id="comments" lazyload>
       
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
 
     </article>
   
@@ -504,7 +534,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -698,6 +728,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 

@@ -68,6 +68,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -85,7 +89,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -278,10 +286,10 @@
               <div class="markdown-body">
                 
                 <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><ul>
-<li><a href="#第一类-基于数据生成的任务">第一类-基于数据生成的任务</a></li>
-<li><a href="#第二类-基于数据变换的任务">第二类-基于数据变换的任务</a></li>
-<li><a href="#第三类-基于多模态数据的自监督任务">第三类-基于多模态数据的自监督任务</a></li>
-<li><a href="#对比学习">对比学习</a></li>
+<li><a href="#%E7%AC%AC%E4%B8%80%E7%B1%BB-%E5%9F%BA%E4%BA%8E%E6%95%B0%E6%8D%AE%E7%94%9F%E6%88%90%E7%9A%84%E4%BB%BB%E5%8A%A1">第一类-基于数据生成的任务</a></li>
+<li><a href="#%E7%AC%AC%E4%BA%8C%E7%B1%BB-%E5%9F%BA%E4%BA%8E%E6%95%B0%E6%8D%AE%E5%8F%98%E6%8D%A2%E7%9A%84%E4%BB%BB%E5%8A%A1">第二类-基于数据变换的任务</a></li>
+<li><a href="#%E7%AC%AC%E4%B8%89%E7%B1%BB-%E5%9F%BA%E4%BA%8E%E5%A4%9A%E6%A8%A1%E6%80%81%E6%95%B0%E6%8D%AE%E7%9A%84%E8%87%AA%E7%9B%91%E7%9D%A3%E4%BB%BB%E5%8A%A1">第三类-基于多模态数据的自监督任务</a></li>
+<li><a href="#%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0">对比学习</a></li>
 </ul>
 <blockquote>
 <p>以下转载自<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/66063089">知乎的一篇文章</a></p>
@@ -313,7 +321,7 @@
 <p>视频预测任务十分的耿直。怎么形容呢，他就是那种，你知道的，我们说视频中帧与帧之间存在时空连续性。类似的，人类会利用这种帧与帧之间的连续性，当我们看电影时突然按了暂停，下一秒下几秒会发生什么实际上我们是可以预测的。</p>
 <p>同样，把这个学习过程推广到我们的模型上，在给定前一帧或者前几帧的情况下，我们用后续的视频帧作为学习的标签，从而模型会试着理解给定视频帧中的语义信息(发生了啥？)进而去建立从当前到未来的映射关系。</p>
 <h2 id="第二类-基于数据变换的任务"><a href="#第二类-基于数据变换的任务" class="headerlink" title="第二类-基于数据变换的任务"></a>第二类-基于数据变换的任务</h2><p>这种类型的自监督学习是大家熟知的窄意的自监督学习。本文<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1803.07728.pdf">链接</a></p>
-<p>用一句话说明这一类任务，事实上原理很简单。对于样本 X ，我们对其做任意变换 T(X)=Y ，则自监督任务的目标是能够对生成的 Y 估计出其变换 T。下面介绍一种原理十分简单但是目前看来非常有效的自监督任务——Rotation Prediction。</p>
+<p>用一句话说明这一类任务，事实上原理很简单。对于样本 X ，我们对其做任意变换 T(X)&#x3D;Y ，则自监督任务的目标是能够对生成的 Y 估计出其变换 T。下面介绍一种原理十分简单但是目前看来非常有效的自监督任务——Rotation Prediction。</p>
 <p>给定输入图片 X ，我们对其做4个角度的旋转，分别得到 $X_0, X_1, X_2, X_3$ ,并且我们知道其对应的变换角度分别为 0°，90°，180°，270° 。此时，任务目标即是对于以上4张图片预测其对应的旋转角度，这里每张图片都经过同样的卷积神经网。</p>
 <blockquote>
 <p>我始终坚持的观点是自监督学习需要动机明确，这里我们能做的任意变换应当是对目标有益的。比如在Rotation Prediction中，作为人类的我们只有在理解了图片中是一只鸟站在枝头之后才知道X_0的旋转角度应当是 0° 。那么我们有理由相信，当模型能够做出同样正确的判断时，其中间的feature map必然携带了有意义的图片语义信息。</p>
@@ -431,6 +439,28 @@
   
     <article id="comments" lazyload>
       
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
 
     </article>
   
@@ -534,7 +564,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -728,6 +758,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 

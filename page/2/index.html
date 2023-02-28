@@ -56,6 +56,10 @@
 
 
 
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -73,7 +77,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -474,7 +482,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2019/10/30/2019-10-30-camera-extrinsic/" target="_self">
         <div>
-          之前写过一篇博客介绍vins中进行初始化的操作，其实在这之前，vins会首先进行外参的标定。今天终于找到时间写一下。 外参标定外参此处的外参指的是相机坐标系到imu坐标系（body）的变换矩阵。下文中会使用$$T_{bc}$$来表示。 vins中的设置在vins中可以通过在配置文件中设置estimate_extrinsic值来选择对外参进行如何处理  将这个值设为0时代表提供的外参已经是准确的了，
+          之前写过一篇博客介绍vins中进行初始化的操作，其实在这之前，vins会首先进行外参的标定。今天终于找到时间写一下。 外参标定外参此处的外参指的是相机坐标系到imu坐标系（body）的变换矩阵。下文中会使用$T_{bc}$来表示。 vins中的设置在vins中可以通过在配置文件中设置estimate_extrinsic值来选择对外参进行如何处理  将这个值设为0时代表提供的外参已经是准确的了，vi
         </div>
       </a>
 
@@ -514,7 +522,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2019/10/15/2019-10-15-robot-coordinate-transform/" target="_self">
         <div>
-          在机器人学中，坐标变换是一个及其复杂但重要的问题。为了更清楚的表达，我们在本文中做出如下约定。  坐标、姿态的表达使用下标来表明坐标系。比如物体在A坐标系下的位置坐标为$$P_{A}$$  将坐标系B的坐标变换到A坐标系的坐标的变换矩阵，记为$$T_{AB}$$  本文中使用的向量$(x,y,z)$是横向量，纵向量形式为$(x,y,z)^T$    一般我们在描述不同物体之间的位姿变换关系时，会引
+          在机器人学中，坐标变换是一个及其复杂但重要的问题。为了更清楚的表达，我们在本文中做出如下约定。  坐标、姿态的表达使用下标来表明坐标系。比如物体在A坐标系下的位置坐标为$P_{A}$  将坐标系B的坐标变换到A坐标系的坐标的变换矩阵，记为$T_{AB}$  本文中使用的向量$(x,y,z)$是横向量，纵向量形式为$(x,y,z)^T$    一般我们在描述不同物体之间的位姿变换关系时，会引入坐标系
         </div>
       </a>
 
@@ -674,7 +682,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
     </div>
   
   
@@ -732,6 +740,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
 
 
 
