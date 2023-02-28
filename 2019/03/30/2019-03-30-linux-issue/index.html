@@ -16,12 +16,12 @@
   <meta name="author" content="Line">
   <meta name="keywords" content="">
   
-    <meta name="description" content="在学习linux的内容中，存在很多重要有趣有用的小知识，但是这些小知识很繁琐，每一个都写一片博客是不可能的，篇幅太短，所以这篇博客就来将这些小知识来一个大杂烩。  数据流重定向 管道命令-pipe 回车与换行的区别 常用组合键 bash环境中的特殊字符 通配符 修改文件权限 在linux文件系统中搜索字符串 在Linux文件系统中搜索 linux中备份操作tar  数据流重定向要想了解数据流重定向">
+    <meta name="description" content="在学习linux的内容中，存在很多重要有趣有用的小知识，但是这些小知识很繁琐，每一个都写一片博客是不可能的，篇幅太短，所以这篇博客就来将这些小知识来一个大杂烩。  数据流重定向 管道命令-pipe 回车与换行的区别 常用组合键 bash环境中的特殊字符 通配符 修改文件权限 在linux文件系统中搜索字符串 在Linux文件系统中搜索 linux中备份操作tar   数据流重定向 要想了解数据流重">
 <meta property="og:type" content="article">
 <meta property="og:title" content="linux常用--数据流重定向、管道、组合键、权限、查找等">
 <meta property="og:url" content="http://line.com/2019/03/30/2019-03-30-linux-issue/index.html">
 <meta property="og:site_name" content="Line&#39;s Blog">
-<meta property="og:description" content="在学习linux的内容中，存在很多重要有趣有用的小知识，但是这些小知识很繁琐，每一个都写一片博客是不可能的，篇幅太短，所以这篇博客就来将这些小知识来一个大杂烩。  数据流重定向 管道命令-pipe 回车与换行的区别 常用组合键 bash环境中的特殊字符 通配符 修改文件权限 在linux文件系统中搜索字符串 在Linux文件系统中搜索 linux中备份操作tar  数据流重定向要想了解数据流重定向">
+<meta property="og:description" content="在学习linux的内容中，存在很多重要有趣有用的小知识，但是这些小知识很繁琐，每一个都写一片博客是不可能的，篇幅太短，所以这篇博客就来将这些小知识来一个大杂烩。  数据流重定向 管道命令-pipe 回车与换行的区别 常用组合键 bash环境中的特殊字符 通配符 修改文件权限 在linux文件系统中搜索字符串 在Linux文件系统中搜索 linux中备份操作tar   数据流重定向 要想了解数据流重">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://line.com/img/linux/redirection.jpg">
 <meta property="og:image" content="http://line.com/img/linux/redirection.jpg">
@@ -48,6 +48,8 @@
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
 
 
 
@@ -301,126 +303,158 @@
 <li><a href="#%E6%90%9C%E7%B4%A2%E6%96%87%E4%BB%B6">在Linux文件系统中搜索</a></li>
 <li><a href="#linux%E4%B8%AD%E5%A4%87%E4%BB%BD%E6%93%8D%E4%BD%9Ctar">linux中备份操作tar</a></li>
 </ol>
-<h2 id="数据流重定向"><a href="#数据流重定向" class="headerlink" title="数据流重定向"></a>数据流重定向</h2><p>要想了解数据流重定向，首先我们得知道数据的输入与输出总共有几种。</p>
+<h2 id="数据流重定向"><a class="markdownIt-Anchor" href="#数据流重定向"></a> 数据流重定向</h2>
+<p>要想了解数据流重定向，首先我们得知道数据的输入与输出总共有几种。</p>
 <div style="text-align: center">
 <img src="/img/linux/redirection.jpg" srcset="/img/loading.gif" lazyload/>
 </div>
 如上，命令的输入只有一种，那就是**标准输入(STDIN)**；而输出有两种，一种是**标准输出(STDOUT)**，一种是**标准错误输出(STDERR)**。标准输出(STDOUT)的内容是一个命令正确执行后返回的内容，标准错误输出(STDERR)的内容是一个命令执行过程中出现错误返回的错误信息。
-
 <blockquote>
 <p>上述的三种输入输出可以理解为三个不同的<strong>缓冲区</strong>，输入缓冲区只有一个，输出缓冲区有两个。</p>
 </blockquote>
 <p>默认情况下，在终端执行命令时，<strong>STDOUT与STDERR都是默认绑定到了屏幕上</strong>，因此执行一个命令，无论正确执行与否，最终输出都会出现在屏幕上。<strong>STDIN默认绑定在了键盘上</strong>，所以我们可以通过手动输入确定输入内容。</p>
 <p><strong>数据流重定向</strong>要做的就是重新定向这三个缓冲区绑定的字符流设备。重定向方法形式如下</p>
 <ol>
-<li><p>标准输入(stdin): 代码为0，使用<code>&lt;</code>或<code>&lt;&lt;</code>;</p>
+<li>
+<p>标准输入(stdin): 代码为0，使用<code>&lt;</code>或<code>&lt;&lt;</code>;</p>
 </li>
-<li><p>标准输出(stdout): 代码为1，使用<code>&gt;</code>或<code>&gt;&gt;</code>;</p>
+<li>
+<p>标准输出(stdout): 代码为1，使用<code>&gt;</code>或<code>&gt;&gt;</code>;</p>
 </li>
-<li><p>标准错误输出(stderr): 代码为2，使用<code>2&gt;</code>或<code>2&gt;&gt;</code>;</p>
+<li>
+<p>标准错误输出(stderr): 代码为2，使用<code>2&gt;</code>或<code>2&gt;&gt;</code>;</p>
 </li>
-<li><p><code>&gt;</code>与<code>&gt;&gt;</code>的区别是：前者是覆盖输入，后者是累加输入；</p>
+<li>
+<p><code>&gt;</code>与<code>&gt;&gt;</code>的区别是：前者是覆盖输入，后者是累加输入；</p>
 </li>
 </ol>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">xhy@xhy-SVF14316SCB:~/Music$ <span class="hljs-built_in">ls</span><br>CloudMusic<br>xhy@xhy-SVF14316SCB:~/Music$ <span class="hljs-built_in">ls</span> &gt;&gt; ls_result<br>xhy@xhy-SVF14316SCB:~/Music$ <span class="hljs-built_in">cat</span> ls_result <br>CloudMusic<br>ls_result<br></code></pre></td></tr></table></figure>
-
-<h2 id="命令执行的连接符号-amp-amp"><a href="#命令执行的连接符号-amp-amp" class="headerlink" title="命令执行的连接符号; &amp;&amp; ||"></a>命令执行的连接符号<code>; &amp;&amp; ||</code></h2><ul>
-<li><p><code>cmd1; cmd2</code>: 顺序执行cmd1与cmd2</p>
+<h2 id="命令执行的连接符号"><a class="markdownIt-Anchor" href="#命令执行的连接符号"></a> 命令执行的连接符号<code>; &amp;&amp; ||</code></h2>
+<ul>
+<li>
+<p><code>cmd1; cmd2</code>: 顺序执行cmd1与cmd2</p>
 </li>
-<li><p><code>cmd1 &amp;&amp; cmd2</code>: </p>
+<li>
+<p><code>cmd1 &amp;&amp; cmd2</code>:</p>
 <ul>
 <li>若cmd1执行完毕且正确执行(<code>$?=0</code>指令回传值为0)，则开始执行cmd2；</li>
 <li>若cmd1执行完毕且错误执行(指令回传值不为0)，则cmd2不执行；</li>
 </ul>
 </li>
-<li><p><code>cmd1 || cmd2</code>:</p>
+<li>
+<p><code>cmd1 || cmd2</code>:</p>
 <ul>
 <li>若cmd1执行完毕且正确执行(<code>$?=0</code>指令回传值为0)，则cmd2不执行；</li>
 <li>若cmd1执行完毕且错误执行(指令回传值不为0)，则开始执行cmd2；</li>
 </ul>
 </li>
 </ul>
-<h2 id="管道命令-pipe"><a href="#管道命令-pipe" class="headerlink" title="管道命令-pipe"></a>管道命令-pipe</h2><p>首先说明一下，管道命令要实现的功能如下图，其实就是对于输入进行一系列的连续处理。</p>
+<h2 id="管道命令-pipe"><a class="markdownIt-Anchor" href="#管道命令-pipe"></a> 管道命令-pipe</h2>
+<p>首先说明一下，管道命令要实现的功能如下图，其实就是对于输入进行一系列的连续处理。</p>
 <div style="text-align: center">
 <img src="/img/linux/redirection.jpg" srcset="/img/loading.gif" lazyload/>
 </div>
 关于管道命令，可以总结如下几点：
 1. 管道命令用`|`来连接命令，实现将前一个命令的stdout变成后一个命令的stdin；
-
 <ol start="2">
-<li><p>管道命令默认是对stdout起作用，对于stderr不起作用</p>
+<li>
+<p>管道命令默认是对stdout起作用，对于stderr不起作用</p>
 </li>
-<li><p>如果一个命令不能接受stdin，则这个命令不能作为管道中的后置命令</p>
+<li>
+<p>如果一个命令不能接受stdin，则这个命令不能作为管道中的后置命令</p>
 </li>
 </ol>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">xhy@xhy-SVF14316SCB:~/book$ ll<br>total 16<br>drwxrwxr-x  4 xhy xhy 4096 3月  20 15:34 ./<br>drwxr-xr-x 41 xhy xhy 4096 3月  30 20:11 ../<br>drwxrwxr-x 10 xhy xhy 4096 3月  20 15:33 book_note/<br>drwxr-xr-x  2 xhy xhy 4096 3月  20 23:31 工具书/<br>xhy@xhy-SVF14316SCB:~/book$ ll | grep book_note<br>drwxrwxr-x 10 xhy xhy 4096 3月  20 15:33 book_note/<br></code></pre></td></tr></table></figure>
-
 <blockquote>
 <p>其实管道命令涉及到了数据流重定向的功能。如果想让stderr可以被管道命令使用，需要使用数据流重定向，将<code>2&gt;</code>变成<code>1&gt;</code></p>
 </blockquote>
-<h2 id="回车与换行的区别"><a href="#回车与换行的区别" class="headerlink" title="回车与换行的区别"></a>回车与换行的区别</h2><ol>
-<li><p><code>\r</code>:   回车，打印效果是将输出重定位到<strong>本行</strong>的开头</p>
+<h2 id="回车与换行的区别"><a class="markdownIt-Anchor" href="#回车与换行的区别"></a> 回车与换行的区别</h2>
+<ol>
+<li>
+<p><code>\r</code>:   回车，打印效果是将输出重定位到<strong>本行</strong>的开头</p>
 </li>
-<li><p><code>\n</code>:   换行，打印效果是将输出重定位到<strong>下一行</strong>的开头</p>
+<li>
+<p><code>\n</code>:   换行，打印效果是将输出重定位到<strong>下一行</strong>的开头</p>
 </li>
 </ol>
-<h2 id="常用组合键"><a href="#常用组合键" class="headerlink" title="常用组合键"></a>常用组合键</h2><div style="text-align: center">
+<h2 id="常用组合键"><a class="markdownIt-Anchor" href="#常用组合键"></a> 常用组合键</h2>
+<div style="text-align: center">
 <img src="/img/linux/combine_input.png" srcset="/img/loading.gif" lazyload/>
 </div>
-
-<h2 id="bash环境中的特殊字符"><a href="#bash环境中的特殊字符" class="headerlink" title="bash环境中的特殊字符"></a>bash环境中的特殊字符</h2><div style="text-align: center">
+<h2 id="bash环境中的特殊字符"><a class="markdownIt-Anchor" href="#bash环境中的特殊字符"></a> bash环境中的特殊字符</h2>
+<div style="text-align: center">
 <img src="/img/linux/special_character.png" srcset="/img/loading.gif" lazyload/>
 </div>
-
-<h2 id="通配符"><a href="#通配符" class="headerlink" title="通配符"></a>通配符</h2><div style="text-align: center">
+<h2 id="通配符"><a class="markdownIt-Anchor" href="#通配符"></a> 通配符</h2>
+<div style="text-align: center">
 <img src="/img/linux/common_character.png" srcset="/img/loading.gif" lazyload/>
 </div>
-
-<h2 id="修改文件权限"><a href="#修改文件权限" class="headerlink" title="修改文件权限"></a>修改文件权限</h2><p>语法：</p>
+<h2 id="修改文件权限"><a class="markdownIt-Anchor" href="#修改文件权限"></a> 修改文件权限</h2>
+<p>语法：</p>
 <pre><code class="hljs">chmod [-cfvR] [--help] [--version] mode file
 </code></pre>
 <p>参数说明：</p>
 <ul>
-<li><p>$-c$: 若该文件权限确实已经更改，才显示其更改动作</p>
+<li>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>−</mo><mi>c</mi></mrow><annotation encoding="application/x-tex">-c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord">−</span><span class="mord mathnormal">c</span></span></span></span>: 若该文件权限确实已经更改，才显示其更改动作</p>
 </li>
-<li><p>$-f$: 若该文件权限无法被更改也不要显示错误信息</p>
+<li>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>−</mo><mi>f</mi></mrow><annotation encoding="application/x-tex">-f</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord">−</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span></span></span></span>: 若该文件权限无法被更改也不要显示错误信息</p>
 </li>
-<li><p>$-v$: 显示权限变更的详细资料</p>
+<li>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>−</mo><mi>v</mi></mrow><annotation encoding="application/x-tex">-v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord">−</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span></span></span></span>: 显示权限变更的详细资料</p>
 </li>
-<li><p>$-R$: 对当前目录下的所有文件与子目录进行相同的权限变更</p>
+<li>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>−</mo><mi>R</mi></mrow><annotation encoding="application/x-tex">-R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord">−</span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span></span></span></span>: 对当前目录下的所有文件与子目录进行相同的权限变更</p>
 </li>
-<li><p>$–help$: 显示辅助说明</p>
+<li>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>−</mo><mo>−</mo><mi>h</mi><mi>e</mi><mi>l</mi><mi>p</mi></mrow><annotation encoding="application/x-tex">--help</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">h</span><span class="mord mathnormal">e</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">p</span></span></span></span>: 显示辅助说明</p>
 </li>
-<li><p>$–version$: 显示版本</p>
+<li>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>−</mo><mo>−</mo><mi>v</mi><mi>e</mi><mi>r</mi><mi>s</mi><mi>i</mi><mi>o</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">--version</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">e</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">s</span><span class="mord mathnormal">i</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span></span></span></span>: 显示版本</p>
 </li>
 </ul>
-<p>$mode$是设置权限，用字符串来表示，格式如下：</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi></mrow><annotation encoding="application/x-tex">mode</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal">m</span><span class="mord mathnormal">o</span><span class="mord mathnormal">d</span><span class="mord mathnormal">e</span></span></span></span>是设置权限，用字符串来表示，格式如下：</p>
 <pre><code class="hljs">[ugoa...][[+-=][rwxX]...][,...]
 </code></pre>
 <p>其中：</p>
 <ul>
 <li>u 表示该文件的拥有者，g 表示与该文件的拥有者属于同一个群体(group)者，o 表示其他以外的人，a 表示这三者皆是。</li>
-<li>$+$ 表示增加权限、$-$ 表示取消权限、$&#x3D;$ 表示唯一设定权限。</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>+</mo></mrow><annotation encoding="application/x-tex">+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord">+</span></span></span></span> 表示增加权限、<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>−</mo></mrow><annotation encoding="application/x-tex">-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord">−</span></span></span></span> 表示取消权限、<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo></mrow><annotation encoding="application/x-tex">=</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">=</span></span></span></span> 表示唯一设定权限。</li>
 <li>r 表示可读取，w 表示可写入，x 表示可执行，X 表示只有当该文件是个子目录或者该文件已经被设定过为可执行。</li>
 </ul>
-<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><ul>
-<li>将文件$file1.txt$设为所有人皆可读取 :<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">chmod</span> ugo+r file1.txt<br><span class="hljs-built_in">chmod</span> a+r file1.txt<br></code></pre></td></tr></table></figure></li>
-<li>将文件 file1.txt 与 file2.txt 设为该文件拥有者，与其所属同一个群体者可写入，但其他以外的人则不可写入 :<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">chmod</span> ug+w,o-w file1.txt file2.txt<br></code></pre></td></tr></table></figure></li>
-<li>将目前目录下的所有文件与子目录皆设为任何人可读取 :<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">chmod</span> -R a+r *<br></code></pre></td></tr></table></figure></li>
-<li>也可以使用数字来表示权限（r&#x3D;4，w&#x3D;2，x&#x3D;1），下面两组作用相同<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver">chmod <span class="hljs-number">777</span> <span class="hljs-built_in">file</span><br>chmod <span class="hljs-keyword">a</span>=rwx <span class="hljs-built_in">file</span><br><br>chmod ug=rwx,o=x <span class="hljs-built_in">file</span><br>chmod <span class="hljs-number">771</span> <span class="hljs-built_in">file</span><br></code></pre></td></tr></table></figure></li>
+<h3 id="实例"><a class="markdownIt-Anchor" href="#实例"></a> 实例</h3>
+<ul>
+<li>将文件<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mi>i</mi><mi>l</mi><mi>e</mi><mn>1.</mn><mi>t</mi><mi>x</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">file1.txt</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">e</span><span class="mord">1</span><span class="mord">.</span><span class="mord mathnormal">t</span><span class="mord mathnormal">x</span><span class="mord mathnormal">t</span></span></span></span>设为所有人皆可读取 :</li>
 </ul>
-<h2 id="搜索字符串"><a href="#搜索字符串" class="headerlink" title="搜索字符串"></a>搜索字符串</h2><p>在linux的文件系统中搜索字符串一般使用<code>grep</code>命令，下面这个命令是在当前目录下的所有文件中递归搜索字符串<code>string</code>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">chmod</span> ugo+r file1.txt<br><span class="hljs-built_in">chmod</span> a+r file1.txt<br></code></pre></td></tr></table></figure>
+<ul>
+<li>将文件 file1.txt 与 file2.txt 设为该文件拥有者，与其所属同一个群体者可写入，但其他以外的人则不可写入 :</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">chmod</span> ug+w,o-w file1.txt file2.txt<br></code></pre></td></tr></table></figure>
+<ul>
+<li>将目前目录下的所有文件与子目录皆设为任何人可读取 :</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">chmod</span> -R a+r *<br></code></pre></td></tr></table></figure>
+<ul>
+<li>也可以使用数字来表示权限（r=4，w=2，x=1），下面两组作用相同</li>
+</ul>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver">chmod <span class="hljs-number">777</span> <span class="hljs-built_in">file</span><br>chmod <span class="hljs-keyword">a</span>=rwx <span class="hljs-built_in">file</span><br><br>chmod ug=rwx,o=x <span class="hljs-built_in">file</span><br>chmod <span class="hljs-number">771</span> <span class="hljs-built_in">file</span><br></code></pre></td></tr></table></figure>
+<h2 id="搜索字符串"><a class="markdownIt-Anchor" href="#搜索字符串"></a> 搜索字符串</h2>
+<p>在linux的文件系统中搜索字符串一般使用<code>grep</code>命令，下面这个命令是在当前目录下的所有文件中递归搜索字符串<code>string</code>:</p>
 <pre><code class="hljs">grep -r string ./
 </code></pre>
-<h2 id="搜索文件"><a href="#搜索文件" class="headerlink" title="搜索文件"></a>搜索文件</h2><p>在linux的文件系统中搜索文件一般使用<code>find</code>命令，下面这个命令是在当前目录下搜索<code>2019-03-30-linux-issue.markdown</code>这个文件</p>
+<h2 id="搜索文件"><a class="markdownIt-Anchor" href="#搜索文件"></a> 搜索文件</h2>
+<p>在linux的文件系统中搜索文件一般使用<code>find</code>命令，下面这个命令是在当前目录下搜索<code>2019-03-30-linux-issue.markdown</code>这个文件</p>
 <pre><code class="hljs">find ./ -name 2019-03-30-linux-issue.markdown
 </code></pre>
-<h2 id="linux中备份操作tar"><a href="#linux中备份操作tar" class="headerlink" title="linux中备份操作tar"></a>linux中备份操作tar</h2><blockquote>
+<h2 id="linux中备份操作tar"><a class="markdownIt-Anchor" href="#linux中备份操作tar"></a> linux中备份操作tar</h2>
+<blockquote>
 <p>Linux的tar命令用于建立和还原备份文件。这个命令其实是很复杂的，，，所以此处仅仅列出常用的。</p>
 </blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">###### tar格式（该格式仅仅打包，不压缩）######</span><br><span class="hljs-comment"># 打包</span><br>tar -cvf [目标文件名].tar [原文件名/目录名]<br><span class="hljs-comment"># 解包</span><br>tar -xvf [原文件名].tar<br><span class="hljs-comment"># c参数代表create（创建），x参数代表extract（解包），v参数代表verbose（详细信息），f参数代表filename（文件名），所以f后必须接文件名。</span><br><br><span class="hljs-comment">###### tar.gz格式（打包加压缩） ######</span><br><span class="hljs-comment"># 打包并压缩</span><br>tar -zcvf [目标文件名].tar.gz [原文件名/目录名]<br><span class="hljs-comment"># 解压并解包</span><br>tar -zxvf [原文件名].tar.gz<br><span class="hljs-comment"># z代表用gzip算法来压缩/解压。</span><br><br><span class="hljs-comment">###### tar.bz2格式（打包并压缩） ######</span><br><span class="hljs-comment"># 打包并压缩</span><br>tar -jcvf [目标文件名].tar.bz2 [原文件名/目录名]<br><span class="hljs-comment"># 解压并解包</span><br>tar -jxvf [原文件名].tar.bz2<br><span class="hljs-comment"># 小写j代表使用bzip2算法来压缩、解压。</span><br><br><span class="hljs-comment">###### tar.xz格式（打包并压缩） ######</span><br><span class="hljs-comment"># 打包并压缩</span><br>tar -Jcvf [目标文件名].tar.xz [原文件名/目录名]<br><span class="hljs-comment"># 打包并解压</span><br>tar -Jxvf [原文件名].tar.xz<br><span class="hljs-comment"># 大写J代表用xz算法来压缩/解压。</span><br><br><span class="hljs-comment">###### 其他tar.z jar 7z等格式使用了再找吧。</span><br></code></pre></td></tr></table></figure>
-
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<h1 id="参考资料"><a class="markdownIt-Anchor" href="#参考资料"></a> 参考资料</h1>
+<ul>
 <li>[1] 《鸟哥的linux私房菜》；</li>
 </ul>
 
@@ -595,7 +629,6 @@
 
   
   
-
 
 
 
@@ -790,49 +823,6 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
-
-  
-      <script>
-        if (!window.MathJax) {
-          window.MathJax = {
-            tex    : {
-              inlineMath: { '[+]': [['$', '$']] }
-            },
-            loader : {
-              load: ['ui/lazy']
-            },
-            options: {
-              renderActions: {
-                insertedScript: [200, () => {
-                  document.querySelectorAll('mjx-container').forEach(node => {
-                    let target = node.parentNode;
-                    if (target.nodeName.toLowerCase() === 'li') {
-                      target.parentNode.classList.add('has-jax');
-                    }
-                  });
-                }, '', false]
-              }
-            }
-          };
-        } else {
-          MathJax.startup.document.state(0);
-          MathJax.texReset();
-          MathJax.typeset();
-          MathJax.typesetPromise();
-        }
-
-        Fluid.events.registerRefreshCallback(function() {
-          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
-            MathJax.startup.document.state(0);
-            MathJax.texReset();
-            MathJax.typeset();
-            MathJax.typesetPromise();
-          }
-        });
-      </script>
-    
-
-  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 

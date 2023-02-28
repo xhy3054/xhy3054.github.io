@@ -16,12 +16,12 @@
   <meta name="author" content="Line">
   <meta name="keywords" content="">
   
-    <meta name="description" content="dijkstra算法和astar算法图搜索算法 图搜索算法指在一个类似图的数据结构上进行路径搜索的算法的总称。二维网格地图其实就是一种类似图的数据结构，每个网格代表一个图节点，它连接着自身周围的四个相邻网格（图节点）。  可以将图搜索的图结构转换成搜索树结构。那么最具代表性的两类图搜索算法就是深度优先与广度优先算法。  需要提前强调的一点是，为了不会形成环路，已经访问过的节点需要做标记，并且不再访">
+    <meta name="description" content="dijkstra算法和astar算法  图搜索算法  图搜索算法指在一个类似图的数据结构上进行路径搜索的算法的总称。二维网格地图其实就是一种类似图的数据结构，每个网格代表一个图节点，它连接着自身周围的四个相邻网格（图节点）。  可以将图搜索的图结构转换成搜索树结构。那么最具代表性的两类图搜索算法就是深度优先与广度优先算法。  需要提前强调的一点是，为了不会形成环路，已经访问过的节点需要做标记，并">
 <meta property="og:type" content="article">
 <meta property="og:title" content="dijkstra算法和astar算法">
 <meta property="og:url" content="http://line.com/2021/01/05/2021-01-05-dijkstra-astar/index.html">
 <meta property="og:site_name" content="Line&#39;s Blog">
-<meta property="og:description" content="dijkstra算法和astar算法图搜索算法 图搜索算法指在一个类似图的数据结构上进行路径搜索的算法的总称。二维网格地图其实就是一种类似图的数据结构，每个网格代表一个图节点，它连接着自身周围的四个相邻网格（图节点）。  可以将图搜索的图结构转换成搜索树结构。那么最具代表性的两类图搜索算法就是深度优先与广度优先算法。  需要提前强调的一点是，为了不会形成环路，已经访问过的节点需要做标记，并且不再访">
+<meta property="og:description" content="dijkstra算法和astar算法  图搜索算法  图搜索算法指在一个类似图的数据结构上进行路径搜索的算法的总称。二维网格地图其实就是一种类似图的数据结构，每个网格代表一个图节点，它连接着自身周围的四个相邻网格（图节点）。  可以将图搜索的图结构转换成搜索树结构。那么最具代表性的两类图搜索算法就是深度优先与广度优先算法。  需要提前强调的一点是，为了不会形成环路，已经访问过的节点需要做标记，并">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://line.com/img/astar/dfs.png">
 <meta property="og:image" content="http://line.com/img/astar/bfs.png">
@@ -49,6 +49,8 @@
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
 
 
 
@@ -235,7 +237,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3k 字
+          3.1k 字
         
       </span>
     
@@ -246,7 +248,7 @@
         
         
         
-          25 分钟
+          26 分钟
         
       </span>
     
@@ -289,56 +291,64 @@
             
               <div class="markdown-body">
                 
-                <h1 id="dijkstra算法和astar算法"><a href="#dijkstra算法和astar算法" class="headerlink" title="dijkstra算法和astar算法"></a>dijkstra算法和astar算法</h1><h2 id="图搜索算法"><a href="#图搜索算法" class="headerlink" title="图搜索算法"></a>图搜索算法</h2><blockquote>
+                <h1 id="dijkstra算法和astar算法"><a class="markdownIt-Anchor" href="#dijkstra算法和astar算法"></a> dijkstra算法和astar算法</h1>
+<h2 id="图搜索算法"><a class="markdownIt-Anchor" href="#图搜索算法"></a> 图搜索算法</h2>
+<blockquote>
 <p>图搜索算法指在一个类似图的数据结构上进行路径搜索的算法的总称。二维网格地图其实就是一种类似图的数据结构，每个网格代表一个图节点，它连接着自身周围的四个相邻网格（图节点）。</p>
 </blockquote>
 <p>可以将图搜索的图结构转换成搜索树结构。那么最具代表性的两类图搜索算法就是深度优先与广度优先算法。</p>
 <blockquote>
 <p>需要提前强调的一点是，为了不会形成环路，已经访问过的节点需要做标记，并且不再访问。</p>
 </blockquote>
-<h3 id="深度优先算法-Deep-First-Search"><a href="#深度优先算法-Deep-First-Search" class="headerlink" title="深度优先算法-Deep First Search"></a>深度优先算法-Deep First Search</h3><p>可以使用栈（先进后出）这种数据结构来实现。</p>
-<p><img src="/img/astar/dfs.png" srcset="/img/loading.gif" lazyload alt="dfs"></p>
+<h3 id="深度优先算法-deep-first-search"><a class="markdownIt-Anchor" href="#深度优先算法-deep-first-search"></a> 深度优先算法-Deep First Search</h3>
+<p>可以使用栈（先进后出）这种数据结构来实现。</p>
+<p><img src="/img/astar/dfs.png" srcset="/img/loading.gif" lazyload alt="dfs" /></p>
 <blockquote>
 <p>可以使用栈结构实现，几乎不太可能找到最优解，因此更短的路径大部分没有试过。因此dfs算法实现简单、路径可能不是最优解、寻路时间比较长</p>
 </blockquote>
-<h3 id="广度优先算法-Breadth-First-Search"><a href="#广度优先算法-Breadth-First-Search" class="headerlink" title="广度优先算法-Breadth First Search"></a>广度优先算法-Breadth First Search</h3><p>可以使用队列（先进先出）这种数据结构来实现。</p>
-<p><img src="/img/astar/bfs.png" srcset="/img/loading.gif" lazyload alt="bfs"></p>
+<h3 id="广度优先算法-breadth-first-search"><a class="markdownIt-Anchor" href="#广度优先算法-breadth-first-search"></a> 广度优先算法-Breadth First Search</h3>
+<p>可以使用队列（先进先出）这种数据结构来实现。</p>
+<p><img src="/img/astar/bfs.png" srcset="/img/loading.gif" lazyload alt="bfs" /></p>
 <blockquote>
 <p>可以使用队列结构实现，由于是逐层遍历的，因此遍历到目标点时肯定可以得到一条最短路径，因此更短的所有路径都已经遍历了，不能到达目标点。因此BFS算法实现简单、路径能找到最优解、算法消耗时间比较大、遍历的点有点多。</p>
 </blockquote>
-<h3 id="启发式搜索"><a href="#启发式搜索" class="headerlink" title="启发式搜索"></a>启发式搜索</h3><blockquote>
+<h3 id="启发式搜索"><a class="markdownIt-Anchor" href="#启发式搜索"></a> 启发式搜索</h3>
+<blockquote>
 <p>传统的广度优先搜索与深度优先搜索它们本质的区别就是每次从当前集合中弹出要读取的节点的规则，BFS是先入先出，使得每次弹出搜索树上深度最小的节点；DFS是先入后出，使得每次弹出搜索树上深度最大的节点；这两种弹出规则下两种方法的优缺点都很明显，并且都没有利用目标节点位置信息。因此后来为了找到一种更优的图搜索算法，就有了启发式搜索算法，启发式搜索算法简单来说就是指根据目标位置人为定义的另一种更合理的规则来弹出集合中的节点，这种规则就是所谓的启发。</p>
 </blockquote>
 <p>最简单的启发式搜索算法就是<strong>贪心算法</strong>。贪心算法的启发规则就是简单的弹出当前集合中距离终点最近的那个节点。当然实际的距离我们是不会提前知道的（虽然一般我们知道起点和终点的位置，但是我们不知道地图或者地图会变化），所以用来做启发的是一种理想中的距离，比如假设没有障碍物的存在，使用欧式（或曼哈顿等）距离来做启发。</p>
 <blockquote>
 <p>其实上述的广度优先与深度优先还有一个缺点，那就是只能在无权图上做规划，因为是以生成树上节点的深度来启发的。</p>
 </blockquote>
-<h2 id="Dijkstra算法"><a href="#Dijkstra算法" class="headerlink" title="Dijkstra算法"></a>Dijkstra算法</h2><p>算法要点：</p>
+<h2 id="dijkstra算法"><a class="markdownIt-Anchor" href="#dijkstra算法"></a> Dijkstra算法</h2>
+<p>算法要点：</p>
 <ul>
 <li><strong>弹出规则</strong>：g(n)-对于一个节点n，g(n)表示从起点到当前节点已经耗费的总代价。（Dijkstra算法每次<strong>弹出</strong>g(n)最小的那个节点，其实类似BFS，BFS的g(n)为节点在搜索树上的深度）</li>
 <li><strong>更新规则</strong>：对于当前节点n的一个邻居节点m，如果m已经在当前集合中，则根据当前路径（n-&gt;m）重新确定一个g(m)，如果其小于原本的值，则对g(m)进行更新。</li>
 </ul>
 <p>算法伪代码：</p>
 <figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs vbnet">Initial初始化: 初始节点g(X_s)=<span class="hljs-number">0</span>,其他所有节点g(n)=infinite;设计一个数据结构priority queue(自动对其中数据根据g(n)进行排序) <br><span class="hljs-symbol">Loop:</span><br>	- <span class="hljs-keyword">if</span> the queue <span class="hljs-built_in">is</span> empty, <span class="hljs-keyword">return</span> <span class="hljs-literal">FALSE</span>; break;<br>	- Remove the node <span class="hljs-string">&quot;n&quot;</span> <span class="hljs-keyword">with</span> the lowest g(n) <span class="hljs-keyword">from</span> the queue<br>	- Mark node <span class="hljs-string">&quot;n&quot;</span> <span class="hljs-keyword">as</span> expanded<br>	- <span class="hljs-keyword">if</span> the node <span class="hljs-string">&quot;n&quot;</span> <span class="hljs-built_in">is</span> the goal state, <span class="hljs-keyword">return</span> <span class="hljs-literal">TRUE</span>; break;<br>	- <span class="hljs-keyword">For</span> all unexpanded neighbors <span class="hljs-string">&quot;m&quot;</span> <span class="hljs-keyword">of</span> node <span class="hljs-string">&quot;n&quot;</span><br>		- <span class="hljs-keyword">if</span> g(m)=infinite<br>			- g(m) = g(n) + Cnm<br>			- Push node <span class="hljs-string">&quot;m&quot;</span> <span class="hljs-keyword">into</span> the queue<br>		- <span class="hljs-keyword">if</span> g(m) &gt; g(n) + Cnm<br>			- g(m) = g(n) + Cnm<br>	- <span class="hljs-keyword">end</span><br><span class="hljs-keyword">End</span> <span class="hljs-keyword">Loop</span>	<br></code></pre></td></tr></table></figure>
-
-<p><img src="/img/astar/dijkstra.png" srcset="/img/loading.gif" lazyload alt="Dijkstra"></p>
+<p><img src="/img/astar/dijkstra.png" srcset="/img/loading.gif" lazyload alt="Dijkstra" /></p>
 <blockquote>
 <p>优点：完备的，只要有解一定可以找到最优解。缺点：只利用了到目前为止的成本，没有利用目标位置的信息，这也导致了当图中每条边权重相同时，Dijkstra算法也就退化成了广度优先搜索算法。所以本算法其实就是对BFS的拓展使其可以用于有权图搜索。此类算法盲目穷举进行探索的，都不是启发式搜索算法。</p>
 </blockquote>
 <ul>
-<li>在cpp中上述Priority queue可以使用下面三种方式实现<ul>
+<li>在cpp中上述Priority queue可以使用下面三种方式实现
+<ul>
 <li><code>std::priority_queue</code></li>
 <li><code>std::make_heap</code></li>
 <li><code>std::mutimap</code></li>
 </ul>
 </li>
 </ul>
-<h2 id="A-star算法"><a href="#A-star算法" class="headerlink" title="A-star算法"></a>A-star算法</h2><p>算法要点：</p>
+<h2 id="a-star算法"><a class="markdownIt-Anchor" href="#a-star算法"></a> A-star算法</h2>
+<p>算法要点：</p>
 <ul>
 <li><strong>累积成本函数</strong>g(n): 从起点到当前节点n累积的成本cost；</li>
 <li><strong>启发函数</strong>h(n): 从当前节点n到目标估计成本cost（类似欧式距离、曼哈顿距离等）；</li>
-<li><strong>估计成本函数</strong> f(n) &#x3D; g(n) + h(n): 经过当前节点n从起始节点到目标节点的估计成本； </li>
-<li><strong>策略</strong>：每次<strong>弹出</strong>f(n)最小的节点<ul>
+<li><strong>估计成本函数</strong> f(n) = g(n) + h(n): 经过当前节点n从起始节点到目标节点的估计成本；</li>
+<li><strong>策略</strong>：每次<strong>弹出</strong>f(n)最小的节点
+<ul>
 <li><strong>更新策略</strong>：对于当前节点n的一个邻居节点m，如果m已经在当前集合中，则根据当前路径（n-&gt;m）重新确定一个g(m)，如果其小于原本的值，则对g(m)进行更新。</li>
 <li>每个被访问（弹出）过的节点n，一定找到了从起点到n的一个最短路径</li>
 </ul>
@@ -346,16 +356,16 @@
 </ul>
 <p>算法伪代码：</p>
 <figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs vbnet">Initial初始化: 初始节点g(X_s)=<span class="hljs-number">0</span>,其他所有节点g(n)=infinite;初始化所有节点h(n);设计一个数据结构priority queue(自动对其中数据根据g(n)进行排序) <br><span class="hljs-symbol">Loop:</span><br>	- <span class="hljs-keyword">if</span> the queue <span class="hljs-built_in">is</span> empty, <span class="hljs-keyword">return</span> <span class="hljs-literal">FALSE</span>; break;<br>	- Remove the node <span class="hljs-string">&quot;n&quot;</span> <span class="hljs-keyword">with</span> the lowest f(n) <span class="hljs-keyword">from</span> the queue<br>	- Mark node <span class="hljs-string">&quot;n&quot;</span> <span class="hljs-keyword">as</span> expanded<br>	- <span class="hljs-keyword">if</span> the node <span class="hljs-string">&quot;n&quot;</span> <span class="hljs-built_in">is</span> the goal state, <span class="hljs-keyword">return</span> <span class="hljs-literal">TRUE</span>; break;<br>	- <span class="hljs-keyword">For</span> all unexpanded neighbors <span class="hljs-string">&quot;m&quot;</span> <span class="hljs-keyword">of</span> node <span class="hljs-string">&quot;n&quot;</span><br>		- <span class="hljs-keyword">if</span> g(m)=infinite<br>			- g(m) = g(n) + Cnm<br>			- Push node <span class="hljs-string">&quot;m&quot;</span> <span class="hljs-keyword">into</span> the queue<br>		- <span class="hljs-keyword">if</span> g(m) &gt; g(n) + Cnm<br>			- g(m) = g(n) + Cnm<br>	- <span class="hljs-keyword">end</span><br><span class="hljs-keyword">End</span> <span class="hljs-keyword">Loop</span>	<br></code></pre></td></tr></table></figure>
-
-<p><img src="/img/astar/astar.png" srcset="/img/loading.gif" lazyload alt="astar"></p>
+<p><img src="/img/astar/astar.png" srcset="/img/loading.gif" lazyload alt="astar" /></p>
 <blockquote>
 <p>由于引入了启发函数h，如果启发函数不合理，A星算法有可能是找不到最优解的（如下图）。如果想保证a星算法可以找到最优解，需要满足任意 h(n)小于等于节点n到终点的实际cost。</p>
 </blockquote>
-<p><img src="/img/astar/astar1.png" srcset="/img/loading.gif" lazyload alt="astar_wrong"></p>
+<p><img src="/img/astar/astar1.png" srcset="/img/loading.gif" lazyload alt="astar_wrong" /></p>
 <ul>
-<li><strong>加权A星算法</strong>，即使用的$f(n)&#x3D;g(n)+\varepsilon h(n)$，当$\varepsilon &gt;1$时，代表着增加了h(n)的权重，这有可能导致不能得到最优解，但是可以更快的到达目标（有可能提升几十倍 ）。<ul>
+<li><strong>加权A星算法</strong>，即使用的<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo><mo>=</mo><mi>g</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo><mo>+</mo><mi>ε</mi><mi>h</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(n)=g(n)+\varepsilon h(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">ε</span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>，当<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ε</mi><mo>&gt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\varepsilon &gt;1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">ε</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>时，代表着增加了h(n)的权重，这有可能导致不能得到最优解，但是可以更快的到达目标（有可能提升几十倍 ）。
+<ul>
 <li>这种方法其实是一种 最优性 vs 速度（贪心算法肯定是最快的，只是不能得到最优解）；</li>
-<li>已经被证明：$cost_{solution} \le \varepsilon cost_{optimal}$，即结果的cost与最优解的cost的关系；</li>
+<li>已经被证明：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mi>o</mi><mi>s</mi><msub><mi>t</mi><mrow><mi>s</mi><mi>o</mi><mi>l</mi><mi>u</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi></mrow></msub><mo>≤</mo><mi>ε</mi><mi>c</mi><mi>o</mi><mi>s</mi><msub><mi>t</mi><mrow><mi>o</mi><mi>p</mi><mi>t</mi><mi>i</mi><mi>m</mi><mi>a</mi><mi>l</mi></mrow></msub></mrow><annotation encoding="application/x-tex">cost_{solution} \le \varepsilon cost_{optimal}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7859700000000001em;vertical-align:-0.15em;"></span><span class="mord mathnormal">c</span><span class="mord mathnormal">o</span><span class="mord mathnormal">s</span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">s</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span><span class="mord mathnormal mtight">u</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.9011879999999999em;vertical-align:-0.286108em;"></span><span class="mord mathnormal">ε</span><span class="mord mathnormal">c</span><span class="mord mathnormal">o</span><span class="mord mathnormal">s</span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">p</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span>，即结果的cost与最优解的cost的关系；</li>
 </ul>
 </li>
 </ul>
@@ -363,13 +373,15 @@
 <p>如果想查看不同算法的动态效果，<a target="_blank" rel="noopener" href="http://qiao.github.io/PathFinding.js/visual/">这个网页</a>提供了在线模拟运行的小程序。</p>
 </blockquote>
 <ul>
-<li>常识强调：<ul>
+<li>常识强调：
+<ul>
 <li><code>openlist</code>：也就是维护的priority queue，也就是所有已经扩展过的节点的邻居（不包括已经扩展过的节点）组成的容器；</li>
 <li><code>closelist</code>: 也就是已经扩展过（访问过）的节点组成的容器；</li>
 </ul>
 </li>
 </ul>
-<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ul>
+<h1 id="参考文献"><a class="markdownIt-Anchor" href="#参考文献"></a> 参考文献</h1>
+<ul>
 <li>[1] 深蓝学院运动规划课程PPT（高飞老师）。</li>
 </ul>
 
@@ -443,9 +455,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/01/17/2021-01-17-lens-camera/" title="镜头的参数与成像">
+                      <a href="/2021/01/05/2021-01-05-auction/" title="拍卖算法">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">镜头的参数与成像</span>
+                        <span class="hidden-mobile">拍卖算法</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -546,7 +558,6 @@
 
   
   
-
 
 
 
@@ -741,49 +752,6 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
-
-  
-      <script>
-        if (!window.MathJax) {
-          window.MathJax = {
-            tex    : {
-              inlineMath: { '[+]': [['$', '$']] }
-            },
-            loader : {
-              load: ['ui/lazy']
-            },
-            options: {
-              renderActions: {
-                insertedScript: [200, () => {
-                  document.querySelectorAll('mjx-container').forEach(node => {
-                    let target = node.parentNode;
-                    if (target.nodeName.toLowerCase() === 'li') {
-                      target.parentNode.classList.add('has-jax');
-                    }
-                  });
-                }, '', false]
-              }
-            }
-          };
-        } else {
-          MathJax.startup.document.state(0);
-          MathJax.texReset();
-          MathJax.typeset();
-          MathJax.typesetPromise();
-        }
-
-        Fluid.events.registerRefreshCallback(function() {
-          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
-            MathJax.startup.document.state(0);
-            MathJax.texReset();
-            MathJax.typeset();
-            MathJax.typesetPromise();
-          }
-        });
-      </script>
-    
-
-  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 

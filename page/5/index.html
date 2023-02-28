@@ -234,6 +234,86 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2019/04/22/2019-04-22-Li-group/" target="_self">
+          李群与李代数
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2019/04/22/2019-04-22-Li-group/" target="_self">
+        <div>
+          这部分内容是在slam中经常会用到的数学内容。  群 群(group)是一种代数结构，由两部分(一个集合A与一种运算⋅\cdot⋅)构成，可以记作G=(A,⋅)G=(A, \cdot)G=(A,⋅),并且群满足如下条件:  封闭性:     $ \quad \forall a_1, a_2, \quad a_1 \cdot a_2 \in A $ 结合律:     $ \quad \forall
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-04-22 01:07" pubdate>
+              2019-04-22
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E6%95%B0%E5%AD%A6/">#数学</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2019/04/21/2019-04-21-pose-estimation/" target="_self">
+          特征点法slam中位姿估计方法总结
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2019/04/21/2019-04-21-pose-estimation/" target="_self">
+        <div>
+          这篇博客主要是对基于特征点匹配的slam中的位姿估计方法进行总结。  2d-2d的位姿估计 一般用在单目slam的初始阶段，系统还没有地图，此时只有输入的2d的图片序列。一般会使用如下方法进行位姿估计。而RGBD与双目系统中，无需进行初始化。   首先通过对极约束求解出本质矩阵(比较经典的有八点法)，然后对本质矩阵进行奇异值分解(SVD)，求解出R与t;  原理公式E=t∧RE = t^{\lan
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-04-21 01:07" pubdate>
+              2019-04-21
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">#计算机视觉</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2019/04/20/2019-04-20-triangulation/" target="_self">
           单目vo中的深度确定方法--三角测量
         </a>
@@ -282,7 +362,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2019/04/19/2019-04-19-bow/" target="_self">
         <div>
-          看orb-slam的时候发现它在回环检测的时候使用了基于视觉词袋的图像匹配，现在有了一点心得，虽然还有些东西没有完全吃透，但最近比较忙，可能不会有时间在这里死磕，所以先将目前所得写下来，省的忘了。以后有时间完全吃透了会继续完善这篇文章。 Bag-of-words模型简介词袋模型在信息检索领域使用的比较多，以前上课时就听老师讲过，是很常见的算法。在信息检索中，Bow忽略一个文档中单词出现的顺序、语法
+          看orb-slam的时候发现它在回环检测的时候使用了基于视觉词袋的图像匹配，现在有了一点心得，虽然还有些东西没有完全吃透，但最近比较忙，可能不会有时间在这里死磕，所以先将目前所得写下来，省的忘了。以后有时间完全吃透了会继续完善这篇文章。  Bag-of-words模型简介 词袋模型在信息检索领域使用的比较多，以前上课时就听老师讲过，是很常见的算法。在信息检索中，Bow忽略一个文档中单词出现的顺序、
         </div>
       </a>
 
@@ -322,7 +402,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2019/04/15/2019-04-15-sort/" target="_self">
         <div>
-          排序问题是一个基础问题，这篇博客主要总结一下各种经典常用的有特色的排序算法。 冒泡排序(bubble sort) 原理：每次从左向右两两进行比较，将较大&#x2F;小的交换到后面。每一个循环可以确定排好一个数，循环n-1次，完全排序完毕。  1234567891011void bubble_sort(vector&lt;int&gt; &amp; nums)&#123;    for(int i=
+          排序问题是一个基础问题，这篇博客主要总结一下各种经典常用的有特色的排序算法。  冒泡排序(bubble sort)  原理：每次从左向右两两进行比较，将较大/小的交换到后面。每一个循环可以确定排好一个数，循环n-1次，完全排序完毕。  1234567891011void bubble_sort(vector&lt;int&gt; &amp; nums)&#123;    for(int i=0;
         </div>
       </a>
 
@@ -362,7 +442,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2019/04/15/2019-04-15-vnc-rdp/" target="_self">
         <div>
-          由于个人电脑性能有限，很多时候我们都需要远程登录服务器利用其资源。常见的远程界面连接到计算机有两种方法，一种是VNC(Virtual Network Computing)，另一种是RDP(Remote Desktop Protocol). VNCVNC(Virtual Network Computing，是一个软件)是基于RFB(Remote Frame Buffer)协议进行通信的，这种协议是一
+          由于个人电脑性能有限，很多时候我们都需要远程登录服务器利用其资源。常见的远程界面连接到计算机有两种方法，一种是VNC(Virtual Network Computing)，另一种是RDP(Remote Desktop Protocol).  VNC VNC(Virtual Network Computing，是一个软件)是基于RFB(Remote Frame Buffer)协议进行通信的，这种协议
         </div>
       </a>
 
@@ -402,7 +482,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2019/04/02/2019-04-12-linked-list-cycle/" target="_self">
         <div>
-          昨天去面试，面试官问了我一道带环的链表问题。因为以前一个师姐问过我这个问题，我在网上看到过正确解法，因此很轻松的就写出了解法。但是当面试官让我将这个问题用公式推导出来时，，很尴尬，我忽然脑子僵了，多亏面试官提醒了一下，我才推导出来。  事后回想，总结如下: 任何问题不能只记住解法，而要真正将这个问题弄清楚。  链表结构描述其实就是一个6字型的链表问题，一般我们解这样的题，都是设置两个前进节点，一个
+          昨天去面试，面试官问了我一道带环的链表问题。因为以前一个师姐问过我这个问题，我在网上看到过正确解法，因此很轻松的就写出了解法。但是当面试官让我将这个问题用公式推导出来时，，很尴尬，我忽然脑子僵了，多亏面试官提醒了一下，我才推导出来。  事后回想，总结如下: 任何问题不能只记住解法，而要真正将这个问题弄清楚。   链表结构描述 其实就是一个6字型的链表问题，一般我们解这样的题，都是设置两个前进节点，
         </div>
       </a>
 
@@ -442,7 +522,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2019/03/30/2019-03-30-linux-issue/" target="_self">
         <div>
-          在学习linux的内容中，存在很多重要有趣有用的小知识，但是这些小知识很繁琐，每一个都写一片博客是不可能的，篇幅太短，所以这篇博客就来将这些小知识来一个大杂烩。  数据流重定向 管道命令-pipe 回车与换行的区别 常用组合键 bash环境中的特殊字符 通配符 修改文件权限 在linux文件系统中搜索字符串 在Linux文件系统中搜索 linux中备份操作tar  数据流重定向要想了解数据流重定向
+          在学习linux的内容中，存在很多重要有趣有用的小知识，但是这些小知识很繁琐，每一个都写一片博客是不可能的，篇幅太短，所以这篇博客就来将这些小知识来一个大杂烩。  数据流重定向 管道命令-pipe 回车与换行的区别 常用组合键 bash环境中的特殊字符 通配符 修改文件权限 在linux文件系统中搜索字符串 在Linux文件系统中搜索 linux中备份操作tar   数据流重定向 要想了解数据流重
         </div>
       </a>
 
@@ -482,7 +562,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2019/03/30/2019-03-30-vim/" target="_self">
         <div>
-          经常需要在linux环境下进行开发，不可避免的要使用vim。为了方便每次查阅与温习，在这篇博客里记录一些常用功能操作与我熟悉的一些基本配置。 vimvim本身就是一个编辑器，就像是windows的text一样，但是这个编辑器有很多的命令与快捷操作方式可以大大的节省我们开发编辑的时间。 基本命令 一般命令模式下的普通命令  dd : 剪切光标所在的那一整行到剪切板，会覆盖原先剪切板内容 yy : 复
+          经常需要在linux环境下进行开发，不可避免的要使用vim。为了方便每次查阅与温习，在这篇博客里记录一些常用功能操作与我熟悉的一些基本配置。  vim vim本身就是一个编辑器，就像是windows的text一样，但是这个编辑器有很多的命令与快捷操作方式可以大大的节省我们开发编辑的时间。  基本命令   一般命令模式下的普通命令  dd : 剪切光标所在的那一整行到剪切板，会覆盖原先剪切板内容 y
         </div>
       </a>
 
@@ -548,93 +628,11 @@
     </article>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2019/01/27/2019-01-27-Homography-matrix/" target="_self">
-          射影几何中的单应变换
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2019/01/27/2019-01-27-Homography-matrix/" target="_self">
-        <div>
-          各种经典变换总结(2维平面上，三维空间中思想一致，但是自由度不同) 刚体(欧式)变换：可以保证两个点在变换前后欧式距离不变，具有3个自由度（旋转一个，平移两个）；  通常是旋转加上平移；   相似变换：通常指相似刚体变换，指增加了缩放的刚体变换，具有4个自由度（刚体的3个再加上缩放尺度），相似变换具有保角性与保持距离比的性质；  通常可以描述为先旋转一次，再缩放一次，最后平移一次；   仿射变换：
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-01-27 01:07" pubdate>
-              2019-01-27
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">#计算机视觉</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2019/01/26/2019-01-26-ransac/" target="_self">
-          RANSAC算法的理解与使用
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2019/01/26/2019-01-26-ransac/" target="_self">
-        <div>
-          **随机抽样一致算法(random sample consensus, RANSAC)**，其实就是采用迭代的方法从一组包含离群的被观测数据中估算出数学模型的参数。(比如通过一群点拟合一条直线等) 基本假设 模型假设：事先知道真实数据满足的数学模型，不知道的只是模型的具体参数；  输入假设：输入数据中包含正确数据（即inliers，可以被假设模型描述的数据）；同时也包含异常数据（即outliers
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-01-26 01:07" pubdate>
-              2019-01-26
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">#计算机视觉</a>
-            
-              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">#机器学习</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
 
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/4/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/#board">3</a><a class="page-number" href="/page/4/#board">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/#board">6</a><a class="page-number" href="/page/7/#board">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/#board">10</a><a class="extend next" rel="next" href="/page/6/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/4/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/#board">3</a><a class="page-number" href="/page/4/#board">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/#board">6</a><a class="page-number" href="/page/7/#board">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/#board">11</a><a class="extend next" rel="next" href="/page/6/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 

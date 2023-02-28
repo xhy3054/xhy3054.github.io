@@ -234,6 +234,86 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2019/06/19/2019-06-19-rotation-3d/" target="_self">
+          三维中间中旋转的表示方式--欧拉角、旋转矩阵、旋转向量、四元数
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2019/06/19/2019-06-19-rotation-3d/" target="_self">
+        <div>
+          三维空间中的旋转有很多种表示方式，欧拉角，旋转矩阵，旋转向量，四元数。由于在slam与机器人中会大量用到这方面的知识，所以在这里将此方面的知识总结一下，方便以后查阅。  欧拉角（Euler Angle）  欧拉角可以使用滑翔翼飞行器控制来理解，比如对于下面这张图，一般假设红色轴为z轴，则z轴表示空间的第三维，则去掉这一维度表示飞行器在一个二维平面上；蓝色轴为x轴，也是飞行器的朝向，因此绕此轴转动就
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-06-19 01:07" pubdate>
+              2019-06-19
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E6%95%B0%E5%AD%A6/">#数学</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2019/05/30/2019-05-30-auto-drive/" target="_self">
+          自动驾驶系统描述
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2019/05/30/2019-05-30-auto-drive/" target="_self">
+        <div>
+          虽然很多人都说自动驾驶是坑，，，但是我就是喜欢在坑里玩泥巴。入坑也有一段时间了，今天主要将要填这个坑需要做的工作总结一下。  自动驾驶 一些有的没得今天就不扯了，毕竟历史、事件、定义之类的经常看，经常忘。 我理解的自动驾驶系统是是由两部分组成的：感知与决策。本文主要从这两个大方向入手，对其麾下的一些不可或缺的功能模块进行描述。  1. 感知系统  我将感知问题分为两部分，第一是对世界的感知与理解，
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-05-30 01:07" pubdate>
+              2019-05-30
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">#人工智能</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2019/05/25/2019-05-25-ros/" target="_self">
           ros操作系统入门
         </a>
@@ -242,7 +322,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2019/05/25/2019-05-25-ros/" target="_self">
         <div>
-          很长时间没有用ros了，刚好这几天手头有一台闲置的$turtlebot$，于是就想用它验证一些导航算法。重新看ros的官网教程，写的很好，但是每一节讲的东西很少，而我这里网速不快，每次打开新的网页都要等一会，超级费时间，所以写篇博客将ros的常用操作概括归纳一些，以后忘记了方便查阅。 rosROS是一个用于开发机器人应用程序的、类似操作系统的机器人软件平台。ROS提供开发机器人应用程序时所需的硬件
+          很长时间没有用ros了，刚好这几天手头有一台闲置的turtlebotturtlebotturtlebot，于是就想用它验证一些导航算法。重新看ros的官网教程，写的很好，但是每一节讲的东西很少，而我这里网速不快，每次打开新的网页都要等一会，超级费时间，所以写篇博客将ros的常用操作概括归纳一些，以后忘记了方便查阅。  ros ROS是一个用于开发机器人应用程序的、类似操作系统的机器人软件平台。RO
         </div>
       </a>
 
@@ -322,7 +402,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2019/05/14/2019-05-14-loop-closing/" target="_self">
         <div>
-          在slam中，前端负责提供轨迹与地图的初值，后端负责对轨迹与地图进行优化。在小范围的环境中，前端与后端便已经够用了。但是当活动的范围增加以后，这一类只依靠内部传感器（相机、imu等）的定位方法不可避免的会出现累积误差，这时因为虽然我们可以使用ba等优化方式进行优化，但是这种优化方式毕竟还是局部的（比如某一个位姿下会有大部分的地图点是看不到的）。 回环检测回环检测与累积误差拿视觉slam来说，虽然对
+          在slam中，前端负责提供轨迹与地图的初值，后端负责对轨迹与地图进行优化。在小范围的环境中，前端与后端便已经够用了。但是当活动的范围增加以后，这一类只依靠内部传感器（相机、imu等）的定位方法不可避免的会出现累积误差，这时因为虽然我们可以使用ba等优化方式进行优化，但是这种优化方式毕竟还是局部的（比如某一个位姿下会有大部分的地图点是看不到的）。  回环检测  回环检测与累积误差 拿视觉slam来说
         </div>
       </a>
 
@@ -362,7 +442,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2019/05/07/2019-05-07-bundle-adjustment-solve/" target="_self">
         <div>
-          在视觉slam与sfm中，BA是很常见的参数优化方法。它的全名是 Bundle Adjustment，中文翻译有捆集调整、光束法平差等。  BA的主要思想是最小化重投影误差，以其作为目标函数来优化位姿、地图点、相机参数等。  计算投影点根据以前的两篇博客相机成像模型与相机畸变与标定，我们可以知道将一个地图点投影到像素平面上流程如下：  首先，世界坐标系下有一个固定的点P，世界坐标是 $P_{w}$
+          在视觉slam与sfm中，BA是很常见的参数优化方法。它的全名是 Bundle Adjustment，中文翻译有捆集调整、光束法平差等。  BA的主要思想是最小化重投影误差，以其作为目标函数来优化位姿、地图点、相机参数等。   计算投影点 根据以前的两篇博客相机成像模型与相机畸变与标定，我们可以知道将一个地图点投影到像素平面上流程如下：   首先，世界坐标系下有一个固定的点P，世界坐标是 PwP_
         </div>
       </a>
 
@@ -402,7 +482,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2019/05/06/2019-05-06-state-estimation-filter/" target="_self">
         <div>
-          本文主要介绍如何使用滤波器(卡尔曼滤波器与扩展卡尔曼滤波器)进行状态估计。 状态估计问题首先列出状态估计方程，由运动方程与观测方程组成 $$\left{\begin{array}{l}{\boldsymbol{x}{k}&#x3D;f\left(\boldsymbol{x}{k-1}, \boldsymbol{u}{k}\right)+\boldsymbol{w}{k}} \ {\boldsymb
+          本文主要介绍如何使用滤波器(卡尔曼滤波器与扩展卡尔曼滤波器)进行状态估计。  状态估计问题 首先列出状态估计方程，由运动方程与观测方程组成 {xk=f(xk−1,uk)+wkzk=h(xk)+υkk=1,…,N\left\{\begin{array}{l}{\boldsymbol{x}_{k}=f\left(\boldsymbol{x}_{k-1}, \boldsymbol{u}_{k}\righ
         </div>
       </a>
 
@@ -442,7 +522,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2019/04/29/2019-04-29-nonlinear-optimization/" target="_self">
         <div>
-          什么是非线性优化 对于最优化问题，如果目标函数是非线性的，那就是非线性优化问题，如果目标函数是凸函数，那就是凸优化问题。  首先需要说明的是，最初的问题其实是一个最优化问题。所谓的最优化问题其实就是寻找最优解的问题，一般形式是寻找函数的最大值或者最小值(一般都是将问题转换成求解目标函数的最小值)。 而非线性优化问题就是针对一个非线性函数求最值的问题。其实，在我们初高中的时候就已经求解过非线性优化的
+          什么是非线性优化  对于最优化问题，如果目标函数是非线性的，那就是非线性优化问题，如果目标函数是凸函数，那就是凸优化问题。  首先需要说明的是，最初的问题其实是一个最优化问题。所谓的最优化问题其实就是寻找最优解的问题，一般形式是寻找函数的最大值或者最小值(一般都是将问题转换成求解目标函数的最小值)。 而非线性优化问题就是针对一个非线性函数求最值的问题。其实，在我们初高中的时候就已经求解过非线性优
         </div>
       </a>
 
@@ -482,7 +562,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2019/04/29/2019-04-29-state-estimation-nonlinear-least-square/" target="_self">
         <div>
-          本文主要介绍一下视觉slam中的状态估计问题，并介绍如何将非线性最小二乘与其联系起来。 状态估计问题首先介绍一下slam中的状态估计问题，这个问题由一个运动方程与一个观测方程构成。 $$ \begin{equation} \begin{cases} x_{k} &#x3D; f(x_{k-1}, u_{k}) + w_k  \ z_{k,j} &#x3D; h(y_j, x_{k}) + {\up
+          本文主要介绍一下视觉slam中的状态估计问题，并介绍如何将非线性最小二乘与其联系起来。  状态估计问题 首先介绍一下slam中的状态估计问题，这个问题由一个运动方程与一个观测方程构成。 \begin{equation} \begin{cases} x_{k} = f(x_{k-1}, u_{k}) + w_k  \\ z_{k,j} = h(y_j, x_{k}) + {\upsilon}_{k,
         </div>
       </a>
 
@@ -522,7 +602,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2019/04/25/2019-04-25-li-group-derivation/" target="_self">
         <div>
-          $SO(3)$李代数上的扰动模型求导是slam中使用最广泛的公式。！！！  在上一篇博客中我们了解了李群与李代数的定义，那么知道这些有什么用呢？ 我们经常构建与位姿有关的函数，然后讨论该函数关于位姿的导数，以调整当前的估计值。表示姿态的李群$SO(3)$与表示位姿的李群$SE(3)$上并没有定义加法，而求导数是需要加法的。因此此时如何求导就成了一个需要解决的问题，它们的李代数由向量组成，具有良好
+          SO(3)SO(3)SO(3)李代数上的扰动模型求导是slam中使用最广泛的公式。！！！  在上一篇博客中我们了解了李群与李代数的定义，那么知道这些有什么用呢？ 我们经常构建与位姿有关的函数，然后讨论该函数关于位姿的导数，以调整当前的估计值。表示姿态的李群SO(3)SO(3)SO(3)与表示位姿的李群SE(3)SE(3)SE(3)上并没有定义加法，而求导数是需要加法的。因此此时如何求导就成了一个
         </div>
       </a>
 
@@ -548,91 +628,11 @@
     </article>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2019/04/22/2019-04-22-Li-group/" target="_self">
-          李群与李代数
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2019/04/22/2019-04-22-Li-group/" target="_self">
-        <div>
-          这部分内容是在slam中经常会用到的数学内容。 群群(group)是一种代数结构，由两部分(一个集合A与一种运算$\cdot$)构成，可以记作$G&#x3D;(A, \cdot)$,并且群满足如下条件:  封闭性:     $ \quad \forall a_1, a_2, \quad a_1 \cdot a_2 \in A $ 结合律:     $ \quad \forall a_1, a_2,
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-04-22 01:07" pubdate>
-              2019-04-22
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E6%95%B0%E5%AD%A6/">#数学</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2019/04/21/2019-04-21-pose-estimation/" target="_self">
-          特征点法slam中位姿估计方法总结
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2019/04/21/2019-04-21-pose-estimation/" target="_self">
-        <div>
-          这篇博客主要是对基于特征点匹配的slam中的位姿估计方法进行总结。 2d-2d的位姿估计一般用在单目slam的初始阶段，系统还没有地图，此时只有输入的2d的图片序列。一般会使用如下方法进行位姿估计。而RGBD与双目系统中，无需进行初始化。  首先通过对极约束求解出本质矩阵(比较经典的有八点法)，然后对本质矩阵进行奇异值分解(SVD)，求解出R与t;  原理公式$ E &#x3D; t^{\land
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-04-21 01:07" pubdate>
-              2019-04-21
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">#计算机视觉</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
 
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/3/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/#board">2</a><a class="page-number" href="/page/3/#board">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/#board">5</a><a class="page-number" href="/page/6/#board">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/#board">10</a><a class="extend next" rel="next" href="/page/5/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/3/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/#board">2</a><a class="page-number" href="/page/3/#board">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/#board">5</a><a class="page-number" href="/page/6/#board">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/#board">11</a><a class="extend next" rel="next" href="/page/5/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 

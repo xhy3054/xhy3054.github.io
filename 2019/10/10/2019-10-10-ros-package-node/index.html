@@ -46,6 +46,8 @@
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
 
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
+
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
@@ -231,7 +233,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          4.6k 字
+          4.7k 字
         
       </span>
     
@@ -286,66 +288,81 @@
               <div class="markdown-body">
                 
                 <p>之前写过一篇<a href="">关于ros入门的博客</a>，但是这段时间我再看时发现当时比较关注全面性，所以在里面可以看到ros里几乎所有的基本知识。但是通篇看下来每一个讲的都没有很仔细，都是概念性的讲解。使得看完后，大家似乎对于ros的实现机制与功能模块有了一定的理解，但是如何使用ros呢？如何开发ros呢？好像还是有一些不是很懂。所以这一篇博客就会从ros使用的案例来说明，如何使用一个最小ros的功能包来跑起来节点。</p>
-<h1 id="1-功能包"><a href="#1-功能包" class="headerlink" title="1. 功能包"></a>1. 功能包</h1><blockquote>
-<p><strong>功能包（package）</strong>是构成ROS的基本单元。ROS应用程序是以功能包为单位开发的。功能包包括至少一个以上的节点或拥有用于运行其他功能包的节点的配置文件。它还包含功能包所需的所有文件，如用于运行各种进程的ROS依赖库、数据集和配置文件等。</p>
-</blockquote>
-<ul>
-<li>在工作空间中创建包<code>new_package</code>，依赖于包<code>depend_p1</code>与<code>depend_p2</code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> ~/catkin_ws/src<br>catkin_create_pkg new_package depend_p1 depend_p2 <br></code></pre></td></tr></table></figure></li>
-</ul>
-<hr>
-<ul>
-<li><p>查看一个包的直接依赖<code>rospack depends1 new_packsge</code></p>
-</li>
-<li><p>查看一个包的所有依赖（包括直接与间接）<code>rospack depends new_package</code></p>
-</li>
-<li><p>编译包，直接编译整个工作空间就可以了</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> ~/catkin_ws<br>catkin_make<br></code></pre></td></tr></table></figure></li>
-</ul>
-<hr>
+<h1 id="1-功能包"><a class="markdownIt-Anchor" href="#1-功能包"></a> 1. 功能包</h1>
 <blockquote>
-<p><strong>元功能包（metapackage）</strong>是一个具有共同目的的功能包的集合。例如，导航元功能包包含AMCL、DWA、EKF和map_server等10余个功能包。</p>
+<p>**功能包（package）**是构成ROS的基本单元。ROS应用程序是以功能包为单位开发的。功能包包括至少一个以上的节点或拥有用于运行其他功能包的节点的配置文件。它还包含功能包所需的所有文件，如用于运行各种进程的ROS依赖库、数据集和配置文件等。</p>
 </blockquote>
-<h1 id="2-节点"><a href="#2-节点" class="headerlink" title="2. 节点"></a>2. 节点</h1><blockquote>
+<ul>
+<li>在工作空间中创建包<code>new_package</code>，依赖于包<code>depend_p1</code>与<code>depend_p2</code></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> ~/catkin_ws/src<br>catkin_create_pkg new_package depend_p1 depend_p2 <br></code></pre></td></tr></table></figure>
+<hr />
+<ul>
+<li>
+<p>查看一个包的直接依赖<code>rospack depends1 new_packsge</code></p>
+</li>
+<li>
+<p>查看一个包的所有依赖（包括直接与间接）<code>rospack depends new_package</code></p>
+</li>
+<li>
+<p>编译包，直接编译整个工作空间就可以了</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> ~/catkin_ws<br>catkin_make<br></code></pre></td></tr></table></figure>
+<hr />
+<blockquote>
+<p>**元功能包（metapackage）**是一个具有共同目的的功能包的集合。例如，导航元功能包包含AMCL、DWA、EKF和map_server等10余个功能包。</p>
+</blockquote>
+<h1 id="2-节点"><a class="markdownIt-Anchor" href="#2-节点"></a> 2. 节点</h1>
+<blockquote>
 <p><strong>ros的节点</strong>说到底就是一个操作系统上运行起来的程序。而这个可执行文件是依赖于某一个功能包的。</p>
 </blockquote>
 <p>如同前一节，假设我们创建了一个功能包<code>ros_tutorials_topic</code>，这个功能包主要的作用就是向初学者演示两个节点如何通过话题（topic）来通信。</p>
 <ul>
-<li><p>首先，这个功能包中会有两个节点（也就是会生成两个可执行文件），一个是话题发布节点，一个是话题订阅节点。</p>
+<li>
+<p>首先，这个功能包中会有两个节点（也就是会生成两个可执行文件），一个是话题发布节点，一个是话题订阅节点。</p>
 </li>
-<li><p>生成这两个节点的方法比较简单，就是在功能包文件夹下新建<code>src</code>文件夹，在里面编写两个节点的源代码，然后编译生成可执行文件即可。在CMakeLists中如下生成的两个可执行文件就是该功能包的两个节点。（添加依赖、链接什么的省略了）</p>
+<li>
+<p>生成这两个节点的方法比较简单，就是在功能包文件夹下新建<code>src</code>文件夹，在里面编写两个节点的源代码，然后编译生成可执行文件即可。在CMakeLists中如下生成的两个可执行文件就是该功能包的两个节点。（添加依赖、链接什么的省略了）</p>
 </li>
 </ul>
 <figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">add<span class="hljs-constructor">_executable(<span class="hljs-params">topic_publisher</span> <span class="hljs-params">src</span><span class="hljs-operator">/</span><span class="hljs-params">topic_publisher</span>.<span class="hljs-params">cpp</span>)</span><br>add<span class="hljs-constructor">_executable(<span class="hljs-params">topic_subscriber</span> <span class="hljs-params">src</span><span class="hljs-operator">/</span><span class="hljs-params">topic_subscriber</span>.<span class="hljs-params">cpp</span>)</span><br></code></pre></td></tr></table></figure>
-
 <ul>
 <li>在使用<code>catkin_make</code>编译之后可执行文件（节点就生成了），下面就可以运行这两个节点了。</li>
 </ul>
-<h2 id="2-1-使用rosrun运行节点"><a href="#2-1-使用rosrun运行节点" class="headerlink" title="2.1 使用rosrun运行节点"></a>2.1 使用<code>rosrun</code>运行节点</h2><ul>
-<li>下面三条命令分别新开一个终端执行<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ roscore<br>$ rosrun ros_tutorials_topic topic_publisher<br>$ rosrun ros_tutorials_topic topic_subscriber<br></code></pre></td></tr></table></figure></li>
+<h2 id="21-使用rosrun运行节点"><a class="markdownIt-Anchor" href="#21-使用rosrun运行节点"></a> 2.1 使用<code>rosrun</code>运行节点</h2>
+<ul>
+<li>下面三条命令分别新开一个终端执行</li>
 </ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ roscore<br>$ rosrun ros_tutorials_topic topic_publisher<br>$ rosrun ros_tutorials_topic topic_subscriber<br></code></pre></td></tr></table></figure>
 <blockquote>
 <p>使用<code>rosrun</code>来启动节点，只需要知道节点所属的功能包的名字，然后知道节点对应的可执行文件的名称，即可找到该节点对应的可执行文件并启动节点了。（如果是python脚本的节点，可执行文件的名称就是python脚本的名字去除后缀名）</p>
 </blockquote>
-<h2 id="2-2-使用roslaunch运行节点"><a href="#2-2-使用roslaunch运行节点" class="headerlink" title="2.2 使用roslaunch运行节点"></a>2.2 使用<code>roslaunch</code>运行节点</h2><ul>
-<li><p>使用<code>rosrun</code>来运行节点实在太麻烦，需要开太多的终端。此时我们可以使用<code>roslaunch</code>来同时启动多个节点。同时，它还有很多灵活的地方，比如修改参数与节点的名称，设置节点的命名空间等（并且会自动启动ros master）。</p>
+<h2 id="22-使用roslaunch运行节点"><a class="markdownIt-Anchor" href="#22-使用roslaunch运行节点"></a> 2.2 使用<code>roslaunch</code>运行节点</h2>
+<ul>
+<li>
+<p>使用<code>rosrun</code>来运行节点实在太麻烦，需要开太多的终端。此时我们可以使用<code>roslaunch</code>来同时启动多个节点。同时，它还有很多灵活的地方，比如修改参数与节点的名称，设置节点的命名空间等（并且会自动启动ros master）。</p>
 </li>
-<li><p>首先需要创建一个<code>×.launch</code>文件，它基于<code>XML</code>，提供了标签选项。</p>
+<li>
+<p>首先需要创建一个<code>×.launch</code>文件，它基于<code>XML</code>，提供了标签选项。</p>
 </li>
 </ul>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">launch</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">node</span> <span class="hljs-attr">pkg</span>=<span class="hljs-string">&quot;ros_tutorials_topic&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;topic_publisher&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;topic_publisher1&quot;</span>/&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">node</span> <span class="hljs-attr">pkg</span>=<span class="hljs-string">&quot;ros_tutorials_topic&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;topic_subscriber&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;topic_subscriber1&quot;</span>/&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">node</span> <span class="hljs-attr">pkg</span>=<span class="hljs-string">&quot;ros_tutorials_topic&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;topic_publisher&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;topic_publisher2&quot;</span>/&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">node</span> <span class="hljs-attr">pkg</span>=<span class="hljs-string">&quot;ros_tutorials_topic&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;topic_subscriber&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;topic_subscriber2&quot;</span>/&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">launch</span>&gt;</span><br></code></pre></td></tr></table></figure>
-
 <p>launch文件中的标签；</p>
 <ul>
-<li>$launch$标签是launch文件中的根元素；</li>
-<li>$node$标签表示启动节点<ul>
-<li>$pkg$ 表示该节点所在的功能包的名称</li>
-<li>$type$ 表示实际运行的节点的名称（也就是该节点对应的可执行文件名称）</li>
-<li>$name$ 节点运行时的名称，如果只有一个同类型的节点，一般取的name与type相同</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi><mi>a</mi><mi>u</mi><mi>n</mi><mi>c</mi><mi>h</mi></mrow><annotation encoding="application/x-tex">launch</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">a</span><span class="mord mathnormal">u</span><span class="mord mathnormal">n</span><span class="mord mathnormal">c</span><span class="mord mathnormal">h</span></span></span></span>标签是launch文件中的根元素；</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mi>o</mi><mi>d</mi><mi>e</mi></mrow><annotation encoding="application/x-tex">node</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal">n</span><span class="mord mathnormal">o</span><span class="mord mathnormal">d</span><span class="mord mathnormal">e</span></span></span></span>标签表示启动节点
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mi>k</mi><mi>g</mi></mrow><annotation encoding="application/x-tex">pkg</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">p</span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span></span></span></span> 表示该节点所在的功能包的名称</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mi>y</mi><mi>p</mi><mi>e</mi></mrow><annotation encoding="application/x-tex">type</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.80952em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mord mathnormal">p</span><span class="mord mathnormal">e</span></span></span></span> 表示实际运行的节点的名称（也就是该节点对应的可执行文件名称）</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mi>a</mi><mi>m</mi><mi>e</mi></mrow><annotation encoding="application/x-tex">name</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">n</span><span class="mord mathnormal">a</span><span class="mord mathnormal">m</span><span class="mord mathnormal">e</span></span></span></span> 节点运行时的名称，如果只有一个同类型的节点，一般取的name与type相同</li>
 <li>其他的还会有output、respawn、required、ns、args等；</li>
 </ul>
 </li>
-<li>$param$标签为设置ROS系统运行中的参数，存储在参数服务器中；<ul>
-<li>比如<code>&lt;param name=&quot;output_frame&quot; value=&quot;odom&quot;/&gt;</code><ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mi>a</mi><mi>r</mi><mi>a</mi><mi>m</mi></mrow><annotation encoding="application/x-tex">param</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">p</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">a</span><span class="mord mathnormal">m</span></span></span></span>标签为设置ROS系统运行中的参数，存储在参数服务器中；
+<ul>
+<li>比如<code>&lt;param name=&quot;output_frame&quot; value=&quot;odom&quot;/&gt;</code>
+<ul>
 <li>name为参数名</li>
 <li>value为参数值</li>
 </ul>
@@ -353,26 +370,30 @@
 <li>加载参数文件中的多个参数：<code>&lt;rosparam file=&quot;params.yaml&quot; command=&quot;load&quot; ns=&quot;params&quot; /&gt;</code></li>
 </ul>
 </li>
-<li>$arg$标签为设置launch文件内部的局部变量，仅限于launch文件使用<ul>
-<li>比如<code>arg name=&quot;arg-name&quot; value=&quot;arg-value&quot; /&gt;</code><ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mi>r</mi><mi>g</mi></mrow><annotation encoding="application/x-tex">arg</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span></span></span></span>标签为设置launch文件内部的局部变量，仅限于launch文件使用
+<ul>
+<li>比如<code>arg name=&quot;arg-name&quot; value=&quot;arg-value&quot; /&gt;</code>
+<ul>
 <li>name为参数名</li>
 <li>value为参数值</li>
 </ul>
 </li>
 </ul>
 </li>
-<li>$remap$为重映射ros计算图资源的命名；<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mi>e</mi><mi>m</mi><mi>a</mi><mi>p</mi></mrow><annotation encoding="application/x-tex">remap</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">e</span><span class="mord mathnormal">m</span><span class="mord mathnormal">a</span><span class="mord mathnormal">p</span></span></span></span>为重映射ros计算图资源的命名；
+<ul>
 <li>比如<code>&lt;remap from=&quot;/turtlebot/cmd_vel&quot; to=&quot;/cmd_vel&quot; /&gt;</code></li>
 </ul>
 </li>
-<li>$include$为包含其他launch文件，类似c语言的头文件包含<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mi>n</mi><mi>c</mi><mi>l</mi><mi>u</mi><mi>d</mi><mi>e</mi></mrow><annotation encoding="application/x-tex">include</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal">i</span><span class="mord mathnormal">n</span><span class="mord mathnormal">c</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">u</span><span class="mord mathnormal">d</span><span class="mord mathnormal">e</span></span></span></span>为包含其他launch文件，类似c语言的头文件包含
+<ul>
 <li>比如<code>&lt;include file=&quot;$(dirname)/other.launch&quot; /&gt;</code></li>
 </ul>
 </li>
 <li>运行该<code>union.launch</code>文件</li>
 </ul>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ roslaunch ros_tutorials_topic union.launch --screen<br></code></pre></td></tr></table></figure>
-<hr>
+<hr />
 <blockquote>
 <p>此处需要说明的是使用<code>roslaunch</code>启动多个节点时，默认这些节点的输出（info、error）等不会打印在终端。所以添加一个<code>--screen</code>，则所有节点的输出会打印到终端上，方便调试。</p>
 </blockquote>
@@ -383,7 +404,6 @@
 <div style="text-align: center">
 <img src="/assets/img/ros/launch1.PNG" srcset="/img/loading.gif" lazyload/>
 </div>
-
 <blockquote>
 <p>我们会发现此时两个订阅者都订阅了两个发布者发布的话题，这是因为两个发布者发布的话题名称相同，两个订阅者订阅的话题名称也一样。</p>
 </blockquote>
@@ -391,50 +411,67 @@
 <li>为了使得<code>subscriber1</code>只订阅<code>publisher1</code>发布的话题，<code>subscriber2</code>只订阅<code>publisher2</code>发布的话题。我们可以将launch文件进行如下改写</li>
 </ul>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">launch</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">group</span> <span class="hljs-attr">ns</span>=<span class="hljs-string">&quot;ns1&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">node</span> <span class="hljs-attr">pkg</span>=<span class="hljs-string">&quot;ros_tutorials_topic&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;topic_publisher&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;topic_publisher&quot;</span>/&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">node</span> <span class="hljs-attr">pkg</span>=<span class="hljs-string">&quot;ros_tutorials_topic&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;topic_subscriber&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;topic_subscriber&quot;</span>/&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">group</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">group</span> <span class="hljs-attr">ns</span>=<span class="hljs-string">&quot;ns2&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">node</span> <span class="hljs-attr">pkg</span>=<span class="hljs-string">&quot;ros_tutorials_topic&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;topic_publisher&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;topic_publisher&quot;</span>/&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">node</span> <span class="hljs-attr">pkg</span>=<span class="hljs-string">&quot;ros_tutorials_topic&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;topic_subscriber&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;topic_subscriber&quot;</span>/&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">group</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">launch</span>&gt;</span><br></code></pre></td></tr></table></figure>
-<hr>
+<hr />
 <ul>
-<li><p>上面新的标签如下：</p>
+<li>
+<p>上面新的标签如下：</p>
 <ul>
-<li>$group$ 是对指定节点进行分组的标签</li>
-<li>$ns$ 是group的选项，代表命名空间，是给这个组起了一个名字，使其与其他组区分开来</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mi>r</mi><mi>o</mi><mi>u</mi><mi>p</mi></mrow><annotation encoding="application/x-tex">group</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">o</span><span class="mord mathnormal">u</span><span class="mord mathnormal">p</span></span></span></span> 是对指定节点进行分组的标签</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">ns</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">n</span><span class="mord mathnormal">s</span></span></span></span> 是group的选项，代表命名空间，是给这个组起了一个名字，使其与其他组区分开来</li>
 </ul>
 </li>
-<li><p>新的launch文件运行后，使用<code>rqt_graph</code>来查看各个节点之间的关联，可以看到我们实现了目的。</p>
+<li>
+<p>新的launch文件运行后，使用<code>rqt_graph</code>来查看各个节点之间的关联，可以看到我们实现了目的。</p>
 </li>
 </ul>
 <div style="text-align: center">
 <img src="/assets/img/ros/launch2.PNG" srcset="/img/loading.gif" lazyload/>
 </div>
-
-<h2 id="2-3-launch的标签"><a href="#2-3-launch的标签" class="headerlink" title="2.3 launch的标签"></a>2.3 launch的标签</h2><p>在launch文件中根据XML的编写方式可以灵活的实现ros节点的启动。launch中会使用到的标签如下：</p>
+<h2 id="23-launch的标签"><a class="markdownIt-Anchor" href="#23-launch的标签"></a> 2.3 launch的标签</h2>
+<p>在launch文件中根据XML的编写方式可以灵活的实现ros节点的启动。launch中会使用到的标签如下：</p>
 <ul>
-<li><p><code>launch</code> 指roslaunch语句的开始与结束</p>
+<li>
+<p><code>launch</code> 指roslaunch语句的开始与结束</p>
 </li>
-<li><p><code>node</code> 这是节点运行的标签，可以在标签里修改功能包、节点名称、执行名称等</p>
+<li>
+<p><code>node</code> 这是节点运行的标签，可以在标签里修改功能包、节点名称、执行名称等</p>
 </li>
-<li><p><code>machine</code> 可以设置运行该节点的PC名称、address、ros-root还有ros-package-path等</p>
+<li>
+<p><code>machine</code> 可以设置运行该节点的PC名称、address、ros-root还有ros-package-path等</p>
 </li>
-<li><p><code>include</code> 可以加载属于同一个功能包或不同功能包的另一个launch文件，并运行</p>
+<li>
+<p><code>include</code> 可以加载属于同一个功能包或不同功能包的另一个launch文件，并运行</p>
 </li>
-<li><p><code>remap</code> 可以更改节点名称、话题名称等等，在节点中用到的ROS变量的名称</p>
+<li>
+<p><code>remap</code> 可以更改节点名称、话题名称等等，在节点中用到的ROS变量的名称</p>
 </li>
-<li><p><code>env</code> 设置环境变量，如路径和IP（较少使用）</p>
+<li>
+<p><code>env</code> 设置环境变量，如路径和IP（较少使用）</p>
 </li>
-<li><p><code>param</code> 设置参数名称、类型、值等</p>
+<li>
+<p><code>param</code> 设置参数名称、类型、值等</p>
 </li>
-<li><p><code>rosparam</code> 可以像rosparam命令一样，查看修改load、dump和delete等参数信息。</p>
+<li>
+<p><code>rosparam</code> 可以像rosparam命令一样，查看修改load、dump和delete等参数信息。</p>
 </li>
-<li><p><code>group</code> 用于分组正在运行的节点</p>
+<li>
+<p><code>group</code> 用于分组正在运行的节点</p>
 </li>
-<li><p><code>test</code> 用于测试节点。类似于node，但是可以有用于测试的选型</p>
+<li>
+<p><code>test</code> 用于测试节点。类似于node，但是可以有用于测试的选型</p>
 </li>
-<li><p><code>arg</code> 可以在launch文件中定义一个变量，以便在像下面这样运行时更改参数</p>
+<li>
+<p><code>arg</code> 可以在launch文件中定义一个变量，以便在像下面这样运行时更改参数</p>
 </li>
 </ul>
 <p>此处举一个例子，大致演示一下如何使用<code>arg</code>与<code>param</code></p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">launch</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;update_period&quot;</span> <span class="hljs-attr">default</span>=<span class="hljs-string">&quot;10&quot;</span>/&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">param</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;timing&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;$(arg update_period)&quot;</span>/&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">launch</span>&gt;</span><br></code></pre></td></tr></table></figure>
-<hr>
-<h2 id="在运行上述launch文件时，可以指定上述参数的值"><a href="#在运行上述launch文件时，可以指定上述参数的值" class="headerlink" title="在运行上述launch文件时，可以指定上述参数的值"></a>在运行上述launch文件时，可以指定上述参数的值<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ roslaunch my_package my_package.launch update_period:=30<br></code></pre></td></tr></table></figure></h2><h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ul>
+<hr />
+<p>在运行上述launch文件时，可以指定上述参数的值</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ roslaunch my_package my_package.launch update_period:=30<br></code></pre></td></tr></table></figure>
+<hr />
+<h1 id="参考文献"><a class="markdownIt-Anchor" href="#参考文献"></a> 参考文献</h1>
+<ul>
 <li>[1]. ROS Robot Programming. YoonSeok Pyo, HanCheol Cho, RyuWoon Jung, TaeHoon Lim</li>
 </ul>
 
@@ -609,7 +646,6 @@
 
   
   
-
 
 
 
@@ -804,49 +840,6 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
-
-  
-      <script>
-        if (!window.MathJax) {
-          window.MathJax = {
-            tex    : {
-              inlineMath: { '[+]': [['$', '$']] }
-            },
-            loader : {
-              load: ['ui/lazy']
-            },
-            options: {
-              renderActions: {
-                insertedScript: [200, () => {
-                  document.querySelectorAll('mjx-container').forEach(node => {
-                    let target = node.parentNode;
-                    if (target.nodeName.toLowerCase() === 'li') {
-                      target.parentNode.classList.add('has-jax');
-                    }
-                  });
-                }, '', false]
-              }
-            }
-          };
-        } else {
-          MathJax.startup.document.state(0);
-          MathJax.texReset();
-          MathJax.typeset();
-          MathJax.typesetPromise();
-        }
-
-        Fluid.events.registerRefreshCallback(function() {
-          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
-            MathJax.startup.document.state(0);
-            MathJax.texReset();
-            MathJax.typeset();
-            MathJax.typesetPromise();
-          }
-        });
-      </script>
-    
-
-  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 

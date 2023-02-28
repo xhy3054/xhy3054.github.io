@@ -43,6 +43,8 @@
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
 
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
+
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
@@ -283,38 +285,46 @@
               <div class="markdown-body">
                 
                 <p>由于本人对于git的理解尚且粗浅，本文主要简单的介绍使用<code>git</code>的必要功能的详细步骤。比如说自己开发一个git仓库，并托管在github上可能需要用到的操作。附带了实例命令演示。但是，本教程仅仅限于个人简单的git的使用，如果想要使用git与人协同工作，或者git管理一个大型的开源项目，这个教程是远远不够的。以后在我对于git有了更加深刻的理解后，也许会再写一些系统的git笔记。但是如果你忘记了git的一些简单命令，可以来这里温习一遍。</p>
-<h1 id="what’s-Git-and-what’s-Github"><a href="#what’s-Git-and-what’s-Github" class="headerlink" title="what’s Git and what’s Github"></a>what’s Git and what’s Github</h1><p>Git是一种分布式版本控制系统，具体学习可以参考<a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000">廖雪峰的git教程</a>,讲解清晰易懂，本文主要介绍如何运用git与github进行基本上手操作。</p>
+<h1 id="whats-git-and-whats-github"><a class="markdownIt-Anchor" href="#whats-git-and-whats-github"></a> what’s Git and what’s Github</h1>
+<p>Git是一种分布式版本控制系统，具体学习可以参考<a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000">廖雪峰的git教程</a>,讲解清晰易懂，本文主要介绍如何运用git与github进行基本上手操作。</p>
 <p>GitHub是通过Git进行版本控制的软件源代码托管服务。</p>
-<h1 id="安装git"><a href="#安装git" class="headerlink" title="安装git"></a>安装git</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ sudo apt-get install git<br></code></pre></td></tr></table></figure>
-
-
-
-<h1 id="git与github基本使用"><a href="#git与github基本使用" class="headerlink" title="git与github基本使用"></a>git与github基本使用</h1><h2 id="git与github远程库交互"><a href="#git与github远程库交互" class="headerlink" title="git与github远程库交互"></a>git与github远程库交互</h2><h3 id="创建版本库"><a href="#创建版本库" class="headerlink" title="创建版本库"></a>创建版本库</h3><p>本地创建版本库<strong>learngit</strong></p>
+<h1 id="安装git"><a class="markdownIt-Anchor" href="#安装git"></a> 安装git</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ sudo apt-get install git<br></code></pre></td></tr></table></figure>
+<h1 id="git与github基本使用"><a class="markdownIt-Anchor" href="#git与github基本使用"></a> git与github基本使用</h1>
+<h2 id="git与github远程库交互"><a class="markdownIt-Anchor" href="#git与github远程库交互"></a> git与github远程库交互</h2>
+<h3 id="创建版本库"><a class="markdownIt-Anchor" href="#创建版本库"></a> 创建版本库</h3>
+<p>本地创建版本库<strong>learngit</strong></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ <span class="hljs-built_in">mkdir</span> learngit<br>$ <span class="hljs-built_in">cd</span> learngit<br>$ git init<br></code></pre></td></tr></table></figure>
-
-<h3 id="将修改结果添加到仓库并提交"><a href="#将修改结果添加到仓库并提交" class="headerlink" title="将修改结果添加到仓库并提交"></a>将修改结果添加到仓库并提交</h3><p>编辑完文件<strong>readme</strong>添加到仓库并提交</p>
+<h3 id="将修改结果添加到仓库并提交"><a class="markdownIt-Anchor" href="#将修改结果添加到仓库并提交"></a> 将修改结果添加到仓库并提交</h3>
+<p>编辑完文件<strong>readme</strong>添加到仓库并提交</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ git add readme        <span class="hljs-comment"># git add --all 提交所有改动</span><br>$ git commit -m <span class="hljs-string">&#x27;first commit&#x27;</span><br></code></pre></td></tr></table></figure>
-
-<h3 id="配置个人信息"><a href="#配置个人信息" class="headerlink" title="配置个人信息"></a>配置个人信息</h3><p>如果是第一次使用git，那么<code>git commit</code>可能报错，所以需要你配置一些个人信息</p>
+<h3 id="配置个人信息"><a class="markdownIt-Anchor" href="#配置个人信息"></a> 配置个人信息</h3>
+<p>如果是第一次使用git，那么<code>git commit</code>可能报错，所以需要你配置一些个人信息</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ git config --global user.email <span class="hljs-string">&quot;you@example.com&quot;</span><br>$ git config --global user.name <span class="hljs-string">&quot;Your Name&quot;</span><br></code></pre></td></tr></table></figure>
-
-<h3 id="上传到github"><a href="#上传到github" class="headerlink" title="上传到github"></a>上传到github</h3><p>上传到github,首先登陆自己的github帐号，然后新建一个<strong>repository</strong>并取名为<strong>learngit</strong>,然后执行下面命令</p>
+<h3 id="上传到github"><a class="markdownIt-Anchor" href="#上传到github"></a> 上传到github</h3>
+<p>上传到github,首先登陆自己的github帐号，然后新建一个<strong>repository</strong>并取名为<strong>learngit</strong>,然后执行下面命令</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ git remote add origin https://github.com/xhy3054/learngit.git  <span class="hljs-comment">#与远程库建立链接,只有第一次上传需要执行</span><br>$ git push -u origin master<br></code></pre></td></tr></table></figure>
-
-<h3 id="克隆远程库到本地"><a href="#克隆远程库到本地" class="headerlink" title="克隆远程库到本地"></a>克隆远程库到本地</h3><p>将一个github上的版本库克隆到本地</p>
+<h3 id="克隆远程库到本地"><a class="markdownIt-Anchor" href="#克隆远程库到本地"></a> 克隆远程库到本地</h3>
+<p>将一个github上的版本库克隆到本地</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ git <span class="hljs-built_in">clone</span> https://github.com/xhy3054/learngit.git  <span class="hljs-comment">#也可以指定本地目录名 git clone &lt;版本库的网址&gt; &lt;本地目录名&gt;</span><br></code></pre></td></tr></table></figure>
-
-<h3 id="远程库修改过，更新本地库（将远程库拉下来与本地库合并）"><a href="#远程库修改过，更新本地库（将远程库拉下来与本地库合并）" class="headerlink" title="远程库修改过，更新本地库（将远程库拉下来与本地库合并）"></a>远程库修改过，更新本地库（将远程库拉下来与本地库合并）</h3><pre><code class="hljs">git pull #此命令用时需保证本地库没有修改未提交，
+<h3 id="远程库修改过更新本地库将远程库拉下来与本地库合并"><a class="markdownIt-Anchor" href="#远程库修改过更新本地库将远程库拉下来与本地库合并"></a> 远程库修改过，更新本地库（将远程库拉下来与本地库合并）</h3>
+<pre><code class="hljs">git pull #此命令用时需保证本地库没有修改未提交，
 </code></pre>
-<h3 id="查看本地分支列表"><a href="#查看本地分支列表" class="headerlink" title="查看本地分支列表"></a>查看本地分支列表</h3><pre><code class="hljs">git branch
+<h3 id="查看本地分支列表"><a class="markdownIt-Anchor" href="#查看本地分支列表"></a> 查看本地分支列表</h3>
+<pre><code class="hljs">git branch
 </code></pre>
-<h3 id="查看本地仓库工作状态"><a href="#查看本地仓库工作状态" class="headerlink" title="查看本地仓库工作状态"></a>查看本地仓库工作状态</h3><pre><code class="hljs">git status
+<h3 id="查看本地仓库工作状态"><a class="markdownIt-Anchor" href="#查看本地仓库工作状态"></a> 查看本地仓库工作状态</h3>
+<pre><code class="hljs">git status
 </code></pre>
-<h3 id="查看本地库关联的远程库（即push与pull推送与拉取的那个远程库）"><a href="#查看本地库关联的远程库（即push与pull推送与拉取的那个远程库）" class="headerlink" title="查看本地库关联的远程库（即push与pull推送与拉取的那个远程库）"></a>查看本地库关联的远程库（即push与pull推送与拉取的那个远程库）</h3><pre><code class="hljs">git remote -v
+<h3 id="查看本地库关联的远程库即push与pull推送与拉取的那个远程库"><a class="markdownIt-Anchor" href="#查看本地库关联的远程库即push与pull推送与拉取的那个远程库"></a> 查看本地库关联的远程库（即push与pull推送与拉取的那个远程库）</h3>
+<pre><code class="hljs">git remote -v
 </code></pre>
-<h3 id="修改本地库关联的远程库"><a href="#修改本地库关联的远程库" class="headerlink" title="修改本地库关联的远程库"></a>修改本地库关联的远程库</h3><pre><code class="hljs">git remote -v set-url origin https://github.com/xhy3054/ssdcaffe.git
+<h3 id="修改本地库关联的远程库"><a class="markdownIt-Anchor" href="#修改本地库关联的远程库"></a> 修改本地库关联的远程库</h3>
+<pre><code class="hljs">git remote -v set-url origin https://github.com/xhy3054/ssdcaffe.git
 </code></pre>
-<h2 id="git版本管理"><a href="#git版本管理" class="headerlink" title="git版本管理"></a>git版本管理</h2><h3 id="查看历史版本git-log"><a href="#查看历史版本git-log" class="headerlink" title="查看历史版本git log"></a>查看历史版本<code>git log</code></h3><pre><code class="hljs">$git log
+<h2 id="git版本管理"><a class="markdownIt-Anchor" href="#git版本管理"></a> git版本管理</h2>
+<h3 id="查看历史版本git-log"><a class="markdownIt-Anchor" href="#查看历史版本git-log"></a> 查看历史版本<code>git log</code></h3>
+<pre><code class="hljs">$git log
 commit 85c18305998dc282973a21513aa1893567a52e33
 Author: xhy3054 &lt;1076170656@qq.com&gt;
 Date:   Mon May 7 14:31:42 2018 +0800
@@ -327,23 +337,32 @@ Date:   Sat May 5 20:51:53 2018 +0800
 
     add a image
 </code></pre>
-<h3 id="回退到版本add-a-image"><a href="#回退到版本add-a-image" class="headerlink" title="回退到版本add a image"></a>回退到版本<code>add a image</code></h3><pre><code class="hljs">git reset --hard fd2bc5
+<h3 id="回退到版本add-a-image"><a class="markdownIt-Anchor" href="#回退到版本add-a-image"></a> 回退到版本<code>add a image</code></h3>
+<pre><code class="hljs">git reset --hard fd2bc5
 </code></pre>
-<h3 id="查看当前分支"><a href="#查看当前分支" class="headerlink" title="查看当前分支"></a>查看当前分支</h3><pre><code class="hljs">git branch
+<h3 id="查看当前分支"><a class="markdownIt-Anchor" href="#查看当前分支"></a> 查看当前分支</h3>
+<pre><code class="hljs">git branch
 </code></pre>
-<h3 id="新建分支dev"><a href="#新建分支dev" class="headerlink" title="新建分支dev"></a>新建分支<code>dev</code></h3><pre><code class="hljs">git branch dev
+<h3 id="新建分支dev"><a class="markdownIt-Anchor" href="#新建分支dev"></a> 新建分支<code>dev</code></h3>
+<pre><code class="hljs">git branch dev
 </code></pre>
-<h3 id="切换到分支dev"><a href="#切换到分支dev" class="headerlink" title="切换到分支dev"></a>切换到分支<code>dev</code></h3><pre><code class="hljs">git checkout dev
+<h3 id="切换到分支dev"><a class="markdownIt-Anchor" href="#切换到分支dev"></a> 切换到分支<code>dev</code></h3>
+<pre><code class="hljs">git checkout dev
 </code></pre>
-<h3 id="如果dev上的工作想合并到master"><a href="#如果dev上的工作想合并到master" class="headerlink" title="如果dev上的工作想合并到master"></a>如果<code>dev</code>上的工作想合并到<code>master</code></h3><pre><code class="hljs">git checkout master
+<h3 id="如果dev上的工作想合并到master"><a class="markdownIt-Anchor" href="#如果dev上的工作想合并到master"></a> 如果<code>dev</code>上的工作想合并到<code>master</code></h3>
+<pre><code class="hljs">git checkout master
 git merge dev
 </code></pre>
-<h3 id="删除分支dev"><a href="#删除分支dev" class="headerlink" title="删除分支dev"></a>删除分支<code>dev</code></h3><pre><code class="hljs">git branch -d dev
+<h3 id="删除分支dev"><a class="markdownIt-Anchor" href="#删除分支dev"></a> 删除分支<code>dev</code></h3>
+<pre><code class="hljs">git branch -d dev
 </code></pre>
-<h3 id="循环克隆带子模块的仓库"><a href="#循环克隆带子模块的仓库" class="headerlink" title="循环克隆带子模块的仓库"></a>循环克隆带子模块的仓库</h3><ol>
-<li><p>在克隆整个仓库时指定：<code>git clone --recursive https://github.com/xhy3054/ssdcaffe.git</code></p>
+<h3 id="循环克隆带子模块的仓库"><a class="markdownIt-Anchor" href="#循环克隆带子模块的仓库"></a> 循环克隆带子模块的仓库</h3>
+<ol>
+<li>
+<p>在克隆整个仓库时指定：<code>git clone --recursive https://github.com/xhy3054/ssdcaffe.git</code></p>
 </li>
-<li><p>项目已经克隆到了本地，需要把子模块也克隆下来：</p>
+<li>
+<p>项目已经克隆到了本地，需要把子模块也克隆下来：</p>
 <ul>
 <li>初始化本地子模块配置文件：<code>git submodule init</code></li>
 <li>更新项目，抓取子模块内容：<code>git submodule update</code></li>
@@ -523,7 +542,6 @@ git merge dev
 
   
   
-
 
 
 
@@ -718,49 +736,6 @@ git merge dev
 
 
   <script>Fluid.plugins.imageCaption();</script>
-
-  
-      <script>
-        if (!window.MathJax) {
-          window.MathJax = {
-            tex    : {
-              inlineMath: { '[+]': [['$', '$']] }
-            },
-            loader : {
-              load: ['ui/lazy']
-            },
-            options: {
-              renderActions: {
-                insertedScript: [200, () => {
-                  document.querySelectorAll('mjx-container').forEach(node => {
-                    let target = node.parentNode;
-                    if (target.nodeName.toLowerCase() === 'li') {
-                      target.parentNode.classList.add('has-jax');
-                    }
-                  });
-                }, '', false]
-              }
-            }
-          };
-        } else {
-          MathJax.startup.document.state(0);
-          MathJax.texReset();
-          MathJax.typeset();
-          MathJax.typesetPromise();
-        }
-
-        Fluid.events.registerRefreshCallback(function() {
-          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
-            MathJax.startup.document.state(0);
-            MathJax.texReset();
-            MathJax.typeset();
-            MathJax.typesetPromise();
-          }
-        });
-      </script>
-    
-
-  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 

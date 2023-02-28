@@ -16,12 +16,12 @@
   <meta name="author" content="Line">
   <meta name="keywords" content="">
   
-    <meta name="description" content="我们在本地windows使用各种IDE可以很方便的调试代码，但是有的项目对内存或者显存需求量很大，本地的机器很难满足。实验室刚好有一个linux服务器，内存够大，gpu够给力，不过我没有在服务器上安装IDE的权限，于是就鼓捣了一下pycharm的远程调试。 pycharm远程调试pycharm的远程调试其实就是利用ssh先将本地工程拷贝到远程服务器上，然后在远程服务器上运行，所以我们需要给pych">
+    <meta name="description" content="我们在本地windows使用各种IDE可以很方便的调试代码，但是有的项目对内存或者显存需求量很大，本地的机器很难满足。实验室刚好有一个linux服务器，内存够大，gpu够给力，不过我没有在服务器上安装IDE的权限，于是就鼓捣了一下pycharm的远程调试。  pycharm远程调试 pycharm的远程调试其实就是利用ssh先将本地工程拷贝到远程服务器上，然后在远程服务器上运行，所以我们需要给py">
 <meta property="og:type" content="article">
 <meta property="og:title" content="pycharm远程调试">
 <meta property="og:url" content="http://line.com/2020/08/14/2020-08-14-pychram-remote/index.html">
 <meta property="og:site_name" content="Line&#39;s Blog">
-<meta property="og:description" content="我们在本地windows使用各种IDE可以很方便的调试代码，但是有的项目对内存或者显存需求量很大，本地的机器很难满足。实验室刚好有一个linux服务器，内存够大，gpu够给力，不过我没有在服务器上安装IDE的权限，于是就鼓捣了一下pycharm的远程调试。 pycharm远程调试pycharm的远程调试其实就是利用ssh先将本地工程拷贝到远程服务器上，然后在远程服务器上运行，所以我们需要给pych">
+<meta property="og:description" content="我们在本地windows使用各种IDE可以很方便的调试代码，但是有的项目对内存或者显存需求量很大，本地的机器很难满足。实验室刚好有一个linux服务器，内存够大，gpu够给力，不过我没有在服务器上安装IDE的权限，于是就鼓捣了一下pycharm的远程调试。  pycharm远程调试 pycharm的远程调试其实就是利用ssh先将本地工程拷贝到远程服务器上，然后在远程服务器上运行，所以我们需要给py">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://line.com/img/pycharm/pycharm1.PNG">
 <meta property="og:image" content="http://line.com/img/pycharm/pycharm2.PNG">
@@ -48,6 +48,8 @@
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
 
 
 
@@ -289,46 +291,58 @@
               <div class="markdown-body">
                 
                 <p>我们在本地windows使用各种IDE可以很方便的调试代码，但是有的项目对内存或者显存需求量很大，本地的机器很难满足。实验室刚好有一个linux服务器，内存够大，gpu够给力，不过我没有在服务器上安装IDE的权限，于是就鼓捣了一下pycharm的远程调试。</p>
-<h1 id="pycharm远程调试"><a href="#pycharm远程调试" class="headerlink" title="pycharm远程调试"></a>pycharm远程调试</h1><p>pycharm的远程调试其实就是利用ssh先将本地工程拷贝到远程服务器上，然后在远程服务器上运行，所以我们需要给pycharm提供以下的信息：</p>
+<h1 id="pycharm远程调试"><a class="markdownIt-Anchor" href="#pycharm远程调试"></a> pycharm远程调试</h1>
+<p>pycharm的远程调试其实就是利用ssh先将本地工程拷贝到远程服务器上，然后在远程服务器上运行，所以我们需要给pycharm提供以下的信息：</p>
 <ol>
-<li><p>远程服务器ip，用户名，密码；</p>
+<li>
+<p>远程服务器ip，用户名，密码；</p>
 </li>
-<li><p>工程使用的python解释器（一般是远程服务器上anaconda的一个环境）；</p>
+<li>
+<p>工程使用的python解释器（一般是远程服务器上anaconda的一个环境）；</p>
 </li>
-<li><p>本地工程文件夹与远程服务器上的工程文件夹的对应关系；</p>
+<li>
+<p>本地工程文件夹与远程服务器上的工程文件夹的对应关系；</p>
 </li>
 </ol>
-<h2 id="配置步骤"><a href="#配置步骤" class="headerlink" title="配置步骤"></a>配置步骤</h2><ul>
-<li><p>首先使用pycharm打开本地的工程目录；</p>
+<h2 id="配置步骤"><a class="markdownIt-Anchor" href="#配置步骤"></a> 配置步骤</h2>
+<ul>
+<li>
+<p>首先使用pycharm打开本地的工程目录；</p>
 </li>
-<li><p>依次打开<code>File</code>-&gt;<code>Setting</code>-&gt;<code>Project:工程名</code>-&gt;<code>Project Interpreter</code>；</p>
+<li>
+<p>依次打开<code>File</code>-&gt;<code>Setting</code>-&gt;<code>Project:工程名</code>-&gt;<code>Project Interpreter</code>；</p>
 </li>
 </ul>
-<p><img src="/img/pycharm/pycharm1.PNG" srcset="/img/loading.gif" lazyload alt="pycharm"></p>
+<p><img src="/img/pycharm/pycharm1.PNG" srcset="/img/loading.gif" lazyload alt="pycharm" /></p>
 <ul>
 <li>选择<code>Project Interpreter</code>最右侧的那个设置按钮点<code>add</code>，新界面选择<code>SSH Interpreter</code>;</li>
 </ul>
-<p><img src="/img/pycharm/pycharm2.PNG" srcset="/img/loading.gif" lazyload alt="pycharm"></p>
+<p><img src="/img/pycharm/pycharm2.PNG" srcset="/img/loading.gif" lazyload alt="pycharm" /></p>
 <ul>
 <li>在<code>New server configuration</code>中输入ip和用户名，点击<code>Next</code>，输入密码连接后;</li>
 </ul>
-<p><img src="/img/pycharm/pycharm3.PNG" srcset="/img/loading.gif" lazyload alt="pycharm"></p>
+<p><img src="/img/pycharm/pycharm3.PNG" srcset="/img/loading.gif" lazyload alt="pycharm" /></p>
 <ul>
-<li><p>其中<code>Interpreter</code>是远程服务器中你想使用的python环境地址，<code>Sync folders</code>是本地和远程的工程文件夹对应关系，两个同名文件夹，设置完后选择<code>Finish</code>;</p>
+<li>
+<p>其中<code>Interpreter</code>是远程服务器中你想使用的python环境地址，<code>Sync folders</code>是本地和远程的工程文件夹对应关系，两个同名文件夹，设置完后选择<code>Finish</code>;</p>
 </li>
-<li><p>然后pycharm会自动将本地工程复制到远程服务器上。</p>
+<li>
+<p>然后pycharm会自动将本地工程复制到远程服务器上。</p>
 </li>
-<li><p>复制完毕后，要想远程调试还需要<code>Run</code>-&gt;<code>edit Configurations</code>，然后在这个界面中选择运行和调试时使用的python解释器<code>Python interpreter</code>，还有通过<code>Parameters</code>设置运行时的参数输入。</p>
+<li>
+<p>复制完毕后，要想远程调试还需要<code>Run</code>-&gt;<code>edit Configurations</code>，然后在这个界面中选择运行和调试时使用的python解释器<code>Python interpreter</code>，还有通过<code>Parameters</code>设置运行时的参数输入。</p>
 </li>
 </ul>
-<p><img src="/img/pycharm/pycharm4.PNG" srcset="/img/loading.gif" lazyload alt="pycharm"></p>
+<p><img src="/img/pycharm/pycharm4.PNG" srcset="/img/loading.gif" lazyload alt="pycharm" /></p>
 <ul>
-<li><p>大功告成，可以调试了。</p>
+<li>
+<p>大功告成，可以调试了。</p>
 </li>
-<li><p>如果想对远程服务器进行管理，可以<code>Tools</code>-&gt;<code>Deployment</code>-&gt;<code>configure</code>进行改名、新建、删除等，其中<code>Encoding for client-server communication</code>是与服务器通信的编码方式，可以设置成<code>UTF-8</code>(如果包含中文的话)；</p>
+<li>
+<p>如果想对远程服务器进行管理，可以<code>Tools</code>-&gt;<code>Deployment</code>-&gt;<code>configure</code>进行改名、新建、删除等，其中<code>Encoding for client-server communication</code>是与服务器通信的编码方式，可以设置成<code>UTF-8</code>(如果包含中文的话)；</p>
 </li>
 </ul>
-<p><img src="/img/pycharm/pycharm5.PNG" srcset="/img/loading.gif" lazyload alt="pycharm"></p>
+<p><img src="/img/pycharm/pycharm5.PNG" srcset="/img/loading.gif" lazyload alt="pycharm" /></p>
 
                 
               </div>
@@ -501,7 +515,6 @@
 
   
   
-
 
 
 
@@ -696,49 +709,6 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
-
-  
-      <script>
-        if (!window.MathJax) {
-          window.MathJax = {
-            tex    : {
-              inlineMath: { '[+]': [['$', '$']] }
-            },
-            loader : {
-              load: ['ui/lazy']
-            },
-            options: {
-              renderActions: {
-                insertedScript: [200, () => {
-                  document.querySelectorAll('mjx-container').forEach(node => {
-                    let target = node.parentNode;
-                    if (target.nodeName.toLowerCase() === 'li') {
-                      target.parentNode.classList.add('has-jax');
-                    }
-                  });
-                }, '', false]
-              }
-            }
-          };
-        } else {
-          MathJax.startup.document.state(0);
-          MathJax.texReset();
-          MathJax.typeset();
-          MathJax.typesetPromise();
-        }
-
-        Fluid.events.registerRefreshCallback(function() {
-          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
-            MathJax.startup.document.state(0);
-            MathJax.texReset();
-            MathJax.typeset();
-            MathJax.typesetPromise();
-          }
-        });
-      </script>
-    
-
-  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 

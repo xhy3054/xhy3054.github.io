@@ -234,6 +234,86 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2018/12/20/2018-12-20-ml-PCA/" target="_self">
+          主成分分析(PCA)
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2018/12/20/2018-12-20-ml-PCA/" target="_self">
+        <div>
+          1. 主成分分析原理介绍  PCA是一种无监督的降维方法，主要作用是压缩与简化  顾名思义，主成分分析(PCA)是用来分析数据的主要成分的。 打个比方，一些ｎ维点可以用一个ｎ维的坐标完全表示。主成分分析，可以提取出ｎ个空间基向量来表示这些数据点。不过你可以理解成这ｎ个空间基向量是按顺序求出的，首先根据这些ｎ维点确定第一个空间基向量方向，使得如果只能用一个基向量来表示这些点，只使用这个基向量表示这
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2018-12-20 01:07" pubdate>
+              2018-12-20
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">#机器学习</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2018/12/16/2018-12-16-linux-file-permission/" target="_self">
+          Linux系统下文件权限问题解析
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2018/12/16/2018-12-16-linux-file-permission/" target="_self">
+        <div>
+          我们都知道，在linux下一切都是文件，目录也是文件，本文主要讨论常规文件与目录文件的权限问题。 使用ll(即ls -l)我们可以查看当前文件夹下的文件的及其相关属性。  我们会发现每个文件都会有三种权限rwx，且为其拥有者、所属用户组成员、其他用户分别进行了不同的设置。  在每行最前面一位，在这里我们会发现是符号d或-，这代表的是文件类型，-代表着常规文件，d代表目录文件，当然还会有一些其他的特
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2018-12-16 01:07" pubdate>
+              2018-12-16
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/linux/">#linux</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2018/12/02/2018-12-02-disk-partition/" target="_self">
           磁盘分区问题解析
         </a>
@@ -282,7 +362,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2018/12/01/2018-12-01-corner-detect-harris/" target="_self">
         <div>
-          1. 角点与角点的检测1.1 什么是角点？从图像分析的角度来看，一般而言角点有如下两种定义：  角点可以是两个边缘的角点； 角点是邻域内具有两个主方向的特征点；  如同下图所示，前俩例子一个是平坦区域，一个是边缘。第三个就如上述两种定义方式的角点一样，设置一个滑动窗口，无论朝那个方向移动，对应位置上的亮度都会有很大变化，  1.2 不同的角点检测方法角点定义出来了以后，如何检测角点呢？这个有好多种
+          1. 角点与角点的检测  1.1 什么是角点？ 从图像分析的角度来看，一般而言角点有如下两种定义：  角点可以是两个边缘的角点； 角点是邻域内具有两个主方向的特征点；  如同下图所示，前俩例子一个是平坦区域，一个是边缘。第三个就如上述两种定义方式的角点一样，设置一个滑动窗口，无论朝那个方向移动，对应位置上的亮度都会有很大变化，   1.2 不同的角点检测方法 角点定义出来了以后，如何检测角点呢？
         </div>
       </a>
 
@@ -362,7 +442,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2018/11/03/2018-11-03-cpp-template-class/" target="_self">
         <div>
-          在c++中，模板是非常常见并且好用的。基本每一个c++的库都会使用模板，对自己的适用类型进行扩展。本文主要讲的是模板的实例化问题。 函数模板类模板模板实例化当模板被使用时才会实例化，这一特性意味着，相同的实例可能出现在多个对象文件中。举个例子就是说，当两个或多个独立编译的源文件使用了相同的模板，并提供了相同的模板参数时，每个文件中都会有该模板适用该参数的一个实例。 上述的问题在小程序里不算什么，但
+          在c中，模板是非常常见并且好用的。基本每一个c的库都会使用模板，对自己的适用类型进行扩展。本文主要讲的是模板的实例化问题。  函数模板  类模板  模板实例化 当模板被使用时才会实例化，这一特性意味着，相同的实例可能出现在多个对象文件中。举个例子就是说，当两个或多个独立编译的源文件使用了相同的模板，并提供了相同的模板参数时，每个文件中都会有该模板适用该参数的一个实例。 上述的问题在小程序里不算什么
         </div>
       </a>
 
@@ -402,7 +482,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2018/11/03/2018-11-04-cpp-exception/" target="_self">
         <div>
-          c++是一门复杂的语言，程序的运行环境也是千奇百怪。因此总会有异常出现，本文主要就是讨论一下c++程序中的异常处理问题。 异常对象讲到异常，这里就要说明一下，什么是异常？在c++中，异常就是指异常对象。而异常对象是异常类的实例化，异常类是我们定义的用来表示程序错误信息的数据抽象。下图便是标准库异常类的继承体系。![exception](&#x2F;assets&#x2F;img&#x2F;exce
+          c是一门复杂的语言，程序的运行环境也是千奇百怪。因此总会有异常出现，本文主要就是讨论一下c程序中的异常处理问题。  异常对象 讲到异常，这里就要说明一下，什么是异常？在c++中，异常就是指异常对象。而异常对象是异常类的实例化，异常类是我们定义的用来表示程序错误信息的数据抽象。下图便是标准库异常类的继承体系。 ![exception](/assets/img/exception/exception.
         </div>
       </a>
 
@@ -442,7 +522,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2018/10/28/2018-10-28-cpp-inheritance-virtual-func/" target="_self">
         <div>
-          c++中带有继承关系的类在进行成员函数调用时，需要考虑很多问题，是否是虚函数？动态静态类型是否一致？调用形式？本文主要就是对这些问题进行一一剖析。 动态类型与静态类型当我们在继承体系中进行成员函数调用时，一个变量（或表达式）的静态类型与其动态类型与其息息相关。  静态类型：一个变量（或表达式）的静态类型在编译时总是已知的，它是变量声明时的类型（或表达式生成的类型）； 动态类型：是一个变量或表达式表
+          c++中带有继承关系的类在进行成员函数调用时，需要考虑很多问题，是否是虚函数？动态静态类型是否一致？调用形式？本文主要就是对这些问题进行一一剖析。  动态类型与静态类型 当我们在继承体系中进行成员函数调用时，一个变量（或表达式）的静态类型与其动态类型与其息息相关。  静态类型：一个变量（或表达式）的静态类型在编译时总是已知的，它是变量声明时的类型（或表达式生成的类型）； 动态类型：是一个变量或表达
         </div>
       </a>
 
@@ -482,7 +562,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2018/10/27/2018-10-27-cpp-copy-move/" target="_self">
         <div>
-          在此需要强调一点，c++中的移动操作不是指标准库函数move，它仅仅只是一个辅助移动操作顺利进行的标准库函数而已，功能十分单一。 对象的移动本文我们讲的移动是指对象的移动操作，与拷贝操作相对等的一种操作。  一般而言，移动操作的目的是将目标源对象管理的资源直接移动到本对象，即本对象接管了原本目标对象管理的资源（而拷贝操作一般只是将资源内容复制了一份），因此移动操作往往比拷贝操作效率更高。不过这也就
+          在此需要强调一点，c++中的移动操作不是指标准库函数move，它仅仅只是一个辅助移动操作顺利进行的标准库函数而已，功能十分单一。  对象的移动 本文我们讲的移动是指对象的移动操作，与拷贝操作相对等的一种操作。  一般而言，移动操作的目的是将目标源对象管理的资源直接移动到本对象，即本对象接管了原本目标对象管理的资源（而拷贝操作一般只是将资源内容复制了一份），因此移动操作往往比拷贝操作效率更高。不过这
         </div>
       </a>
 
@@ -522,7 +602,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2018/10/25/2018-10-25-cpp-public-protected-private/" target="_self">
         <div>
-          不用说，这三个关键字大家都很熟悉，今天我主要是重新温习一遍，理清一遍。 访问权限关键字（无继承关系时） public: 这个关键字代表对外界开放，用户可以通过一个对象直接进行其public成员的访问操作；  protected: 这个关键字代表只对自己的派生类开放，对与普通用户不开放；  private: 这个关键字代表只对自己内部的成员（或友元）开放，对其他任何外在用户（包括派生类对象）都不开放
+          不用说，这三个关键字大家都很熟悉，今天我主要是重新温习一遍，理清一遍。  访问权限关键字（无继承关系时）   public: 这个关键字代表对外界开放，用户可以通过一个对象直接进行其public成员的访问操作；   protected: 这个关键字代表只对自己的派生类开放，对与普通用户不开放；   private: 这个关键字代表只对自己内部的成员（或友元）开放，对其他任何外在用户（包括派生类对象
         </div>
       </a>
 
@@ -548,91 +628,11 @@
     </article>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2018/10/20/2018-10-20-cpp-unique-ptr/" target="_self">
-          c++智能指针－－unique_ptr
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/10/20/2018-10-20-cpp-unique-ptr/" target="_self">
-        <div>
-          众所周知，c语言与c++需要自行管理动态的内存。许多代码写到最后，防止内存泄漏需要花费程序员大量的心力。在c++11标准中，提出了智能指针来帮助程序员管理动态内存(如果使用智能指针来管理栈上的内存，则在最后析构阶段释放内存时会出现错误)。智能指针主要有三种，分别是shared_ptr、unique_ptr与weak_ptr。本文主要讲的就是unique_ptr使用中的问题。 unique_ptr与
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-10-20 01:07" pubdate>
-              2018-10-20
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/c%E4%B8%8Ec/">#c与c++</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2018/10/20/2018-10-21-cpp-const-constexpr/" target="_self">
-          c++中const与constexpr关键字
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/10/20/2018-10-21-cpp-const-constexpr/" target="_self">
-        <div>
-          本文主要讨论const变量与constexpr变量的初始化时刻与constexpr函数的编译期计算问题。转载 const变量的初始化时刻const修饰变量，表示这个变量是不可修改的，因此const变量必须初始化，一经初始化就不可修改。  如果const变量的初始化值是在编译时就可以确定，则在编译时初始化；  如果const变量的初始化值是在运行时才确定，则在运行时初始化；   1const int
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-10-20 01:07" pubdate>
-              2018-10-20
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/c%E4%B8%8Ec/">#c与c++</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
 
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/6/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/#board">5</a><a class="page-number" href="/page/6/#board">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/#board">8</a><a class="page-number" href="/page/9/#board">9</a><a class="page-number" href="/page/10/#board">10</a><a class="extend next" rel="next" href="/page/8/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/6/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/#board">5</a><a class="page-number" href="/page/6/#board">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/#board">8</a><a class="page-number" href="/page/9/#board">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/#board">11</a><a class="extend next" rel="next" href="/page/8/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 

@@ -234,6 +234,86 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2018/10/20/2018-10-20-cpp-unique-ptr/" target="_self">
+          c++智能指针－－unique_ptr
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2018/10/20/2018-10-20-cpp-unique-ptr/" target="_self">
+        <div>
+          众所周知，c语言与c需要自行管理动态的内存。许多代码写到最后，防止内存泄漏需要花费程序员大量的心力。在c11标准中，提出了智能指针来帮助程序员管理动态内存(如果使用智能指针来管理栈上的内存，则在最后析构阶段释放内存时会出现错误)。智能指针主要有三种，分别是shared_ptr、unique_ptr与weak_ptr。本文主要讲的就是unique_ptr使用中的问题。  unique_ptr 与sh
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2018-10-20 01:07" pubdate>
+              2018-10-20
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/c%E4%B8%8Ec/">#c与c++</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2018/10/20/2018-10-21-cpp-const-constexpr/" target="_self">
+          c++中const与constexpr关键字
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2018/10/20/2018-10-21-cpp-const-constexpr/" target="_self">
+        <div>
+          本文主要讨论const变量与constexpr变量的初始化时刻与constexpr函数的编译期计算问题。转载  const变量的初始化时刻 const修饰变量，表示这个变量是不可修改的，因此const变量必须初始化，一经初始化就不可修改。   如果const变量的初始化值是在编译时就可以确定，则在编译时初始化；   如果const变量的初始化值是在运行时才确定，则在运行时初始化；   1const
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2018-10-20 01:07" pubdate>
+              2018-10-20
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/c%E4%B8%8Ec/">#c与c++</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2018/10/18/2018-10-18-cpp-shared-ptr/" target="_self">
           c++智能指针－－shared_ptr
         </a>
@@ -242,7 +322,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2018/10/18/2018-10-18-cpp-shared-ptr/" target="_self">
         <div>
-          众所周知，c语言与c++需要自行管理动态的内存。许多代码写到最后，防止内存泄漏需要花费程序员大量的心力。在c++11标准中，提出了智能指针来帮助程序员管理动态内存。智能指针主要有三种，分别是shared_ptr、unique_ptr与weak_ptr。本文主要讲的就是shared_ptr使用中的问题。 shared_ptr首先需要说明的是，shared_ptr是一个模板类。为了让用户可以像使用内置
+          众所周知，c语言与c需要自行管理动态的内存。许多代码写到最后，防止内存泄漏需要花费程序员大量的心力。在c11标准中，提出了智能指针来帮助程序员管理动态内存。智能指针主要有三种，分别是shared_ptr、unique_ptr与weak_ptr。本文主要讲的就是shared_ptr使用中的问题。  shared_ptr 首先需要说明的是，shared_ptr是一个模板类。为了让用户可以像使用内置指针
         </div>
       </a>
 
@@ -282,7 +362,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2018/10/16/2018-10-16-cpp-class-construct-destruct/" target="_self">
         <div>
-          通常一个类的拷贝控制操作由以下三个函数来定义：  拷贝构造函数  拷贝赋值运算符  析构函数   以上这３个成员，如果在一个类中未自己定义时，编译器会为这个类自动生成默认的版本。三个成员共同构成了一个类基本的的拷贝控制与资源管理操作。 =default 与 =delete 的使用我们可以通过将拷贝控制成员定义为=default来显式地要求编译器生成合成版本的。 在c++11标准以后我们可以通过将拷
+          通常一个类的拷贝控制操作由以下三个函数来定义：   拷贝构造函数   拷贝赋值运算符   析构函数   以上这３个成员，如果在一个类中未自己定义时，编译器会为这个类自动生成默认的版本。三个成员共同构成了一个类基本的的拷贝控制与资源管理操作。  =default 与 =delete 的使用 我们可以通过将拷贝控制成员定义为=default来显式地要求编译器生成合成版本的。 在c++11标准以后我们可
         </div>
       </a>
 
@@ -322,7 +402,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2018/10/10/2018-10-10-opencv-mat/" target="_self">
         <div>
-          Mat类很久以前（大概两千年左右），opencv还只是提供ｃ接口的一个库。那时它使用一种ｃ语言的结构体叫做IplImage来存储图像。后来实在是受不了了，因为使用ｃ语言接口的用户需要自己来管理内存，实在特别麻烦并且容易出错。opencv维护者们就使用c++又翻新了一遍opencv库。新版本中（2.0往后）支持使用Mat来存储图像。 Mat的组成Mat主要由两部分组成：  矩阵头信息：主要是矩阵大小
+          Mat类 很久以前（大概两千年左右），opencv还只是提供ｃ接口的一个库。那时它使用一种ｃ语言的结构体叫做IplImage来存储图像。后来实在是受不了了，因为使用ｃ语言接口的用户需要自己来管理内存，实在特别麻烦并且容易出错。opencv维护者们就使用c++又翻新了一遍opencv库。新版本中（2.0往后）支持使用Mat来存储图像。  Mat的组成 Mat主要由两部分组成：   矩阵头信息：主要
         </div>
       </a>
 
@@ -364,7 +444,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2018/10/09/2018-10-09-reference-cpp/" target="_self">
         <div>
-          在c++中，为了改变c语言中指针使用的种种麻烦与困难，定义了一种新的复合类型－－－引用，引用也分为很多种，比如左值引用、右值引用、常量引用等等。 左值引用一般情况下，大家见的最多的就是左值引用。右值引用通常与移动操作结合起来的比较多。其中左值引用使用&amp;符号，右值引用使用&amp;&amp;。 下面是左值引用的两个大类。 普通引用引用为对象起了另外一个名字，引用类型引用（refers to）
+          在c++中，为了改变c语言中指针使用的种种麻烦与困难，定义了一种新的复合类型－－－引用，引用也分为很多种，比如左值引用、右值引用、常量引用等等。  左值引用 一般情况下，大家见的最多的就是左值引用。右值引用通常与移动操作结合起来的比较多。其中左值引用使用&amp;符号，右值引用使用&amp;&amp;。 下面是左值引用的两个大类。  普通引用 引用为对象起了另外一个名字，引用类型引用（refers
         </div>
       </a>
 
@@ -444,7 +524,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2018/10/01/2018-10-01-gdb/" target="_self">
         <div>
-          一个合格的程序猿，肯定熟练掌握一种或者几种编程语言。而要想熟练掌握ｃ与c++语言，gdb这个工具是一定得了解的。额，不过我写它主要是给自己一个快速查看的链接，等到我把这些背下来就没什么价值了。这里只会写最常用最简单的功能，如果想要了解更多，可以查看gdb技术手册。 gdbGDB是一个由GNU开源组织发布的、UNIX&#x2F;LINUX操作系统下的、基于命令行的、功能强大的程序调试工具。gdb的功
+          一个合格的程序猿，肯定熟练掌握一种或者几种编程语言。而要想熟练掌握ｃ与c++语言，gdb这个工具是一定得了解的。额，不过我写它主要是给自己一个快速查看的链接，等到我把这些背下来就没什么价值了。这里只会写最常用最简单的功能，如果想要了解更多，可以查看gdb技术手册。  gdb GDB是一个由GNU开源组织发布的、UNIX/LINUX操作系统下的、基于命令行的、功能强大的程序调试工具。gdb的功能及其
         </div>
       </a>
 
@@ -524,7 +604,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2018/09/15/2018-09-15-c-cpp-common/" target="_self">
         <div>
-          在我刚上大学那会儿，学了ｃ语言与c++。当时肯定是没学好哈哈，记得我好长一段时间都认为c++语言就是ｃ语言多了面向对象的部分（这个有可能是因为谭浩强的两本书实在太像了）。这段时间一直在总结c语言和c++语言学习，c++语言确实脱胎于c语言，但是有些地方确实还是会有细微的差别的。已经写了几篇博客了，今天这应该是最后一篇，讲的是一些ｃ语言和c++的几个常识问题．比如关键字struct与关键字class
+          在我刚上大学那会儿，学了ｃ语言与cpp。当时肯定是没学好哈哈，记得我好长一段时间都认为c++语言就是ｃ语言多了面向对象的部分（这个有可能是因为谭浩强的两本书实在太像了）。这段时间一直在总结c语言和cpp语言学习，cpp语言确实脱胎于c语言，但是有些地方确实还是会有细微的差别的。已经写了几篇博客了，今天这应该是最后一篇，讲的是一些ｃ语言和cpp的几个常识问题．比如关键字struct与关键字class
         </div>
       </a>
 
@@ -550,91 +630,11 @@
     </article>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2018/09/09/2018-09-09-c-cpp-argu-passing/" target="_self">
-          c语言和ｃ++语言中函数参数的传递
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/09/09/2018-09-09-c-cpp-argu-passing/" target="_self">
-        <div>
-          其实关于函数参数的传递，我一直以来的理解还算到位的。但是经常会有一些稀奇古怪的写法会让我有点懵圈，仔细想清楚了，就会发现都是一样的道理，不过要是我来写我可能会那样写，而不这样写，在这里稍微吐槽一下ｃ语言关于数组指针的很多写法，真是很难理解了。写这个博客希望自己从此不要被很多拗口的写法吓住，抓住本质的东西，写自己的代码。 1 函数参数传递的本质在调用一个函数时进行参数传递（不只是讲参数列表里的参数，
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-09-09 01:07" pubdate>
-              2018-09-09
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/c%E4%B8%8Ec/">#c与c++</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2018/09/08/2018-09-08-c-cpp-type-convert/" target="_self">
-          c语言和ｃ++语言中的类型转换
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/09/08/2018-09-08-c-cpp-type-convert/" target="_self">
-        <div>
-          关于类型转换的问题，本来我并没有如何在意。因为一直都是写的ｃ的代码比较多一点嘛，而ｃ这方面的内容并不多，形式也很简单。所以一直以来都会有一点错觉，觉得这方面自己应该了解的差不多，够用了。偶尔写代码有些关于这部分的内容老是出错，我也都是尽量“绕”过去，没想过深究原因。这段时间的基础学习，真的是学到了很多，也让我意识到自己很多错误的观点。其中关于类型转换，我以前的理解确实是很肤浅的，直到现在我可能了解
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-09-08 01:07" pubdate>
-              2018-09-08
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/c%E4%B8%8Ec/">#c与c++</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
 
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/7/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/#board">6</a><a class="page-number" href="/page/7/#board">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/#board">9</a><a class="page-number" href="/page/10/#board">10</a><a class="extend next" rel="next" href="/page/9/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/7/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/#board">6</a><a class="page-number" href="/page/7/#board">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/#board">9</a><a class="page-number" href="/page/10/#board">10</a><a class="page-number" href="/page/11/#board">11</a><a class="extend next" rel="next" href="/page/9/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 

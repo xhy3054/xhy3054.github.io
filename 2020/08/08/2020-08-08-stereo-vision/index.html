@@ -16,12 +16,12 @@
   <meta name="author" content="Line">
   <meta name="keywords" content="">
   
-    <meta name="description" content="单目相机无法恢复真实尺度，使得双目相机成为了很多开发者的选择。 双目相机模型双目恢复深度进行三维重建的原理与人眼类似，为了进一步分析双目测距的原理，可以从下图深入理解双目相机模型：  双目相机一般由左眼和右眼两个水平放置的相机组成。上图中左右两个相机都是使用针孔相机模型，两个相机的成像平面在同一个水平面上，同时两个相机光心是水平放置的，因此对于一个P点，其在两个图像上的投影点的行坐标是相同的，我们">
+    <meta name="description" content="单目相机无法恢复真实尺度，使得双目相机成为了很多开发者的选择。  双目相机模型 双目恢复深度进行三维重建的原理与人眼类似，为了进一步分析双目测距的原理，可以从下图深入理解双目相机模型：  双目相机一般由左眼和右眼两个水平放置的相机组成。上图中左右两个相机都是使用针孔相机模型，两个相机的成像平面在同一个水平面上，同时两个相机光心是水平放置的，因此对于一个P点，其在两个图像上的投影点的行坐标是相同的，">
 <meta property="og:type" content="article">
 <meta property="og:title" content="双目相机模型与标定">
 <meta property="og:url" content="http://line.com/2020/08/08/2020-08-08-stereo-vision/index.html">
 <meta property="og:site_name" content="Line&#39;s Blog">
-<meta property="og:description" content="单目相机无法恢复真实尺度，使得双目相机成为了很多开发者的选择。 双目相机模型双目恢复深度进行三维重建的原理与人眼类似，为了进一步分析双目测距的原理，可以从下图深入理解双目相机模型：  双目相机一般由左眼和右眼两个水平放置的相机组成。上图中左右两个相机都是使用针孔相机模型，两个相机的成像平面在同一个水平面上，同时两个相机光心是水平放置的，因此对于一个P点，其在两个图像上的投影点的行坐标是相同的，我们">
+<meta property="og:description" content="单目相机无法恢复真实尺度，使得双目相机成为了很多开发者的选择。  双目相机模型 双目恢复深度进行三维重建的原理与人眼类似，为了进一步分析双目测距的原理，可以从下图深入理解双目相机模型：  双目相机一般由左眼和右眼两个水平放置的相机组成。上图中左右两个相机都是使用针孔相机模型，两个相机的成像平面在同一个水平面上，同时两个相机光心是水平放置的，因此对于一个P点，其在两个图像上的投影点的行坐标是相同的，">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://line.com/img/stereo/stereo.PNG">
 <meta property="og:image" content="http://line.com/img/stereo/stereo_rectify.gif">
@@ -46,6 +46,8 @@
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
 
 
 
@@ -243,7 +245,7 @@
         
         
         
-          24 分钟
+          25 分钟
         
       </span>
     
@@ -287,42 +289,49 @@
               <div class="markdown-body">
                 
                 <p>单目相机无法恢复真实尺度，使得双目相机成为了很多开发者的选择。</p>
-<h1 id="双目相机模型"><a href="#双目相机模型" class="headerlink" title="双目相机模型"></a>双目相机模型</h1><p>双目恢复深度进行三维重建的原理与人眼类似，为了进一步分析双目测距的原理，可以从下图深入理解双目相机模型：</p>
-<p><img src="/img/stereo/stereo.PNG" srcset="/img/loading.gif" lazyload alt="stereo"></p>
+<h1 id="双目相机模型"><a class="markdownIt-Anchor" href="#双目相机模型"></a> 双目相机模型</h1>
+<p>双目恢复深度进行三维重建的原理与人眼类似，为了进一步分析双目测距的原理，可以从下图深入理解双目相机模型：</p>
+<p><img src="/img/stereo/stereo.PNG" srcset="/img/loading.gif" lazyload alt="stereo" /></p>
 <p>双目相机一般由左眼和右眼两个<strong>水平放置</strong>的相机组成。上图中左右两个相机都是使用针孔相机模型，两个相机的成像平面在同一个水平面上，同时两个相机光心是水平放置的，因此对于一个P点，其在两个图像上的投影点的行坐标是相同的，我们通过对其纵坐标的处理便可以得到视差了。</p>
 <p>图中两个相机光心之间的距离b被成为双目相机的<strong>基线</strong>，是与焦距f一样重要的参数。</p>
-<p>根据上图，假设一个空间点P，在左右目各成一像$P_L$与$P_R$，分别以两个光心垂直的位置为二维坐标原点，则$P_L$的横坐标为$u_L$，$P_R$的横坐标为$u_R$，可以发现$u_R$是一个负数。根据上图中右侧三角形相似的原理，可以得到下面公式</p>
-<p>$$\frac{z-f}{z}&#x3D;\frac{b-u_{L}+u_{R}}{b}$$</p>
+<p>根据上图，假设一个空间点P，在左右目各成一像<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mi>L</mi></msub></mrow><annotation encoding="application/x-tex">P_L</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">L</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>与<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mi>R</mi></msub></mrow><annotation encoding="application/x-tex">P_R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.00773em;">R</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，分别以两个光心垂直的位置为二维坐标原点，则<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mi>L</mi></msub></mrow><annotation encoding="application/x-tex">P_L</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">L</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>的横坐标为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>u</mi><mi>L</mi></msub></mrow><annotation encoding="application/x-tex">u_L</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">u</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">L</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mi>R</mi></msub></mrow><annotation encoding="application/x-tex">P_R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.00773em;">R</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>的横坐标为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>u</mi><mi>R</mi></msub></mrow><annotation encoding="application/x-tex">u_R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">u</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.00773em;">R</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，可以发现<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>u</mi><mi>R</mi></msub></mrow><annotation encoding="application/x-tex">u_R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">u</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.00773em;">R</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>是一个负数。根据上图中右侧三角形相似的原理，可以得到下面公式</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mfrac><mrow><mi>z</mi><mo>−</mo><mi>f</mi></mrow><mi>z</mi></mfrac><mo>=</mo><mfrac><mrow><mi>b</mi><mo>−</mo><msub><mi>u</mi><mi>L</mi></msub><mo>+</mo><msub><mi>u</mi><mi>R</mi></msub></mrow><mi>b</mi></mfrac></mrow><annotation encoding="application/x-tex">\frac{z-f}{z}=\frac{b-u_{L}+u_{R}}{b}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.0574399999999997em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714399999999998em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.04398em;">z</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.04398em;">z</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.05744em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.37144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">b</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathnormal">u</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">L</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathnormal">u</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.00773em;">R</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
 <p>经过整理，可以得到</p>
-<p>$$ z &#x3D; \frac{fb}{d}, d&#x3D; u_L -u_R $$</p>
-<p>此处d为投影点在左右图上的横坐标之差，也叫作<strong>视差</strong>，因此，根据视差我们就可以估计出这个空间点的深度了。此处可以发现，视差最小也就是1个像素，因此双目可以测量的最大深度是有上限的，而这个值和$fb$有关，所以一般相机焦距f确定的时候，双目基线越大，可测量的最远深度也越大。</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>z</mi><mo>=</mo><mfrac><mrow><mi>f</mi><mi>b</mi></mrow><mi>d</mi></mfrac><mo separator="true">,</mo><mi>d</mi><mo>=</mo><msub><mi>u</mi><mi>L</mi></msub><mo>−</mo><msub><mi>u</mi><mi>R</mi></msub></mrow><annotation encoding="application/x-tex">z = \frac{fb}{d}, d= u_L -u_R 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.04398em;">z</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.0574399999999997em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714399999999998em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">d</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mord mathnormal">b</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">d</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.73333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">u</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">L</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">u</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.00773em;">R</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></p>
+<p>此处d为投影点在左右图上的横坐标之差，也叫作<strong>视差</strong>，因此，根据视差我们就可以估计出这个空间点的深度了。此处可以发现，视差最小也就是1个像素，因此双目可以测量的最大深度是有上限的，而这个值和<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mi>b</mi></mrow><annotation encoding="application/x-tex">fb</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mord mathnormal">b</span></span></span></span>有关，所以一般相机焦距f确定的时候，双目基线越大，可测量的最远深度也越大。</p>
 <blockquote>
 <p>由于以上双目相机模型的特殊，我们不仅可以方便的估计深度，也可以在双目匹配时很容易的进行极线（横坐标一致的水平线）搜索匹配，大大减小匹配计算量。</p>
 </blockquote>
-<h1 id="双目立体标定"><a href="#双目立体标定" class="headerlink" title="双目立体标定"></a>双目立体标定</h1><p>上面讲述了双目相机模型的原理，我们可以发现这是一个很苛刻的条件，要求两个相机光心在同一水平线上，并且成像平面平行。这个在双目相机的制作中很难做到。因此在获得一个双目相机后，需要对其进行双目标定，得到两个$3*4$的投影矩阵H1和H2，在两个相机成像分别使用这两个矩阵进行投影后得到两个新的矫正后的图像，此时校正后的两个图像应该是满足上面的双目相机模型的。整个矫正过程如下所示 </p>
-<p><img src="/img/stereo/stereo_rectify.gif" srcset="/img/loading.gif" lazyload alt="stereo"></p>
-<h2 id="opencv进行双目标定"><a href="#opencv进行双目标定" class="headerlink" title="opencv进行双目标定"></a>opencv进行双目标定</h2><h3 id="知道内参"><a href="#知道内参" class="headerlink" title="知道内参"></a>知道内参</h3><blockquote>
+<h1 id="双目立体标定"><a class="markdownIt-Anchor" href="#双目立体标定"></a> 双目立体标定</h1>
+<p>上面讲述了双目相机模型的原理，我们可以发现这是一个很苛刻的条件，要求两个相机光心在同一水平线上，并且成像平面平行。这个在双目相机的制作中很难做到。因此在获得一个双目相机后，需要对其进行双目标定，得到两个<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>∗</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">3*4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span></span></span></span>的投影矩阵H1和H2，在两个相机成像分别使用这两个矩阵进行投影后得到两个新的矫正后的图像，此时校正后的两个图像应该是满足上面的双目相机模型的。整个矫正过程如下所示</p>
+<p><img src="/img/stereo/stereo_rectify.gif" srcset="/img/loading.gif" lazyload alt="stereo" /></p>
+<h2 id="opencv进行双目标定"><a class="markdownIt-Anchor" href="#opencv进行双目标定"></a> opencv进行双目标定</h2>
+<h3 id="知道内参"><a class="markdownIt-Anchor" href="#知道内参"></a> 知道内参</h3>
+<blockquote>
 <p>对于一个已经标定的双目相机（已知内参、畸变参数等），在opencv中可以使用<code>cv:StereoRectify</code>来完成双目矫正矩阵的获得（不只是矫正矩阵，还有两个相机之间的位姿变换，视差到深度的4*4映射矩阵等）；</p>
 </blockquote>
 <p>这种方法也称为(Bouguet)方法，需要先分别对两个相机进行标定，分别得出两个相机的内参数矩阵，然后再进行立体标定，进行立体图像的矫正。具体可以去opencv官网查看，函数介绍比较清晰。</p>
-<h3 id="不知道内参"><a href="#不知道内参" class="headerlink" title="不知道内参"></a>不知道内参</h3><blockquote>
+<h3 id="不知道内参"><a class="markdownIt-Anchor" href="#不知道内参"></a> 不知道内参</h3>
+<blockquote>
 <p>对于一个没有标定的双目相机，可以使用opencv中<code>cv::stereoRectifyUncalibrated</code>函数来获得双目的矫正矩阵H1和H2，分别使用这两个矩阵对图像做单应变换，即可矫正图像。</p>
 </blockquote>
 <p>这种方法也叫非标定方法也称为（Hartley)方法，有时候我们不知道相机的内参矩阵，而且也不用知道内参数具体是多少，因为我们仅关心如何得到两幅图像的稠密匹配，或者两幅图像之间的视差图或者深度图就足够了。因为不知道相机的内参数，所以只能借助对极约束来解决问题了，通过计算两幅图像的基础矩阵F，然后利用对极约束条件中对极线为平行且行对准，可以很好的实现目标。</p>
-<p><img src="/img/stereo/stereo_rectify1.PNG" srcset="/img/loading.gif" lazyload alt="stereo"></p>
+<p><img src="/img/stereo/stereo_rectify1.PNG" srcset="/img/loading.gif" lazyload alt="stereo" /></p>
 <p>第三个参数是本质矩阵可以通过<code>cv::findFundamentalMat</code>获得，需要说明一点，该函数的前两个参数<code>Mat&amp; points1, Mat&amp; points2</code>与<code>cv::findFundamentalMat</code>的前两个参数并不是相同的数据结构。它们虽然可以是同一个匹配点集，但是他们的数据结构是完全不同的！<code>cv::findFundamentalMat</code>中传入的匹配点集要求是2xN或者Nx2的矩阵，但是<code>cv::stereoRectifyUncalibrated</code>中要求传入的匹配点集必须是1x2N或者2Nx1的矩阵！在很多文档中都说他们的参数是一样的，这其实是一个天大的错误，如果用计算F的匹配点集直接传给图像矫正函数，程序将直接崩溃。正确的做法是利用cv::Mat的构造函数，直接从vector<Point2f>构造一个cv::Mat传入。</p>
-<p><code>cv::stereoRectifyUncalibrated</code>函数默认原始图像是没有径向畸变的，因此在矫正图像之前，最好先对原始图像做径向矫正。另外需要注意的一点，函数返回的单应变换矩阵H1和H2都是double类型，也即CV_64F类型，若不是该类型的矩阵，与之相乘会报错。	</p>
-<h3 id="生成映射矩阵"><a href="#生成映射矩阵" class="headerlink" title="生成映射矩阵"></a>生成映射矩阵</h3><blockquote>
+<p><code>cv::stereoRectifyUncalibrated</code>函数默认原始图像是没有径向畸变的，因此在矫正图像之前，最好先对原始图像做径向矫正。另外需要注意的一点，函数返回的单应变换矩阵H1和H2都是double类型，也即CV_64F类型，若不是该类型的矩阵，与之相乘会报错。</p>
+<h3 id="生成映射矩阵"><a class="markdownIt-Anchor" href="#生成映射矩阵"></a> 生成映射矩阵</h3>
+<blockquote>
 <p>在双目立体标定之后，需要根据标定结果生成新的映射表，然后通过映射表完成矫正。</p>
 </blockquote>
 <p>映射表的生成使用如下函数，这个函数需要使用两遍，如下这边是得到左目的映射表，这个映射函数的原理可以查看opencv的docs，关于该函数有详细的公式推导</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs cpp">cv::<span class="hljs-built_in">initUndistortRectifyMap</span>(            <span class="hljs-comment">//计算无畸变和修正转换映射</span><br>    K_l,                                <span class="hljs-comment">//输入：相机内参矩阵 (单目标定阶段得到的相机内参矩阵)</span><br>    D_l,                                <span class="hljs-comment">//输入：单目标定阶段得到的相机的去畸变参数</span><br>    R_l,                                <span class="hljs-comment">//输入：可选的修正变换矩阵,3*3, 从 cv::stereoRectify 得来.如果这个矩阵为空矩阵,那么就将会被设置成为单位矩阵</span><br>    P_l.<span class="hljs-built_in">rowRange</span>(<span class="hljs-number">0</span>,<span class="hljs-number">3</span>).<span class="hljs-built_in">colRange</span>(<span class="hljs-number">0</span>,<span class="hljs-number">3</span>),    <span class="hljs-comment">//输入：新的相机内参矩阵（后续根据这个矩阵来进行投影变换，畸变已经没有了）</span><br>    cv::<span class="hljs-built_in">Size</span>(cols_l,rows_l),            <span class="hljs-comment">//在去畸变之前的图像尺寸</span><br>    CV_32F,                             <span class="hljs-comment">//第一个输出映射的类型，映射x</span><br>    M1l,                                <span class="hljs-comment">//输出：第一个输出映射表，映射y</span><br>    M2l);                               <span class="hljs-comment">//输出：第二个输出映射</span><br></code></pre></td></tr></table></figure>
-
 <p>得到映射表后，可以通过如下函数完成映射：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs cpp">cv::<span class="hljs-built_in">remap</span>(              <span class="hljs-comment">//重映射，就是把一幅图像中某位置的像素放置到另一个图片指定位置的过程。</span><br>            imLeft,             <span class="hljs-comment">//输入图像</span><br>            imLeftRect,         <span class="hljs-comment">//输出图像</span><br>            M1l,                <span class="hljs-comment">//第一个映射矩阵表， 作用是对于输出图像某个位置（x,y），M1l(x,y)处的值为一个x1坐标</span><br>            M2l,                <span class="hljs-comment">//第二个映射矩阵，作用是对于输出图像某个位置（x,y），M2l(x,y)处的值一个y1坐标, remap函数将输入图像(x1,y1)处的值赋值给输出图像（x,y）位置处</span><br>            cv::INTER_LINEAR);<br></code></pre></td></tr></table></figure>
-
 <p>至此，大功告成得到的imLeftRect便是修正后的左目图像了，与同样修正后的右目图像满足上面介绍的双目相机模型</p>
-<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ul>
+<h1 id="参考文献"><a class="markdownIt-Anchor" href="#参考文献"></a> 参考文献</h1>
+<ul>
 <li>[1]. 视觉slam十四讲</li>
 <li>[2]. <a target="_blank" rel="noopener" href="https://blog.csdn.net/jaccen/article/details/51217936">https://blog.csdn.net/jaccen/article/details/51217936</a></li>
 <li>[3]. <a target="_blank" rel="noopener" href="https://docs.opencv.org/4.2.0/d9/d0c/group__calib3d.html#gaadc5b14471ddc004939471339294f052">https://docs.opencv.org/4.2.0/d9/d0c/group__calib3d.html#gaadc5b14471ddc004939471339294f052</a></li>
@@ -500,7 +509,6 @@
 
   
   
-
 
 
 
@@ -695,49 +703,6 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
-
-  
-      <script>
-        if (!window.MathJax) {
-          window.MathJax = {
-            tex    : {
-              inlineMath: { '[+]': [['$', '$']] }
-            },
-            loader : {
-              load: ['ui/lazy']
-            },
-            options: {
-              renderActions: {
-                insertedScript: [200, () => {
-                  document.querySelectorAll('mjx-container').forEach(node => {
-                    let target = node.parentNode;
-                    if (target.nodeName.toLowerCase() === 'li') {
-                      target.parentNode.classList.add('has-jax');
-                    }
-                  });
-                }, '', false]
-              }
-            }
-          };
-        } else {
-          MathJax.startup.document.state(0);
-          MathJax.texReset();
-          MathJax.typeset();
-          MathJax.typesetPromise();
-        }
-
-        Fluid.events.registerRefreshCallback(function() {
-          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
-            MathJax.startup.document.state(0);
-            MathJax.texReset();
-            MathJax.typeset();
-            MathJax.typesetPromise();
-          }
-        });
-      </script>
-    
-
-  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 

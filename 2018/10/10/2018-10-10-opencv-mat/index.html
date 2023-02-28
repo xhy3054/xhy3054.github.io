@@ -16,12 +16,12 @@
   <meta name="author" content="Line">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Mat类很久以前（大概两千年左右），opencv还只是提供ｃ接口的一个库。那时它使用一种ｃ语言的结构体叫做IplImage来存储图像。后来实在是受不了了，因为使用ｃ语言接口的用户需要自己来管理内存，实在特别麻烦并且容易出错。opencv维护者们就使用c++又翻新了一遍opencv库。新版本中（2.0往后）支持使用Mat来存储图像。 Mat的组成Mat主要由两部分组成：  矩阵头信息：主要是矩阵大小">
+    <meta name="description" content="Mat类 很久以前（大概两千年左右），opencv还只是提供ｃ接口的一个库。那时它使用一种ｃ语言的结构体叫做IplImage来存储图像。后来实在是受不了了，因为使用ｃ语言接口的用户需要自己来管理内存，实在特别麻烦并且容易出错。opencv维护者们就使用c++又翻新了一遍opencv库。新版本中（2.0往后）支持使用Mat来存储图像。  Mat的组成 Mat主要由两部分组成：   矩阵头信息：主要">
 <meta property="og:type" content="article">
 <meta property="og:title" content="opencv中的Mat类讲解">
 <meta property="og:url" content="http://line.com/2018/10/10/2018-10-10-opencv-mat/index.html">
 <meta property="og:site_name" content="Line&#39;s Blog">
-<meta property="og:description" content="Mat类很久以前（大概两千年左右），opencv还只是提供ｃ接口的一个库。那时它使用一种ｃ语言的结构体叫做IplImage来存储图像。后来实在是受不了了，因为使用ｃ语言接口的用户需要自己来管理内存，实在特别麻烦并且容易出错。opencv维护者们就使用c++又翻新了一遍opencv库。新版本中（2.0往后）支持使用Mat来存储图像。 Mat的组成Mat主要由两部分组成：  矩阵头信息：主要是矩阵大小">
+<meta property="og:description" content="Mat类 很久以前（大概两千年左右），opencv还只是提供ｃ接口的一个库。那时它使用一种ｃ语言的结构体叫做IplImage来存储图像。后来实在是受不了了，因为使用ｃ语言接口的用户需要自己来管理内存，实在特别麻烦并且容易出错。opencv维护者们就使用c++又翻新了一遍opencv库。新版本中（2.0往后）支持使用Mat来存储图像。  Mat的组成 Mat主要由两部分组成：   矩阵头信息：主要">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://line.com/img/opencv-mat/tutorial_how_matrix_stored_1.png">
 <meta property="og:image" content="http://line.com/img/opencv-mat/tutorial_how_matrix_stored_2.png">
@@ -46,6 +46,8 @@
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
 
 
 
@@ -286,29 +288,35 @@
             
               <div class="markdown-body">
                 
-                <h1 id="Mat类"><a href="#Mat类" class="headerlink" title="Mat类"></a>Mat类</h1><p>很久以前（大概两千年左右），opencv还只是提供ｃ接口的一个库。那时它使用一种ｃ语言的结构体叫做<code>IplImage</code>来存储图像。后来实在是受不了了，因为使用ｃ语言接口的用户需要自己来管理内存，实在特别麻烦并且容易出错。opencv维护者们就使用c++又翻新了一遍opencv库。新版本中（2.0往后）支持使用Mat来存储图像。</p>
-<h2 id="Mat的组成"><a href="#Mat的组成" class="headerlink" title="Mat的组成"></a>Mat的组成</h2><p>Mat主要由两部分组成：</p>
+                <h1 id="mat类"><a class="markdownIt-Anchor" href="#mat类"></a> Mat类</h1>
+<p>很久以前（大概两千年左右），opencv还只是提供ｃ接口的一个库。那时它使用一种ｃ语言的结构体叫做<code>IplImage</code>来存储图像。后来实在是受不了了，因为使用ｃ语言接口的用户需要自己来管理内存，实在特别麻烦并且容易出错。opencv维护者们就使用c++又翻新了一遍opencv库。新版本中（2.0往后）支持使用Mat来存储图像。</p>
+<h2 id="mat的组成"><a class="markdownIt-Anchor" href="#mat的组成"></a> Mat的组成</h2>
+<p>Mat主要由两部分组成：</p>
 <ol>
-<li><p>矩阵头信息：主要是矩阵大小、矩阵存储方法、矩阵地址等，矩阵头大小是固定的；</p>
+<li>
+<p>矩阵头信息：主要是矩阵大小、矩阵存储方法、矩阵地址等，矩阵头大小是固定的；</p>
 </li>
-<li><p>图像像素矩阵的指针对象，使用类似智能指针<code>shared_ptr</code>的方法来管理内存；</p>
+<li>
+<p>图像像素矩阵的指针对象，使用类似智能指针<code>shared_ptr</code>的方法来管理内存；</p>
 </li>
 </ol>
-<h2 id="Mat对象的拷贝问题"><a href="#Mat对象的拷贝问题" class="headerlink" title="Mat对象的拷贝问题"></a>Mat对象的拷贝问题</h2><p>Mat对象的拷贝构造函数、拷贝赋值运算符（重载的<code>=</code>）都是使用的浅拷贝，即只拷贝了指针的值，但是它们指向共同的一片区域。</p>
+<h2 id="mat对象的拷贝问题"><a class="markdownIt-Anchor" href="#mat对象的拷贝问题"></a> Mat对象的拷贝问题</h2>
+<p>Mat对象的拷贝构造函数、拷贝赋值运算符（重载的<code>=</code>）都是使用的浅拷贝，即只拷贝了指针的值，但是它们指向共同的一片区域。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs cpp">Mat A, C;                          <span class="hljs-comment">// creates just the header parts</span><br>A = <span class="hljs-built_in">imread</span>(argv[<span class="hljs-number">1</span>], IMREAD_COLOR); <span class="hljs-comment">// here we&#x27;ll know the method used (allocate matrix)</span><br><span class="hljs-function">Mat <span class="hljs-title">B</span><span class="hljs-params">(A)</span></span>;                                 <span class="hljs-comment">// Use the copy constructor</span><br>C = A;                                    <span class="hljs-comment">// Assignment operator</span><br><span class="hljs-function">Mat <span class="hljs-title">D</span> <span class="hljs-params">(A, Rect(<span class="hljs-number">10</span>, <span class="hljs-number">10</span>, <span class="hljs-number">100</span>, <span class="hljs-number">100</span>) )</span></span>; <span class="hljs-comment">// using a rectangle　Ｄ中的指针指向Ａ指针指向矩阵的一片长方形区域</span><br>Mat E = <span class="hljs-built_in">A</span>(Range::<span class="hljs-built_in">all</span>(), <span class="hljs-built_in">Range</span>(<span class="hljs-number">1</span>,<span class="hljs-number">3</span>)); <span class="hljs-comment">// using row and column boundaries　也是指向一部分区域，第一个参数代表行（全部行），第二个参数代表列（１～３列）</span><br></code></pre></td></tr></table></figure>
-
 <p>如上，A、B、C三个对象最终指向的都是同一片内存区域。即对它们三个任何一个的图像进行修改，另外两个也修改了。如果想要进行深拷贝，可以使用Mat类自带的两个函数：<code>cv::Mat::clone()</code>与<code>cv::Mat::copyTo()</code>，使用方法如下：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cpp">Mat F = A.<span class="hljs-built_in">clone</span>();<br>Mat G;<br>A.<span class="hljs-built_in">copyTo</span>(G);<br></code></pre></td></tr></table></figure>
-
 <p>现在，Ａ、Ｆ、Ｇ三个Mat对象分别管理属于自己的图像矩阵内存，不会互相干扰。</p>
-<h2 id="Mat对象的存储方法"><a href="#Mat对象的存储方法" class="headerlink" title="Mat对象的存储方法"></a>Mat对象的存储方法</h2><blockquote>
+<h2 id="mat对象的存储方法"><a class="markdownIt-Anchor" href="#mat对象的存储方法"></a> Mat对象的存储方法</h2>
+<blockquote>
 <p>使用<code>imread(&quot;1.png&quot;)</code>，默认参数是<code>IMREAD_COLOR </code>,即总是将硬盘中的图片转换为8位的3通道BGR彩色图然后读入内存，并返回一个3通道BGR的mat类型</p>
 </blockquote>
 <p>存储方法主要受两个参数影响：</p>
 <ol>
-<li><p>颜色空间：决定了使用何种方法编码一个像素的颜色，比如灰度空间单通道描述、RGB三通道红绿蓝描述、RGBD四通道红绿蓝透明度四通道描述等等；</p>
+<li>
+<p>颜色空间：决定了使用何种方法编码一个像素的颜色，比如灰度空间单通道描述、RGB三通道红绿蓝描述、RGBD四通道红绿蓝透明度四通道描述等等；</p>
 </li>
-<li><p>数据类型：使用何种数据类型来描述一个通道，如unsigned char(8位0<del>255)、signed char(8位-128</del>127)、float(32位)、double(64位)等，越大则图像占用内存越大，可描述的色彩越细微；</p>
+<li>
+<p>数据类型：使用何种数据类型来描述一个通道，如unsigned char(8位0~255)、signed char(8位-128~127)、float(32位)、double(64位)等，越大则图像占用内存越大，可描述的色彩越细微；</p>
 </li>
 </ol>
 <p>颜色空间主要有RGB、HSV、HLS、YCrCb等，想了解自己再查书吧。值得一提的是<strong>opencv标准显式中使用的RGB其实是BGR</strong>，即翻转了一下顺序。同时，RGB转灰度空间使用了如下公式：</p>
@@ -317,12 +325,16 @@
 <blockquote>
 <p>关于颜色空间更多的知识可以查看<a target="_blank" rel="noopener" href="https://www.learnopencv.com/color-spaces-in-opencv-cpp-python/">这篇博文</a>，在opencv中提供了将不同颜色空间的Mat进行转换的函数<code>cv2.cvtColor</code></p>
 </blockquote>
-<h3 id="Mat中指针指向的矩阵中像素的组织形式（灰度空间与BGR空间）"><a href="#Mat中指针指向的矩阵中像素的组织形式（灰度空间与BGR空间）" class="headerlink" title="Mat中指针指向的矩阵中像素的组织形式（灰度空间与BGR空间）"></a>Mat中指针指向的矩阵中像素的组织形式（灰度空间与BGR空间）</h3><p>像素的组织形式主要依赖于颜色空间类型的选择，下图是<strong>灰度空间</strong>下像素的组织形式：<br><img src="/img/opencv-mat/tutorial_how_matrix_stored_1.png" srcset="/img/loading.gif" lazyload alt="tutorial_how_matrix_stored_1"></p>
-<p>下面这张图是<strong>BGR颜色空间</strong>的组织形式，每个大列下会有三个小列依次代表着三种颜色通道（分别是B、G、R），其实就是每个像素由三个<code>uchar</code>组成（假设<code>data_type</code>是<code>uchar</code>）：<br><img src="/img/opencv-mat/tutorial_how_matrix_stored_2.png" srcset="/img/loading.gif" lazyload alt="tutorial_how_matrix_stored_2"></p>
+<h3 id="mat中指针指向的矩阵中像素的组织形式灰度空间与bgr空间"><a class="markdownIt-Anchor" href="#mat中指针指向的矩阵中像素的组织形式灰度空间与bgr空间"></a> Mat中指针指向的矩阵中像素的组织形式（灰度空间与BGR空间）</h3>
+<p>像素的组织形式主要依赖于颜色空间类型的选择，下图是<strong>灰度空间</strong>下像素的组织形式：<br />
+<img src="/img/opencv-mat/tutorial_how_matrix_stored_1.png" srcset="/img/loading.gif" lazyload alt="tutorial_how_matrix_stored_1" /></p>
+<p>下面这张图是<strong>BGR颜色空间</strong>的组织形式，每个大列下会有三个小列依次代表着三种颜色通道（分别是B、G、R），其实就是每个像素由三个<code>uchar</code>组成（假设<code>data_type</code>是<code>uchar</code>）：<br />
+<img src="/img/opencv-mat/tutorial_how_matrix_stored_2.png" srcset="/img/loading.gif" lazyload alt="tutorial_how_matrix_stored_2" /></p>
 <blockquote>
 <p>无论Mat是几通道的颜色空间，其矩阵都是两维的。只是两维矩阵的每一个元素的大小是<code>通道数*数据类型的大小</code>，即在一个元素中，各通道依次存储。同时有一点需要说明，如果内存足够大，在载入图像时，便会将下一行紧随着上一行存储，所以最后有可能<strong>整幅图像存成了一行</strong>。这种情况是可以帮我们提升扫描速度的（按照一维方式扫描只需要获得一次行首指针），我们可以使用opencv提供的<code>cv::Mat::isContinuous()</code>函数来确定是否是连续存储的。</p>
 </blockquote>
-<h2 id="Mat对象的创建与显示"><a href="#Mat对象的创建与显示" class="headerlink" title="Mat对象的创建与显示"></a>Mat对象的创建与显示</h2><p>Mat的创建有好多方式，同时它重载了<code>&lt;&lt;</code>，使得可以直接用<code>cout</code>进行输出显示，<a target="_blank" rel="noopener" href="https://github.com/xhy3054/myopencv/blob/master/004_Mat/mat_creat_print.cpp">mat_creat_print.cpp</a>中实现了各种创建与显示的方法，可以查看代码或者直接运行查看结果。</p>
+<h2 id="mat对象的创建与显示"><a class="markdownIt-Anchor" href="#mat对象的创建与显示"></a> Mat对象的创建与显示</h2>
+<p>Mat的创建有好多方式，同时它重载了<code>&lt;&lt;</code>，使得可以直接用<code>cout</code>进行输出显示，<a target="_blank" rel="noopener" href="https://github.com/xhy3054/myopencv/blob/master/004_Mat/mat_creat_print.cpp">mat_creat_print.cpp</a>中实现了各种创建与显示的方法，可以查看代码或者直接运行查看结果。</p>
 
                 
               </div>
@@ -497,7 +509,6 @@
 
   
   
-
 
 
 
@@ -692,49 +703,6 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
-
-  
-      <script>
-        if (!window.MathJax) {
-          window.MathJax = {
-            tex    : {
-              inlineMath: { '[+]': [['$', '$']] }
-            },
-            loader : {
-              load: ['ui/lazy']
-            },
-            options: {
-              renderActions: {
-                insertedScript: [200, () => {
-                  document.querySelectorAll('mjx-container').forEach(node => {
-                    let target = node.parentNode;
-                    if (target.nodeName.toLowerCase() === 'li') {
-                      target.parentNode.classList.add('has-jax');
-                    }
-                  });
-                }, '', false]
-              }
-            }
-          };
-        } else {
-          MathJax.startup.document.state(0);
-          MathJax.texReset();
-          MathJax.typeset();
-          MathJax.typesetPromise();
-        }
-
-        Fluid.events.registerRefreshCallback(function() {
-          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
-            MathJax.startup.document.state(0);
-            MathJax.texReset();
-            MathJax.typeset();
-            MathJax.typesetPromise();
-          }
-        });
-      </script>
-    
-
-  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 

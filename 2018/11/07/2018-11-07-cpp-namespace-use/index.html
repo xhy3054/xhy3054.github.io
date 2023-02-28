@@ -43,6 +43,8 @@
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
 
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
+
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
@@ -284,35 +286,40 @@
                 
                 <p>使用c++进行开发的我们总会不可避免的使用很多外部的库，这样可以避免自己重复造轮子，大大提高工作效率。但是每个库都会定义大量的全局名字，如类、函数、模板等。如果这些名字都放在全局命名空间中，不可避免的会出现相同的名字，形成<strong>命名冲突。</strong></p>
 <p><strong>命名空间</strong>就是为了防止命名冲突而出现的，每个库都可以拥有自己的命名空间，每个命名空间是一个作用域。然后如何使用一个特定命名空间里的成员，就是本文主要要讲的内容，不过我只挑了一些我认为需要记录下来的，因为有很多常识性的规则实在没有多说的必要。</p>
-<h1 id="using声明"><a href="#using声明" class="headerlink" title="using声明"></a>using声明</h1><p>一条<code>using</code>声明语句一次只引入命名空间的一个成员。例如最常见的<code>using std::cout</code>就是使用using声明将std命名空间中的标准输出对象<code>cout</code>引入<strong>当前作用域</strong>。其实就是在当前作用域声明了有<code>cout</code>这个对象，并且说明它定义在命名空间<code>std</code>里。因此如果当前作用域中已经有一个同名的对象，将会<strong>报错</strong>。</p>
+<h1 id="using声明"><a class="markdownIt-Anchor" href="#using声明"></a> using声明</h1>
+<p>一条<code>using</code>声明语句一次只引入命名空间的一个成员。例如最常见的<code>using std::cout</code>就是使用using声明将std命名空间中的标准输出对象<code>cout</code>引入<strong>当前作用域</strong>。其实就是在当前作用域声明了有<code>cout</code>这个对象，并且说明它定义在命名空间<code>std</code>里。因此如果当前作用域中已经有一个同名的对象，将会<strong>报错</strong>。</p>
 <p>需要注意的是using声明<strong>引入的是一个名字</strong>，所以在在引入一个<strong>函数</strong>时比较特殊。如下：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-keyword">using</span> <span class="hljs-title">ns::print</span><span class="hljs-params">(<span class="hljs-type">int</span>)</span></span>;	<span class="hljs-comment">//错误：只能引入一个名字，不能指定形参列表</span><br><span class="hljs-keyword">using</span> ns::print;	<span class="hljs-comment">//正确</span><br></code></pre></td></tr></table></figure>
-<hr>
+<hr />
 <p>并且在引入一个函数时，会出现如下情况。</p>
 <ol>
 <li>如果using声明出现在局部作用域中，则引入的名字将隐藏外层作用域的相关声明；</li>
 <li>如果using声明所在的作用域中已经有一个函数与新引入的函数同名且形参列表相同，则将引发错误；</li>
 <li>除了上面两种情况，其他同名函数都会进行<strong>重载</strong>，最终扩展候选函数集的规模。</li>
 </ol>
-<h1 id="using指示"><a href="#using指示" class="headerlink" title="using指示"></a>using指示</h1><p><code>using</code>指示是将某个命名空间中的所有内容都变得有效。但是有一点需要注意，那就是using指示是对<strong>最近的外层作用域</strong>有效。如下</p>
+<h1 id="using指示"><a class="markdownIt-Anchor" href="#using指示"></a> using指示</h1>
+<p><code>using</code>指示是将某个命名空间中的所有内容都变得有效。但是有一点需要注意，那就是using指示是对<strong>最近的外层作用域</strong>有效。如下</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// namespace A and function f are defined at global scope</span><br><span class="hljs-comment">//定义在全局作用域</span><br><span class="hljs-keyword">namespace</span> A &#123;<br>    <span class="hljs-type">int</span> i = <span class="hljs-number">0</span>, j = <span class="hljs-number">42</span>;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">f</span><span class="hljs-params">()</span> </span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> A; <span class="hljs-comment">// 把A中的名字注入到全局作用域</span><br><br>	<span class="hljs-comment">// uses i and j from namespace A</span><br>    cout &lt;&lt; <span class="hljs-string">&quot;i: &quot;</span> &lt;&lt; i &lt;&lt; <span class="hljs-string">&quot; j: &quot;</span> &lt;&lt; j &lt;&lt; endl;<br>&#125;<br></code></pre></td></tr></table></figure>
-<hr>
+<hr />
 <p>并且using指示后在同一作用域出现相同名字的时候，并<strong>不会马上报错</strong>，而是直到使用时出现二义性的代码时才会报错。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">namespace</span> blip &#123;<br>    <span class="hljs-type">int</span> i = <span class="hljs-number">16</span>, j = <span class="hljs-number">15</span>, k = <span class="hljs-number">23</span>;<br>	<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">f</span><span class="hljs-params">()</span> </span><br><span class="hljs-function">		</span>&#123; cout &lt;&lt; <span class="hljs-string">&quot;i: &quot;</span> &lt;&lt; i &lt;&lt; <span class="hljs-string">&quot; j: &quot;</span> &lt;&lt; j &lt;&lt; <span class="hljs-string">&quot; k: &quot;</span> &lt;&lt; k &lt;&lt; endl; &#125;<br>&#125;<br><br><span class="hljs-type">int</span> j = <span class="hljs-number">0</span>;  <span class="hljs-comment">// ok: j inside blip is hidden inside a namespace</span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-comment">// using directive; </span><br>	<span class="hljs-comment">// the names in blip are ``added&#x27;&#x27; to the global scope</span><br>    <span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> blip; <span class="hljs-comment">// clash between ::j and blip::j</span><br>                          <span class="hljs-comment">// detected only if j is used</span><br><br>    ++i;        <span class="hljs-comment">// sets blip::i to 17</span><br>    ++j;        <span class="hljs-comment">//　二义性错误，是全局的j还是blip::j?</span><br>    ++::j;      <span class="hljs-comment">// ok: sets global j to 1</span><br>    ++blip::j;  <span class="hljs-comment">// ok: sets blip::j to 16</span><br><br>    <span class="hljs-type">int</span> k = <span class="hljs-number">97</span>; <span class="hljs-comment">// local k hides blip::k</span><br>    ++k;        <span class="hljs-comment">// sets local k to 98</span><br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>如上，如果使用using指示引入函数与最近的外层作用域重名，会直接被添加到重载集合，即使出现同名且参数列表相同的函数也不会报错，而是知道出现二义性代码才会报错。</p>
 <blockquote>
 <p>通常情况下大家都是在最外层的全局作用域使用using指示，此时没有更外层的作用域了，所以会直接将成员注入到全局作用域。</p>
 </blockquote>
-<h1 id="实参相关与类类型形参的函数查找"><a href="#实参相关与类类型形参的函数查找" class="headerlink" title="实参相关与类类型形参的函数查找"></a>实参相关与类类型形参的函数查找</h1><p>如果不用using指示与using声明，通常我们在使用一个命名空间中的成员时，需要使用作用域限定符<code>::</code>指明出处，但是有一点例外，那就是在使用函数时。</p>
+<h1 id="实参相关与类类型形参的函数查找"><a class="markdownIt-Anchor" href="#实参相关与类类型形参的函数查找"></a> 实参相关与类类型形参的函数查找</h1>
+<p>如果不用using指示与using声明，通常我们在使用一个命名空间中的成员时，需要使用作用域限定符<code>::</code>指明出处，但是有一点例外，那就是在使用函数时。</p>
 <ol>
-<li><p>当我们调用一个函数，并且此函数的实参传递一个类类型的对象是，<strong>除了在常规作用域进行函数查找外，还会查找实参类所属的命名空间</strong>（比如<code>std::cout&lt;&lt;&quot;helio&quot;</code>中对于重载的输出运算符函数并没有指定作用域，但是依然找到了，便是根据实参cout）。</p>
+<li>
+<p>当我们调用一个函数，并且此函数的实参传递一个类类型的对象是，<strong>除了在常规作用域进行函数查找外，还会查找实参类所属的命名空间</strong>（比如<code>std::cout&lt;&lt;&quot;helio&quot;</code>中对于重载的输出运算符函数并没有指定作用域，但是依然找到了，便是根据实参cout）。</p>
 </li>
-<li><p>如果形参是一个基类，传入的实参是该基类的一个派生类，则除了在常规作用域与实参类所属的命名空间中进行函数的查找外，还会在<strong>基类的作用域中</strong>进行该函数的查找。如下：</p>
+<li>
+<p>如果形参是一个基类，传入的实参是该基类的一个派生类，则除了在常规作用域与实参类所属的命名空间中进行函数的查找外，还会在<strong>基类的作用域中</strong>进行该函数的查找。如下：</p>
 </li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">namespace</span> NS &#123;<br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">Quote</span> &#123; <br>	<span class="hljs-keyword">public</span>:<br>		<span class="hljs-built_in">Quote</span>() &#123; std::cout &lt;&lt; <span class="hljs-string">&quot;Quote::Quote&quot;</span> &lt;&lt; std::endl; &#125; <br>	&#125;;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">display</span><span class="hljs-params">(<span class="hljs-type">const</span> Quote&amp;)</span> </span><br><span class="hljs-function">		</span>&#123; std::cout &lt;&lt; <span class="hljs-string">&quot;display(const Quote&amp;)&quot;</span> &lt;&lt; std::endl; &#125;<br>&#125;<br><br><span class="hljs-comment">// Bulk_item&#x27;s base class is declared in namespace NS</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Bulk_item</span> : <span class="hljs-keyword">public</span> NS::Quote &#123; <br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-built_in">Bulk_item</span>() &#123; std::cout &lt;&lt; <span class="hljs-string">&quot;Bulk_item::Bulk_item&quot;</span> &lt;&lt; std::endl; &#125;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    Bulk_item book1;<br><br>    <span class="hljs-built_in">display</span>(book1); <span class="hljs-comment">// calls Quote::display</span><br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<h1 id="参考资料"><a class="markdownIt-Anchor" href="#参考资料"></a> 参考资料</h1>
+<ul>
 <li>[1] C++ Primer（第5版）</li>
 </ul>
 
@@ -487,7 +494,6 @@
 
   
   
-
 
 
 
@@ -682,49 +688,6 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
-
-  
-      <script>
-        if (!window.MathJax) {
-          window.MathJax = {
-            tex    : {
-              inlineMath: { '[+]': [['$', '$']] }
-            },
-            loader : {
-              load: ['ui/lazy']
-            },
-            options: {
-              renderActions: {
-                insertedScript: [200, () => {
-                  document.querySelectorAll('mjx-container').forEach(node => {
-                    let target = node.parentNode;
-                    if (target.nodeName.toLowerCase() === 'li') {
-                      target.parentNode.classList.add('has-jax');
-                    }
-                  });
-                }, '', false]
-              }
-            }
-          };
-        } else {
-          MathJax.startup.document.state(0);
-          MathJax.texReset();
-          MathJax.typeset();
-          MathJax.typesetPromise();
-        }
-
-        Fluid.events.registerRefreshCallback(function() {
-          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
-            MathJax.startup.document.state(0);
-            MathJax.texReset();
-            MathJax.typeset();
-            MathJax.typesetPromise();
-          }
-        });
-      </script>
-    
-
-  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 

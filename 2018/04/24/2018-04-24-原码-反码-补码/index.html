@@ -16,12 +16,12 @@
   <meta name="author" content="Line">
   <meta name="keywords" content="">
   
-    <meta name="description" content="写作缘由昨天室友忽然问起老师布置的作业里有关补码的问题，我竟然忘了，张口结舌说了半天不知所云。事后想到这是最基础的内容了，不由老脸一红。赌气般的把这个问题又梳理了一遍。想来想去觉得还是写出来吧，加深记忆，随时翻阅，省的再给忘了。 有符号数与无符号数首先，无符号数是最简单的，例如一个八位的无符号数取值范围为0～255。 而有符号数最高位为符号位，下文中讲的原码、反码、补码都是指有符号数的编码方式。以">
+    <meta name="description" content="写作缘由 昨天室友忽然问起老师布置的作业里有关补码的问题，我竟然忘了，张口结舌说了半天不知所云。事后想到这是最基础的内容了，不由老脸一红。赌气般的把这个问题又梳理了一遍。想来想去觉得还是写出来吧，加深记忆，随时翻阅，省的再给忘了。  有符号数与无符号数 首先，无符号数是最简单的，例如一个八位的无符号数取值范围为0～255。 而有符号数最高位为符号位，下文中讲的原码、反码、补码都是指有符号数的编码">
 <meta property="og:type" content="article">
 <meta property="og:title" content="补码，原码，反码">
 <meta property="og:url" content="http://line.com/2018/04/24/2018-04-24-%E5%8E%9F%E7%A0%81-%E5%8F%8D%E7%A0%81-%E8%A1%A5%E7%A0%81/index.html">
 <meta property="og:site_name" content="Line&#39;s Blog">
-<meta property="og:description" content="写作缘由昨天室友忽然问起老师布置的作业里有关补码的问题，我竟然忘了，张口结舌说了半天不知所云。事后想到这是最基础的内容了，不由老脸一红。赌气般的把这个问题又梳理了一遍。想来想去觉得还是写出来吧，加深记忆，随时翻阅，省的再给忘了。 有符号数与无符号数首先，无符号数是最简单的，例如一个八位的无符号数取值范围为0～255。 而有符号数最高位为符号位，下文中讲的原码、反码、补码都是指有符号数的编码方式。以">
+<meta property="og:description" content="写作缘由 昨天室友忽然问起老师布置的作业里有关补码的问题，我竟然忘了，张口结舌说了半天不知所云。事后想到这是最基础的内容了，不由老脸一红。赌气般的把这个问题又梳理了一遍。想来想去觉得还是写出来吧，加深记忆，随时翻阅，省的再给忘了。  有符号数与无符号数 首先，无符号数是最简单的，例如一个八位的无符号数取值范围为0～255。 而有符号数最高位为符号位，下文中讲的原码、反码、补码都是指有符号数的编码">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2018-04-23T17:07:24.000Z">
 <meta property="article:modified_time" content="2023-01-08T16:21:28.849Z">
@@ -42,6 +42,8 @@
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
 
 
 
@@ -239,7 +241,7 @@
         
         
         
-          21 分钟
+          20 分钟
         
       </span>
     
@@ -282,16 +284,20 @@
             
               <div class="markdown-body">
                 
-                <h2 id="写作缘由"><a href="#写作缘由" class="headerlink" title="写作缘由"></a>写作缘由</h2><p>昨天室友忽然问起老师布置的作业里有关补码的问题，我竟然忘了，张口结舌说了半天不知所云。事后想到这是最基础的内容了，不由老脸一红。赌气般的把这个问题又梳理了一遍。想来想去觉得还是写出来吧，加深记忆，随时翻阅，省的再给忘了。</p>
-<h2 id="有符号数与无符号数"><a href="#有符号数与无符号数" class="headerlink" title="有符号数与无符号数"></a>有符号数与无符号数</h2><p>首先，无符号数是最简单的，例如一个八位的无符号数取值范围为<code>0～255</code>。</p>
+                <h2 id="写作缘由"><a class="markdownIt-Anchor" href="#写作缘由"></a> 写作缘由</h2>
+<p>昨天室友忽然问起老师布置的作业里有关补码的问题，我竟然忘了，张口结舌说了半天不知所云。事后想到这是最基础的内容了，不由老脸一红。赌气般的把这个问题又梳理了一遍。想来想去觉得还是写出来吧，加深记忆，随时翻阅，省的再给忘了。</p>
+<h2 id="有符号数与无符号数"><a class="markdownIt-Anchor" href="#有符号数与无符号数"></a> 有符号数与无符号数</h2>
+<p>首先，无符号数是最简单的，例如一个八位的无符号数取值范围为<code>0～255</code>。</p>
 <p>而有符号数最高位为符号位，下文中讲的<strong>原码、反码、补码</strong>都是指<strong>有符号数</strong>的编码方式。以八位有符号数为例进行讲解。</p>
-<h3 id="原码"><a href="#原码" class="headerlink" title="原码"></a>原码</h3><blockquote>
+<h3 id="原码"><a class="markdownIt-Anchor" href="#原码"></a> 原码</h3>
+<blockquote>
 <p>m位二进制<strong>原码的定义</strong>与其他编码形式稍有不同，它最高位并没有权值，而是一个系数，所以在由原码求十进制整数式，是最高位的确定的系数乘以低m-1位累加各位值与权值的积的和。</p>
 </blockquote>
 <p>原码：符号位 + 绝对值</p>
 <p>所以八位机器数的原码范围为<code>11111111 ～ 01111111</code>，也就是<code>-127～127</code>（0有两种表示）。</p>
 <p>这种形式（原码）极其符合人们脑海中对于有符号数的第一印象，看到这里都会觉得理所当然，确实，这是人脑最容易理解与计算的形式。但，对电脑不是。</p>
-<h3 id="反码"><a href="#反码" class="headerlink" title="反码"></a>反码</h3><blockquote>
+<h3 id="反码"><a class="markdownIt-Anchor" href="#反码"></a> 反码</h3>
+<blockquote>
 <p>首先提一下，m位<strong>反码的定义</strong>，即最高位的权值为<code>-2^(m-1)-1</code>，其他第n位权值为<code>2^(n-1)</code>，在由反码求十进制整数时，直接累加各位值与权值的积即可。</p>
 </blockquote>
 <p>反码：</p>
@@ -307,7 +313,8 @@
 <pre><code class="hljs">3 - 1 = 3 + （-1）=反[00000011] + 反[11111110] = 反[00000001] = 原[00000001] = 1
 </code></pre>
 <p>这个原因我们仔细考虑一下会发现，在采用反码的减法中，负数通过加正数得0时得到的是<code>-0</code>，而且刚好<code>-0 +1 = +0（本来应该是1的）</code>。如何解决这个问题呢？我们来看补码。</p>
-<h3 id="补码"><a href="#补码" class="headerlink" title="补码"></a>补码</h3><blockquote>
+<h3 id="补码"><a class="markdownIt-Anchor" href="#补码"></a> 补码</h3>
+<blockquote>
 <p>首先提一下，m位<strong>补码的定义</strong>，即最高位的权值为<code>-2^(m-1)</code>，其他第n位权值为<code>2^(n-1)</code>，在由补码求十进制整数时，直接累加各位值与权值的积即可。</p>
 </blockquote>
 <p>补码：</p>
@@ -325,8 +332,9 @@
 <blockquote>
 <p>此处说明一下，由于补码的定义，使得对于一个补码表示的有符号数x来说，<strong>按位取反再加１</strong>是一种用来求<code>-x</code>补码的手段。这个手段一直有效，无论x是正数还是负数还是0。(最小的那个负数的<code>-x</code>是本身)</p>
 </blockquote>
-<h3 id="神奇补码背后思考"><a href="#神奇补码背后思考" class="headerlink" title="神奇补码背后思考"></a>神奇补码背后思考</h3><blockquote>
-<p>由补码的定义可知，一个m位有符号数（假设值为x，x为一个负值）的补码如果表示的是一个无符号数，则这个无符号数的值为<code>x+2^m</code>，这个结果可以由上面补码的定义推断出，因为补码的最高位权值是<code>-2^(m-1)</code>。同理，一个m位无符号数（假设值为x，x&gt;&#x3D;2^(m-1)）的二进制编码如果用来表示的是一个有符号数的补码，则这个有符号数值为<code>x-2^m</code>。</p>
+<h3 id="神奇补码背后思考"><a class="markdownIt-Anchor" href="#神奇补码背后思考"></a> 神奇补码背后思考</h3>
+<blockquote>
+<p>由补码的定义可知，一个m位有符号数（假设值为x，x为一个负值）的补码如果表示的是一个无符号数，则这个无符号数的值为<code>x+2^m</code>，这个结果可以由上面补码的定义推断出，因为补码的最高位权值是<code>-2^(m-1)</code>。同理，一个m位无符号数（假设值为x，x&gt;=2^(m-1)）的二进制编码如果用来表示的是一个有符号数的补码，则这个有符号数值为<code>x-2^m</code>。</p>
 </blockquote>
 <p>我们都知道加法减法是满足结合率的，所以要想知道做减法需要用到的负数机器码应该如何定义可以这样想：</p>
 <pre><code class="hljs">原数 + a - a = 原数
@@ -340,9 +348,10 @@
 <blockquote>
 <p>亮点：计算机中数都是补码存储的，计算机的加法计算也没有什么弯弯绕绕，就是很耿直的进位加法，补码这种形式刚好可以使得加法计算的结果正确无误，无非就是靠进位导致的循环来实现罢了。很多人只是不熟悉而已，熟悉了在分析此类问题时会自动先将数据切换成补码形式，任何问题都会一目了然。</p>
 </blockquote>
-<p><strong>现在我们可以想一下并发现，如果8位计算溢出了，大于127比如结果为<code>127+n</code>（n&gt;0且n&lt;&#x3D;256），8位存储的数会变成<code>-129+n</code>（从-128到127）;小于-128比如结果为<code>-128-n</code>（n&gt;0且n&lt;&#x3D;256）,8位存储的数会变成<code>128-n</code>（从127到-128）。这就是一个完美循环。</strong></p>
+<p><strong>现在我们可以想一下并发现，如果8位计算溢出了，大于127比如结果为<code>127+n</code>（n&gt;0且n&lt;=256），8位存储的数会变成<code>-129+n</code>（从-128到127）;小于-128比如结果为<code>-128-n</code>（n&gt;0且n&lt;=256）,8位存储的数会变成<code>128-n</code>（从127到-128）。这就是一个完美循环。</strong></p>
 <p>其实这没有什么不好理解的，你只需要想清楚，在计算机中，数据都是补码形式存储的。计算机做加法操作其实就是不断进位喽。如果你还是觉得不太直观，写个c语言程序验证一下，我的<code>c_learn</code>文件夹下<code>ch3</code>目录就写了一个很简短的验证。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>一般情况下，以上这些已经足够了，为了不会闹笑话，我们来检验一下：</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>一般情况下，以上这些已经足够了，为了不会闹笑话，我们来检验一下：</p>
 <p>-8的补码是多少？</p>
 
                 
@@ -516,7 +525,6 @@
 
   
   
-
 
 
 
@@ -711,49 +719,6 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
-
-  
-      <script>
-        if (!window.MathJax) {
-          window.MathJax = {
-            tex    : {
-              inlineMath: { '[+]': [['$', '$']] }
-            },
-            loader : {
-              load: ['ui/lazy']
-            },
-            options: {
-              renderActions: {
-                insertedScript: [200, () => {
-                  document.querySelectorAll('mjx-container').forEach(node => {
-                    let target = node.parentNode;
-                    if (target.nodeName.toLowerCase() === 'li') {
-                      target.parentNode.classList.add('has-jax');
-                    }
-                  });
-                }, '', false]
-              }
-            }
-          };
-        } else {
-          MathJax.startup.document.state(0);
-          MathJax.texReset();
-          MathJax.typeset();
-          MathJax.typesetPromise();
-        }
-
-        Fluid.events.registerRefreshCallback(function() {
-          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
-            MathJax.startup.document.state(0);
-            MathJax.texReset();
-            MathJax.typeset();
-            MathJax.typesetPromise();
-          }
-        });
-      </script>
-    
-
-  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 

@@ -16,12 +16,12 @@
   <meta name="author" content="Line">
   <meta name="keywords" content="">
   
-    <meta name="description" content="经常需要在linux环境下进行开发，不可避免的要使用vim。为了方便每次查阅与温习，在这篇博客里记录一些常用功能操作与我熟悉的一些基本配置。 vimvim本身就是一个编辑器，就像是windows的text一样，但是这个编辑器有很多的命令与快捷操作方式可以大大的节省我们开发编辑的时间。 基本命令 一般命令模式下的普通命令  dd : 剪切光标所在的那一整行到剪切板，会覆盖原先剪切板内容 yy : 复">
+    <meta name="description" content="经常需要在linux环境下进行开发，不可避免的要使用vim。为了方便每次查阅与温习，在这篇博客里记录一些常用功能操作与我熟悉的一些基本配置。  vim vim本身就是一个编辑器，就像是windows的text一样，但是这个编辑器有很多的命令与快捷操作方式可以大大的节省我们开发编辑的时间。  基本命令   一般命令模式下的普通命令  dd : 剪切光标所在的那一整行到剪切板，会覆盖原先剪切板内容 y">
 <meta property="og:type" content="article">
 <meta property="og:title" content="备忘vim编辑器">
 <meta property="og:url" content="http://line.com/2019/03/30/2019-03-30-vim/index.html">
 <meta property="og:site_name" content="Line&#39;s Blog">
-<meta property="og:description" content="经常需要在linux环境下进行开发，不可避免的要使用vim。为了方便每次查阅与温习，在这篇博客里记录一些常用功能操作与我熟悉的一些基本配置。 vimvim本身就是一个编辑器，就像是windows的text一样，但是这个编辑器有很多的命令与快捷操作方式可以大大的节省我们开发编辑的时间。 基本命令 一般命令模式下的普通命令  dd : 剪切光标所在的那一整行到剪切板，会覆盖原先剪切板内容 yy : 复">
+<meta property="og:description" content="经常需要在linux环境下进行开发，不可避免的要使用vim。为了方便每次查阅与温习，在这篇博客里记录一些常用功能操作与我熟悉的一些基本配置。  vim vim本身就是一个编辑器，就像是windows的text一样，但是这个编辑器有很多的命令与快捷操作方式可以大大的节省我们开发编辑的时间。  基本命令   一般命令模式下的普通命令  dd : 剪切光标所在的那一整行到剪切板，会覆盖原先剪切板内容 y">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://line.com/img/vim/regular_vim.jpg">
 <meta property="og:image" content="http://line.com/img/vim/Block.PNG">
@@ -47,6 +47,8 @@
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
 
 
 
@@ -233,7 +235,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.7k 字
+          1.6k 字
         
       </span>
     
@@ -288,9 +290,12 @@
               <div class="markdown-body">
                 
                 <p>经常需要在linux环境下进行开发，不可避免的要使用vim。为了方便每次查阅与温习，在这篇博客里记录一些常用功能操作与我熟悉的一些基本配置。</p>
-<h1 id="vim"><a href="#vim" class="headerlink" title="vim"></a>vim</h1><p>vim本身就是一个编辑器，就像是windows的text一样，但是这个编辑器有很多的命令与快捷操作方式可以大大的节省我们开发编辑的时间。</p>
-<h2 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h2><ul>
-<li><p>一般命令模式下的普通命令</p>
+<h1 id="vim"><a class="markdownIt-Anchor" href="#vim"></a> vim</h1>
+<p>vim本身就是一个编辑器，就像是windows的text一样，但是这个编辑器有很多的命令与快捷操作方式可以大大的节省我们开发编辑的时间。</p>
+<h2 id="基本命令"><a class="markdownIt-Anchor" href="#基本命令"></a> 基本命令</h2>
+<ul>
+<li>
+<p>一般命令模式下的普通命令</p>
 <ul>
 <li>dd : 剪切光标所在的那一整行到剪切板，会覆盖原先剪切板内容</li>
 <li>yy : 复制光标所在的那一整行到剪切板，会覆盖原先剪切板内容</li>
@@ -304,20 +309,22 @@
 <li>o  : 进入编辑模式，并且在下一行插入一个空白行，再将光标移到下一行</li>
 </ul>
 </li>
-<li><p>一般命令模式下的命令行操作</p>
+<li>
+<p>一般命令模式下的命令行操作</p>
 <ul>
 <li>:w    : 保存现在对文件的修改</li>
 <li>:w filename : 将现在的文件另存为filename</li>
 <li>:q    : 退出vim</li>
 <li>:!    : 强制操作，一般感叹号放在操作后面</li>
 <li>:10   : 光标跳转到第10行</li>
-<li>&#x2F;word : 从光标处往下寻找word这个字符串</li>
+<li>/word : 从光标处往下寻找word这个字符串</li>
 <li>?word : 从光标处往上寻找word这个字符串</li>
-<li>:100,200s&#x2F;word1&#x2F;word2&#x2F;g : 在100行与200行之间寻找word1这个字符串，并将字符串取代为word2</li>
-<li>:100,200s&#x2F;word1&#x2F;word2&#x2F;gc : 在100行与200行之间寻找word1这个字符串，并将字符串取代为word2，并且在取代前显示提示字符给使用者确认是否要执行操作</li>
+<li>:100,200s/word1/word2/g : 在100行与200行之间寻找word1这个字符串，并将字符串取代为word2</li>
+<li>:100,200s/word1/word2/gc : 在100行与200行之间寻找word1这个字符串，并将字符串取代为word2，并且在取代前显示提示字符给使用者确认是否要执行操作</li>
 </ul>
 </li>
-<li><p>编辑模式：</p>
+<li>
+<p>编辑模式：</p>
 <ul>
 <li>[Ctrl]+p : 按照上文中出现的字符串进行补全</li>
 <li>esc： 退出编辑模式，进入一般命令模式</li>
@@ -327,42 +334,49 @@
 <div style="text-align: center">
 <img src="/img/vim/regular_vim.jpg" srcset="/img/loading.gif" lazyload/>
 </div>
-
-<h2 id="区块选择"><a href="#区块选择" class="headerlink" title="区块选择"></a>区块选择</h2><p>一共有三种区块选择方式，都是在一般命令模式下进行操作</p>
+<h2 id="区块选择"><a class="markdownIt-Anchor" href="#区块选择"></a> 区块选择</h2>
+<p>一共有三种区块选择方式，都是在一般命令模式下进行操作</p>
 <div style="text-align: center">
 <img src="/img/vim/Block.PNG" srcset="/img/loading.gif" lazyload/>
 </div>
-
-<h2 id="多文件编辑1"><a href="#多文件编辑1" class="headerlink" title="多文件编辑1"></a>多文件编辑1</h2><p>通过<code>vim file1 file2</code>打开两个文件，并且在其中一个文件拷贝到粘贴板上的文本可以在另一个文件中使用。</p>
+<h2 id="多文件编辑1"><a class="markdownIt-Anchor" href="#多文件编辑1"></a> 多文件编辑1</h2>
+<p>通过<code>vim file1 file2</code>打开两个文件，并且在其中一个文件拷贝到粘贴板上的文本可以在另一个文件中使用。</p>
 <div style="text-align: center">
 <img src="/img/vim/multifiles.PNG" srcset="/img/loading.gif" lazyload/>
 </div>
-
-<h2 id="多文件编辑2"><a href="#多文件编辑2" class="headerlink" title="多文件编辑2"></a>多文件编辑2</h2><blockquote>
+<h2 id="多文件编辑2"><a class="markdownIt-Anchor" href="#多文件编辑2"></a> 多文件编辑2</h2>
+<blockquote>
 <p>上面那种方式我用起来感觉不是很舒服，也不是很会用，这第二种方法用起来感觉比较好</p>
 </blockquote>
 <ul>
-<li><p>通过<code>tabedit file2</code>打开第二个文件</p>
+<li>
+<p>通过<code>tabedit file2</code>打开第二个文件</p>
 </li>
-<li><p>通过<code>tabn</code>切换到下一个文件</p>
+<li>
+<p>通过<code>tabn</code>切换到下一个文件</p>
 </li>
-<li><p>通过<code>tabp</code>切换到上一个文件 </p>
+<li>
+<p>通过<code>tabp</code>切换到上一个文件</p>
 </li>
-<li><p>这种模式下多文件间剪切板是共用的</p>
+<li>
+<p>这种模式下多文件间剪切板是共用的</p>
 </li>
 </ul>
-<h2 id="多窗口编辑"><a href="#多窗口编辑" class="headerlink" title="多窗口编辑"></a>多窗口编辑</h2><p>这种模式下会将一个窗口划分为多个窗口，在文件比较长需要前后对应时可以使用。使用方式下面讲的很详细。</p>
+<h2 id="多窗口编辑"><a class="markdownIt-Anchor" href="#多窗口编辑"></a> 多窗口编辑</h2>
+<p>这种模式下会将一个窗口划分为多个窗口，在文件比较长需要前后对应时可以使用。使用方式下面讲的很详细。</p>
 <div style="text-align: center">
 <img src="/img/vim/multiwindows.PNG" srcset="/img/loading.gif" lazyload/>
 </div>
-
-<h2 id="我的vim常用设置"><a href="#我的vim常用设置" class="headerlink" title="我的vim常用设置"></a>我的vim常用设置</h2><p>在<code>/etc/vim/vimrc</code>（个人账户的设置是<code>~/.vimrc</code>配置文件，默认不存在，需要自己手动创建）中，我们可以对vim这个编辑器进行一些常用的设置。</p>
+<h2 id="我的vim常用设置"><a class="markdownIt-Anchor" href="#我的vim常用设置"></a> 我的vim常用设置</h2>
+<p>在<code>/etc/vim/vimrc</code>（个人账户的设置是<code>~/.vimrc</code>配置文件，默认不存在，需要自己手动创建）中，我们可以对vim这个编辑器进行一些常用的设置。</p>
 <figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">set</span> showmatch       <span class="hljs-comment">&quot; Show matching brackets.</span><br><span class="hljs-keyword">set</span> hlsearch        <span class="hljs-comment">&quot; heighlight the search result</span><br><span class="hljs-keyword">set</span> incsearch       <span class="hljs-comment">&quot; auto jump to search result</span><br><span class="hljs-keyword">set</span> autoread        <span class="hljs-comment">&quot; auto check the file whether be changed by other editor</span><br><span class="hljs-keyword">set</span> cursorline      <span class="hljs-comment">&quot; heighlight the cursorline</span><br><span class="hljs-keyword">set</span> <span class="hljs-keyword">number</span> <br><span class="hljs-keyword">set</span> <span class="hljs-keyword">ts</span>=<span class="hljs-number">4</span>            <span class="hljs-comment">&quot; set one tab = 4 blank length</span><br><span class="hljs-keyword">set</span> expandtab       <span class="hljs-comment">&quot; if new editor&#x27;s tab&#x27;s length is not equal,convert the tab to blank</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><ul>
-<li><p>有时我们在编辑文件后没有保存就因为各种原因强制退出了，这时会在当前目录下生成一个缓存文件，这个缓存文件不手动删除会一直存在</p>
+<h2 id="常见问题"><a class="markdownIt-Anchor" href="#常见问题"></a> 常见问题</h2>
+<ul>
+<li>
+<p>有时我们在编辑文件后没有保存就因为各种原因强制退出了，这时会在当前目录下生成一个缓存文件，这个缓存文件不手动删除会一直存在</p>
 </li>
-<li><p>编码问题</p>
+<li>
+<p>编码问题</p>
 <ul>
 <li>linux系统默认支持的语系数据：这与<code>/etc/locale.conf</code>有关</li>
 <li>终端接口(bash)的语系：与<code>LANG</code>、<code>LC_ALL</code>几个环境变量有关</li>
@@ -371,7 +385,8 @@
 </ul>
 </li>
 </ul>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<h1 id="参考资料"><a class="markdownIt-Anchor" href="#参考资料"></a> 参考资料</h1>
+<ul>
 <li>[1] 《鸟哥的linux私房菜》；</li>
 </ul>
 
@@ -546,7 +561,6 @@
 
   
   
-
 
 
 
@@ -741,49 +755,6 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
-
-  
-      <script>
-        if (!window.MathJax) {
-          window.MathJax = {
-            tex    : {
-              inlineMath: { '[+]': [['$', '$']] }
-            },
-            loader : {
-              load: ['ui/lazy']
-            },
-            options: {
-              renderActions: {
-                insertedScript: [200, () => {
-                  document.querySelectorAll('mjx-container').forEach(node => {
-                    let target = node.parentNode;
-                    if (target.nodeName.toLowerCase() === 'li') {
-                      target.parentNode.classList.add('has-jax');
-                    }
-                  });
-                }, '', false]
-              }
-            }
-          };
-        } else {
-          MathJax.startup.document.state(0);
-          MathJax.texReset();
-          MathJax.typeset();
-          MathJax.typesetPromise();
-        }
-
-        Fluid.events.registerRefreshCallback(function() {
-          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
-            MathJax.startup.document.state(0);
-            MathJax.texReset();
-            MathJax.typeset();
-            MathJax.typesetPromise();
-          }
-        });
-      </script>
-    
-
-  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 
