@@ -18,7 +18,7 @@
   
     <meta name="description" content="要想使用一块硬盘，我们需要怎么做呢？假设操作系统已经识别到了一块硬盘，剩下的在linux上主要可以分成三步来完成：  分区(对硬盘进行划分) 格式化分区(在分区上进行文件系统初始化) 将格式化好的分区(文件系统)进行挂载  这篇博客主要记录磁盘分区知识。 目前，磁盘分区主要使用两种方式，分别是MBR磁盘分区方式与GPT磁盘分区方式。其中前者是比后者先出现，后来随着磁盘容量越来越大，前者已经不能很好">
 <meta property="og:type" content="article">
-<meta property="og:title" content="磁盘分区问题解析">
+<meta property="og:title" content="磁盘分区以及挂载">
 <meta property="og:url" content="http://line.com/2018/12/02/2018-12-02-disk-partition/index.html">
 <meta property="og:site_name" content="Line&#39;s Blog">
 <meta property="og:description" content="要想使用一块硬盘，我们需要怎么做呢？假设操作系统已经识别到了一块硬盘，剩下的在linux上主要可以分成三步来完成：  分区(对硬盘进行划分) 格式化分区(在分区上进行文件系统初始化) 将格式化好的分区(文件系统)进行挂载  这篇博客主要记录磁盘分区知识。 目前，磁盘分区主要使用两种方式，分别是MBR磁盘分区方式与GPT磁盘分区方式。其中前者是比后者先出现，后来随着磁盘容量越来越大，前者已经不能很好">
@@ -30,15 +30,17 @@
 <meta property="og:image" content="http://line.com/img/mbr_gpt/gparted.png">
 <meta property="og:image" content="http://line.com/img/mbr_gpt/parted-blkid.png">
 <meta property="article:published_time" content="2018-12-01T17:07:24.000Z">
-<meta property="article:modified_time" content="2023-02-27T12:42:25.818Z">
+<meta property="article:modified_time" content="2023-03-01T11:31:53.947Z">
 <meta property="article:author" content="Line">
+<meta property="article:tag" content="tools">
+<meta property="article:tag" content="linux">
 <meta property="article:tag" content="计算机基础">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://line.com/img/mbr_gpt/mbr_partition.png">
   
   
   
-  <title>磁盘分区问题解析 - Line&#39;s Blog</title>
+  <title>磁盘分区以及挂载 - Line&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -214,7 +216,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="磁盘分区问题解析"></span>
+            <span id="subtitle" data-typed-text="磁盘分区以及挂载"></span>
           
         </div>
 
@@ -237,7 +239,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.7k 字
+          4k 字
         
       </span>
     
@@ -248,7 +250,7 @@
         
         
         
-          31 分钟
+          34 分钟
         
       </span>
     
@@ -286,7 +288,7 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">磁盘分区问题解析</h1>
+            <h1 style="display: none">磁盘分区以及挂载</h1>
             
             
               <div class="markdown-body">
@@ -388,7 +390,12 @@
 <ul>
 <li>分区操作命令<code>gdisk</code>与<code>fdisk</code>（前一个针对gpt分区表的磁盘，后一个针对mbr分区表的磁盘）</li>
 </ul>
+<h1 id="挂载分区"><a class="markdownIt-Anchor" href="#挂载分区"></a> 挂载分区</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 首先需要将分区文件系统格式化成可用形式，我一般用ext4</span><br>sudo mkfs -t ext4 /dev/sda1<br><span class="hljs-comment"># 查看该分区信息，包括文件系统和uuid这些</span><br>sudo blkid /dev/sda1<br><span class="hljs-comment"># 新建一个文件夹用于挂载</span><br><span class="hljs-built_in">mkdir</span> -p /home/line/media<br><span class="hljs-comment"># 设置分区自动挂载，在/etc/fstab末尾添加（其中第一行是分区的uuid）</span><br><span class="hljs-comment"># UUID=21e3c5b1-5a43-4df2-b41a-5f6a5cfc67cc /home/line/media ext4 defaults 0 2</span><br>sudo vim /etc/fstab<br><span class="hljs-comment"># 重启，或者用以下命令将/etc/fstab中设置的所有进行挂载</span><br>sudo mount -a<br><span class="hljs-comment"># 查看分区挂载以及占用情况</span><br><span class="hljs-built_in">df</span> -h<br></code></pre></td></tr></table></figure>
 <h1 id="linux交换分区的设置"><a class="markdownIt-Anchor" href="#linux交换分区的设置"></a> linux交换分区的设置</h1>
+<blockquote>
+<p>交换分区本质是一种用途独特的分区。</p>
+</blockquote>
 <h2 id="第一种方法分区挂载"><a class="markdownIt-Anchor" href="#第一种方法分区挂载"></a> 第一种方法：分区挂载</h2>
 <ul>
 <li>
@@ -450,6 +457,10 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
+        <a href="/tags/tools/">#tools</a>
+      
+        <a href="/tags/linux/">#linux</a>
+      
         <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">#计算机基础</a>
       
     </div>
@@ -462,7 +473,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>磁盘分区问题解析</div>
+      <div>磁盘分区以及挂载</div>
       <div>http://line.com/2018/12/02/2018-12-02-disk-partition/</div>
     </div>
     <div class="license-meta">
