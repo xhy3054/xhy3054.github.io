@@ -1,0 +1,816 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon1.png">
+  <link rel="icon" href="/img/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Line">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="对于一个线性方程\(Ax&#x3D;b\)，其中A的维度为\(m\times n， m \geq n\)，\(x\)的维度为\(n\times 1\)，b的维度为\(m \times 1\)，则在A满秩的情况下，\(x\)有解且唯一。  对于高斯牛顿法，我们一般求解的是\(J^T J x &#x3D; J^T b\)，其中\(J\)为残差\(b\)对状态\(x\)的雅克比矩阵，维度为\(m*n\)，这样的话其实更加简">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于Ax&#x3D;b形式的矩阵分解与求解问题">
+<meta property="og:url" content="http://line.com/2021/05/19/2021-05-19-ax=b-solve/index.html">
+<meta property="og:site_name" content="Line&#39;s Blog">
+<meta property="og:description" content="对于一个线性方程\(Ax&#x3D;b\)，其中A的维度为\(m\times n， m \geq n\)，\(x\)的维度为\(n\times 1\)，b的维度为\(m \times 1\)，则在A满秩的情况下，\(x\)有解且唯一。  对于高斯牛顿法，我们一般求解的是\(J^T J x &#x3D; J^T b\)，其中\(J\)为残差\(b\)对状态\(x\)的雅克比矩阵，维度为\(m*n\)，这样的话其实更加简">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://line.com/img/one-piece/one-piece39.jpg">
+<meta property="article:published_time" content="2021-05-18T17:07:24.000Z">
+<meta property="article:modified_time" content="2023-03-05T05:58:42.707Z">
+<meta property="article:author" content="Line">
+<meta property="article:tag" content="数学">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://line.com/img/one-piece/one-piece39.jpg">
+  
+  
+  
+  <title>关于Ax=b形式的矩阵分解与求解问题 - Line&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+<link rel="stylesheet" href="/css/mac.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"line.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Line</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default2.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="关于Ax=b形式的矩阵分解与求解问题"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-05-19 01:07" pubdate>
+          2021年5月19日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          16 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">关于Ax=b形式的矩阵分解与求解问题</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>对于一个线性方程<span
+class="math inline">\(Ax=b\)</span>，其中A的维度为<span
+class="math inline">\(m\times n， m \geq n\)</span>，<span
+class="math inline">\(x\)</span>的维度为<span
+class="math inline">\(n\times 1\)</span>，b的维度为<span
+class="math inline">\(m \times 1\)</span>，则在A满秩的情况下，<span
+class="math inline">\(x\)</span>有解且唯一。</p>
+<blockquote>
+<p>对于高斯牛顿法，我们一般求解的是<span class="math inline">\(J^T J x =
+J^T b\)</span>，其中<span class="math inline">\(J\)</span>为残差<span
+class="math inline">\(b\)</span>对状态<span
+class="math inline">\(x\)</span>的雅克比矩阵，维度为<span
+class="math inline">\(m*n\)</span>，这样的话其实更加简单了，因为线性方程的系数矩阵<span
+class="math inline">\(A\)</span>变成了一个方阵，并且这个方阵是实对称且半正定的。</p>
+</blockquote>
+<h2 id="高斯消元法">高斯消元法</h2>
+<p>高斯消元法的原理是，将矩阵A通过初等变换变成一个阶梯型的矩阵（变成一个<span
+class="math inline">\(n\times
+n\)</span>的上三角矩阵），然后逐行求解；</p>
+<h2 id="qr分解">QR分解</h2>
+<p>将矩阵A分解成一个正交矩阵和一个上三角矩阵的乘积<span
+class="math inline">\(A=QR\)</span>，所以只需要求解<span
+class="math inline">\(Rx=Q^Tb\)</span>即可，其中<span
+class="math inline">\(R\)</span>为一个上三角矩阵；进行qr分解主要有三种方法：</p>
+<ul>
+<li>Househoder
+<ul>
+<li>时间复杂度：<span class="math inline">\(\frac{2}{3}n^3\)</span></li>
+</ul></li>
+<li>Gram-Schmidt
+<ul>
+<li>时间复杂度：<span class="math inline">\(\frac{3}{3}n^3\)</span></li>
+</ul></li>
+<li>Givens rotation
+<ul>
+<li>时间复杂度：<span class="math inline">\(\frac{4}{3}n^3\)</span></li>
+</ul></li>
+</ul>
+<h2 id="givens-rotation求解思路">Givens Rotation求解思路</h2>
+<p>另外一种消元思路，也是将A变换为一个上三角矩阵。这种思路是不断的对A进行二维的旋转，每次旋转会将一个位置的元素置为0，经过若干次之后将下三角部分所有的元素都变成了0，givens
+rotation也就达到目标了。</p>
+<blockquote>
+<p>因为旋转矩阵是一种正交矩阵，因此givens
+rotation就是对原本的A不断的乘以旋转矩阵，最终将A转化成了一个上三角矩阵R，那么之前乘以的所有旋转矩阵累乘起来就是上面qr分解中的<span
+class="math inline">\(Q^T\)</span>。</p>
+</blockquote>
+<p>例子：</p>
+<p>首先，对于一个二维矩阵块 <span class="math display">\[
+{\begin{bmatrix} a_{11}  &amp; a_{12} \\ a_{21} &amp; a_{22}
+\end{bmatrix}}
+\]</span></p>
+<p>我们使用二维旋转矩阵 <span class="math display">\[
+{\begin{bmatrix} cos{\theta}  &amp; -sin{\theta} \\ sin{\theta} &amp;
+cos{\theta} \end{bmatrix}}
+\]</span></p>
+<p>左乘它，在满足<span class="math inline">\(\theta =
+atan(-\frac{a_{21}}{a_{11}})\)</span>时，可以得到结果 <span
+class="math display">\[
+{\begin{bmatrix} b_{11}  &amp; b_{12} \\ 0 &amp; b_{22} \end{bmatrix}}
+\]</span> （满足其他角度条件可以将其他位置的元素变为0）。</p>
+<p>在使用二维旋转矩阵不断的将下三角的元素变成0的过程中，需要遵循：</p>
+<ul>
+<li>从左往右逐列进行；</li>
+<li>每一列，从下往上执行；</li>
+</ul>
+<p>对于一个维度<span
+class="math inline">\((m,n)\)</span>的矩阵A，我们对其进行左乘一个正交矩阵Q应该是维度为<span
+class="math inline">\((m,m)\)</span>的。因此假设我们要对A(m1,n1,2,2)这个矩阵块中的一个元素变为0，则Q矩阵应该首先被赋值成一个单位矩阵，然后将Q(m1,n1,2,2)矩阵块赋值为二维旋转矩阵（旋转矩阵由A(m1,n1,2,2)中要消去的变量确定）。按照上面的顺序操作可以使得一个被变为0的元素不会再变为非0值。</p>
+<blockquote>
+<p>出现：1.
+openvins代码中MSCKF更新模块将测量误差方程投影到H_f的零空间上，消除路标的影响；2.
+openvins代码中MSCKF更新模块零空间投影完得到系统总的重投影测量误差方程后，通过givens
+rotation将H_x变为一个上三角方阵，res变为与其同维度向量，消减计算量。</p>
+</blockquote>
+<h2 id="cholesky分解">Cholesky分解</h2>
+<p>将A分解为<span class="math inline">\(A = L
+L^T\)</span>，其中L为下三角矩阵。然后，首先求解<span
+class="math inline">\(Lc = b\)</span>，c为中间结果;再求解<span
+class="math inline">\(L^T x =
+c\)</span>，得到最终结果。此过程要求A实对称且正定。</p>
+<blockquote>
+<p>由于Cholesky分解对A的要求，所以一般情况下，对于方程<span
+class="math inline">\(Ax=b\)</span>，会首先变成<span
+class="math inline">\((A^T A + \lambda I) x = A^T
+b\)</span>再使用（刚好是LM优化的形式，因此LM优化时总会使用llt分解求解）。</p>
+</blockquote>
+<h2 id="lu分解">LU分解</h2>
+<p>LU分解将A分解为一个下三角矩阵与一个上三角矩阵的乘积，如<code>A= LU</code>。然后可以通过两次高斯消元法进行求解。</p>
+<blockquote>
+<p>事实上，并不是每个矩阵都有LU分解。而这种情况可以通过对A各行顺序重排进行解决，此时的分解叫做PLU分解，分解形式为<code>A=PLU</code>，其中P为置换矩阵（主要用来对行序进行交换的），L为下三角矩阵，U为上三角矩阵，此时其实可以这样理解，<span
+class="math inline">\(P^{-1} A =
+LU\)</span>，即对A交换行序后再进行LU分解。</p>
+</blockquote>
+<blockquote>
+<p>如果不止交换行序，还交换列序，则是<code>A = PLUQ</code>，Q是一个排列矩阵。</p>
+</blockquote>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%95%B0%E5%AD%A6/">#数学</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>关于Ax=b形式的矩阵分解与求解问题</div>
+      <div>http://line.com/2021/05/19/2021-05-19-ax=b-solve/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Line</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年5月19日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/05/25/2021-05-25-rotation-jacobian/" title="关于旋转或姿态的扰动求导问题总结">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">关于旋转或姿态的扰动求导问题总结</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/04/23/2021-04-23-error-state-system/" title="系统误差状态的维护">
+                        <span class="hidden-mobile">系统误差状态的维护</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

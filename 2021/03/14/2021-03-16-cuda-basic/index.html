@@ -16,24 +16,20 @@
   <meta name="author" content="Line">
   <meta name="keywords" content="">
   
-    <meta name="description" content="GPU的基础介绍 首先上一张显卡主板构造图。  其中GPU芯片是重点，其结构图如下，它一般有很多核心，这些核的学术名字叫流多处理器（stream multiprocessor，SM），每个SM根据GPU型号的不同由若干个流处理器（stream processor，SP）组成，SP的功能只有计算。   cuda编程的基本概念  主机端host与设备端device  一个工程，我们想要有的代码在cp">
+    <meta name="description" content="GPU的基础介绍 首先上一张显卡主板构造图。   dfs  其中GPU芯片是重点，其结构图如下，它一般有很多核心，这些核的学术名字叫流多处理器（stream multiprocessor，SM），每个SM根据GPU型号的不同由若干个流处理器（stream processor，SP）组成，SP的功能只有计算。   cuda  cuda编程的基本概念 主机端host与设备端device  一个工程，我">
 <meta property="og:type" content="article">
 <meta property="og:title" content="cuda编程的基础概念总结">
 <meta property="og:url" content="http://line.com/2021/03/14/2021-03-16-cuda-basic/index.html">
 <meta property="og:site_name" content="Line&#39;s Blog">
-<meta property="og:description" content="GPU的基础介绍 首先上一张显卡主板构造图。  其中GPU芯片是重点，其结构图如下，它一般有很多核心，这些核的学术名字叫流多处理器（stream multiprocessor，SM），每个SM根据GPU型号的不同由若干个流处理器（stream processor，SP）组成，SP的功能只有计算。   cuda编程的基本概念  主机端host与设备端device  一个工程，我们想要有的代码在cp">
+<meta property="og:description" content="GPU的基础介绍 首先上一张显卡主板构造图。   dfs  其中GPU芯片是重点，其结构图如下，它一般有很多核心，这些核的学术名字叫流多处理器（stream multiprocessor，SM），每个SM根据GPU型号的不同由若干个流处理器（stream processor，SP）组成，SP的功能只有计算。   cuda  cuda编程的基本概念 主机端host与设备端device  一个工程，我">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://line.com/img/cuda/00.png">
-<meta property="og:image" content="http://line.com/img/cuda/04.png">
-<meta property="og:image" content="http://line.com/img/cuda/01.png">
-<meta property="og:image" content="http://line.com/img/cuda/02.png">
-<meta property="og:image" content="http://line.com/img/cuda/03.png">
+<meta property="og:image" content="http://line.com/img/one-piece/one-piece36.jpg">
 <meta property="article:published_time" content="2021-03-13T17:07:24.000Z">
-<meta property="article:modified_time" content="2023-02-28T07:56:23.820Z">
+<meta property="article:modified_time" content="2023-03-05T05:59:47.347Z">
 <meta property="article:author" content="Line">
 <meta property="article:tag" content="c与c++">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://line.com/img/cuda/00.png">
+<meta name="twitter:image" content="http://line.com/img/one-piece/one-piece36.jpg">
   
   
   
@@ -48,8 +44,6 @@
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
 
 
 
@@ -75,6 +69,7 @@
 
   
 <link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+<link rel="stylesheet" href="/css/mac.css">
 
 
 
@@ -290,13 +285,21 @@
             
               <div class="markdown-body">
                 
-                <h1 id="gpu的基础介绍"><a class="markdownIt-Anchor" href="#gpu的基础介绍"></a> GPU的基础介绍</h1>
+                <h1 id="gpu的基础介绍">GPU的基础介绍</h1>
 <p>首先上一张显卡主板构造图。</p>
-<p><img src="/img/cuda/00.png" srcset="/img/loading.gif" lazyload alt="dfs" /></p>
-<p>其中GPU芯片是重点，其结构图如下，它一般有很多核心，这些核的学术名字叫流多处理器（stream multiprocessor，SM），每个SM根据GPU型号的不同由若干个流处理器（stream processor，SP）组成，SP的功能只有计算。</p>
-<p><img src="/img/cuda/04.png" srcset="/img/loading.gif" lazyload alt="cuda" /></p>
-<h1 id="cuda编程的基本概念"><a class="markdownIt-Anchor" href="#cuda编程的基本概念"></a> cuda编程的基本概念</h1>
-<h2 id="主机端host与设备端device"><a class="markdownIt-Anchor" href="#主机端host与设备端device"></a> 主机端host与设备端device</h2>
+<figure>
+<img src="/img/cuda/00.png" srcset="/img/loading.gif" lazyload alt="dfs" />
+<figcaption aria-hidden="true">dfs</figcaption>
+</figure>
+<p>其中GPU芯片是重点，其结构图如下，它一般有很多核心，这些核的学术名字叫流多处理器（stream
+multiprocessor，SM），每个SM根据GPU型号的不同由若干个流处理器（stream
+processor，SP）组成，SP的功能只有计算。</p>
+<figure>
+<img src="/img/cuda/04.png" srcset="/img/loading.gif" lazyload alt="cuda" />
+<figcaption aria-hidden="true">cuda</figcaption>
+</figure>
+<h1 id="cuda编程的基本概念">cuda编程的基本概念</h1>
+<h2 id="主机端host与设备端device">主机端host与设备端device</h2>
 <blockquote>
 <p>一个工程，我们想要有的代码在cpu上执行，有的代码在gpu上执行。因此就需要有host与device的概念。</p>
 </blockquote>
@@ -304,40 +307,60 @@
 <p>CUDA中，为了更好的区分CPU和GPU，将CPU作为主机端（Host），GPU作为设备端（Device），每个进程（process）中，通过一个Host控制一个或多个Device协同工作。通过这种方式，CPU负责进行逻辑性强的事务性处理和串行计算，而GPU则专注于执行高度线程化的并行处理任务。</p>
 <p>通过这种方式，首先实现了CUDA中最上层的并行：Host与Device的并行。也可以理解为将计算任务分解成若干子任务分别交给CPU和GPU。如下图所示，Host和Device有各自的流水线，计算和内存等均彼此独立，不过Device依然由Host控制，控制Device的工作也是Host流水线上的一部分。</p>
 <p>虽然在大多数时候，为了结果的正确性需要经常在必要处进行Host与Device同步（往往是CPU、GPU间的数据通信），此时CPU或GPU会空等另一边执行到同步出再继续计算。但在此基础上进行进一步优化往往可以带来很好的优化效果，比如采用通信隐藏、或者插入无关计算等方法。</p>
-<p><img src="/img/cuda/01.png" srcset="/img/loading.gif" lazyload alt="dfs" /></p>
+<figure>
+<img src="/img/cuda/01.png" srcset="/img/loading.gif" lazyload alt="dfs" />
+<figcaption aria-hidden="true">dfs</figcaption>
+</figure>
 <blockquote>
 <p>在正常c语言中，设备端函数用<code>__global__</code>来修饰。在执行时需要使用特定的调用格式。</p>
 </blockquote>
-<h2 id="设备端代码的执行"><a class="markdownIt-Anchor" href="#设备端代码的执行"></a> 设备端代码的执行</h2>
+<h2 id="设备端代码的执行">设备端代码的执行</h2>
 <blockquote>
 <p>一般从主机代码中启动设备代码叫做<strong>内核调用</strong>。内核调用有固定的语法<code>func &lt;&lt; &lt;block数量，每个block中线程数量，共享内存大小  &gt;&gt; &gt;(参数列表)</code></p>
 </blockquote>
 <p>CUDA中，运行在GPU上的并行计算函数称为kernel函数。</p>
-<p><strong>内核调用是以线程网格（grid）的形式组织的，每个grid由若干个线程块（block）组成，而每个block又由若干个线程（thread）组成</strong>。block的数量只要小于<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>31</mn></msup><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2^{31}-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.897438em;vertical-align:-0.08333em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">3</span><span class="mord mtight">1</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>就好，thread的数量现在一般都是1024了。</p>
-<p><img src="/img/cuda/02.png" srcset="/img/loading.gif" lazyload alt="dfs" /></p>
+<p><strong>内核调用是以线程网格（grid）的形式组织的，每个grid由若干个线程块（block）组成，而每个block又由若干个线程（thread）组成</strong>。block的数量只要小于<span
+class="math inline">\(2^{31}-1\)</span>就好，thread的数量现在一般都是1024了。</p>
+<figure>
+<img src="/img/cuda/02.png" srcset="/img/loading.gif" lazyload alt="dfs" />
+<figcaption aria-hidden="true">dfs</figcaption>
+</figure>
 <blockquote>
 <p>一般block数量是GPU的流多处理器数量的两倍时，GPU会给出最佳性能。</p>
 </blockquote>
-<h2 id="cuda编程时的内存结构"><a class="markdownIt-Anchor" href="#cuda编程时的内存结构"></a> cuda编程时的内存结构</h2>
-<p><img src="/img/cuda/03.png" srcset="/img/loading.gif" lazyload alt="dfs" /></p>
+<h2 id="cuda编程时的内存结构">cuda编程时的内存结构</h2>
+<figure>
+<img src="/img/cuda/03.png" srcset="/img/loading.gif" lazyload alt="dfs" />
+<figcaption aria-hidden="true">dfs</figcaption>
+</figure>
 <blockquote>
-<p>除了表格中的，其实还有L1和L2缓存。其中L1缓存一般是每个流多处理器（gpu的核）都有的，一般与shared memory使用相同的存储硬件，L2缓存是整个gpu中所有的流多处理器共享的，所有的global memory和local memory都使用这些缓存。同时，所有的global memory访问通过L2缓存进行。</p>
+<p>除了表格中的，其实还有L1和L2缓存。其中L1缓存一般是每个流多处理器（gpu的核）都有的，一般与shared
+memory使用相同的存储硬件，L2缓存是整个gpu中所有的流多处理器共享的，所有的global
+memory和local memory都使用这些缓存。同时，所有的global
+memory访问通过L2缓存进行。</p>
 </blockquote>
-<p>在<code>__global__</code>修饰的设备函数中声明的局部变量肯定使用的是local memory或者是register（一开始会优先使用register，如果register装不下，就会使用local memory）；而使用<code>cudaMalloc</code>分配的内存都是global memory</p>
-<p>此处说的<strong>global memory</strong>对应的物理结构也就是本文开头的显卡主板构造中的显存芯片，这是在gpu芯片之外的，因此访问速度会比较慢。</p>
-<p>上面的<strong>shared memory</strong>是在gpu芯片内部，因此速度比global memory快很多。一般在设备函数中使用<code>__shared__</code>修饰声明的变量存储在shared memory中，供同一个block中的所有线程使用。</p>
-<p>上面的<strong>constant memory</strong>也是占用的显存，并且逻辑上分配64kb大小的常量内存空间，这部分内存是只读的。其中的变量一般在全局程序中使用<code>__constant__</code>关键字修饰，对常量内存中的变量进行初始化需要使用<code>cudaMemcpyToSymbol</code>函数。在设备函数中常量内存是只读的，因此每个线程在访问常量内存时不是单独访问，而是统一一次访问，然后广播给所有的线程，因此在频繁访问同一块常量内存时可以节省时间。</p>
-<p>上面的<strong>texture memory</strong>是另外一种当数据访问具有特定模式的时候可以加速程序执行、减少显存带宽的只读存储器。纹理内存也是在显存芯片中，和常量内存一样都在芯片内部被cache缓冲。当每个线程的读取位置都与其他线程的读取位置临近时，使用纹理内存会很高效。</p>
+<p>在<code>__global__</code>修饰的设备函数中声明的局部变量肯定使用的是local
+memory或者是register（一开始会优先使用register，如果register装不下，就会使用local
+memory）；而使用<code>cudaMalloc</code>分配的内存都是global memory</p>
+<p>此处说的<strong>global
+memory</strong>对应的物理结构也就是本文开头的显卡主板构造中的显存芯片，这是在gpu芯片之外的，因此访问速度会比较慢。</p>
+<p>上面的<strong>shared memory</strong>是在gpu芯片内部，因此速度比global
+memory快很多。一般在设备函数中使用<code>__shared__</code>修饰声明的变量存储在shared
+memory中，供同一个block中的所有线程使用。</p>
+<p>上面的<strong>constant
+memory</strong>也是占用的显存，并且逻辑上分配64kb大小的常量内存空间，这部分内存是只读的。其中的变量一般在全局程序中使用<code>__constant__</code>关键字修饰，对常量内存中的变量进行初始化需要使用<code>cudaMemcpyToSymbol</code>函数。在设备函数中常量内存是只读的，因此每个线程在访问常量内存时不是单独访问，而是统一一次访问，然后广播给所有的线程，因此在频繁访问同一块常量内存时可以节省时间。</p>
+<p>上面的<strong>texture
+memory</strong>是另外一种当数据访问具有特定模式的时候可以加速程序执行、减少显存带宽的只读存储器。纹理内存也是在显存芯片中，和常量内存一样都在芯片内部被cache缓冲。当每个线程的读取位置都与其他线程的读取位置临近时，使用纹理内存会很高效。</p>
 <p>CUDA对于显存中常见的大数据量的存储方式有两种，一种是普通的线性存储（cudaMalloc申请），可以直接用指针访问。另一种则是cuda数组（一般与纹理内存绑定），对用户不透明，不能在内核里直接用指针访问，需要通过texture或surface的相应函数访问。</p>
-<h4 id="主机内存"><a class="markdownIt-Anchor" href="#主机内存"></a> 主机内存</h4>
+<h4 id="主机内存">主机内存</h4>
 <p>一般cuda编程都会涉及到主机与设备之间的内存交换，而主机内存需要注意的是：</p>
-<ol>
+<ol type="1">
 <li>使用<code>malloc</code>函数在cpu上分配的内存是可换页的标准内存；</li>
 <li>CUDA提供了<code>cudaHostAlloc</code>函数可以分配锁定页面的内存，也叫Pinned内存；操作系统会保证永远不会将这种内存换页到磁盘上，总在物理内存中，因此系统内的所有设备都可以直接用该段内存缓冲区的物理地址来访问，此属性可以帮助GPU通过直接内存访问（DMA）将数据复制到主机或从主机复制数据，无需cpu干预（cuda流中的传输需要使用页面锁定内存）；</li>
 </ol>
-<h2 id="cuda流"><a class="markdownIt-Anchor" href="#cuda流"></a> CUDA流</h2>
+<h2 id="cuda流">CUDA流</h2>
 <p>GPU作为一种专用的并行计算设备，可以同时支持多个内核调用，为了使得这个内核调用互不干扰，独立运行，可以使用CUDA流来组织不同的任务。每个流中的工作是串行的（比如从cpu拷贝内存，内核调用，拷贝内存回cpu，依次执行），而流与流之间则是默认不保证顺序的（并行互不干扰的）。</p>
-<h2 id="cu程序编译"><a class="markdownIt-Anchor" href="#cu程序编译"></a> <code>.cu</code>程序编译</h2>
+<h2 id="cu程序编译"><code>.cu</code>程序编译</h2>
 <p>带有cuda编程的源文件一般是<code>.cu</code>结尾的，这种源文件的编译使用<code>nvcc</code>编译器，使用方法与<code>gcc</code>一致。</p>
 
                 
@@ -511,6 +534,7 @@
 
   
   
+
 
 
 
@@ -705,6 +729,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 

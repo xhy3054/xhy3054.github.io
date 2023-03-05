@@ -16,18 +16,20 @@
   <meta name="author" content="Line">
   <meta name="keywords" content="">
   
-    <meta name="description" content="c是一门复杂的语言，程序的运行环境也是千奇百怪。因此总会有异常出现，本文主要就是讨论一下c程序中的异常处理问题。  异常对象 讲到异常，这里就要说明一下，什么是异常？在c++中，异常就是指异常对象。而异常对象是异常类的实例化，异常类是我们定义的用来表示程序错误信息的数据抽象。下图便是标准库异常类的继承体系。 ![exception](&#x2F;assets&#x2F;img&#x2F;exception&#x2F;exception.">
+    <meta name="description" content="c++是一门复杂的语言，程序的运行环境也是千奇百怪。因此总会有异常出现，本文主要就是讨论一下c++程序中的异常处理问题。 异常对象 讲到异常，这里就要说明一下，什么是异常？在c++中，异常就是指异常对象。而异常对象是异常类的实例化，异常类是我们定义的用来表示程序错误信息的数据抽象。下图便是标准库异常类的继承体系。 [exception](&#x2F;assets&#x2F;img&#x2F;exception&#x2F;exceptio">
 <meta property="og:type" content="article">
 <meta property="og:title" content="c++中的异常处理">
 <meta property="og:url" content="http://line.com/2018/11/03/2018-11-04-cpp-exception/index.html">
 <meta property="og:site_name" content="Line&#39;s Blog">
-<meta property="og:description" content="c是一门复杂的语言，程序的运行环境也是千奇百怪。因此总会有异常出现，本文主要就是讨论一下c程序中的异常处理问题。  异常对象 讲到异常，这里就要说明一下，什么是异常？在c++中，异常就是指异常对象。而异常对象是异常类的实例化，异常类是我们定义的用来表示程序错误信息的数据抽象。下图便是标准库异常类的继承体系。 ![exception](&#x2F;assets&#x2F;img&#x2F;exception&#x2F;exception.">
+<meta property="og:description" content="c++是一门复杂的语言，程序的运行环境也是千奇百怪。因此总会有异常出现，本文主要就是讨论一下c++程序中的异常处理问题。 异常对象 讲到异常，这里就要说明一下，什么是异常？在c++中，异常就是指异常对象。而异常对象是异常类的实例化，异常类是我们定义的用来表示程序错误信息的数据抽象。下图便是标准库异常类的继承体系。 [exception](&#x2F;assets&#x2F;img&#x2F;exception&#x2F;exceptio">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://line.com/img/cute7.jpg">
 <meta property="article:published_time" content="2018-11-02T17:07:24.000Z">
-<meta property="article:modified_time" content="2023-01-10T13:24:53.439Z">
+<meta property="article:modified_time" content="2023-03-05T06:10:28.089Z">
 <meta property="article:author" content="Line">
 <meta property="article:tag" content="c与c++">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://line.com/img/cute7.jpg">
   
   
   
@@ -42,8 +44,6 @@
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
 
 
 
@@ -69,6 +69,7 @@
 
   
 <link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+<link rel="stylesheet" href="/css/mac.css">
 
 
 
@@ -241,7 +242,7 @@
         
         
         
-          15 分钟
+          16 分钟
         
       </span>
     
@@ -284,52 +285,39 @@
             
               <div class="markdown-body">
                 
-                <p>c<ins>是一门复杂的语言，程序的运行环境也是千奇百怪。因此总会有异常出现，本文主要就是讨论一下c</ins>程序中的异常处理问题。</p>
-<h2 id="异常对象"><a class="markdownIt-Anchor" href="#异常对象"></a> 异常对象</h2>
-<p>讲到异常，这里就要说明一下，什么是异常？<strong>在c++中，异常就是指异常对象</strong>。而异常对象是异常类的实例化，<strong>异常类是我们定义的用来表示程序错误信息的数据抽象</strong>。下图便是标准库异常类的继承体系。<br />
-![exception](/assets/img/exception/exception.jpg)</p>
+                <p>c++是一门复杂的语言，程序的运行环境也是千奇百怪。因此总会有异常出现，本文主要就是讨论一下c++程序中的异常处理问题。</p>
+<h2 id="异常对象">异常对象</h2>
+<p>讲到异常，这里就要说明一下，什么是异常？<strong>在c++中，异常就是指异常对象</strong>。而异常对象是异常类的实例化，<strong>异常类是我们定义的用来表示程序错误信息的数据抽象</strong>。下图便是标准库异常类的继承体系。
+[exception](/assets/img/exception/exception.jpg)</p>
 <p>由上图我们可以看到，异常类的继承体系中基类是<code>exception</code>类。整个关系可以看成是按照层次关系组织的，层次越低，表示的异常情况就越特殊。</p>
-<p>一般情况下，每个异常类都定义的有：</p>
-<ol>
-<li>拷贝构造函数；</li>
-<li>拷贝赋值运算符；</li>
-<li>虚析构函数；</li>
-<li>一个名叫<code>what</code>的虚成员函数。没有参数，返回一个<code>const char*</code>的指针指向一个以<code>null</code>结尾的字符数组，并且确保不会抛出任何异常。</li>
-</ol>
-<h2 id="函数try语句块"><a class="markdownIt-Anchor" href="#函数try语句块"></a> 函数try语句块</h2>
+<p>一般情况下，每个异常类都定义的有： 1. 拷贝构造函数； 2.
+拷贝赋值运算符； 3. 虚析构函数； 4.
+一个名叫<code>what</code>的虚成员函数。没有参数，返回一个<code>const char*</code>的指针指向一个以<code>null</code>结尾的字符数组，并且确保不会抛出任何异常。</p>
+<h2 id="函数try语句块">函数try语句块</h2>
 <p>一般异常处理部分使用try语句块处理异常，try语句块以关键字try开始，并以一个或多个<strong>catch子句</strong>结束。try语句块中代码抛出的异常通常会被某个catch子句处理。因为catch子句“处理”异常，所以它们也被称作<strong>异常处理代码</strong>。其一般形式如下：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">try</span>&#123;<br>	<span class="hljs-comment">//program-statements</span><br>&#125;	<br><span class="hljs-built_in">catch</span>(exception-declaration)&#123;<br>	<span class="hljs-comment">//handler-statements</span><br>&#125;<br></code></pre></td></tr></table></figure>
-<hr />
-<h3 id="抛出异常throw"><a class="markdownIt-Anchor" href="#抛出异常throw"></a> 抛出异常（throw）</h3>
+<h2 id="section"><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">try</span>&#123;<br>	<span class="hljs-comment">//program-statements</span><br>&#125;	<br><span class="hljs-built_in">catch</span>(exception-declaration)&#123;<br>	<span class="hljs-comment">//handler-statements</span><br>&#125;<br></code></pre></td></tr></table></figure></h2>
+<h3 id="抛出异常throw">抛出异常（throw）</h3>
 <p><strong>抛出异常一般指的是抛出一个异常对象</strong>。一般使用如下语句进行异常的抛出。</p>
-<pre><code class="hljs">throw exception1;	//其中，exception1是一个异常对象。
-</code></pre>
+<pre><code class="hljs">throw exception1;   //其中，exception1是一个异常对象。</code></pre>
 <p>这样的形式特别像<code>return</code>语句。它们的作用机理也会有些许相似，都提供一个待接收的对象。</p>
-<h3 id="捕获异常catch"><a class="markdownIt-Anchor" href="#捕获异常catch"></a> 捕获异常（catch）</h3>
-<p><strong>捕获异常也是指捕获一个异常对象</strong>。捕获的过程也就是<strong>参数匹配</strong>的过程。一般捕获异常使用如下形式进行：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">//exception-declaration通常与函数形参的声明形式一样，可以与throw抛出的异常对象进行参数匹配。</span><br><span class="hljs-built_in">catch</span>(exception-declaration)&#123;<br>	<span class="hljs-comment">//handler-statements</span><br>&#125;<br></code></pre></td></tr></table></figure>
-<h3 id="异常匹配过程解析"><a class="markdownIt-Anchor" href="#异常匹配过程解析"></a> 异常匹配过程解析</h3>
-<p>通常最完美的一个异常处理过程如下：</p>
-<ul>
-<li>如果在一个try语句块内有异常抛出，则检查与该try块关联的catch子句，如果找到了匹配的catch，就使用该catch处理异常。然后执行完这个catch子句后，找到与try块关联的最后一个catch子句之后的点，并从这里继续执行。</li>
-</ul>
-<p>但是一般情况下，并不会如此顺利，往往一个更完整的异常匹配过程如下：</p>
-<ul>
-<li>对于在一个try语句块内有异常抛出，则检查与该try块关联的catch子句，如果找到了匹配的catch，就使用该catch处理异常。否则，如果该try语句嵌套在其他try块中，则继续检查与外层try匹配的catch子句。如果仍然没有找到匹配的catch，则退出当前这个主调函数，如果调用语句也是在一个try语句块内，继续在调用了刚刚退出的这个函数的try代码块中寻找。直到找到与之匹配的catch，并使用该catch处理异常。然后执行完这个catch子句后，找到与这个catch对应的try块关联的最后一个catch子句之后的点，并从这里继续执行。上述过程也叫作<strong>栈展开</strong>。</li>
-</ul>
+<h3 id="捕获异常catch">捕获异常（catch）</h3>
+<p><strong>捕获异常也是指捕获一个异常对象</strong>。捕获的过程也就是<strong>参数匹配</strong>的过程。一般捕获异常使用如下形式进行：
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">//exception-declaration通常与函数形参的声明形式一样，可以与throw抛出的异常对象进行参数匹配。</span><br><span class="hljs-built_in">catch</span>(exception-declaration)&#123;<br>	<span class="hljs-comment">//handler-statements</span><br>&#125;<br></code></pre></td></tr></table></figure> ### 异常匹配过程解析 通常最完美的一个异常处理过程如下： -
+如果在一个try语句块内有异常抛出，则检查与该try块关联的catch子句，如果找到了匹配的catch，就使用该catch处理异常。然后执行完这个catch子句后，找到与try块关联的最后一个catch子句之后的点，并从这里继续执行。</p>
+<p>但是一般情况下，并不会如此顺利，往往一个更完整的异常匹配过程如下： -
+对于在一个try语句块内有异常抛出，则检查与该try块关联的catch子句，如果找到了匹配的catch，就使用该catch处理异常。否则，如果该try语句嵌套在其他try块中，则继续检查与外层try匹配的catch子句。如果仍然没有找到匹配的catch，则退出当前这个主调函数，如果调用语句也是在一个try语句块内，继续在调用了刚刚退出的这个函数的try代码块中寻找。直到找到与之匹配的catch，并使用该catch处理异常。然后执行完这个catch子句后，找到与这个catch对应的try块关联的最后一个catch子句之后的点，并从这里继续执行。上述过程也叫作<strong>栈展开</strong>。</p>
 <blockquote>
 <p>栈展开过程沿着嵌套函数的调用链不断查找，直到找到了与异常匹配的catch子句为止；或者也可能一直没找到匹配的catch语句，则退出主函数后查找过程终止。（如果找不到匹配的catch时，程序会调用标准库函数<code>terminate</code>终止程序）</p>
 </blockquote>
-<h3 id="异常捕获中的参数匹配规则"><a class="markdownIt-Anchor" href="#异常捕获中的参数匹配规则"></a> 异常捕获中的参数匹配规则</h3>
+<h3 id="异常捕获中的参数匹配规则">异常捕获中的参数匹配规则</h3>
 <p>上文说过，catch语句的捕获与throw语句的抛出异常之间会进行<strong>参数匹配</strong>。匹配规则类似函数的形参与实参的匹配，但是也不是完全相同。</p>
-<p>一般而言要求异常的类型与catch声明的类型是<strong>精确匹配</strong>的，匹配时一般只有如下三种类型转换可用：</p>
-<ol>
-<li>允许从非常量向常量的类型转换，也就是说，一条非常量１对象的throw语句可以匹配一个接受常量引用的catch语句；</li>
-<li>允许从派生类向基类的类型转换；</li>
-<li>数组被转换成指向数组（元素）类型的指针，函数被转换成指向该函数类型的指针。</li>
-</ol>
+<p>一般而言要求异常的类型与catch声明的类型是<strong>精确匹配</strong>的，匹配时一般只有如下三种类型转换可用：
+1.
+允许从非常量向常量的类型转换，也就是说，一条非常量１对象的throw语句可以匹配一个接受常量引用的catch语句；
+2. 允许从派生类向基类的类型转换； 3.
+数组被转换成指向数组（元素）类型的指针，函数被转换成指向该函数类型的指针。</p>
 <p>除此之外，包括标准算数类型的转换和类类型转换在内，其他所有转换规则都不能在匹配catch的过程中使用。</p>
-<h1 id="参考资料"><a class="markdownIt-Anchor" href="#参考资料"></a> 参考资料</h1>
+<h1 id="参考资料">参考资料</h1>
 <ul>
 <li>[1] C++ Primer（第5版）</li>
 </ul>
@@ -505,6 +493,7 @@
 
   
   
+
 
 
 
@@ -699,6 +688,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 

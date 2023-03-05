@@ -1,0 +1,927 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon1.png">
+  <link rel="icon" href="/img/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Line">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="线性系统的误差状态的维护  在基于滤波方法的状态估计问题中，需要实时维护系统的误差状态（也就是系统变量的协方差矩阵），本文主要对系统的误差状态进行分析。   对于线性系统，从k时刻到k+1时刻的状态传播转移  \[ \hat{\boldsymbol{x}}_{k+1}&#x3D;\boldsymbol{A}_{k} \hat{\boldsymbol{x}}_{k}+ \boldsymbol{B}_k \bo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="系统误差状态的维护">
+<meta property="og:url" content="http://line.com/2021/04/23/2021-04-23-error-state-system/index.html">
+<meta property="og:site_name" content="Line&#39;s Blog">
+<meta property="og:description" content="线性系统的误差状态的维护  在基于滤波方法的状态估计问题中，需要实时维护系统的误差状态（也就是系统变量的协方差矩阵），本文主要对系统的误差状态进行分析。   对于线性系统，从k时刻到k+1时刻的状态传播转移  \[ \hat{\boldsymbol{x}}_{k+1}&#x3D;\boldsymbol{A}_{k} \hat{\boldsymbol{x}}_{k}+ \boldsymbol{B}_k \bo">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://line.com/img/one-piece/one-piece38.jpg">
+<meta property="article:published_time" content="2021-04-22T17:07:24.000Z">
+<meta property="article:modified_time" content="2023-03-05T05:58:51.187Z">
+<meta property="article:author" content="Line">
+<meta property="article:tag" content="数学">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://line.com/img/one-piece/one-piece38.jpg">
+  
+  
+  
+  <title>系统误差状态的维护 - Line&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+<link rel="stylesheet" href="/css/mac.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"line.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Line</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default2.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="系统误差状态的维护"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-04-23 01:07" pubdate>
+          2021年4月23日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          38 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">系统误差状态的维护</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="线性系统的误差状态的维护">线性系统的误差状态的维护</h2>
+<blockquote>
+<p>在基于滤波方法的状态估计问题中，需要实时维护系统的误差状态（也就是系统变量的协方差矩阵），本文主要对系统的误差状态进行分析。</p>
+</blockquote>
+<ul>
+<li>对于线性系统，从k时刻到k+1时刻的状态传播转移</li>
+</ul>
+<p><span class="math display">\[
+\hat{\boldsymbol{x}}_{k+1}=\boldsymbol{A}_{k} \hat{\boldsymbol{x}}_{k}+
+\boldsymbol{B}_k \boldsymbol{u}_{k}
+\]</span></p>
+<p>其中，<span
+class="math inline">\(\hat{x}_{k+1}\)</span>是k+1时刻的传播估计，<span
+class="math inline">\(A_k\)</span>是系统线性转移矩阵，<span
+class="math inline">\(u_k\)</span>是系统输入，<span
+class="math inline">\(B_k\)</span>是相对于输入的线性转移矩阵。</p>
+<ul>
+<li>则系统的误差状态传播为</li>
+</ul>
+<p><span class="math display">\[
+\tilde{x}_{k+1} = A_k \tilde{x}_{k} + B_k n_k
+\]</span></p>
+<p>其中，<span
+class="math inline">\(\tilde{x}_k\)</span>是k时刻的系统状态误差，<span
+class="math inline">\(n_k\)</span>是系统输入的噪声（误差）。</p>
+<ul>
+<li>系统的状态误差的协方差矩阵传播为</li>
+</ul>
+<p><span class="math display">\[
+P_{k+1} = A_k P_k A_k^T + B_k Q_k B_k^T
+\]</span></p>
+<p>其中，<span
+class="math inline">\(P_k\)</span>是k时刻系统的误差协方差矩阵，<span
+class="math inline">\(Q_k\)</span>是系统输入的噪声的协方差矩阵。</p>
+<blockquote>
+<p>线性系统中假设传播转移估计的状态变量<span
+class="math inline">\(\hat{x}_k\)</span>其实是近似满足高斯分布的，因此状态误差<span
+class="math inline">\(\tilde{x}_k\)</span>就近似满足零均值高斯分布，而系统中对误差分布的表示是使用协方差矩阵（方差，因此需要计算平方均值）的形式。可以发现在第三个公式中，<span
+class="math inline">\(B_k\)</span>刚好将<span
+class="math inline">\(m\times
+m\)</span>（m为输入维度）的协方差矩阵转换为<span class="math inline">\(n
+\times n\)</span>（n为系统状态维度）的协方差矩阵。</p>
+</blockquote>
+<h2 id="非线性系统-imu积分传播示例">非线性系统-imu积分传播示例</h2>
+<blockquote>
+<p>和EKF的原理一致，对于非线性系统的处理就是对其进行线性展开，使用<strong>雅克比矩阵近似线性转移矩阵</strong>（因此此处<strong>仅仅是大致估计误差状态的转移，而一个系统如果没有发散，其误差一般是比较小的</strong>）。</p>
+</blockquote>
+<h3 id="离散时间imu状态传播">离散时间imu状态传播</h3>
+<ul>
+<li>将姿态估计从k时刻传播到k+1时刻：</li>
+</ul>
+<p><span class="math display">\[
+{ }_{G}^{I_{k+1}} \hat{\bar{q}}=\exp \left(\frac{1}{2}
+\boldsymbol{\Omega}\left(\boldsymbol{\omega}_{m, k}-\hat{\mathbf{b}}_{g,
+k}\right) \Delta t\right) {}_{G}^{I_{k}} \hat{\bar{q}}
+\]</span></p>
+<ul>
+<li>将速度估计从k时刻传播到k+1时刻：</li>
+</ul>
+<p><span class="math display">\[
+{}^{G} \hat{v}_{I_{k+1}} = {}^{G} \hat{v}_{I_k} - {}^{G}g \Delta t +
+{}_{G}^{I_{k}} \hat{R}^{T} \left( a_{m,k} - \hat{b}_{a.k}   \right)
+\Delta t
+\]</span></p>
+<ul>
+<li>将位置估计从k时刻传播到k+1时刻：</li>
+</ul>
+<p><span class="math display">\[
+{}^{G} \hat{p}_{I_{k+1}} = {}^{G} \hat{p}_{I_k} + {}^{G} \hat{v}_{I_k}
+\Delta t - \frac{1}{2} {}^{G}g \Delta t^2 + \frac{1}{2} {}^{I_k}_G
+\hat{R}^T \left( a_{m,k} - \hat{b}_{a,k} \right) {\Delta t} ^ {2}
+\]</span></p>
+<ul>
+<li>将bias估计从k时刻传播到k+1时刻：</li>
+</ul>
+<p><span class="math display">\[
+\hat{b}_{g,k+1} = \hat{b}_{g,k} \\
+\hat{b}_{a,k+1} = \hat{b}_{a,k}
+\]</span></p>
+<h3 id="离散时间imu的误差状态传播">离散时间imu的误差状态传播</h3>
+<blockquote>
+<p>由上面可知，对于imu积分这样一个非线性系统，我们需要计算两个雅克比，一个是k+1时刻系统状态对k时刻系统状态的雅克比，一个是k+1时刻系统状态对输入噪声的雅克比。</p>
+</blockquote>
+<ul>
+<li>首先明确需要构造的系统误差状态传播方程：</li>
+</ul>
+<p><span class="math display">\[
+\tilde{x}_{I_{k+1}} = {\Phi}_k \tilde{x}_{I_{k}} + G_k n_k
+\]</span></p>
+<p>其中x为系统状态<span
+class="math inline">\(q,v,p,b_g,b_a\)</span>，n为输入噪声<span
+class="math inline">\(n_{m,a},n_{m,g},n_{b,a},n_{b,g}\)</span>（分别是测量噪声与bias的随机游走噪声）。<strong><span
+class="math inline">\(\Phi\)</span>是k+1时刻系统状态相对于k时刻系统状态的雅克比。<span
+class="math inline">\(G\)</span>是k+1时刻系统状态相对与输入噪声的雅克比。</strong>（因为噪声一般很小，所以上式近似成立）</p>
+<ul>
+<li>系统协方差矩阵的状态传播方程：</li>
+</ul>
+<p><span class="math display">\[
+P_{k+1} = {\Phi}_k P_k {\Phi}_k^T + G_k Q_d G_k^T
+\]</span></p>
+<p>其中，<span
+class="math inline">\(P_k\)</span>是k时刻系统误差状态的协方差矩阵，<span
+class="math inline">\(Q_d\)</span>是系统输入噪声的协方差矩阵。使用前一般会对imu进行标定，假设测量噪声<span
+class="math inline">\(n_{m,a},n_{m,g}\)</span>的标准差分别为<span
+class="math inline">\({\sigma}_{m,a,c}，{\sigma}_{m,g,c}\)</span>（c表示连续信号），则离散信号的测量噪声的协方差矩阵为：
+<span class="math display">\[
+\mathbf{Q}_{\text {meas }}=\left[\begin{array}{cc}
+\frac{1}{\Delta t} \sigma_{m,g,c}^{2} \mathbf{I}_{3} &amp;&amp;
+\mathbf{0}_{3} \\
+\mathbf{0}_{3} &amp;&amp; \frac{1}{\Delta t} \sigma_{m,a,c}^{2}
+\mathbf{I}_{3}
+\end{array}\right]
+\]</span> 同理，离散信号的bias随机游走噪声的协方差矩阵为： <span
+class="math display">\[
+\mathbf{Q}_{\text {bias }}=\left[\begin{array}{cc}
+{\Delta t} \sigma_{b,g,c}^{2} \mathbf{I}_{3} &amp;&amp; \mathbf{0}_{3}
+\\
+\mathbf{0}_{3} &amp;&amp; {\Delta t} \sigma_{b,a,c}^{2} \mathbf{I}_{3}
+\end{array}\right]
+\]</span> 所以整个系统输入的噪声协方差矩阵为： <span
+class="math display">\[
+\mathbf{Q}_{\text {d}}=\left[\begin{array}{cc}
+\mathbf{Q}_{\text {meas}} &amp;&amp; \mathbf{0}_{3} \\
+\mathbf{0}_{3} &amp;&amp; \mathbf{Q}_{\text {bias}}
+\end{array}\right]
+\]</span></p>
+<ul>
+<li>关于雅克比矩阵的推导，可以通过上一小节离散imu状态传播的公式入手得到。（比较多推导，有时间再补充）</li>
+</ul>
+<h3
+id="系统中部分误差状态传播对整体系统的影响当状态传播仅仅与本身前一时刻相关时">系统中部分误差状态传播对整体系统的影响（当状态传播仅仅与本身前一时刻相关时）</h3>
+<blockquote>
+<p>以一个vio系统为例，VIO系统维护了整个系统的协方差矩阵，其中包括了IMU状态与其他状态（比如imu与相机的外参，路标，时间偏移等）的协方差矩阵，前面的传播过程只讨论的IMU本身的协方差矩阵（其实是IMU状态的方差）如何变换，而IMU状态与其他状态变量之间的协方差矩阵如何变换没有涉及。</p>
+</blockquote>
+<ul>
+<li>假设整个vio系统的协方差矩阵（这是一个对称矩阵）为</li>
+</ul>
+<p><span class="math display">\[
+P_{vio} = \left[\begin{array}{cc}
+\mathbf{P}_{\text {imu}} &amp;&amp; \mathbf{P}_{imu}^{others} \\
+\mathbf{P}_{others}^{imu} &amp;&amp; \mathbf{P}_{\text {others}}
+\end{array}\right]
+\]</span></p>
+<ul>
+<li>由上面可以知，imu积分传播之后<span
+class="math inline">\(\mathbf{P}_{\text
+{imu}}\)</span>的更新方式为：</li>
+</ul>
+<p><span class="math display">\[
+P_{k+1}^{imu} = {\Phi}_k P_k^{imu} {\Phi}_k^T + G_k Q_d G_k^T
+\]</span></p>
+<ul>
+<li>其中协方差部分因为<span
+class="math inline">\(\mathbf{P}_{others}^{imu}\)</span>与<span
+class="math inline">\(\mathbf{P}_{imu}^{others}\)</span>互为转置，所以只需要计算一次即可：</li>
+</ul>
+<p><span class="math display">\[
+P_{others}^{imu} = P_{others}^{imu} * {\Phi}^T
+\]</span></p>
+<blockquote>
+<p>此处还有一点需要注意：此处协方差矩阵是由imu与others共同决定的，此处传播只有imu的误差状态变化了，如果others的误差状态也变化了，则还需要为<span
+class="math inline">\(P_{others}^{imu}\)</span>左乘一个others相关的传播雅克比矩阵。系统中一直维护这imu与其他状态的相关性，则在测量更新时更新其他状态时，由于相关性的关系，imu的状态（主要是bias）也会被更新。</p>
+</blockquote>
+<ul>
+<li><p>最后<span
+class="math inline">\(P_{others}\)</span>不变。</p></li>
+<li><p>小技巧：对于上述分析，我们会发现我们将要更新的状态imu放到了矩阵的头部，这样在计算协方差矩阵时十分方便，因为不需要考虑协方差是断开的。但是在实际使用中很有可能当前传播的状态变量在系统变量中是在中间。此时进行系统协方差矩阵的传播更新时就会有些麻烦。</p>
+<ul>
+<li>解决方法：直接取出<span
+class="math inline">\(\left[\begin{array}{cc} \mathbf{P}_{\text {imu}}
+\\ \mathbf{P}_{others}^{imu}
+\end{array}\right]\)</span>，imu相关的协方差与方差部分的列，然后一起右乘以<span
+class="math inline">\({\Phi}^T\)</span>，然后再取出imu相关的行协方差左乘<span
+class="math inline">\(\Phi\)</span>，这样协方差部分已经完成了，方差部分仅仅只需要在叠加一个新引入的噪声<span
+class="math inline">\(Q=G_k Q_d G_k^T\)</span>就可以了。</li>
+<li>注意：这样做还是需要传播的状态变量imu内部在系统中id连续。</li>
+</ul></li>
+</ul>
+<h3
+id="当状态传播不仅仅与本身前一时刻相关时">当状态传播不仅仅与本身前一时刻相关时</h3>
+<blockquote>
+<p>上面k+1时刻的imu状态仅仅与k时刻的imu状态相关，所以<span
+class="math inline">\(\Phi\)</span>维度为<span
+class="math inline">\(m*m\)</span>。但是举个例子，msckf中改变路标的anchored帧时，路标新的参数除了与旧的参数相关外，还与相机外参，旧的anchor帧位姿，新的anchor帧位姿相关，此时整个传播过程原理一样，但是形式变了。</p>
+</blockquote>
+<ul>
+<li>首先，计算<span
+class="math inline">\(\Phi\)</span>矩阵变成了新的路标参数到与其传播相关的状态（旧的路标参数、相机外参、旧的anchor帧位姿、新的anchor帧位姿，假设一共n维度，记为relative）的雅克比，维度为<span
+class="math inline">\(m*n\)</span>；噪声部分没有啥变化；</li>
+<li>此时该路标新的方差变成(从相关的状态的方差转过来的)：</li>
+</ul>
+<p><span class="math display">\[
+P_{k+1}^{landmark} = \Phi P_k^{relative} \Phi^T + G_k Q_d G_k^T \\
+维度变换为m*m = (m*n)(n*n)(n*m) + m*m
+\]</span></p>
+<ul>
+<li>而该路标与系统中所有其他的状态的协方差也是由相关变量与系统其他状态的协方差转来的（互为转置的仅仅计算一次）：</li>
+</ul>
+<p><span class="math display">\[
+P_{others}^{landmark} = P_{others}^{relative} * \Phi^T \\
+维度变换为N*m = (N*n)*(n*m)
+\]</span></p>
+<blockquote>
+<p>此处为了讨论简单，假设relatives中所有变量在系统中相邻，如果不相邻的话需要对每一个相关变量的协方差依次使用<span
+class="math inline">\(\Phi\)</span>进行转换然后叠加起来就好了。此处依然满足上面一节说的，方差部分可以和协方差部分一起完成<span
+class="math inline">\(\Phi\)</span>的乘法，最后加上新引入噪声就可以了</p>
+</blockquote>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%95%B0%E5%AD%A6/">#数学</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>系统误差状态的维护</div>
+      <div>http://line.com/2021/04/23/2021-04-23-error-state-system/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Line</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年4月23日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/05/19/2021-05-19-ax=b-solve/" title="关于Ax=b形式的矩阵分解与求解问题">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">关于Ax=b形式的矩阵分解与求解问题</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/04/20/2021-04-20-propagation/" title="离散积分传播的几种方式">
+                        <span class="hidden-mobile">离散积分传播的几种方式</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -16,18 +16,20 @@
   <meta name="author" content="Line">
   <meta name="keywords" content="">
   
-    <meta name="description" content="主要近来又发现本人的记忆力水平需要笔记辅助，因此写来备忘。  目录  Softmax函数 Triplet loss   Softmax函数 Softmax函数，也叫归一化指数函数，主要是用来辅助多分类任务。 应用场景： 对于一个k分类的问题，通过对一个物体的特征进行处理，得到一个k维向量v，最好的结果当然是正确分类的维度取值1，其他维度取值0. 但是一般情况下我们得到的结果是每个维度取值范围为从负">
+    <meta name="description" content="主要近来又发现本人的记忆力水平需要笔记辅助，因此写来备忘。 目录  目录  Softmax函数 Triplet_loss  目的 原理    Softmax函数 Softmax函数，也叫归一化指数函数，主要是用来辅助多分类任务。 应用场景： 对于一个k分类的问题，通过对一个物体的特征进行处理，得到一个k维向量v，最好的结果当然是正确分类的维度取值1，其他维度取值0. 但是一般情况下我们得到的结果是">
 <meta property="og:type" content="article">
 <meta property="og:title" content="机器学习中的常见函数总结（备忘）">
 <meta property="og:url" content="http://line.com/2020/06/02/2020-06-02-matchine-learning/index.html">
 <meta property="og:site_name" content="Line&#39;s Blog">
-<meta property="og:description" content="主要近来又发现本人的记忆力水平需要笔记辅助，因此写来备忘。  目录  Softmax函数 Triplet loss   Softmax函数 Softmax函数，也叫归一化指数函数，主要是用来辅助多分类任务。 应用场景： 对于一个k分类的问题，通过对一个物体的特征进行处理，得到一个k维向量v，最好的结果当然是正确分类的维度取值1，其他维度取值0. 但是一般情况下我们得到的结果是每个维度取值范围为从负">
+<meta property="og:description" content="主要近来又发现本人的记忆力水平需要笔记辅助，因此写来备忘。 目录  目录  Softmax函数 Triplet_loss  目的 原理    Softmax函数 Softmax函数，也叫归一化指数函数，主要是用来辅助多分类任务。 应用场景： 对于一个k分类的问题，通过对一个物体的特征进行处理，得到一个k维向量v，最好的结果当然是正确分类的维度取值1，其他维度取值0. 但是一般情况下我们得到的结果是">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://line.com/img/one-piece/one-piece23.jpg">
 <meta property="article:published_time" content="2020-06-01T17:07:24.000Z">
-<meta property="article:modified_time" content="2023-01-08T16:21:28.853Z">
+<meta property="article:modified_time" content="2023-03-05T06:01:17.860Z">
 <meta property="article:author" content="Line">
 <meta property="article:tag" content="机器学习">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://line.com/img/one-piece/one-piece23.jpg">
   
   
   
@@ -42,8 +44,6 @@
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
 
 
 
@@ -69,6 +69,7 @@
 
   
 <link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+<link rel="stylesheet" href="/css/mac.css">
 
 
 
@@ -230,7 +231,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          826 字
+          781 字
         
       </span>
     
@@ -285,40 +286,42 @@
               <div class="markdown-body">
                 
                 <p>主要近来又发现本人的记忆力水平需要笔记辅助，因此写来备忘。</p>
-<h1 id="目录"><a class="markdownIt-Anchor" href="#目录"></a> 目录</h1>
+<h1 id="目录">目录</h1>
 <ul>
-<li><a href="#Softmax%E5%87%BD%E6%95%B0">Softmax函数</a></li>
-<li><a href="#Triplet_loss">Triplet loss</a></li>
+<li><a href="#目录">目录</a>
+<ul>
+<li><a href="#softmax函数">Softmax函数</a></li>
+<li><a href="#triplet_loss">Triplet_loss</a>
+<ul>
+<li><a href="#目的">目的</a></li>
+<li><a href="#原理">原理</a></li>
+</ul></li>
+</ul></li>
 </ul>
-<h2 id="softmax函数"><a class="markdownIt-Anchor" href="#softmax函数"></a> Softmax函数</h2>
+<h2 id="softmax函数">Softmax函数</h2>
 <p>Softmax函数，也叫归一化指数函数，主要是用来辅助多分类任务。</p>
-<p>应用场景： 对于一个k分类的问题，通过对一个物体的特征进行处理，得到一个k维向量v，最好的结果当然是正确分类的维度取值1，其他维度取值0. 但是一般情况下我们得到的结果是每个维度取值范围为从负无穷到正无穷。</p>
+<p>应用场景：
+对于一个k分类的问题，通过对一个物体的特征进行处理，得到一个k维向量v，最好的结果当然是正确分类的维度取值1，其他维度取值0.
+但是一般情况下我们得到的结果是每个维度取值范围为从负无穷到正无穷。</p>
 <p>Softmax的作用：将每个维度的取值限定到0到1之间，并且所有维度的值之和为1.</p>
-<p>Softmax的做法：</p>
-<ol>
-<li>
-<p>首先将每个维度的值转换为非负数，做法：<code>v[i] = exp(v[i])</code></p>
-</li>
-<li>
-<p>将非负数的值限定到0和1之间，并似的所有值和为1.做法：<code>v[i] = v[i]/(v[1]+v[2]+...+v[k])</code>;</p>
-</li>
+<p>Softmax的做法： 1.
+首先将每个维度的值转换为非负数，做法：<code>v[i] = exp(v[i])</code></p>
+<ol start="2" type="1">
+<li>将非负数的值限定到0和1之间，并似的所有值和为1.做法：<code>v[i] = v[i]/(v[1]+v[2]+...+v[k])</code>;</li>
 </ol>
 <p>总结：<code>v[i] = exp(v[i]) / &#123;exp(v[1]) + exp(v[2]) + ... + exp(v[k])&#125;</code></p>
-<h2 id="triplet_loss"><a class="markdownIt-Anchor" href="#triplet_loss"></a> Triplet_loss</h2>
+<h2 id="triplet_loss">Triplet_loss</h2>
 <blockquote>
-<p>Triplet loss最初是在FaceNet的论文中提出，可以较好地学到人脸的embedding，相似的图像在embedding空间里是相近的，可以判断是否是同一个人脸。</p>
+<p>Triplet
+loss最初是在FaceNet的论文中提出，可以较好地学到人脸的embedding，相似的图像在embedding空间里是相近的，可以判断是否是同一个人脸。</p>
 </blockquote>
-<h3 id="目的"><a class="markdownIt-Anchor" href="#目的"></a> 目的</h3>
+<h3 id="目的">目的</h3>
 <ul>
-<li>
-<p>使具有相同标签的样本在embedding空间尽量接近。</p>
-</li>
-<li>
-<p>使具有不同标签的样本在embedding空间尽量远离。</p>
-</li>
+<li><p>使具有相同标签的样本在embedding空间尽量接近。</p></li>
+<li><p>使具有不同标签的样本在embedding空间尽量远离。</p></li>
 </ul>
 <p>如果只遵循以上两点，最后embedding空间中相同类别的样本间距离很小，不同类别的样本之间距离也会偏小。因此，需要加入margin。</p>
-<h3 id="原理"><a class="markdownIt-Anchor" href="#原理"></a> 原理</h3>
+<h3 id="原理">原理</h3>
 <p>输入是一个三元组<code>&lt;a, p, n&gt;</code>，其中</p>
 <ul>
 <li>a：anchor 原点</li>
@@ -326,8 +329,8 @@
 <li>n：negative 与a不同类别的样本</li>
 </ul>
 <p>最终的loss为</p>
-<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>L</mi><mo>=</mo><mi>m</mi><mi>a</mi><mi>x</mi><mo stretchy="false">(</mo><mi>d</mi><mo stretchy="false">(</mo><mi>a</mi><mo separator="true">,</mo><mi>p</mi><mo stretchy="false">)</mo><mo>−</mo><mi>d</mi><mo stretchy="false">(</mo><mi>a</mi><mo separator="true">,</mo><mi>n</mi><mo stretchy="false">)</mo><mo>+</mo><mi>m</mi><mi>a</mi><mi>r</mi><mi>g</mi><mi>i</mi><mi>n</mi><mo separator="true">,</mo><mn>0</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">L = max(d(a,p) - d(a,n) + margin, 0) 
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal">L</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">m</span><span class="mord mathnormal">a</span><span class="mord mathnormal">x</span><span class="mopen">(</span><span class="mord mathnormal">d</span><span class="mopen">(</span><span class="mord mathnormal">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">p</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">d</span><span class="mopen">(</span><span class="mord mathnormal">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">n</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">m</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">i</span><span class="mord mathnormal">n</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">0</span><span class="mclose">)</span></span></span></span></span></p>
+<p><span class="math display">\[ L = max(d(a,p) - d(a,n) + margin, 0)
+\]</span></p>
 <p>最小化L，则<code>d(a,p)-&gt;0，d(a,n)-&gt;margin</code></p>
 
                 
@@ -501,6 +504,7 @@
 
   
   
+
 
 
 
@@ -695,6 +699,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 

@@ -58,6 +58,7 @@
 
   
 <link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+<link rel="stylesheet" href="/css/mac.css">
 
 
 
@@ -231,7 +232,433 @@
   <div class="row mx-auto index-card">
     
     
-    <article class="col-12 col-md-12 mx-auto index-info">
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2021/03/14/2021-03-16-cuda-basic/" target="_self">
+          <img src="/img/one-piece/one-piece36.jpg" srcset="/img/loading.gif" lazyload alt="cuda编程的基础概念总结">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/03/14/2021-03-16-cuda-basic/" target="_self">
+          cuda编程的基础概念总结
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2021/03/14/2021-03-16-cuda-basic/" target="_self">
+        <div>
+          GPU的基础介绍 首先上一张显卡主板构造图。   dfs  其中GPU芯片是重点，其结构图如下，它一般有很多核心，这些核的学术名字叫流多处理器（stream multiprocessor，SM），每个SM根据GPU型号的不同由若干个流处理器（stream processor，SP）组成，SP的功能只有计算。   cuda  cuda编程的基本概念 主机端host与设备端device  一个工程，我
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-03-14 01:07" pubdate>
+              2021-03-14
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/c%E4%B8%8Ec/">#c与c++</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2021/03/03/2021-03-03-mutex/" target="_self">
+          <img src="/img/one-piece/one-piece35.jpg" srcset="/img/loading.gif" lazyload alt="C++并发编程中的锁---互斥元">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/03/03/2021-03-03-mutex/" target="_self">
+          C++并发编程中的锁---互斥元
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2021/03/03/2021-03-03-mutex/" target="_self">
+        <div>
+          说到并发编程就离不开锁的概念。锁其实是一种操作，这种操作可以避免竞争问题的出现。在c++中可以使用互斥元来实现锁的操作。 互斥元  互斥元也叫互斥量，在c++11中被命名为Mutex，所有其相关的类和函数都在头文件中。  在头文件mutex中一共有四种互斥元类，分别是：  std::mutex，最基本的互斥元类。 std::recursive_mutex，递归Mutex类（同一线程可以对互斥量多次
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-03-03 01:07" pubdate>
+              2021-03-03
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/c%E4%B8%8Ec/">#c与c++</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2021/01/24/2021-01-24-graph-cut/" target="_self">
+          <img src="/img/one-piece/one-piece34.jpg" srcset="/img/loading.gif" lazyload alt="图片分割之最大流最小割">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/01/24/2021-01-24-graph-cut/" target="_self">
+          图片分割之最大流最小割
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2021/01/24/2021-01-24-graph-cut/" target="_self">
+        <div>
+          在图像分割领域，最近几年基于深度学习的方法占据了绝对领先的地位。但是相对于黑匣子的深度学习，传统的方法更有几分味道。这次要介绍的是图割算法，这是一种基于能量优化的方法，在前景背景分割上很有效果。 1. 最大流与最小割  在了解图割之前，首先需要了解最大流与最小割的概念。  1.1 最小割min-cut 举例说明，如下一个有向加权图所示，从顶点S(source)到顶点T(sink)有三条路径，每条路
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-01-24 01:07" pubdate>
+              2021-01-24
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">#计算机视觉</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2021/01/17/2021-01-17-lens-camera/" target="_self">
+          <img src="/img/one-piece/one-piece32.jpg" srcset="/img/loading.gif" lazyload alt="镜头的参数与成像">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/01/17/2021-01-17-lens-camera/" target="_self">
+          镜头的参数与成像
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2021/01/17/2021-01-17-lens-camera/" target="_self">
+        <div>
+          镜头的参数与成像  最近几天手头刚好有一个闲置的变焦镜头，在把玩的同时对相机的成像特点又有了一些理解。为了不让这些理解被丢进记忆的垃圾堆，打算做一些记录和梳理。  镜头 镜头的参数其实是很多的，主要有  焦距：可以分为物理焦距与摄影焦距。 光圈：大小决定了图像的亮度，在拍摄高斯运动物体、曝光时间很短的应用中，应该选用大光圈镜头，以提高亮度。 景深：指的是在理想对焦状态下物体允许的前后方向的移动量。
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-01-17 01:07" pubdate>
+              2021-01-17
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">#计算机视觉</a>
+            
+              <a href="/tags/%E5%A4%9A%E4%BC%A0%E6%84%9F%E5%99%A8%E8%9E%8D%E5%90%88/">#多传感器融合</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2021/01/05/2021-01-05-auction/" target="_self">
+          <img src="/img/one-piece/one-piece30.jpg" srcset="/img/loading.gif" lazyload alt="拍卖算法">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/01/05/2021-01-05-auction/" target="_self">
+          拍卖算法
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2021/01/05/2021-01-05-auction/" target="_self">
+        <div>
+          拍卖算法  拍卖算法是一种解决目标分配问题的算法。额这个算法我看了网上好多博客的讲解，都不是很理解，最后直接debug了一个代码，总算弄清楚了。果然源码面前，了无秘密。  问题描述  情景描述：在一个拍卖场中，存在N个投标人，M件商品，需要将M件商品分配给投标人们。 单分配问题：每个投标人对所有商品都有意愿争取，但是每人最多只能中标一件商品。（更复杂的暂且不谈） 完全分配问题：是单分配问题，并且\
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-01-05 01:07" pubdate>
+              2021-01-05
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">#算法与数据结构</a>
+            
+              <a href="/tags/%E4%BB%BB%E5%8A%A1%E8%A7%84%E5%88%92/">#任务规划</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2021/01/05/2021-01-05-dijkstra-astar/" target="_self">
+          <img src="/img/one-piece/one-piece29.jpg" srcset="/img/loading.gif" lazyload alt="dijkstra算法和astar算法">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/01/05/2021-01-05-dijkstra-astar/" target="_self">
+          dijkstra算法和astar算法
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2021/01/05/2021-01-05-dijkstra-astar/" target="_self">
+        <div>
+          dijkstra算法和astar算法 图搜索算法  图搜索算法指在一个类似图的数据结构上进行路径搜索的算法的总称。二维网格地图其实就是一种类似图的数据结构，每个网格代表一个图节点，它连接着自身周围的四个相邻网格（图节点）。  可以将图搜索的图结构转换成搜索树结构。那么最具代表性的两类图搜索算法就是深度优先与广度优先算法。  需要提前强调的一点是，为了不会形成环路，已经访问过的节点需要做标记，并且不
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-01-05 01:07" pubdate>
+              2021-01-05
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">#算法与数据结构</a>
+            
+              <a href="/tags/%E8%B7%AF%E5%BE%84%E8%A7%84%E5%88%92/">#路径规划</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2021/01/05/2021-01-05-pigeon/" target="_self">
+          <img src="/img/one-piece/one-piece31.jpg" srcset="/img/loading.gif" lazyload alt="鸽群优化">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/01/05/2021-01-05-pigeon/" target="_self">
+          鸽群优化
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2021/01/05/2021-01-05-pigeon/" target="_self">
+        <div>
+          鸽群优化  鸽子的导航工具  太阳：鸽子可记忆鸽巢位置不同时刻的太阳高度角和方位角，并通过太阳高度信息进行导航； 磁场：鸽子上喙结构含有磁感应结构，磁石粒子的信号是通过鼻子经三叉神经反馈给大脑，从而提高导航信息。 地标：鸽子依靠重力场进行空间定位，通过比较鸽房的陀螺仪设置与其所在地的陀螺仪数值，设定一个初始的返航方向。 导航工具切换：鸽子会在旅程不同阶段使用不同导航工具：前期依赖太阳和磁场，后期依
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-01-05 01:07" pubdate>
+              2021-01-05
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E5%A4%9A%E6%9C%BA%E5%8D%8F%E5%90%8C/">#多机协同</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2020/12/17/2020-12-17-nullspace-observable/" target="_self">
+          <img src="/img/one-piece/one-piece28.jpg" srcset="/img/loading.gif" lazyload alt="系统的可观性问题分析与FEJ的简要说明">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2020/12/17/2020-12-17-nullspace-observable/" target="_self">
+          系统的可观性问题分析与FEJ的简要说明
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2020/12/17/2020-12-17-nullspace-observable/" target="_self">
+        <div>
+          1 系统可观性问题分析 1.1 数学基础 对于一个方程组：\(Ax=0\)，其中\(A\)维度为\(m \times n\)（其中列数为未知数的数量），\(x\)维度为\(n \times 1\)，则有  矩阵\(A\)是列满秩的（\(m \ge n\)，此处列数也是未知向量x的维数），则每个列向量之间线性无关，则上面方程的只存在0解（\(x\)对每列进行线性组合）； 矩阵\(A\)不是列满秩的，
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-12-17 01:07" pubdate>
+              2020-12-17
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E6%95%B0%E5%AD%A6/">#数学</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2020/08/15/2020-08-14-pytorch-network/" target="_self">
+          <img src="/img/one-piece/one-piece27.jpg" srcset="/img/loading.gif" lazyload alt="pytorch中组成网络的卷积、归一化、relu等常见结构">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2020/08/15/2020-08-14-pytorch-network/" target="_self">
+          pytorch中组成网络的卷积、归一化、relu等常见结构
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2020/08/15/2020-08-14-pytorch-network/" target="_self">
+        <div>
+          对pytorch中组成网络的各种结构进行介绍记录，防止忘掉。  第一类-提取特征并调整网络结构的层 第二类-归一化调整数值范围层 第三类-非线性激活函数层  提取并调整特征维度 2维卷积层torch.nn.Conv2d  卷积操作主要用来提取图像特征，卷积过程可以参考我之前的一篇文章中的一个动图。  12345678910CLASS torch.nn.Conv2d(	in_channels: in
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-08-15 01:07" pubdate>
+              2020-08-15
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">#深度学习</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2020/08/14/2020-08-14-pychram-remote/" target="_self">
+          <img src="/img/one-piece/one-piece26.jpg" srcset="/img/loading.gif" lazyload alt="pycharm远程调试">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
       <h1 class="index-header">
         
         <a href="/2020/08/14/2020-08-14-pychram-remote/" target="_self">
@@ -240,9 +667,9 @@
       </h1>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2020/08/14/2020-08-14-pychram-remote/" target="_self">
+      <a class="index-excerpt " href="/2020/08/14/2020-08-14-pychram-remote/" target="_self">
         <div>
-          我们在本地windows使用各种IDE可以很方便的调试代码，但是有的项目对内存或者显存需求量很大，本地的机器很难满足。实验室刚好有一个linux服务器，内存够大，gpu够给力，不过我没有在服务器上安装IDE的权限，于是就鼓捣了一下pycharm的远程调试。  pycharm远程调试 pycharm的远程调试其实就是利用ssh先将本地工程拷贝到远程服务器上，然后在远程服务器上运行，所以我们需要给py
+          我们在本地windows使用各种IDE可以很方便的调试代码，但是有的项目对内存或者显存需求量很大，本地的机器很难满足。实验室刚好有一个linux服务器，内存够大，gpu够给力，不过我没有在服务器上安装IDE的权限，于是就鼓捣了一下pycharm的远程调试。 pycharm远程调试 pycharm的远程调试其实就是利用ssh先将本地工程拷贝到远程服务器上，然后在远程服务器上运行，所以我们需要给pyc
         </div>
       </a>
 
@@ -268,371 +695,11 @@
     </article>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2020/08/08/2020-08-08-stereo-vision/" target="_self">
-          双目相机模型与标定
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2020/08/08/2020-08-08-stereo-vision/" target="_self">
-        <div>
-          单目相机无法恢复真实尺度，使得双目相机成为了很多开发者的选择。  双目相机模型 双目恢复深度进行三维重建的原理与人眼类似，为了进一步分析双目测距的原理，可以从下图深入理解双目相机模型：  双目相机一般由左眼和右眼两个水平放置的相机组成。上图中左右两个相机都是使用针孔相机模型，两个相机的成像平面在同一个水平面上，同时两个相机光心是水平放置的，因此对于一个P点，其在两个图像上的投影点的行坐标是相同的，
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2020-08-08 01:07" pubdate>
-              2020-08-08
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">#计算机视觉</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2020/07/13/2020-07-13-self-supervised-learning/" target="_self">
-          自监督学习备忘
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2020/07/13/2020-07-13-self-supervised-learning/" target="_self">
-        <div>
-          目录  第一类-基于数据生成的任务 第二类-基于数据变换的任务 第三类-基于多模态数据的自监督任务 对比学习   以下转载自知乎的一篇文章  自监督学习（self-supervised learning）可以被看作是机器学习的一种“理想状态”，模型直接从无标签数据中自行学习，无需标注数据。本文主要对当前自监督学习涉及到的一些方面进行总结（笔记）。  自监督学习简介  自监督学习的核心，在于如何自
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2020-07-13 01:07" pubdate>
-              2020-07-13
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">#机器学习</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2020/06/02/2020-06-02-matchine-learning/" target="_self">
-          机器学习中的常见函数总结（备忘）
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2020/06/02/2020-06-02-matchine-learning/" target="_self">
-        <div>
-          主要近来又发现本人的记忆力水平需要笔记辅助，因此写来备忘。  目录  Softmax函数 Triplet loss   Softmax函数 Softmax函数，也叫归一化指数函数，主要是用来辅助多分类任务。 应用场景： 对于一个k分类的问题，通过对一个物体的特征进行处理，得到一个k维向量v，最好的结果当然是正确分类的维度取值1，其他维度取值0. 但是一般情况下我们得到的结果是每个维度取值范围为从负
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2020-06-02 01:07" pubdate>
-              2020-06-02
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">#机器学习</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2020/01/07/2020-01-07-memory-alignment/" target="_self">
-          SSE/AVX加速时的内存对齐问题
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2020/01/07/2020-01-07-memory-alignment/" target="_self">
-        <div>
-          上个月比较忙，一篇博客都没写，这是2020第一篇～  这篇博客的内容主要参考了官网与一篇知乎上的文章   内存对齐问题 这个是在学习Eigen的过程中顺便学习的。Eigen中有较多的矩阵与向量运算，因此可以使用SSE、AVX等指令集进行加速，当编译时打开-march=native这个选项时，会尝试对Eigen中的运算进行加速。而加速时内存对齐，因此如果不满足就会报错。  向量化运算 向量化运算就是
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2020-01-07 01:07" pubdate>
-              2020-01-07
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/tools/">#tools</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2019/11/10/2019-11-10-spatial-coordinate-system/" target="_self">
-          空间坐标系系统介绍
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2019/11/10/2019-11-10-spatial-coordinate-system/" target="_self">
-        <div>
-          最近好忙，只能想起来就写一点，把空间坐标系总结一下。  空间坐标系  我们生活在宇宙中，我们生活在地球上。地球相对于宇宙肯定不是固定不动的，我们知道地球绕太阳公转，同时本身也有自转（具体地球的运动，请见附录）。  我们知道，定义坐标系都是有一个参照物的，因此，根据参照物的属性，我们首先可以将空间坐标系划分为两种：惯性坐标系与地球坐标系。  惯性坐标系 地球坐标系  地心地固坐标系  地心地固直角坐
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-11-10 01:07" pubdate>
-              2019-11-10
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E5%A4%9A%E4%BC%A0%E6%84%9F%E5%99%A8%E8%9E%8D%E5%90%88/">#多传感器融合</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2019/11/01/2019-11-01-BA-jacobian/" target="_self">
-          BA优化中Jacobian矩阵的计算
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2019/11/01/2019-11-01-BA-jacobian/" target="_self">
-        <div>
-          之前写过一篇讲解BA的博客，不过那篇主要侧重于讲解BA在slam中的应用与求解方式，但是忽略了对于细节的边的构造与jacobian矩阵的计算的讲解，前几天有人提醒我这一点，所以今天抽出来时间补充一下。  BA优化中的边（重投影误差） Bundle Adjustment，中文翻译有捆集调整、光束法平差。它的主要思想是最小化重投影误差。 BA优化的误差边也就是重投影误差边。   投影过程是将一个地图点
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-11-01 01:07" pubdate>
-              2019-11-01
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E6%95%B0%E5%AD%A6/">#数学</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2019/10/30/2019-10-30-camera-extrinsic/" target="_self">
-          vins中的外参标定
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2019/10/30/2019-10-30-camera-extrinsic/" target="_self">
-        <div>
-          之前写过一篇博客介绍vins中进行初始化的操作，其实在这之前，vins会首先进行外参的标定。今天终于找到时间写一下。  外参标定  外参 此处的外参指的是相机坐标系到imu坐标系（body）的变换矩阵。下文中会使用TbcT_{bc}Tbc​来表示。  vins中的设置 在vins中可以通过在配置文件中设置estimate_extrinsic值来选择对外参进行如何处理   将这个值设为0时代表提供的
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-10-30 01:07" pubdate>
-              2019-10-30
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E5%A4%9A%E4%BC%A0%E6%84%9F%E5%99%A8%E8%9E%8D%E5%90%88/">#多传感器融合</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2019/10/15/2019-10-15-robot-coordinate-transform/" target="_self">
-          机器人学中的坐标变换问题探讨
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2019/10/15/2019-10-15-robot-coordinate-transform/" target="_self">
-        <div>
-          在机器人学中，坐标变换是一个及其复杂但重要的问题。为了更清楚的表达，我们在本文中做出如下约定。   坐标、姿态的表达使用下标来表明坐标系。比如物体在A坐标系下的位置坐标为PAP_{A}PA​   将坐标系B的坐标变换到A坐标系的坐标的变换矩阵，记为TABT_{AB}TAB​   本文中使用的向量(x,y,z)(x,y,z)(x,y,z)是横向量，纵向量形式为(x,y,z)T(x,y,z)^T(x,
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-10-15 01:07" pubdate>
-              2019-10-15
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E6%95%B0%E5%AD%A6/">#数学</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2019/10/10/2019-10-10-ros-package-node/" target="_self">
-          ros中的包与节点与roslaunch的使用
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2019/10/10/2019-10-10-ros-package-node/" target="_self">
-        <div>
-          之前写过一篇关于ros入门的博客，但是这段时间我再看时发现当时比较关注全面性，所以在里面可以看到ros里几乎所有的基本知识。但是通篇看下来每一个讲的都没有很仔细，都是概念性的讲解。使得看完后，大家似乎对于ros的实现机制与功能模块有了一定的理解，但是如何使用ros呢？如何开发ros呢？好像还是有一些不是很懂。所以这一篇博客就会从ros使用的案例来说明，如何使用一个最小ros的功能包来跑起来节点。
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-10-10 01:07" pubdate>
-              2019-10-10
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/tools/">#tools</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
 
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/#board">3</a><a class="page-number" href="/page/4/#board">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/#board">11</a><a class="extend next" rel="next" href="/page/3/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/#board">3</a><a class="page-number" href="/page/4/#board">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/#board">12</a><a class="extend next" rel="next" href="/page/3/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 

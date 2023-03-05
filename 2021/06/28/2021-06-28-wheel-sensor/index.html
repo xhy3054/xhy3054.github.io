@@ -1,0 +1,1079 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon1.png">
+  <link rel="icon" href="/img/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Line">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="轮速计原理  磁电式轮速传感器是由永磁性磁芯和线圈组成。磁力线从磁芯的一极出来，穿过齿圈和空气，返回到磁芯的另一极。由于传感器的线圈圈绕在磁芯上，因此，这些磁力线也会穿过线圈。当车轮旋转时，与车轮同步的齿圈（转子）随之旋转，齿圈上的齿和间隙依次快速经过传感器的磁场，其结果是改变了磁路的磁阻，从而导致线圈中感应电势发生变化，产生一定幅值、频率的电势脉冲。 光电式轮速传感器：轮子转一圈打4096个光电">
+<meta property="og:type" content="article">
+<meta property="og:title" content="轮式里程计原理与状态传播数学推导">
+<meta property="og:url" content="http://line.com/2021/06/28/2021-06-28-wheel-sensor/index.html">
+<meta property="og:site_name" content="Line&#39;s Blog">
+<meta property="og:description" content="轮速计原理  磁电式轮速传感器是由永磁性磁芯和线圈组成。磁力线从磁芯的一极出来，穿过齿圈和空气，返回到磁芯的另一极。由于传感器的线圈圈绕在磁芯上，因此，这些磁力线也会穿过线圈。当车轮旋转时，与车轮同步的齿圈（转子）随之旋转，齿圈上的齿和间隙依次快速经过传感器的磁场，其结果是改变了磁路的磁阻，从而导致线圈中感应电势发生变化，产生一定幅值、频率的电势脉冲。 光电式轮速传感器：轮子转一圈打4096个光电">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://line.com/img/one-piece/one-piece44.jpg">
+<meta property="article:published_time" content="2021-06-27T17:07:24.000Z">
+<meta property="article:modified_time" content="2023-03-05T05:58:13.495Z">
+<meta property="article:author" content="Line">
+<meta property="article:tag" content="多传感器融合">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://line.com/img/one-piece/one-piece44.jpg">
+  
+  
+  
+  <title>轮式里程计原理与状态传播数学推导 - Line&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+<link rel="stylesheet" href="/css/mac.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"line.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Line</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default2.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="轮式里程计原理与状态传播数学推导"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-06-28 01:07" pubdate>
+          2021年6月28日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          8.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          69 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">轮式里程计原理与状态传播数学推导</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h3 id="轮速计原理">轮速计原理</h3>
+<ul>
+<li><strong>磁电式轮速传感器是由永磁性磁芯和线圈组成。</strong>磁力线从磁芯的一极出来，穿过齿圈和空气，返回到磁芯的另一极。由于传感器的线圈圈绕在磁芯上，因此，这些磁力线也会穿过线圈。当车轮旋转时，与车轮同步的齿圈（转子）随之旋转，齿圈上的齿和间隙依次快速经过传感器的磁场，其结果是改变了磁路的磁阻，从而导致线圈中感应电势发生变化，产生一定幅值、频率的电势脉冲。</li>
+<li><strong>光电式轮速传感器</strong>：轮子转一圈打4096个光电脉冲，通过光电脉冲的计数来获得当前转动的弧度（<span
+class="math inline">\(\frac{n}{4096}\)</span>个圆周）。</li>
+</ul>
+<blockquote>
+<p>可以发现其中磁电式轮速计测量得到的值是连续的，其原始测量可以通过一个常数系数转成轮子旋转的角速度，光电式测量的值不是连续的，其本身更像是里程计。</p>
+</blockquote>
+<h3 id="优点">优点</h3>
+<ul>
+<li>结构简单</li>
+<li>便宜（2个电机就可以）</li>
+<li>模型简单</li>
+</ul>
+<h3 id="两轮差速底盘的运动学模型">两轮差速底盘的运动学模型</h3>
+<ul>
+<li>模型</li>
+</ul>
+<p>传感器测量值为两个轮子的旋转角速度<span
+class="math inline">\(w_R,w_L\)</span>（此处角速度是轮子旋转的角速度，绕小圆）
+<span class="math display">\[
+\begin{align}
+w_{ml}= w_L + n_{wl} \\
+w_{mr}= w_R + n_{wr}
+\end{align}
+\]</span> 假设<span
+class="math inline">\(v,w\)</span>分别为车体的线速度和角速度（此处角速度是yaw姿态变化的速度），<span
+class="math inline">\(v_R,v_L\)</span>为两个轮子的线速度，<span
+class="math inline">\(d\)</span>为轮子距离底盘中心的距离，<span
+class="math inline">\(b\)</span>为两轮之间的距离（<span
+class="math inline">\(b=2d\)</span>），<span
+class="math inline">\(r_R，r_L\)</span>分别为两个轮子的半径。则 <span
+class="math display">\[
+\begin{align}
+v&amp;=\frac{v_R+v_L}{2}=\frac{w_R.r_R+w_L.r_L}{2} \\
+w&amp;=\frac{v_R-v_L}{b}=\frac{w_R.r_R-w_L.r_L}{b}
+\end{align}
+\]</span> 矩阵表示如下： <span class="math display">\[
+\left[\begin{array}{cc} v \\ w   \end{array}\right]=
+\left[\begin{array}{cc} \frac{r_L}{2} &amp; \frac{r_R}{2} \\
+-\frac{r_L}{b} &amp; \frac{r_R}{b}   \end{array}\right]
+\left[\begin{array}{cc} w_L \\ w_R   \end{array}\right] =
+J\left[\begin{array}{cc} w_L \\ w_R   \end{array}\right]
+\]</span></p>
+<ul>
+<li>原理</li>
+</ul>
+<p>假设当前小车绕半径为r的圆弧运动，则有(此处假设左轮更靠近圆心) <span
+class="math display">\[
+\begin{align}
+\frac{v_L}{r-d} &amp;= \frac{v_R}{r+d} \\
+v_L(r+d) &amp;= v_R (r-d) \\
+(v_R-v_L)r&amp;=(v_R+v_L)d \\
+r=&amp; \frac{(v_R+v_L)d}{v_R-v_L}
+\end{align}
+\]</span> 继续推导将r带入可以得到运动的角速度w <span
+class="math display">\[
+\begin{align}
+w&amp;=\frac{v_R}{r+d} \\
+r+d
+&amp;=\frac{(v_R+v_L)d}{(v_R-v_L)}+\frac{(v_R-v_L)d}{(v_R-v_L)}=2\frac{v_Rd}{(v_R-v_L)}
+\\
+w&amp;=\frac{(v_R-v_L)}{2d}
+\end{align}
+\]</span> 同样可以求得线速度如下 <span class="math display">\[
+\begin{align}
+v=w*r &amp;=\frac{(v_R-v_L)}{2d}\frac{(v_R+v_L)d}{(v_R-v_L)} \\
+&amp;= \frac{v_R+v_L}{2}
+\end{align}
+\]</span> 结论如下： <span class="math display">\[
+\begin{align}
+v&amp;=\frac{v_R+v_L}{2}=\frac{w_R.r_R+w_L.r_L}{2} \\
+w&amp;=\frac{v_R-v_L}{2d}=\frac{w_R.r_R-w_L.r_L}{2d}
+\end{align}
+\]</span></p>
+<blockquote>
+<p>虽然此处主要讨论了速度的相关公式，但是其实实际应用中我们不关心速度，上述公式乘以<span
+class="math inline">\(dt\)</span>就变成了距离与姿态变换并且依旧成立，后面的推导基于此。</p>
+</blockquote>
+<h3 id="位姿递推公式">位姿递推公式</h3>
+<ul>
+<li><span
+class="math inline">\((x,y,\theta)\)</span>为世界坐标系下的当前位姿；</li>
+<li><span
+class="math inline">\((dx,dy,d\theta)\)</span>为车体坐标系下的运动增量；</li>
+</ul>
+<p>所以叠加为（首先将增量从车体转换到世界坐标系，然后叠加）： <span
+class="math display">\[
+\left[\begin{array}{cc} x \\ y \\ \theta  \end{array}\right] =
+\left[\begin{array}{cc} x \\ y \\ \theta  \end{array}\right] +
+\left[\begin{array}{cc} cos\theta &amp; -sin\theta &amp; 0 \\ sin\theta
+&amp; cos\theta &amp; 0 \\ 0 &amp; 0 &amp; 1  \end{array}\right]
+\left[\begin{array}{cc} dx \\ dy \\ d\theta  \end{array}\right]
+\]</span></p>
+<blockquote>
+<p>可以发现此处的位姿是se2的，为了更加直观，下面会以kaist数据集为例，讲述拓展到se3上基于轮速计测量的状态传播过程。</p>
+</blockquote>
+<h3
+id="以kaist数据集为例说明轮速里程计状态传播过程">以kaist数据集为例说明轮速里程计(状态传播过程)</h3>
+<p><strong>测量数据说明</strong></p>
+<ul>
+<li>轮速计标定参数：
+<ul>
+<li>分辨率：<span class="math inline">\(resolution=4096\)</span></li>
+<li>左轮直径：<span class="math inline">\(R_l=0.623479\)</span></li>
+<li>右轮直径：<span class="math inline">\(R_r=0.622806\)</span></li>
+<li>两轮子之间距离：<span class="math inline">\(b=1.52439\)</span></li>
+</ul></li>
+<li>轮速计测量：
+<ul>
+<li>时间戳</li>
+<li>左轮目前计数<span class="math inline">\(m_l\)</span></li>
+<li>右轮目前计数<span class="math inline">\(m_r\)</span></li>
+</ul></li>
+</ul>
+<p><strong>均值传播</strong></p>
+<p>首先计算左轮<span class="math inline">\(k_l\)</span>与右轮<span
+class="math inline">\(k_r\)</span>（计数与距离的乘法系数） <span
+class="math display">\[
+\begin{align}
+k_l = R_l * \pi /resolution = 0.00047820240382508 \\
+k_r = R_r * \pi /resolution = 0.00047768621928995
+\end{align}
+\]</span> 假设上一时刻左轮计数是<span
+class="math inline">\(b_{ml}\)</span>，右轮计数是<span
+class="math inline">\(b_{mr}\)</span>，当前时刻左轮计数是<span
+class="math inline">\(e_{ml}\)</span>，右轮计数是<span
+class="math inline">\(e_{mr}\)</span>。则可以计算得到左轮的移动距离<span
+class="math inline">\(d_{l}\)</span>与右轮的移动距离<span
+class="math inline">\(d_r\)</span> <span class="math display">\[
+\begin{align}
+d_l = (e_{ml}-b_{ml})*k_l \\
+d_r = (e_{mr}-b_{mr})*k_r
+\end{align}
+\]</span>
+然后得到得到车体（两轮中点）前进的距离与旋转的角度(yaw角)：<strong>本文重点公式</strong>
+<span class="math display">\[
+\begin{align}
+dp = 0.5(d_l+d_r) \\
+\theta = (d_r-d_l)/b
+\end{align}
+\]</span> 传播位姿：然后更新系统中车体的位姿<span
+class="math inline">\(R_O^G,p_O^G\)</span> <span class="math display">\[
+\begin{align}
+p_O^G &amp;= p_O^G + R_O^G * \left[\begin{array}{cc} dp \\ 0  \\
+0   \end{array}\right] = p_O^G + R_O^G * dx
+  \\
+R_O^G &amp;=  R_O^G * exp_{so3}(\left[\begin{array}{cc} 0 \\ 0  \\
+\theta   \end{array}\right] ) = R_O^G * \left[\begin{array}{cc}
+cos\theta &amp; -sin\theta &amp; 0 \\ sin\theta &amp; cos\theta &amp; 0
+\\ 0 &amp; 0 &amp; 1  \end{array}\right] = R_O^G * dR
+\end{align}
+\]</span></p>
+<blockquote>
+<p>此处可以发现相对于上一时刻的位移直接用<span
+class="math inline">\([dp,0,0]^T\)</span>表示了，这其实是忽略了<span
+class="math inline">\(\theta\)</span>的影响的（小车车头朝向自身坐标系的x轴方向，可以认为时间很短的情况下，<span
+class="math inline">\(\theta\)</span>很小，<span
+class="math inline">\(cos\theta\)</span>接近1，<span
+class="math inline">\(sin\theta\)</span>接近1），会有一定的误差。</p>
+</blockquote>
+<p><strong>协方差传播</strong></p>
+<p>对于协方差传播原理详见之前<a href="">系统误差状态维护的博客</a>。
+<span class="math display">\[
+\tilde{x}_{k+1} = F_c \tilde{x_k} + G_c n
+\]</span> 其中，<span
+class="math inline">\(F_c\)</span>是k+1时刻系统状态相对于k时刻系统状态的雅克比，<span
+class="math inline">\(G_c\)</span>是k+1时刻系统状态相对于输入噪声（此处输入噪声协方差就是dR与dx的噪声协方差矩阵）的雅克比。由上面的状态转移方程，可以得到（哈密顿）
+<span class="math display">\[
+F_c = \begin{bmatrix}{cc} dR^T &amp; 0 \\
+-R_O^G  [dx]_{\times}   &amp;  I \end{bmatrix}
+\]</span></p>
+<p><span class="math display">\[
+G_c= \left[\begin{array}{cc} I_3 &amp; 0 \\ 0   &amp;  R_O^G
+\end{array}\right]
+\]</span> 车体位姿的协方差矩阵（<span
+class="math inline">\(6\times6\)</span>）转移为 <span
+class="math display">\[
+Cov_{new} = F_c . Cov_{old}. F_c^T +  G_c . Cov_n . G_c^T
+\]</span> 其中<span
+class="math inline">\(Cov_n\)</span>是自己设置的一般设置为如下对角矩阵
+<span class="math display">\[
+\left[\begin{array}{cc} 10^{-6} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0
+\\ 0 &amp; 10^{-6} &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp;
+{\theta}^2*noise^2 &amp; 0 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 0 &amp;
+dp^2*noise^2 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 0 &amp; 0 &amp;
+dp^2*noise^2 &amp; 0 \\ 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;
+10^{-4}  \end{array}\right]
+\]</span>
+可以发现其中roll和pitch角误差还有z轴移动噪声其实我们是没有的，都设置了一个比较小的值，而yaw和x，y的噪声是有迹可循的，其中noise可以通过轮速计的分辨率获得，不过一般都会设置的偏大一些。</p>
+<blockquote>
+<p>可以发现此处对odo的建模其实是把其当做里程计来使用，这是不够准确的。更精确的轮速计的建模后续会整理上来。</p>
+</blockquote>
+<h3 id="更精确的轮速计建模">更精确的轮速计建模</h3>
+<blockquote>
+<p>哈密顿</p>
+</blockquote>
+<p><strong>均值传播</strong></p>
+<p>首先是轮速计测量 <span class="math display">\[
+\begin{align}
+w_{ml} = w_l + n_{wl} \\
+w_{mr} = w_r + n_{wr}
+\end{align}
+\]</span> 其中<span
+class="math inline">\(w\)</span>为角速度，一般磁电轮速计测量的raw数据可以看成是角速度。其中<span
+class="math inline">\(n\)</span>是零均值高斯白噪。结合轮速计的内参可以得到车体的角速度与线速度
+<span class="math display">\[
+\begin{align}
+o_w=(w_rr_r-w_lr_l)/b \\
+o_v=(w_rr_r+w_lr_l)/2
+\end{align}
+\]</span> 其中<span
+class="math inline">\([r_l,r_r,b]^T\)</span>是轮速度的内参（分别是左右轮半径、左右轮距离）。据此，假设经过了一个很小的时间间隔<span
+class="math inline">\(\Delta t\)</span>，此时小车在二维平面上运动了
+<span class="math display">\[
+\begin{align}
+d\theta = o_w * \Delta t = (w_rr_r-w_lr_l)\Delta t/b = (d_r-d_l)/b \\
+dp = o_v * \Delta t = (w_rr_r+w_lr_l)\Delta t/2 = (d_r+d_l)/2
+\end{align}
+\]</span> 其中<span
+class="math inline">\(d\theta\)</span>是小车在2维平面上逆时针（从右向左拐弯）旋转的角度，dp是小车沿着<span
+class="math inline">\(d\theta\)</span>角度直线运动的距离，因此将dp分解称为dx和dy后，小车的运动可以概括为
+<span class="math display">\[
+\begin{align}
+d\theta = o_w * \Delta t = (w_rr_r-w_lr_l)\Delta t/b = (d_r-d_l)/b \\
+dx = dp*cos(d\theta) = (d_r+d_l)cos(d\theta)/2  \\
+dy = dp*sin(d\theta) = (d_r+d_l)sin(d\theta)/2
+\end{align}
+\]</span> 将上面转成三维情况，即相对初始时刻旋转向量（轴角表示）为<span
+class="math inline">\(d\theta=\left[\begin{array}{cc} 0 \\ 0 \\ d\theta
+\end{array}\right]\)</span>，平移为<span
+class="math inline">\(\left[\begin{array}{cc} dx \\ dy \\ 0
+\end{array}\right]\)</span>。所以 <span class="math display">\[
+\begin{align}
+p_O^G &amp;= p_O^G + R_O^G * \left[\begin{array}{cc} dx \\ dy  \\
+0   \end{array}\right]
+  \\
+R_O^G &amp;=  R_O^G * exp_{so3}(\left[\begin{array}{cc} 0 \\ 0  \\
+d\theta   \end{array}\right] ) = R_O^G * \left[\begin{array}{cc}
+cos(d\theta) &amp; -sin(d\theta) &amp; 0 \\ sin(d\theta) &amp;
+cos(d\theta) &amp; 0 \\ 0 &amp; 0 &amp; 1  \end{array}\right] = R_O^G *
+dR
+\end{align}
+\]</span> <strong>协方差传播</strong></p>
+<p>对于协方差传播原理详见之前<a href="">系统误差状态维护的博客</a>。
+<span class="math display">\[
+\tilde{x}_{k+1} = F_c \tilde{x_k} + G_c n
+\]</span> 其中，<span
+class="math inline">\(F_c\)</span>是k+1时刻系统状态相对于k时刻系统状态的雅克比，<span
+class="math inline">\(G_c\)</span>是k+1时刻系统状态相对于输入噪声（此处输入噪声协方差就是<span
+class="math inline">\(d_r\)</span>与<span
+class="math inline">\(d_l\)</span>的噪l声协方差矩阵）的雅克比。由上面的状态转移方程，可以得到（哈密顿）
+<span class="math display">\[
+F_c = \left[\begin{array}{cc} dR^T &amp; 0 \\
+-R_O^G  \left[\begin{array}{cc} dx \\ dy  \\
+0   \end{array}\right]_{\times}   &amp;  I \end{array}\right]
+\]</span></p>
+<p><span class="math display">\[
+G_c= \left[\begin{array}{cc} R_O^G\ dR \left[\begin{array}{cc} 0 \\
+0  \\ 1/b   \end{array}\right] &amp; R_O^G\ dR \left[\begin{array}{cc} 0
+\\ 0  \\ -1/b   \end{array}\right] \\ R_O^G \left[\begin{array}{cc}
+\frac{cos(d\theta)}{2} - \frac{(d_r+d_l)}{2b}sin(d\theta) \\
+\frac{sin(d\theta)}{2} + \frac{(d_r+d_l)}{2b}cos(d\theta) \\
+0   \end{array}\right]  &amp;  R_O^G \left[\begin{array}{cc}
+\frac{cos(d\theta)}{2} + \frac{(d_r+d_l)}{2b}sin(d\theta) \\
+\frac{sin(d\theta)}{2} -
+\frac{(d_r+d_l)}{2b}cos(d\theta)  \\0   \end{array}\right]
+\end{array}\right]
+\]</span> 其中 <span class="math display">\[
+\begin{align}
+\frac{d\theta}{d_r}&amp;=\frac{1}{b} \\
+\frac{d\theta}{d_l}&amp;=-\frac{1}{b} \\
+\frac{dx}{d_r}&amp;=\frac{cos(d\theta)}{2} -
+\frac{(d_r+d_l)}{2b}sin(d\theta) \\
+\frac{dx}{d_l}&amp;=\frac{cos(d\theta)}{2} +
+\frac{(d_r+d_l)}{2b}sin(d\theta) \\
+\frac{dy}{d_r}&amp;=\frac{sin(d\theta)}{2} +
+\frac{(d_r+d_l)}{2b}cos(d\theta) \\
+\frac{dy}{d_l}&amp;=\frac{sin(d\theta)}{2} -
+\frac{(d_r+d_l)}{2b}cos(d\theta) \\
+\end{align}
+\]</span></p>
+<p>车体位姿的协方差矩阵（<span
+class="math inline">\(6\times6\)</span>）转移为 <span
+class="math display">\[
+Cov_{new} = F_c . Cov_{old}. F_c^T +  G_c . Cov_n . G_c^T
+\]</span> 其中<span
+class="math inline">\(Cov_n\)</span>是自己设置的一般设置为如下对角矩阵
+<span class="math display">\[
+Cov_n = \left[\begin{array}{cc} k_r*k_r &amp; 0 \\ 0 &amp;
+k_l*k_l  \end{array}\right]
+\]</span> 对角线是误差的平方，其中<span
+class="math inline">\(k_r\)</span>与<span
+class="math inline">\(k_l\)</span>前面有计算，表示的是编码器前后差1时轮子移动的距离。（为了系统稳定可靠，可以将协方差放大一点）</p>
+<h2 id="轮式里程计标定方法">轮式里程计标定方法</h2>
+<h3
+id="内参标定与其他传感器比如激光视觉一同标定">内参标定（与其他传感器比如激光、视觉一同标定）</h3>
+<p>从上述可知，轮式里程计需要标定的是<span
+class="math inline">\(k_l,k_r,b\)</span>。(也有标定左右轮半径+b的，此处就是)，外参需要标定的是相机与odo之间的外参。</p>
+<ul>
+<li><p>旷视开源了一个相机odo标定的<a
+target="_blank" rel="noopener" href="https://github.com/MegviiRobot/CamOdomCalibraTool">代码</a></p></li>
+<li><p>作者：旷视科技 链接：https://zhuanlan.zhihu.com/p/101727151
+来源：知乎
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+<p>我们已将Cam_Odo的标定代码开源：<a
+href="https://link.zhihu.com/?target=https%3A//github.com/MegviiRobot/CamOdomCalibraTool">https://github.com/MegviiRobot/CamOdomCalibraTool</a>。代码使用<strong>方案二</strong>，因为要同时标定码盘内参（左右轮半径和轮距）和相机码盘外参（旋转外参3个角度，平移外参的前两维，第三维在平面运动下不可观）。标定流程分为【采集并筛选数据】，【解析计算标定参数】，【优化refine标定结果】这三个步骤。接下来我们概要说明一下各个步骤和相关注意点。</p>
+<p><strong>采集并筛选数据</strong></p>
+<ul>
+<li>采集数据时尽量走S路线以保证机体有足够的平移和旋转（充足的激励）。</li>
+<li>注意修改wheel_callback函数，确保odoDatas里存的是odo数据的元素是左右轮转速（rad/s）。我们的代码里由于odo_msg里是用出厂时带的码盘内参算出来的线速度和角速度，所以先用出厂码盘参数还原了一下初始转速，才push进了odoDatas。</li>
+<li>采集图像时，采用的apriltag2来解算的cam位姿（相关代码在calc_cam_pose文件夹内，所需<a
+href="https://link.zhihu.com/?target=https%3A//drive.google.com/file/d/0B0T1sizOvRsUQVVCZEV2QXg2WWc/edit%3Fusp%3Dsharing">apriltag选用kalibr里的50cm×50cm</a>），计算帧间位姿变换后，把旋转变成轴角表示，计算帧间平移等存入cam_data并push到camDatas中。</li>
+<li>筛选数据，【nan数据】、【运动平移太小的】、【相机帧间旋转的旋转轴偏离平面法向量的】（我们相机是x右y下z前所以旋转轴应该在[0
+-1
+0]附近，偏离多的说明那一次的帧间运动可能存在地不平的情况，舍之）、【运动角度（/转速）太小的】、【cam和odo转的角度方向不同的】（多是延时导致，在运动发生变化时延时会导致方向不一致）等情况下的数据均被剔除。</li>
+<li>对odo数据进行插值（根据图像时间戳），并求得两个cam帧之间多个odo数据的线速度和角速度均值保存起来。</li>
+</ul>
+<p><strong>解析计算标定参数</strong></p>
+<p>这一部分主要包括三个函数，estimateRyx、correctCamera和calib。</p></li>
+</ul>
+<h3 id="轮式内参已知标定其与相机外参">轮式内参已知标定其与相机外参</h3>
+<p>问题定义：已知相机帧间运动<span
+class="math inline">\(R_{c_i}^{c_{i+1}}，p_{c_i}^{c_{i+1}}\)</span>，与odo的帧间运动<span
+class="math inline">\(R_{o_i}^{o_{i+1}}，p_{o_i}^{o_{i+1}}\)</span>，还已知了odo的内参（左右轮半径和距离），要标定的是cam和odo之间的<span
+class="math inline">\(R_{c}^{o}，p_{c}^{o}\)</span></p>
+<p>首先根据经典的手眼标定公式<span
+class="math inline">\(AX=XB\)</span>可得 <span class="math display">\[
+R_{o_i}^{o_{i+1}} R_{c}^{o} = R_{c}^{o}R_{c_i}^{c_{i+1}} \\
+(R_{o_i}^{o_{i+1}} - I_3) p_c^o = R_c^o p_{c_i}^{c_{i+1}} -
+p_{o_i}^{o_{i+1}}
+\]</span></p>
+<blockquote>
+<p>其中第一个式子是通过两种形式求得<span
+class="math inline">\(R_{c_i}^{o_{i+1}}\)</span>，第二个式子是</p>
+</blockquote>
+<p>可以发现只要帧间运动的测量够多，这个方程就可以解出来。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%A4%9A%E4%BC%A0%E6%84%9F%E5%99%A8%E8%9E%8D%E5%90%88/" class="category-chain-item">多传感器融合</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%A4%9A%E4%BC%A0%E6%84%9F%E5%99%A8%E8%9E%8D%E5%90%88/">#多传感器融合</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>轮式里程计原理与状态传播数学推导</div>
+      <div>http://line.com/2021/06/28/2021-06-28-wheel-sensor/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Line</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年6月28日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/08/21/2021-08-21-multi-sensor-time-calib/" title="多传感器时间同步方法">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">多传感器时间同步方法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/06/07/2021-06-07-nullspace-project/" title="零空间投影">
+                        <span class="hidden-mobile">零空间投影</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

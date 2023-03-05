@@ -16,18 +16,20 @@
   <meta name="author" content="Line">
   <meta name="keywords" content="">
   
-    <meta name="description" content="what’s Anaconda Anaconda,是用于python编程环境管理的一个工具。它让你可以为每一个项目单独的构建自己的python编程环境，因此很好的解决了不同项目之间的串扰问题。并且使得你的工作更加清晰有条理。  install Anaconda 从官网下载安装文件，在linux下是一个类似Anaconda2-5.1.0-Linux-x86_64.sh文件，安装只需运行 1$ ba">
+    <meta name="description" content="what&#39;s Anaconda Anaconda,是用于python编程环境管理的一个工具。它让你可以为每一个项目单独的构建自己的python编程环境，因此很好的解决了不同项目之间的串扰问题。并且使得你的工作更加清晰有条理。 install Anaconda 从官网下载安装文件，在linux下是一个类似Anaconda2-5.1.0-Linux-x86_64.sh文件，安装只需运行 1$ bash">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Anaconda简要教程与jupyter book的安装">
 <meta property="og:url" content="http://line.com/2018/04/12/2018-04-12-anaconda-simple/index.html">
 <meta property="og:site_name" content="Line&#39;s Blog">
-<meta property="og:description" content="what’s Anaconda Anaconda,是用于python编程环境管理的一个工具。它让你可以为每一个项目单独的构建自己的python编程环境，因此很好的解决了不同项目之间的串扰问题。并且使得你的工作更加清晰有条理。  install Anaconda 从官网下载安装文件，在linux下是一个类似Anaconda2-5.1.0-Linux-x86_64.sh文件，安装只需运行 1$ ba">
+<meta property="og:description" content="what&#39;s Anaconda Anaconda,是用于python编程环境管理的一个工具。它让你可以为每一个项目单独的构建自己的python编程环境，因此很好的解决了不同项目之间的串扰问题。并且使得你的工作更加清晰有条理。 install Anaconda 从官网下载安装文件，在linux下是一个类似Anaconda2-5.1.0-Linux-x86_64.sh文件，安装只需运行 1$ bash">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://line.com/img/anaconda.jpg">
 <meta property="article:published_time" content="2018-04-11T18:07:24.000Z">
-<meta property="article:modified_time" content="2023-01-09T07:28:58.168Z">
+<meta property="article:modified_time" content="2023-03-05T06:15:46.010Z">
 <meta property="article:author" content="Line">
 <meta property="article:tag" content="tools">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://line.com/img/anaconda.jpg">
   
   
   
@@ -42,8 +44,6 @@
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
 
 
 
@@ -69,6 +69,7 @@
 
   
 <link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+<link rel="stylesheet" href="/css/mac.css">
 
 
 
@@ -284,86 +285,63 @@
             
               <div class="markdown-body">
                 
-                <h3 id="whats-anaconda"><a class="markdownIt-Anchor" href="#whats-anaconda"></a> what’s Anaconda</h3>
+                <h3 id="whats-anaconda">what's Anaconda</h3>
 <p><strong>Anaconda</strong>,是用于python编程环境管理的一个工具。它让你可以为每一个项目单独的构建自己的python编程环境，因此很好的解决了不同项目之间的串扰问题。并且使得你的工作更加清晰有条理。</p>
-<h3 id="install-anaconda"><a class="markdownIt-Anchor" href="#install-anaconda"></a> install Anaconda</h3>
-<p>从<a target="_blank" rel="noopener" href="https://www.anaconda.com/download/">官网</a>下载安装文件，在linux下是一个类似<code>Anaconda2-5.1.0-Linux-x86_64.sh</code>文件，安装只需运行</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ bash Anaconda2-5.1.0-Linux-x86_64.sh <br></code></pre></td></tr></table></figure>
-<h3 id="anaconda启用与停用"><a class="markdownIt-Anchor" href="#anaconda启用与停用"></a> Anaconda启用与停用</h3>
+<h3 id="install-anaconda">install Anaconda</h3>
+<p>从<a
+target="_blank" rel="noopener" href="https://www.anaconda.com/download/">官网</a>下载安装文件，在linux下是一个类似<code>Anaconda2-5.1.0-Linux-x86_64.sh</code>文件，安装只需运行
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ bash Anaconda2-5.1.0-Linux-x86_64.sh <br></code></pre></td></tr></table></figure></p>
+<h3 id="anaconda启用与停用">Anaconda启用与停用</h3>
 <p>安装的过程中会有两次让你确认的交互，第一次是让你同意他的协议，输入yes即可；第二次是问你是否将anaconda/bin添加到环境变量中，一般来说点击yes是没问题的，这样安装完，就直接和你的python3命令绑定了。如果这一步输入了no，相当于默认没有启动anaconda,需要去环境变量中添加，方法如下：</p>
-<ol>
-<li>
-<p>打开终端并输入<code>gedit ~/.bashrc</code></p>
-</li>
-<li>
-<p>在<code>.bashrc</code>文件末尾输入<code>export PATH=/home/xhy/anaconda3/bin:$PATH </code>,路径换为<strong>自己的</strong>，然后保存。</p>
-</li>
-<li>
-<p>终端输入<code>source~/.bashrc</code>，使得立即生效。</p>
-</li>
+<ol type="1">
+<li><p>打开终端并输入<code>gedit ~/.bashrc</code></p></li>
+<li><p>在<code>.bashrc</code>文件末尾输入<code>export PATH=/home/xhy/anaconda3/bin:$PATH</code>,路径换为<strong>自己的</strong>，然后保存。</p></li>
+<li><p>终端输入<code>source~/.bashrc</code>，使得立即生效。</p></li>
 </ol>
 <p>若想停用anaconda，方法如下：</p>
-<ol>
-<li>
-<p>打开终端并输入<code>gedit ~/.bashrc</code></p>
-</li>
-<li>
-<p>找到刚才添加的那行路径注释掉</p>
-</li>
-<li>
-<p>终端输入<code>source~/.bashrc</code>，使得立即生效。</p>
-</li>
-<li>
-<p>重开一终端即可看到效果。</p>
-</li>
+<ol type="1">
+<li><p>打开终端并输入<code>gedit ~/.bashrc</code></p></li>
+<li><p>找到刚才添加的那行路径注释掉</p></li>
+<li><p>终端输入<code>source~/.bashrc</code>，使得立即生效。</p></li>
+<li><p>重开一终端即可看到效果。</p></li>
 </ol>
-<h3 id="使用anaconda"><a class="markdownIt-Anchor" href="#使用anaconda"></a> 使用Anaconda</h3>
-<p>列出已有的环境</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ conda <span class="hljs-built_in">env</span> list<br></code></pre></td></tr></table></figure>
-<p>基于<strong>python2</strong>创建一个名为<strong>tensorflow</strong>的环境</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ conda create -n tensorflow python=2 <br></code></pre></td></tr></table></figure>
-<p>进入环境<strong>tensorflow</strong>（source可用conda替换）</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ <span class="hljs-built_in">source</span> activate tensorflow<br></code></pre></td></tr></table></figure>
-<p>列出此<strong>python</strong>环境下已有的包</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ conda list<br><span class="hljs-comment">#或者 </span><br>$ pip list<br></code></pre></td></tr></table></figure>
-<p>查询某一个包(比如numpy)的版本信息</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ conda search numpy<br></code></pre></td></tr></table></figure>
-<p>此<strong>python</strong>环境下安装<strong>tensorflow</strong>（其他包类似）（也可以用<strong>pip</strong>安装）</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ conda install tensorflow <br><span class="hljs-comment">#也可以pip管理</span><br>$ pip install tensorflow<br></code></pre></td></tr></table></figure>
-<p>卸载包</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ conda remove tensorflow<br><span class="hljs-comment">#如果pip管理</span><br>$ pip uninstall tensorflow<br></code></pre></td></tr></table></figure>
-<p>离开<strong>tensorflow</strong>环境（source可用conda替换）</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ <span class="hljs-built_in">source</span> deactivate<br></code></pre></td></tr></table></figure>
-<p>删除<strong>tensorflow</strong>环境</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ conda <span class="hljs-built_in">env</span> remove -n tensorflow<br></code></pre></td></tr></table></figure>
-<p>如果换了一台新电脑，想要将旧电脑上配置的这个<strong>tensorflow</strong>环境搬过去，先将此环境下的配置信息导出到一个<code>.yaml</code>文件中</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ conda <span class="hljs-built_in">env</span> <span class="hljs-built_in">export</span> &gt; ~/environment.yaml <br></code></pre></td></tr></table></figure>
-<p>然后在新电脑上新建<strong>tensorflow</strong>环境，然后根据<code>.yaml</code>文件更新环境</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ conda <span class="hljs-built_in">env</span> update -f /path/to/environment.yml <br></code></pre></td></tr></table></figure>
-<h3 id="anaconda的小毛病"><a class="markdownIt-Anchor" href="#anaconda的小毛病"></a> anaconda的小毛病</h3>
+<h3 id="使用anaconda">使用Anaconda</h3>
+<p>列出已有的环境 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ conda <span class="hljs-built_in">env</span> list<br></code></pre></td></tr></table></figure></p>
+<p>基于<strong>python2</strong>创建一个名为<strong>tensorflow</strong>的环境
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ conda create -n tensorflow python=2 <br></code></pre></td></tr></table></figure></p>
+<p>进入环境<strong>tensorflow</strong>（source可用conda替换）
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ <span class="hljs-built_in">source</span> activate tensorflow<br></code></pre></td></tr></table></figure></p>
+<p>列出此<strong>python</strong>环境下已有的包 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ conda list<br><span class="hljs-comment">#或者 </span><br>$ pip list<br></code></pre></td></tr></table></figure></p>
+<p>查询某一个包(比如numpy)的版本信息 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ conda search numpy<br></code></pre></td></tr></table></figure></p>
+<p>此<strong>python</strong>环境下安装<strong>tensorflow</strong>（其他包类似）（也可以用<strong>pip</strong>安装）
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ conda install tensorflow <br><span class="hljs-comment">#也可以pip管理</span><br>$ pip install tensorflow<br></code></pre></td></tr></table></figure></p>
+<p>卸载包 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ conda remove tensorflow<br><span class="hljs-comment">#如果pip管理</span><br>$ pip uninstall tensorflow<br></code></pre></td></tr></table></figure></p>
+<p>离开<strong>tensorflow</strong>环境（source可用conda替换）
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ <span class="hljs-built_in">source</span> deactivate<br></code></pre></td></tr></table></figure></p>
+<p>删除<strong>tensorflow</strong>环境 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ conda <span class="hljs-built_in">env</span> remove -n tensorflow<br></code></pre></td></tr></table></figure></p>
+<p>如果换了一台新电脑，想要将旧电脑上配置的这个<strong>tensorflow</strong>环境搬过去，先将此环境下的配置信息导出到一个<code>.yaml</code>文件中
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ conda <span class="hljs-built_in">env</span> <span class="hljs-built_in">export</span> &gt; ~/environment.yaml <br></code></pre></td></tr></table></figure></p>
+<p>然后在新电脑上新建<strong>tensorflow</strong>环境，然后根据<code>.yaml</code>文件更新环境
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ conda <span class="hljs-built_in">env</span> update -f /path/to/environment.yml <br></code></pre></td></tr></table></figure></p>
+<h3 id="anaconda的小毛病">anaconda的小毛病</h3>
 <ul>
-<li>
-<p>如果你用pip安装的包发现也装在了系统Python下，是因为使用了系统python的pip，指定路径就好了<code>/home/xhy/anaconda3/bin/pip install 包名 </code></p>
-</li>
-<li>
-<p>anaconda并不是完美的，虽然anaconda提供conda与pip方式在独立的env下安装Python包，但是我们知道有些包一般是用apt安装的。比如说pillow包是一个常用的Python图像处理包。但是一般安装这个包是用<code>sudo apt-get install python-imaging</code>命令安装。而apt安装的Python包默认安装在系统Python目录下，所以在anaconda的此env下的	Python并不能import到（当然你可以在import时指定路径我猜测），于是就很烦，查了一下原来这种情况也是可以安装的，虽然直接Pip和conda都找不到python-imaging包，但是可以用命令<code>conda install -c anaconda pillow </code>安装。（可以google下anaconda如何安装××包，前提你得知道包名）</p>
-</li>
+<li><p>如果你用pip安装的包发现也装在了系统Python下，是因为使用了系统python的pip，指定路径就好了<code>/home/xhy/anaconda3/bin/pip install 包名</code></p></li>
+<li><p>anaconda并不是完美的，虽然anaconda提供conda与pip方式在独立的env下安装Python包，但是我们知道有些包一般是用apt安装的。比如说pillow包是一个常用的Python图像处理包。但是一般安装这个包是用<code>sudo apt-get install python-imaging</code>命令安装。而apt安装的Python包默认安装在系统Python目录下，所以在anaconda的此env下的
+Python并不能import到（当然你可以在import时指定路径我猜测），于是就很烦，查了一下原来这种情况也是可以安装的，虽然直接Pip和conda都找不到python-imaging包，但是可以用命令<code>conda install -c anaconda pillow</code>安装。（可以google下anaconda如何安装××包，前提你得知道包名）</p></li>
 </ul>
-<h2 id="安装jupyter-lab"><a class="markdownIt-Anchor" href="#安装jupyter-lab"></a> 安装jupyter lab</h2>
+<h2 id="安装jupyter-lab">安装jupyter lab</h2>
 <ul>
 <li>安装：</li>
 </ul>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">conda install -c conda-forge jupyterlab<br><span class="hljs-comment"># 或者</span><br>pip install jupyterlab<br></code></pre></td></tr></table></figure>
 <ul>
-<li>
-<p>启动服务</p>
-<p>jupyter lab --ip=0.0.0.0 --port=8080</p>
-</li>
+<li><p>启动服务</p>
+<p>jupyter lab --ip=0.0.0.0 --port=8080</p></li>
 </ul>
 <blockquote>
 <p>windows的话直接安装anaconda，然后在navigator里便可以找到jupyter</p>
 </blockquote>
-<h2 id="切换清华镜像源"><a class="markdownIt-Anchor" href="#切换清华镜像源"></a> 切换清华镜像源</h2>
+<h2 id="切换清华镜像源">切换清华镜像源</h2>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/<br>conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/<br>conda config --<span class="hljs-built_in">set</span> show_channel_urls <span class="hljs-built_in">yes</span><br></code></pre></td></tr></table></figure>
 
                 
@@ -531,6 +509,7 @@
 
   
   
+
 
 
 
@@ -725,6 +704,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 

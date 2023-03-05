@@ -16,18 +16,20 @@
   <meta name="author" content="Line">
   <meta name="keywords" content="">
   
-    <meta name="description" content="对pytorch中组成网络的各种结构进行介绍记录，防止忘掉。  第一类-提取特征并调整网络结构的层 第二类-归一化调整数值范围层 第三类-非线性激活函数层   提取并调整特征维度  2维卷积层torch.nn.Conv2d  卷积操作主要用来提取图像特征，卷积过程可以参考我之前的一篇文章中的一个动图。  12345678910CLASS torch.nn.Conv2d(	in_channels:">
+    <meta name="description" content="对pytorch中组成网络的各种结构进行介绍记录，防止忘掉。  第一类-提取特征并调整网络结构的层 第二类-归一化调整数值范围层 第三类-非线性激活函数层  提取并调整特征维度 2维卷积层torch.nn.Conv2d  卷积操作主要用来提取图像特征，卷积过程可以参考我之前的一篇文章中的一个动图。  12345678910CLASS torch.nn.Conv2d(	in_channels: in">
 <meta property="og:type" content="article">
 <meta property="og:title" content="pytorch中组成网络的卷积、归一化、relu等常见结构">
 <meta property="og:url" content="http://line.com/2020/08/15/2020-08-14-pytorch-network/index.html">
 <meta property="og:site_name" content="Line&#39;s Blog">
-<meta property="og:description" content="对pytorch中组成网络的各种结构进行介绍记录，防止忘掉。  第一类-提取特征并调整网络结构的层 第二类-归一化调整数值范围层 第三类-非线性激活函数层   提取并调整特征维度  2维卷积层torch.nn.Conv2d  卷积操作主要用来提取图像特征，卷积过程可以参考我之前的一篇文章中的一个动图。  12345678910CLASS torch.nn.Conv2d(	in_channels:">
+<meta property="og:description" content="对pytorch中组成网络的各种结构进行介绍记录，防止忘掉。  第一类-提取特征并调整网络结构的层 第二类-归一化调整数值范围层 第三类-非线性激活函数层  提取并调整特征维度 2维卷积层torch.nn.Conv2d  卷积操作主要用来提取图像特征，卷积过程可以参考我之前的一篇文章中的一个动图。  12345678910CLASS torch.nn.Conv2d(	in_channels: in">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://line.com/img/one-piece/one-piece27.jpg">
 <meta property="article:published_time" content="2020-08-14T17:07:24.000Z">
-<meta property="article:modified_time" content="2023-01-08T16:21:28.853Z">
+<meta property="article:modified_time" content="2023-03-05T06:00:50.620Z">
 <meta property="article:author" content="Line">
 <meta property="article:tag" content="深度学习">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://line.com/img/one-piece/one-piece27.jpg">
   
   
   
@@ -42,8 +44,6 @@
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
 
 
 
@@ -69,6 +69,7 @@
 
   
 <link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+<link rel="stylesheet" href="/css/mac.css">
 
 
 
@@ -230,7 +231,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.6k 字
+          3.3k 字
         
       </span>
     
@@ -241,7 +242,7 @@
         
         
         
-          30 分钟
+          28 分钟
         
       </span>
     
@@ -286,93 +287,113 @@
                 
                 <p>对pytorch中组成网络的各种结构进行介绍记录，防止忘掉。</p>
 <ul>
-<li><a href="#%E6%8F%90%E5%8F%96%E5%B9%B6%E8%B0%83%E6%95%B4%E7%89%B9%E5%BE%81%E7%BB%B4%E5%BA%A6">第一类-提取特征并调整网络结构的层</a></li>
-<li><a href="#%E5%BD%92%E4%B8%80%E5%8C%96%E8%B0%83%E6%95%B4%E6%95%B0%E5%80%BC%E8%8C%83%E5%9B%B4%E5%B1%82">第二类-归一化调整数值范围层</a></li>
-<li><a href="#%E9%9D%9E%E7%BA%BF%E6%80%A7%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0%E5%B1%82">第三类-非线性激活函数层</a></li>
+<li><a
+href="#提取并调整特征维度">第一类-提取特征并调整网络结构的层</a></li>
+<li><a href="#归一化调整数值范围层">第二类-归一化调整数值范围层</a></li>
+<li><a href="#非线性激活函数层">第三类-非线性激活函数层</a></li>
 </ul>
-<h1 id="提取并调整特征维度"><a class="markdownIt-Anchor" href="#提取并调整特征维度"></a> 提取并调整特征维度</h1>
-<h2 id="2维卷积层torchnnconv2d"><a class="markdownIt-Anchor" href="#2维卷积层torchnnconv2d"></a> 2维卷积层<code>torch.nn.Conv2d</code></h2>
+<h1 id="提取并调整特征维度">提取并调整特征维度</h1>
+<h2
+id="维卷积层torch.nn.conv2d">2维卷积层<code>torch.nn.Conv2d</code></h2>
 <blockquote>
-<p>卷积操作主要用来提取图像特征，卷积过程可以参考我之前的一篇<a target="_blank" rel="noopener" href="https://xhy3054.github.io/cnn-base/">文章</a>中的一个动图。</p>
+<p>卷积操作主要用来提取图像特征，卷积过程可以参考我之前的一篇<a
+target="_blank" rel="noopener" href="https://xhy3054.github.io/cnn-base/">文章</a>中的一个动图。</p>
 </blockquote>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs py">CLASS torch.nn.Conv2d(	in_channels: <span class="hljs-built_in">int</span>, <br>				out_channels: <span class="hljs-built_in">int</span>, <br>				kernel_size: <span class="hljs-type">Union</span>[<span class="hljs-built_in">int</span>, <br>				<span class="hljs-type">Tuple</span>[<span class="hljs-built_in">int</span>, <span class="hljs-built_in">int</span>]], <br>				stride: <span class="hljs-type">Union</span>[<span class="hljs-built_in">int</span>, <span class="hljs-type">Tuple</span>[<span class="hljs-built_in">int</span>, <span class="hljs-built_in">int</span>]] = <span class="hljs-number">1</span>, <br>				padding: <span class="hljs-type">Union</span>[<span class="hljs-built_in">int</span>, <span class="hljs-type">Tuple</span>[<span class="hljs-built_in">int</span>, <span class="hljs-built_in">int</span>]] = <span class="hljs-number">0</span>, <br>				dilation: <span class="hljs-type">Union</span>[<span class="hljs-built_in">int</span>, <span class="hljs-type">Tuple</span>[<span class="hljs-built_in">int</span>, <span class="hljs-built_in">int</span>]] = <span class="hljs-number">1</span>, <br>				groups: <span class="hljs-built_in">int</span> = <span class="hljs-number">1</span>, <br>				bias: <span class="hljs-built_in">bool</span> = <span class="hljs-literal">True</span>, <br>				padding_mode: <span class="hljs-built_in">str</span> = <span class="hljs-string">&#x27;zeros&#x27;</span>)<br></code></pre></td></tr></table></figure>
 <ul>
 <li><code>in_channels</code>：一个整型，表示输入通道数；</li>
 <li><code>out_channels</code>：一个整型，表示输出通道数；</li>
 <li><code>kernel_size</code>：卷积核尺寸，可以是一个整型数，也可以是一个包含两个整型的tuple，一个整数时默认长宽相同；</li>
-<li><code>stride</code>： 输入可以是一个整型号，也可以是一个包含两个整型的tuple；表示步长；一般步长也可以看作提取到的特征相对于原图尺寸缩小的倍数；</li>
+<li><code>stride</code>：
+输入可以是一个整型号，也可以是一个包含两个整型的tuple；表示步长；一般步长也可以看作提取到的特征相对于原图尺寸缩小的倍数；</li>
 <li><code>padding</code>：输入可以是一个整型号，也可以是一个包含两个整型的tuple；表示默认在图像边缘补0的尺寸，输入一个tuple的话，第一个数表示高度上，第二个表示宽度上填充的尺寸；比如当为1时，表示原图基础上，上下左右各补了一行；</li>
 <li><code>dilation</code>：输入可以是一个整型号，也可以是一个包含两个整型的tuple；表示卷积核的扩张尺寸，也是核点之间的间距；</li>
-<li><code>groups</code>: 范围从1到<code>in_channels</code>，默认是1，表示所有每个输出通道都包含了所有输入通道的信息；如果为2，则一半的输出通道是由一半的输入通道产生的，另一半的输出通道是由剩下一半的输入通道产生；如果为<code>in_channels</code>，表示每个输入通道都有自己单独的卷积核，卷积核输出维度为<code>out_channels/in_channels</code>；</li>
+<li><code>groups</code>:
+范围从1到<code>in_channels</code>，默认是1，表示所有每个输出通道都包含了所有输入通道的信息；如果为2，则一半的输出通道是由一半的输入通道产生的，另一半的输出通道是由剩下一半的输入通道产生；如果为<code>in_channels</code>，表示每个输入通道都有自己单独的卷积核，卷积核输出维度为<code>out_channels/in_channels</code>；</li>
 </ul>
-<h2 id="上采样层torchnnpixelshuffle"><a class="markdownIt-Anchor" href="#上采样层torchnnpixelshuffle"></a> 上采样层<code>torch.nn.PixelShuffle</code></h2>
+<h2
+id="上采样层torch.nn.pixelshuffle">上采样层<code>torch.nn.PixelShuffle</code></h2>
 <blockquote>
-<p>主要用来重新排列一个维度(x, C<em>r^2, H, W)的tensor为一个维度(x, C, H</em>r, W<em>r)的tensor。这种做法是16年一篇论文提出的超分辨率方法，主要思想是对于（1, H, W）维度的图像，为了将其放大r倍，首先使用卷积网络提取得到(r^2, H, W)维度的深层特征；然后使用PixelShuffle对深层特征重新排列，得到一个(1, H</em>r, W*r)的高分辨的图像。</p>
+<p>主要用来重新排列一个维度(x, C<em>r^2, H, W)的tensor为一个维度(x, C,
+H</em>r,
+W<em>r)的tensor。这种做法是16年一篇论文提出的超分辨率方法，主要思想是对于（1,
+H, W）维度的图像，为了将其放大r倍，首先使用卷积网络提取得到(r^2, H,
+W)维度的深层特征；然后使用PixelShuffle对深层特征重新排列，得到一个(1,
+H</em>r, W*r)的高分辨的图像。</p>
 </blockquote>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">CLASS torch.nn.PixelShuffle(upscale_factor: <span class="hljs-built_in">int</span>)<br></code></pre></td></tr></table></figure>
 <ul>
 <li><code>upscale_factor</code>：int类型，上采样的倍数，也是上面的r；</li>
 </ul>
-<h1 id="归一化调整数值范围层"><a class="markdownIt-Anchor" href="#归一化调整数值范围层"></a> 归一化调整数值范围层</h1>
-<h2 id="批处理归一化层torchnnbatchnorm2d"><a class="markdownIt-Anchor" href="#批处理归一化层torchnnbatchnorm2d"></a> 批处理归一化层<code>torch.nn.BatchNorm2d</code></h2>
+<h1 id="归一化调整数值范围层">归一化调整数值范围层</h1>
+<h2
+id="批处理归一化层torch.nn.batchnorm2d">批处理归一化层<code>torch.nn.BatchNorm2d</code></h2>
 <blockquote>
 <p>批处理归一化层主要用来进行数据归一化，使得在relu之前不会因数据过大而导致网络性能不稳定。对于一个（1,3，H,W）的输入，主要的处理如下：</p>
 </blockquote>
-<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>y</mi><mo>=</mo><mfrac><mrow><mi>x</mi><mo>−</mo><mi mathvariant="normal">E</mi><mo stretchy="false">[</mo><mi>x</mi><mo stretchy="false">]</mo></mrow><msqrt><mrow><mi mathvariant="normal">Var</mi><mo>⁡</mo><mo stretchy="false">[</mo><mi>x</mi><mo stretchy="false">]</mo><mo>+</mo><mi>ϵ</mi></mrow></msqrt></mfrac><mo>∗</mo><mi>γ</mi><mo>+</mo><mi>β</mi></mrow><annotation encoding="application/x-tex">y=\frac{x-\mathrm{E}[x]}{\sqrt{\operatorname{Var}[x]+\epsilon}} * \gamma+\beta
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.557em;vertical-align:-1.13em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span style="top:-2.175em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.935em;"><span class="svg-align" style="top:-3.2em;"><span class="pstrut" style="height:3.2em;"></span><span class="mord" style="padding-left:1em;"><span class="mop"><span class="mord mathrm" style="margin-right:0.01389em;">V</span><span class="mord mathrm">a</span><span class="mord mathrm">r</span></span><span class="mopen">[</span><span class="mord mathnormal">x</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathnormal">ϵ</span></span></span><span style="top:-2.8950000000000005em;"><span class="pstrut" style="height:3.2em;"></span><span class="hide-tail" style="min-width:1.02em;height:1.28em;"><svg width='400em' height='1.28em' viewBox='0 0 400000 1296' preserveAspectRatio='xMinYMin slice'><path d='M263,681c0.7,0,18,39.7,52,119
-c34,79.3,68.167,158.7,102.5,238c34.3,79.3,51.8,119.3,52.5,120
-c340,-704.7,510.7,-1060.3,512,-1067
-l0 -0
-c4.7,-7.3,11,-11,19,-11
-H40000v40H1012.3
-s-271.3,567,-271.3,567c-38.7,80.7,-84,175,-136,283c-52,108,-89.167,185.3,-111.5,232
-c-22.3,46.7,-33.8,70.3,-34.5,71c-4.7,4.7,-12.3,7,-23,7s-12,-1,-12,-1
-s-109,-253,-109,-253c-72.7,-168,-109.3,-252,-110,-252c-10.7,8,-22,16.7,-34,26
-c-22,17.3,-33.3,26,-34,26s-26,-26,-26,-26s76,-59,76,-59s76,-60,76,-60z
-M1001 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.30499999999999994em;"><span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathrm">E</span></span><span class="mopen">[</span><span class="mord mathnormal">x</span><span class="mclose">]</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.13em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.7777700000000001em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.05556em;">γ</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.05278em;">β</span></span></span></span></span></p>
-<p>上面计算是对3个通道分别进行的，其中x为一个一个像素位置多个通道值组成的向量，E为每个通道的平均数组成的向量，var为每个通道的标准差组成的向量，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϵ</mi></mrow><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">ϵ</span></span></span></span>是为了数值稳定性在分母上增加的值，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>γ</mi></mrow><annotation encoding="application/x-tex">\gamma</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.05556em;">γ</span></span></span></span>（默认1）和<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mi>e</mi><mi>t</mi><mi>a</mi></mrow><annotation encoding="application/x-tex">beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal">b</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mord mathnormal">a</span></span></span></span>（默认0）为可学习的参数向量（维度为通道数）。上面公式写成向量形式，但是实际理解可以是对特征的每个通道分别执行上式。</p>
+<p><span
+class="math display">\[y=\frac{x-\mathrm{E}[x]}{\sqrt{\operatorname{Var}[x]+\epsilon}}
+* \gamma+\beta\]</span></p>
+<p>上面计算是对3个通道分别进行的，其中x为一个一个像素位置多个通道值组成的向量，E为每个通道的平均数组成的向量，var为每个通道的标准差组成的向量，<span
+class="math inline">\(\epsilon\)</span>是为了数值稳定性在分母上增加的值，<span
+class="math inline">\(\gamma\)</span>（默认1）和<span
+class="math inline">\(beta\)</span>（默认0）为可学习的参数向量（维度为通道数）。上面公式写成向量形式，但是实际理解可以是对特征的每个通道分别执行上式。</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs py">CLASS torch.nn.BatchNorm2d(num_features, <br>	eps=<span class="hljs-number">1e-05</span>, <br>	momentum=<span class="hljs-number">0.1</span>, <br>	affine=<span class="hljs-literal">True</span>, <br>	track_running_stats=<span class="hljs-literal">True</span>)<br></code></pre></td></tr></table></figure>
 <ul>
 <li><code>num_features</code>：当前要处理的特征层的通道数（一开始rgb图像的话是3）；</li>
-<li><code>eps</code>：也就是上面公式中的<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϵ</mi></mrow><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">ϵ</span></span></span></span>，为数值稳定性在分母上增加的值。默认为：1e-5；</li>
+<li><code>eps</code>：也就是上面公式中的<span
+class="math inline">\(\epsilon\)</span>，为数值稳定性在分母上增加的值。默认为：1e-5；</li>
 <li><code>momentum</code>：一个用于运行过程中均值和方差的一个估计参数（我的理解是一个稳定系数，类似于SGD中的momentum的系数）；</li>
-<li><code>affine</code>：当设为true时，该模块拥有可以学习的系数<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>γ</mi></mrow><annotation encoding="application/x-tex">\gamma</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.05556em;">γ</span></span></span></span>和<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mi>e</mi><mi>t</mi><mi>a</mi></mrow><annotation encoding="application/x-tex">beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal">b</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mord mathnormal">a</span></span></span></span>；</li>
+<li><code>affine</code>：当设为true时，该模块拥有可以学习的系数<span
+class="math inline">\(\gamma\)</span>和<span
+class="math inline">\(beta\)</span>；</li>
 <li><code>track_running_stats</code>: 是否跟踪均值和标准差的计算；</li>
 </ul>
-<h2 id="归一化层torchnnfunctionalnormalize"><a class="markdownIt-Anchor" href="#归一化层torchnnfunctionalnormalize"></a> 归一化层<code>torch.nn.functional.normalize</code></h2>
+<h2
+id="归一化层torch.nn.functional.normalize">归一化层<code>torch.nn.functional.normalize</code></h2>
 <blockquote>
-<p>在指定的维度上执行<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>L</mi><mi>p</mi></msub></mrow><annotation encoding="application/x-tex">L_p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal">L</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.15139200000000003em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">p</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span>归一化操作，其实就是在某个维度上对每个元素做<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>L</mi><mi>p</mi></msub></mrow><annotation encoding="application/x-tex">L_p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal">L</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.15139200000000003em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">p</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span>操作并做sum，然后当前元素值为原值除以sum，公式为：</p>
+<p>在指定的维度上执行<span
+class="math inline">\(L_p\)</span>归一化操作，其实就是在某个维度上对每个元素做<span
+class="math inline">\(L_p\)</span>操作并做sum，然后当前元素值为原值除以sum，公式为：</p>
 </blockquote>
-<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>v</mi><mo>=</mo><mfrac><mi>v</mi><mrow><mi>max</mi><mo>⁡</mo><mrow><mo fence="true">(</mo><mi mathvariant="normal">∥</mi><mi>v</mi><msub><mi mathvariant="normal">∥</mi><mi>p</mi></msub><mo separator="true">,</mo><mi>ϵ</mi><mo fence="true">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex">v=\frac{v}{\max \left(\|v\|_{p}, \epsilon\right)}
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.079668em;vertical-align:-0.972108em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.10756em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop">max</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">(</span><span class="mord">∥</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord"><span class="mord">∥</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.15139200000000003em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">p</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">ϵ</span><span class="mclose delimcenter" style="top:0em;">)</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.972108em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<p><span class="math display">\[v=\frac{v}{\max \left(\|v\|_{p},
+\epsilon\right)}\]</span></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">torch.nn.functional.normalize(<span class="hljs-built_in">input</span>: torch.Tensor, <br>	p: <span class="hljs-built_in">float</span> = <span class="hljs-number">2</span>, <br>	dim: <span class="hljs-built_in">int</span> = <span class="hljs-number">1</span>, <br>	eps: <span class="hljs-built_in">float</span> = <span class="hljs-number">1e-12</span>, <br>	out: <span class="hljs-type">Optional</span>[torch.Tensor] = <span class="hljs-literal">None</span>) → torch.Tensor<br></code></pre></td></tr></table></figure>
 <ul>
 <li><code>input</code>：任意shape的tensor输入；</li>
-<li><code>p</code>：范数的指数，默认为2，即<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>L</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">L_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">L</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>范数；</li>
+<li><code>p</code>：范数的指数，默认为2，即<span
+class="math inline">\(L_2\)</span>范数；</li>
 <li><code>dim</code>：计算范数的维度，默认是1；</li>
-<li><code>out</code>：the output tensor. If out is used, this operation won’t be differentiable.</li>
+<li><code>out</code>：the output tensor. If out is used, this operation
+won’t be differentiable.</li>
 </ul>
-<h2 id="层torchnnfunctionalsoftplus"><a class="markdownIt-Anchor" href="#层torchnnfunctionalsoftplus"></a> 层<code>torch.nn.functional.softplus</code></h2>
+<h2
+id="层torch.nn.functional.softplus">层<code>torch.nn.functional.softplus</code></h2>
 <blockquote>
-<p>逐元素执行如下操作，note:为了数值稳定，当<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mi>x</mi><mo>&gt;</mo><mi>t</mi><mi>h</mi><mi>r</mi><mi>e</mi><mi>s</mi><mi>h</mi><mi>o</mi><mi>l</mi><mi>d</mi></mrow><annotation encoding="application/x-tex">\beta x &gt; threshold</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.05278em;">β</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal">t</span><span class="mord mathnormal">h</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">e</span><span class="mord mathnormal">s</span><span class="mord mathnormal">h</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">d</span></span></span></span>时实现变为线性函数。</p>
+<p>逐元素执行如下操作，note:为了数值稳定，当<span
+class="math inline">\(\beta x &gt;
+threshold\)</span>时实现变为线性函数。</p>
 </blockquote>
-<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext> Softplus </mtext><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mfrac><mn>1</mn><mi>β</mi></mfrac><mo>∗</mo><mi>log</mi><mo>⁡</mo><mo stretchy="false">(</mo><mn>1</mn><mo>+</mo><mi>exp</mi><mo>⁡</mo><mo stretchy="false">(</mo><mi>β</mi><mo>∗</mo><mi>x</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\text { Softplus }(x)=\frac{1}{\beta} * \log (1+\exp (\beta * x))
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord"> Softplus </span></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.20188em;vertical-align:-0.8804400000000001em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.32144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05278em;">β</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.8804400000000001em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mop">exp</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.05278em;">β</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mclose">)</span></span></span></span></span></p>
+<p><span class="math display">\[\text { Softplus }(x)=\frac{1}{\beta} *
+\log (1+\exp (\beta * x))\]</span></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">torch.nn.functional.softplus(<span class="hljs-built_in">input</span>, beta=<span class="hljs-number">1</span>, threshold=<span class="hljs-number">20</span>) → Tensor<br></code></pre></td></tr></table></figure>
-<h2 id="层torchnnfunctionalsoftmax"><a class="markdownIt-Anchor" href="#层torchnnfunctionalsoftmax"></a> 层<code>torch.nn.functional.softmax</code></h2>
+<h2
+id="层torch.nn.functional.softmax">层<code>torch.nn.functional.softmax</code></h2>
 <blockquote>
 <p>也是一种归一化操作，沿着某个维度执行如下操作，使得该维度向量每个元素值在0到1之间，并且和为1。</p>
 </blockquote>
-<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi mathvariant="normal">Softmax</mi><mo>⁡</mo><mrow><mo fence="true">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo fence="true">)</mo></mrow><mo>=</mo><mfrac><mrow><mi>exp</mi><mo>⁡</mo><mrow><mo fence="true">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo fence="true">)</mo></mrow></mrow><mrow><munder><mo>∑</mo><mi>j</mi></munder><mi>exp</mi><mo>⁡</mo><mrow><mo fence="true">(</mo><msub><mi>x</mi><mi>j</mi></msub><mo fence="true">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex">\operatorname{Softmax}\left(x_{i}\right)=\frac{\exp \left(x_{i}\right)}{\sum_{j} \exp \left(x_{j}\right)}
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mop"><span class="mord mathrm">S</span><span class="mord mathrm">o</span><span class="mord mathrm" style="margin-right:0.07778em;">f</span><span class="mord mathrm">t</span><span class="mord mathrm">m</span><span class="mord mathrm">a</span><span class="mord mathrm">x</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">(</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;">)</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.5488180000000003em;vertical-align:-1.1218180000000002em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.16195399999999993em;"><span style="top:-2.40029em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.43581800000000004em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop">exp</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">(</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;">)</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop">exp</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">(</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.1218180000000002em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<p><span
+class="math display">\[\operatorname{Softmax}\left(x_{i}\right)=\frac{\exp
+\left(x_{i}\right)}{\sum_{j} \exp \left(x_{j}\right)}\]</span></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">torch.nn.functional.softmax(<span class="hljs-built_in">input</span>: torch.Tensor, <br>	dim: <span class="hljs-type">Optional</span>[<span class="hljs-built_in">int</span>] = <span class="hljs-literal">None</span>, <br>	_stacklevel: <span class="hljs-built_in">int</span> = <span class="hljs-number">3</span>, <br>	dtype: <span class="hljs-type">Optional</span>[<span class="hljs-built_in">int</span>] = <span class="hljs-literal">None</span>) → torch.Tensor<br></code></pre></td></tr></table></figure>
 <ul>
 <li><code>input</code>：输入tensor；</li>
 <li><code>dim</code>：沿着这个维度执行softmax</li>
 <li><code>dtype</code>：如果指定类型，在执行操作前需要将输入被转换为该类型；</li>
 </ul>
-<h1 id="非线性激活函数层"><a class="markdownIt-Anchor" href="#非线性激活函数层"></a> 非线性激活函数层</h1>
-<h2 id="修正线性单元层torchnnrelu"><a class="markdownIt-Anchor" href="#修正线性单元层torchnnrelu"></a> 修正线性单元层<code>torch.nn.ReLU</code></h2>
+<h1 id="非线性激活函数层">非线性激活函数层</h1>
+<h2
+id="修正线性单元层torch.nn.relu">修正线性单元层<code>torch.nn.ReLU</code></h2>
 <blockquote>
 <p>主要是执行非线性变换。Relu的非线性变换是大于0时不变，小于0时置为0，特点是瘦脸快，求梯度简单。</p>
 </blockquote>
@@ -380,18 +401,20 @@ M1001 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">�
 <ul>
 <li><code>inplace</code>：是否在原数据上操作；</li>
 </ul>
-<h2 id="第二种激活函数torchnnelu"><a class="markdownIt-Anchor" href="#第二种激活函数torchnnelu"></a> 第二种激活函数<code>torch.nn.ELU</code></h2>
+<h2
+id="第二种激活函数torch.nn.elu">第二种激活函数<code>torch.nn.ELU</code></h2>
 <blockquote>
 <p>对每个元素执行如下操作：</p>
 </blockquote>
-<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>E</mi><mi>L</mi><mi>U</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mi>m</mi><mi>a</mi><mi>x</mi><mo stretchy="false">(</mo><mn>0</mn><mo separator="true">,</mo><mi>x</mi><mo stretchy="false">)</mo><mo>+</mo><mi>m</mi><mi>i</mi><mi>n</mi><mo stretchy="false">(</mo><mn>0</mn><mo separator="true">,</mo><mi>α</mi><mtext>∗</mtext><mo stretchy="false">(</mo><mi>e</mi><mi>x</mi><mi>p</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mtext>−</mtext><mn>1</mn><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">ELU(x)=max(0,x)+min(0,α∗(exp(x)−1)) 
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mord mathnormal">L</span><span class="mord mathnormal" style="margin-right:0.10903em;">U</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">m</span><span class="mord mathnormal">a</span><span class="mord mathnormal">x</span><span class="mopen">(</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">m</span><span class="mord mathnormal">i</span><span class="mord mathnormal">n</span><span class="mopen">(</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mord">∗</span><span class="mopen">(</span><span class="mord mathnormal">e</span><span class="mord mathnormal">x</span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mord">−</span><span class="mord">1</span><span class="mclose">)</span><span class="mclose">)</span></span></span></span></span></p>
+<p><span class="math display">\[ ELU(x)=max(0,x)+min(0,α∗(exp(x)−1))
+\]</span></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">CLASStorch.nn.ELU(alpha: <span class="hljs-built_in">float</span> = <span class="hljs-number">1.0</span>, inplace: <span class="hljs-built_in">bool</span> = <span class="hljs-literal">False</span>)<br></code></pre></td></tr></table></figure>
 <ul>
-<li><code>alpha</code>：上面公式中的<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span></span></span></span>值，默认为1；</li>
+<li><code>alpha</code>：上面公式中的<span
+class="math inline">\(\alpha\)</span>值，默认为1；</li>
 <li><code>inplace</code>：是否在原数据位置进行操作；</li>
 </ul>
-<h1 id="参考文献"><a class="markdownIt-Anchor" href="#参考文献"></a> 参考文献</h1>
+<h1 id="参考文献">参考文献</h1>
 <ul>
 <li>[1] pytorch官方文档</li>
 </ul>
@@ -464,9 +487,9 @@ M1001 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">�
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2020/12/17/2020-12-17-nullspace-observable/" title="系统的可观性问题分析">
+                      <a href="/2020/12/17/2020-12-17-nullspace-observable/" title="系统的可观性问题分析与FEJ的简要说明">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">系统的可观性问题分析</span>
+                        <span class="hidden-mobile">系统的可观性问题分析与FEJ的简要说明</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -567,6 +590,7 @@ M1001 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">�
 
   
   
+
 
 
 
@@ -761,6 +785,49 @@ M1001 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">�
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 

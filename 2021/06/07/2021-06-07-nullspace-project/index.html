@@ -1,0 +1,877 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon1.png">
+  <link rel="icon" href="/img/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Line">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="零空间投影 slam中的问题描述 在MSCKF更新模块中，系统的误差方程为 \[ \tilde{z} &#x3D; z - h(X,P) \approx H_x \tilde{x} + H_f \tilde{p}_f \] 其中X为系统滑窗中的帧集合状态，P为参与更新的3d点集合。此处测量误差其实使用的是重投影误差。因为是一开始使用了系统滑窗帧状态对视觉特征进行三角化得到了3d路标，然后利用这些3d路标投影">
+<meta property="og:type" content="article">
+<meta property="og:title" content="零空间投影">
+<meta property="og:url" content="http://line.com/2021/06/07/2021-06-07-nullspace-project/index.html">
+<meta property="og:site_name" content="Line&#39;s Blog">
+<meta property="og:description" content="零空间投影 slam中的问题描述 在MSCKF更新模块中，系统的误差方程为 \[ \tilde{z} &#x3D; z - h(X,P) \approx H_x \tilde{x} + H_f \tilde{p}_f \] 其中X为系统滑窗中的帧集合状态，P为参与更新的3d点集合。此处测量误差其实使用的是重投影误差。因为是一开始使用了系统滑窗帧状态对视觉特征进行三角化得到了3d路标，然后利用这些3d路标投影">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://line.com/img/one-piece/one-piece43.jpg">
+<meta property="article:published_time" content="2021-06-06T17:07:24.000Z">
+<meta property="article:modified_time" content="2023-03-05T05:58:21.355Z">
+<meta property="article:author" content="Line">
+<meta property="article:tag" content="数学">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://line.com/img/one-piece/one-piece43.jpg">
+  
+  
+  
+  <title>零空间投影 - Line&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+<link rel="stylesheet" href="/css/mac.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"line.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Line</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default2.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="零空间投影"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-06-07 01:07" pubdate>
+          2021年6月7日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          23 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">零空间投影</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="零空间投影">零空间投影</h1>
+<h2 id="slam中的问题描述">slam中的问题描述</h2>
+<p>在MSCKF更新模块中，系统的误差方程为 <span class="math display">\[
+\tilde{z} = z - h(X,P) \approx H_x \tilde{x} + H_f \tilde{p}_f
+\]</span>
+其中X为系统滑窗中的帧集合状态，P为参与更新的3d点集合。此处测量误差其实使用的是重投影误差。因为是一开始使用了系统滑窗帧状态对视觉特征进行三角化得到了3d路标，然后利用这些3d路标投影得到了重投影误差。因此此处上述式子中X与P是相互耦合的，即上述式子中X与P不是无关的，因此不能直接进行EKF更新，此处的做法是消去其中P这一项。</p>
+<h2 id="数学原理">数学原理</h2>
+<blockquote>
+<p>对于一个矩阵A，其左零空间的定义为：所有满足<span
+class="math inline">\(v^TA=0\)</span>的向量<span
+class="math inline">\(v\)</span>的集合。</p>
+</blockquote>
+<p>对于一个类似如下的问题 <span class="math display">\[
+Y = F_1X_1 + F_2X_2
+\]</span> 我们对于上面这个关系式，只想对<span
+class="math inline">\(X_1\)</span>进行讨论，不关心<span
+class="math inline">\(X_2\)</span>，因此需要把等式转换成与<span
+class="math inline">\(X_2\)</span>无关的形式。此处可以分成两种情况：</p>
+<ol type="1">
+<li>当<span
+class="math inline">\(X_1,X_2\)</span>互相独立时，此时直接把<span
+class="math inline">\(X_2\)</span>部分当做常数处理即可；</li>
+<li>当<span class="math inline">\(X_1,X_2\)</span>相关时，此时<span
+class="math inline">\(X_2\)</span>部分对<span
+class="math inline">\(X_1\)</span>求导导数不为0（两个中一个变了，另一个也会相关的改变）。<strong>此时的做法是可以将整个式子投影到<span
+class="math inline">\(F_2\)</span>的零空间上，在<span
+class="math inline">\(F_2\)</span>的零空间上讨论<span
+class="math inline">\(Y\)</span>与<span
+class="math inline">\(X_1\)</span>的相关性，此时整个式子与<span
+class="math inline">\(X_2\)</span>无关</strong>。</li>
+</ol>
+<p>此处开始讨论上面的第二种情况，零空间投影。其实很简单，只需要找到<span
+class="math inline">\(F_2\)</span>左零空间所有的基向量，然后将这些基向量并列组成一个矩阵A（每一列都是一个基向量）。则可以得到：
+<span class="math display">\[
+A^TF_2=0
+\]</span> 使用<span
+class="math inline">\(A^T\)</span>同时乘以整个等式可以得到 <span
+class="math display">\[
+A^TY = A^TF_1X_1
+\]</span></p>
+<blockquote>
+<p>这个操作本质就是将整个等式投影到了<span
+class="math inline">\(F_2\)</span>的零空间上，从而消除了等式中<span
+class="math inline">\(F_2X_2\)</span>这一项。</p>
+</blockquote>
+<ul>
+<li>维度变换讨论</li>
+</ul>
+<p>假设Y维度为<span class="math inline">\((m,1)\)</span>，<span
+class="math inline">\(X_1\)</span>维度为<span
+class="math inline">\((n_1,1)\)</span>，<span
+class="math inline">\(X_2\)</span>维度为<span
+class="math inline">\((n_2,1)\)</span>，则整个式子一开始的维度变化如下：
+<span class="math display">\[
+(m,1) = (m,n_1)(n_1,1) + (m,n_2)(n_2,1)
+\]</span> 假设矩阵<span
+class="math inline">\(F_2\)</span>不客观的自由度为<span
+class="math inline">\(m_1\)</span>（一般是<span
+class="math inline">\(F_2\)</span>的行数减去列数即<span
+class="math inline">\(m_1=m-n_2\)</span>），则零空间投影过程中系统的维度变化为
+<span class="math display">\[
+(m_1,m)(m,1) = (m_1,m)(m,n_1)(n_1,1) \\
+(m_1,1) = (m_1,n_1)(n_1,1)
+\]</span></p>
+<blockquote>
+<p>类似slam系统误差方程，可以发现经过零空间投影，残差的维度变成了<span
+class="math inline">\((m_1,1)\)</span>。</p>
+</blockquote>
+<h2 id="实际操作openvins的解释">实际操作（openvins的解释）</h2>
+一个观测的重投影残差维度为2，因此每个特征的r的维度为<span
+class="math inline">\(m=2*观测数量\)</span>，该特征的3d表示的维度为<span
+class="math inline">\(n_2=3\ or\ 1\)</span>，因此<span
+class="math inline">\(H_f\)</span>矩阵的维度<span
+class="math inline">\((m,n_2)\)</span>行数远远大于列数，不可观的零空间维度为<span
+class="math inline">\(m-n_2\)</span>，可以通过QR分解对其进行分解（可以发现其中<span
+class="math inline">\(Q_2\)</span>部分其实是可以被约掉的） <span
+class="math display">\[
+H_f={\begin{bmatrix} Q_1  &amp; Q_2 \end{bmatrix}}  {\begin{bmatrix} R_1
+\\ 0 \end{bmatrix}}  = Q_1R_1
+\]</span> 其中${
+<span class="math display">\[\begin{bmatrix} Q_1  &amp; Q_2
+\end{bmatrix}\]</span>
+<p>} <span
+class="math inline">\(是一个正交矩阵（整体维度\)</span>(m,m)<span
+class="math inline">\(），\)</span>R_1<span
+class="math inline">\(是一个上三角矩阵（\)</span>(n_2,n_2)<span
+class="math inline">\(），\)</span>Q_1<span
+class="math inline">\(（维度\)</span>(m,n_2)<span
+class="math inline">\(）是\)</span>H_f<span
+class="math inline">\(可观的部分，\)</span>Q_2<span
+class="math inline">\(部分（维度\)</span>(m,m-n_2)<span
+class="math inline">\(）刚好就是\)</span>H_f<span
+class="math inline">\(不可观的部分，因此\)</span>A=Q_2$。</p>
+<p>对于某个特征f，其在系统中的表示的残差为<span
+class="math inline">\(\tilde{p}_f\)</span>，其对应测量残差为<span
+class="math inline">\(\tilde{z}_m\)</span>，系统中与该特征关联的状态的误差为<span
+class="math inline">\(\tilde{x}_k\)</span>，则零空间投影前的状态误差方程为
+<span class="math display">\[
+\tilde{z}_m \approx H_x \tilde{x} + Q_1 R_1 \tilde{p}_f
+\]</span> 对上式进行零空间投影可得（此处可以发现新的测量<span
+class="math inline">\(z_o\)</span>变成了<span
+class="math inline">\(m-n_2\)</span>维度） <span class="math display">\[
+Q_2^T \tilde{z}_m \approx Q_2^T H_x \tilde{x} \\
+\tilde{z}_o \approx H_{o,x} \tilde{x}
+\]</span>
+可以发现经过零空间投影后得到关于特征f的新的系统误差方程，遍历每一个特征，得到整个系统的误差方程（只和系统状态有关，与路标无关的），便可以进行EKF更新了。（对了，上面系统的测量噪声矩阵也需要相应的变换一下）</p>
+<blockquote>
+<p>在openvins的代码中，并没有直接求<span
+class="math inline">\(Q_2\)</span>，而是利用<a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/136551885">givens
+rotation</a>直接对残差还有<span
+class="math inline">\(H_x\)</span>进行变换（相当于乘以<span
+class="math inline">\(Q^T\)</span>），然后取出下面<span
+class="math inline">\(m-n_2\)</span>行就是最终的结果。</p>
+</blockquote>
+<p><strong>实际操作（我的解释，也是代码中的情况）</strong>：</p>
+<p>对于 <span class="math display">\[
+\tilde{z} = z - h(X,P) \approx H_x \tilde{x} + H_f \tilde{p}_f =  H_x
+\tilde{x} + {\begin{bmatrix} Q_1  &amp; Q_2 \end{bmatrix}}
+{\begin{bmatrix} R_1 \\ 0 \end{bmatrix}}  \tilde{p}_f
+\]</span> 使用givens rotation等价于等式两边同时乘以<span
+class="math inline">\(Q^T\)</span>，是为了构造如下形式： <span
+class="math display">\[
+Q^T \tilde{z}  =  Q^T H_x \tilde{x} + {\begin{bmatrix} R_1 \\ 0
+\end{bmatrix}} \tilde{p}_f
+\]</span> 得到上述形式之后，只需要取下面的<span
+class="math inline">\(m-n_2\)</span>行就可以得到零空间投影的结果（消去<span
+class="math inline">\(\tilde{p}_f\)</span>）。</p>
+<blockquote>
+<p>其实givens
+rotation在msckf中有不少应用，比如在最后矩阵压缩求解中：此时也会使用上述原理，不过最后保留的是等式的前n行（n是状态的维度），去掉剩下原理上应该为0的行，这样得到系数矩阵H是一个上三角方阵，求解速度会很快。</p>
+</blockquote>
+<h1 id="参考文献">参考文献</h1>
+<p>[1] https://zhuanlan.zhihu.com/p/150641671</p>
+<p>[2]
+https://link.zhihu.com/?target=https%3A//docs.openvins.com/pages.html</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%95%B0%E5%AD%A6/" class="category-chain-item">数学</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%95%B0%E5%AD%A6/">#数学</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>零空间投影</div>
+      <div>http://line.com/2021/06/07/2021-06-07-nullspace-project/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Line</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年6月7日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/06/28/2021-06-28-wheel-sensor/" title="轮式里程计原理与状态传播数学推导">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">轮式里程计原理与状态传播数学推导</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/06/04/2021-06-04-lagrangian-multipliers/" title="拉格朗日乘子法--带约束的最优化问题求解">
+                        <span class="hidden-mobile">拉格朗日乘子法--带约束的最优化问题求解</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

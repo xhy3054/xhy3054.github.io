@@ -58,6 +58,7 @@
 
   
 <link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+<link rel="stylesheet" href="/css/mac.css">
 
 
 
@@ -231,7 +232,427 @@
   <div class="row mx-auto index-card">
     
     
-    <article class="col-12 col-md-12 mx-auto index-info">
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2019/04/21/2019-04-21-pose-estimation/" target="_self">
+          <img src="/img/sword/sword9.jpg" srcset="/img/loading.gif" lazyload alt="特征点法slam中位姿估计方法总结">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2019/04/21/2019-04-21-pose-estimation/" target="_self">
+          特征点法slam中位姿估计方法总结
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2019/04/21/2019-04-21-pose-estimation/" target="_self">
+        <div>
+          这篇博客主要是对基于特征点匹配的slam中的位姿估计方法进行总结。 2d-2d的位姿估计 一般用在单目slam的初始阶段，系统还没有地图，此时只有输入的2d的图片序列。一般会使用如下方法进行位姿估计。而RGBD与双目系统中，无需进行初始化。  首先通过对极约束求解出本质矩阵(比较经典的有八点法)，然后对本质矩阵进行奇异值分解(SVD)，求解出R与t;  原理公式\(E = t^{\land}R\)
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-04-21 01:07" pubdate>
+              2019-04-21
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">#计算机视觉</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2019/04/20/2019-04-20-triangulation/" target="_self">
+          <img src="/img/sword/sword8.jpg" srcset="/img/loading.gif" lazyload alt="单目vo中的深度确定方法--三角测量">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2019/04/20/2019-04-20-triangulation/" target="_self">
+          单目vo中的深度确定方法--三角测量
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2019/04/20/2019-04-20-triangulation/" target="_self">
+        <div>
+          三角测量的目的是用来确定图片中某一个点的深度。为什么会有这样的需求呢？我们在前面的博客中提到了对极几何与单应变换。在前面其实已经提到过了，在单目VO中，虽然我们可以通过本质矩阵与单应矩阵恢复出相机变换的位姿，但是这两种方法确定的位姿变换是具有尺度不确定性的。在双目vo中，我们会首先使用三角测量恢复出深度信息，再进行位姿估计。  因为基础矩阵与单应矩阵本身描述的是从一个2d平面到另一个2d平面的变换
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-04-20 01:07" pubdate>
+              2019-04-20
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">#计算机视觉</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2019/04/19/2019-04-19-bow/" target="_self">
+          <img src="/img/sword/sword7.jpg" srcset="/img/loading.gif" lazyload alt="基于词袋模型的图像匹配">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2019/04/19/2019-04-19-bow/" target="_self">
+          基于词袋模型的图像匹配
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2019/04/19/2019-04-19-bow/" target="_self">
+        <div>
+          看orb-slam的时候发现它在回环检测的时候使用了基于视觉词袋的图像匹配，现在有了一点心得，虽然还有些东西没有完全吃透，但最近比较忙，可能不会有时间在这里死磕，所以先将目前所得写下来，省的忘了。以后有时间完全吃透了会继续完善这篇文章。 Bag-of-words模型简介 词袋模型在信息检索领域使用的比较多，以前上课时就听老师讲过，是很常见的算法。在信息检索中，Bow忽略一个文档中单词出现的顺序、语
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-04-19 01:07" pubdate>
+              2019-04-19
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">#计算机视觉</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2019/04/15/2019-04-15-sort/" target="_self">
+          <img src="/img/sword/sword6.jpg" srcset="/img/loading.gif" lazyload alt="排序算法总结">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2019/04/15/2019-04-15-sort/" target="_self">
+          排序算法总结
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2019/04/15/2019-04-15-sort/" target="_self">
+        <div>
+          排序问题是一个基础问题，这篇博客主要总结一下各种经典常用的有特色的排序算法。 冒泡排序(bubble sort)  原理：每次从左向右两两进行比较，将较大/小的交换到后面。每一个循环可以确定排好一个数，循环n-1次，完全排序完毕。  1234567891011void bubble_sort(vector&lt;int&gt; &amp; nums)&#123;    for(int i=0; i
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-04-15 01:07" pubdate>
+              2019-04-15
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">#算法与数据结构</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2019/04/15/2019-04-15-vnc-rdp/" target="_self">
+          <img src="/img/sword/sword5.jpg" srcset="/img/loading.gif" lazyload alt="远程界面连接软件简述">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2019/04/15/2019-04-15-vnc-rdp/" target="_self">
+          远程界面连接软件简述
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2019/04/15/2019-04-15-vnc-rdp/" target="_self">
+        <div>
+          由于个人电脑性能有限，很多时候我们都需要远程登录服务器利用其资源。常见的远程界面连接到计算机有三种方法，一种是VNC(Virtual Network Computing)，另一种是RDP(Remote Desktop Protocol).最后一种是新兴的各种专为远程连接开发的第三方软件。 VNC VNC(Virtual Network Computing，是一个软件)是基于RFB(Remote F
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-04-15 01:07" pubdate>
+              2019-04-15
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/tools/">#tools</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2019/04/02/2019-04-12-linked-list-cycle/" target="_self">
+          <img src="/img/sword/sword4.jpg" srcset="/img/loading.gif" lazyload alt="带环链表问题">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2019/04/02/2019-04-12-linked-list-cycle/" target="_self">
+          带环链表问题
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2019/04/02/2019-04-12-linked-list-cycle/" target="_self">
+        <div>
+          昨天去面试，面试官问了我一道带环的链表问题。因为以前一个师姐问过我这个问题，我在网上看到过正确解法，因此很轻松的就写出了解法。但是当面试官让我将这个问题用公式推导出来时，，很尴尬，我忽然脑子僵了，多亏面试官提醒了一下，我才推导出来。  事后回想，总结如下: 任何问题不能只记住解法，而要真正将这个问题弄清楚。  链表结构描述 其实就是一个6字型的链表问题，一般我们解这样的题，都是设置两个前进节点，一
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-04-02 01:07" pubdate>
+              2019-04-02
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">#算法与数据结构</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2019/03/30/2019-03-30-linux-issue/" target="_self">
+          <img src="/img/sword/sword2.jpg" srcset="/img/loading.gif" lazyload alt="linux常用--数据流重定向、管道、组合键、权限、查找等">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2019/03/30/2019-03-30-linux-issue/" target="_self">
+          linux常用--数据流重定向、管道、组合键、权限、查找等
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2019/03/30/2019-03-30-linux-issue/" target="_self">
+        <div>
+          在学习linux的内容中，存在很多重要有趣有用的小知识，但是这些小知识很繁琐，每一个都写一片博客是不可能的，篇幅太短，所以这篇博客就来将这些小知识来一个大杂烩。 1. 数据流重定向 2. 管道命令-pipe 3. 回车与换行的区别 4. 常用组合键 5. bash环境中的特殊字符 6. 通配符 7. 修改文件权限 8. 在linux文件系统中搜索字符串 9. 在Linux文件系统中搜索 10. l
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-03-30 01:07" pubdate>
+              2019-03-30
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/linux/">#linux</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2019/03/30/2019-03-30-vim/" target="_self">
+          <img src="/img/sword/sword3.jpg" srcset="/img/loading.gif" lazyload alt="备忘vim编辑器">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2019/03/30/2019-03-30-vim/" target="_self">
+          备忘vim编辑器
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2019/03/30/2019-03-30-vim/" target="_self">
+        <div>
+          经常需要在linux环境下进行开发，不可避免的要使用vim。为了方便每次查阅与温习，在这篇博客里记录一些常用功能操作与我熟悉的一些基本配置。 vim vim本身就是一个编辑器，就像是windows的text一样，但是这个编辑器有很多的命令与快捷操作方式可以大大的节省我们开发编辑的时间。 基本命令  一般命令模式下的普通命令  dd : 剪切光标所在的那一整行到剪切板，会覆盖原先剪切板内容 yy :
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-03-30 01:07" pubdate>
+              2019-03-30
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/tools/">#tools</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2019/02/19/2019-02-19-camera-calibration-undistort/" target="_self">
+          <img src="/img/sword/sword1.jpg" srcset="/img/loading.gif" lazyload alt="透镜畸变与相机标定">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2019/02/19/2019-02-19-camera-calibration-undistort/" target="_self">
+          透镜畸变与相机标定
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2019/02/19/2019-02-19-camera-calibration-undistort/" target="_self">
+        <div>
+          在相机成像的几何描述这篇文章中我们讨论了如何将一个点从世界坐标映射到像素坐标，不过那是比较理想的成像情况。现实世界中的相机在成像时还会受到透镜畸变的影响。  需要说明的是，下面的畸变模型都是基于针孔模型(一般的相机)得到的结果。而如果遇到一些特殊的相机，比如说鱼眼相机，它的投影模型会与针孔模型有些不同，它是投影在球面而不是平面上的。这样下面的畸变模型就不管用了。因此对于不同的相机，我们要使用不同的
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-02-19 01:07" pubdate>
+              2019-02-19
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">#计算机视觉</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2019/01/27/2019-01-27-Homography-matrix/" target="_self">
+          <img src="/img/game5.jpg" srcset="/img/loading.gif" lazyload alt="射影几何中的单应变换">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
       <h1 class="index-header">
         
         <a href="/2019/01/27/2019-01-27-Homography-matrix/" target="_self">
@@ -240,9 +661,9 @@
       </h1>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2019/01/27/2019-01-27-Homography-matrix/" target="_self">
+      <a class="index-excerpt " href="/2019/01/27/2019-01-27-Homography-matrix/" target="_self">
         <div>
-          各种经典变换总结(2维平面上，三维空间中思想一致，但是自由度不同)   刚体(欧式)变换：可以保证两个点在变换前后欧式距离不变，具有3个自由度（旋转一个，平移两个）；  通常是旋转加上平移；    相似变换：通常指相似刚体变换，指增加了缩放的刚体变换，具有4个自由度（刚体的3个再加上缩放尺度），相似变换具有保角性与保持距离比的性质；  通常可以描述为先旋转一次，再缩放一次，最后平移一次；
+          各种经典变换总结(2维平面上，三维空间中思想一致，但是自由度不同)  刚体(欧式)变换：可以保证两个点在变换前后欧式距离不变，具有3个自由度（旋转一个，平移两个）；  通常是旋转加上平移；  相似变换：通常指相似刚体变换，指增加了缩放的刚体变换，具有4个自由度（刚体的3个再加上缩放尺度），相似变换具有保角性与保持距离比的性质；  通常可以描述为先旋转一次，再缩放一次，最后平移一次；  仿射变换：具
         </div>
       </a>
 
@@ -268,373 +689,11 @@
     </article>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2019/01/26/2019-01-26-ransac/" target="_self">
-          RANSAC算法的理解与使用
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2019/01/26/2019-01-26-ransac/" target="_self">
-        <div>
-          随机抽样一致算法(random sample consensus, RANSAC)，其实就是采用迭代的方法从一组包含离群的被观测数据中估算出数学模型的参数。(比如通过一群点拟合一条直线等)  基本假设   模型假设：事先知道真实数据满足的数学模型，不知道的只是模型的具体参数；   输入假设：输入数据中包含正确数据（即inliers，可以被假设模型描述的数据）；同时也包含异常数据（即outliers
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-01-26 01:07" pubdate>
-              2019-01-26
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">#计算机视觉</a>
-            
-              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">#机器学习</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2019/01/15/2019-01-15-hash-table/" target="_self">
-          哈希表的原理与实现
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2019/01/15/2019-01-15-hash-table/" target="_self">
-        <div>
-          哈希表(hash table，也叫散列表)，是可以根据键(key)直接访问值(value)在内存中存储位置的一种数据结构。哈希表的核心是哈希函数(hash function)，正是哈希函数完成了从key到value存储位置的映射。  在计算机科学中的应用 哈希算法在计算机科学中应用广泛。例如git的版本管理、IP协议中的checksum都有它的身影。   其中在git的版本管理中，文件内容是key
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-01-15 01:07" pubdate>
-              2019-01-15
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">#算法与数据结构</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2019/01/13/2019-01-13-epipolar-geometry/" target="_self">
-          理解对极几何与基本矩阵
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2019/01/13/2019-01-13-epipolar-geometry/" target="_self">
-        <div>
-          对极几何是双视图之间内在的射影几何。它独立于景物结构，只依赖于摄像机的内参外参。 而基本矩阵是对对极几何的代数表示。  对极几何 如下图所示，对极几何通常用来解决双眼匹配搜索对应点的问题。  上图a中两个摄像机的中心分别是C与C’，而X为一个三维空间点，它在两个摄像机的成像平面上的投影点分别是x与x’。我们常称：  基线：两个摄像机光心的连线CC′CC&#x27;CC′ 对极点：上图b中的e与e’
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-01-13 01:07" pubdate>
-              2019-01-13
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">#计算机视觉</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2019/01/11/2019-01-11-homogeneous-coordinates/" target="_self">
-          理解齐次坐标
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2019/01/11/2019-01-11-homogeneous-coordinates/" target="_self">
-        <div>
-          齐次坐标系（Homogeneous Coordinates）是计算机视觉与图形学中的一个重要的数学工具。  齐次坐标的引入 在欧式空间里，两条公面的平行线无法相交，但是在投影空间(Projective Space)里不是这样。一个直观的表示如下：两条轨道的间距随着视线变远而逐渐变小，直到在无限远处相交。  在欧式空间里采用(x,y,z)(x, y, z)(x,y,z)表示一个三维点，但是无穷远点(
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-01-11 01:07" pubdate>
-              2019-01-11
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E6%95%B0%E5%AD%A6/">#数学</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2019/01/10/2019-01-10-camerca-module/" target="_self">
-          相机成像的几何描述
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2019/01/10/2019-01-10-camerca-module/" target="_self">
-        <div>
-          相机成像，就是指通过摄像机将真实的三维空间中的点映射到成像平面（2维）上。这个过程可以通过一个几何模型来表示，本文使用最简单的针孔成像模型进行讲解。  针孔相机模型 如下图所示，是针孔相机的成像模型。  其中，O为相机的光心，也是针孔模型的针孔。现实世界的空间点P，在经过小孔O投影之后，落在了物理成像平面O'-x'-y'上，成像点是 P’ ，假设P的相机坐标系坐标是[X,Y,Z]T[X,Y,Z]^
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-01-10 01:07" pubdate>
-              2019-01-10
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">#计算机视觉</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2019/01/03/2019-01-03-matrix-singular-value/" target="_self">
-          矩阵的奇异值分解(SVD)
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2019/01/03/2019-01-03-matrix-singular-value/" target="_self">
-        <div>
-          矩阵的本质可以是代表着一定维度空间上的线性变换。矩阵分解的本质是将原本m*n复杂的矩阵分解成对应的几个简单矩阵的乘积的形式。使得矩阵分析起来更加简单。 前面写过一篇博客讲的是矩阵的特征值分解，但是我们知道很多矩阵都是不能够进行特征值分解的。这种情况下，如果我们想通过矩阵分解的形式将原本比较复杂的矩阵问题分解成比较简单的矩阵相乘的形式，会对其进行奇异值分解。  简单回顾特征值分解 如果一个n*n矩阵
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-01-03 01:07" pubdate>
-              2019-01-03
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E6%95%B0%E5%AD%A6/">#数学</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2019/01/03/2019-01-03-ml-LDA/" target="_self">
-          线性判别分析(LDA)
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2019/01/03/2019-01-03-ml-LDA/" target="_self">
-        <div>
-          线性判别分析(Linear Discriminant Analysis，简称LDA)是一种经典的有监督线性学习方法，最早在1936年由fisher在二分类问题上提出。这种方法主要用于分类与降维。此处需要说明的是，LDA常常还会是隐含狄利克雷分布(Latent Dirichlet Allocation)的简称，这是自然语言处理领域一种处理文档的主题模型，与本文讲的线性判别分析关系不大。  基本思想
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-01-03 01:07" pubdate>
-              2019-01-03
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">#机器学习</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2018/12/26/2018-12-26-matrix-eigenvalue/" target="_self">
-          矩阵的特征值分解
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/12/26/2018-12-26-matrix-eigenvalue/" target="_self">
-        <div>
-          特征值分解 物理意义：  矩阵可以表示一种变换； 特征向量表示矩阵变换的方向； 特征值表示矩阵变换在对应特征向量方向上的变换速度；   特征值与特征向量 如下一个二维向量v⃗\vec{v_{}}v​​，这个二维空间的基向量是i⃗\vec{i_{}}i​​与j⃗\vec{j_{}}j​​;  将向量v⃗\vec{v_{}}v​​左乘一个矩阵A\mathbf{A}A，情况变成如下：  奇妙的来了，如
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-12-26 01:07" pubdate>
-              2018-12-26
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E6%95%B0%E5%AD%A6/">#数学</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2018/12/24/2018-12-24-optical-flow/" target="_self">
-          光流算法简述
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/12/24/2018-12-24-optical-flow/" target="_self">
-        <div>
-          光流(optical　flow)，字面意思描述的是图像中像素强度的流动。光流法的目的是根据图像中像素点的灰度值强度变化估计出物体移动速度与方向。  光流  光流的假设 首先，光流估计指的是利用时间上相邻的两帧图像内像素强度的变化来计算点的运动。原理决定了这种方法是建立在一系列假设上的。  前后两帧中点的位移不大 灰度不变假设，这要求外界光强保持恒定 空间相关性，每个点的运动和邻近的点类似   好像
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-12-24 01:07" pubdate>
-              2018-12-24
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">#计算机视觉</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
 
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/5/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/#board">4</a><a class="page-number" href="/page/5/#board">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/#board">7</a><a class="page-number" href="/page/8/#board">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/#board">11</a><a class="extend next" rel="next" href="/page/7/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/5/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/#board">4</a><a class="page-number" href="/page/5/#board">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/#board">7</a><a class="page-number" href="/page/8/#board">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/#board">12</a><a class="extend next" rel="next" href="/page/7/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 

@@ -1,0 +1,1061 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon1.png">
+  <link rel="icon" href="/img/icon1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Line">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="下面1，2两节都是在哈密顿形式的姿态上进行讨论的，第三节开始涉及JPL与哈密顿的区别。  1 对于可加法因变量的扰动求导  因为加法本身是无向的（左右等价），所以没有左右扰动的概念。但是对于旋转矩阵群，左乘和右乘是不等价的，因此左右扰动的概念仅仅在不适用加法的群上存在。  1.1 左扰动雅克比 \[ \begin{aligned} \frac{\partial(\boldsymbol{R} \b">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于旋转或姿态的扰动求导问题总结">
+<meta property="og:url" content="http://line.com/2021/05/25/2021-05-25-rotation-jacobian/index.html">
+<meta property="og:site_name" content="Line&#39;s Blog">
+<meta property="og:description" content="下面1，2两节都是在哈密顿形式的姿态上进行讨论的，第三节开始涉及JPL与哈密顿的区别。  1 对于可加法因变量的扰动求导  因为加法本身是无向的（左右等价），所以没有左右扰动的概念。但是对于旋转矩阵群，左乘和右乘是不等价的，因此左右扰动的概念仅仅在不适用加法的群上存在。  1.1 左扰动雅克比 \[ \begin{aligned} \frac{\partial(\boldsymbol{R} \b">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://line.com/img/one-piece/one-piece41.jpg">
+<meta property="article:published_time" content="2021-05-24T17:07:24.000Z">
+<meta property="article:modified_time" content="2023-03-05T06:27:43.721Z">
+<meta property="article:author" content="Line">
+<meta property="article:tag" content="数学">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://line.com/img/one-piece/one-piece41.jpg">
+  
+  
+  
+  <title>关于旋转或姿态的扰动求导问题总结 - Line&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+<link rel="stylesheet" href="/css/mac.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"line.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Line</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default2.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="关于旋转或姿态的扰动求导问题总结"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-05-25 01:07" pubdate>
+          2021年5月25日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          9.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          82 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">关于旋转或姿态的扰动求导问题总结</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p>下面1，2两节都是在哈密顿形式的姿态上进行讨论的，第三节开始涉及JPL与哈密顿的区别。</p>
+</blockquote>
+<h2 id="对于可加法因变量的扰动求导">1 对于可加法因变量的扰动求导</h2>
+<blockquote>
+<p>因为加法本身是无向的（左右等价），所以没有左右扰动的概念。但是对于旋转矩阵群，左乘和右乘是不等价的，因此左右扰动的概念仅仅在不适用加法的群上存在。</p>
+</blockquote>
+<h3 id="左扰动雅克比">1.1 左扰动雅克比</h3>
+<p><span class="math display">\[
+\begin{aligned} \frac{\partial(\boldsymbol{R} \boldsymbol{p})}{\partial
+\boldsymbol{\varphi}}
+      &amp;=\lim _{\varphi \rightarrow 0} \frac{\exp
+\left(\boldsymbol{\varphi}^{\wedge}\right) \boldsymbol{R}
+\boldsymbol{p}- \boldsymbol{R} \boldsymbol{p}}{\varphi} \\
+      &amp;=\lim _{\varphi \rightarrow 0}
+\frac{\left(\boldsymbol{I}+\boldsymbol{\varphi}^{\wedge}\right)
+\boldsymbol{R} \boldsymbol{p} - \boldsymbol{R} \boldsymbol{p}}{\varphi}
+\\
+      &amp;=\lim _{\boldsymbol{\varphi} \rightarrow 0}
+\frac{\boldsymbol{\varphi}^{\wedge} \boldsymbol{R}
+\boldsymbol{p}}{\varphi}
+      =\lim _{\boldsymbol{\varphi} \rightarrow 0} \frac{-(\boldsymbol{R}
+\boldsymbol{p})^{\wedge} \boldsymbol{\varphi}}{\varphi}
+      =-(\boldsymbol{R} \boldsymbol{p})^{\wedge} \end{aligned}
+\]</span></p>
+<h3 id="右扰动雅克比">1.2 右扰动雅克比</h3>
+<p><span class="math display">\[
+\begin{aligned} \frac{\partial(\boldsymbol{R} \boldsymbol{p})}{\partial
+\boldsymbol{\varphi}}
+      &amp;=\lim _{\varphi \rightarrow 0} \frac{ \boldsymbol{R}  \exp
+\left(\boldsymbol{\varphi}^{\wedge}\right)  \boldsymbol{p}-
+\boldsymbol{R} \boldsymbol{p}}{\varphi} \\
+      &amp;=\lim _{\varphi \rightarrow 0} \frac{
+\boldsymbol{R}  \left(\boldsymbol{I}+\boldsymbol{\varphi}^{\wedge}\right)
+\boldsymbol{p} - \boldsymbol{R} \boldsymbol{p}}{\varphi} \\
+      &amp;=\lim _{\boldsymbol{\varphi} \rightarrow 0}
+\frac{\boldsymbol{R} \boldsymbol{\varphi}^{\wedge}
+\boldsymbol{p}}{\varphi}
+      =\lim _{\boldsymbol{\varphi} \rightarrow 0} \frac{-\boldsymbol{R}
+{\boldsymbol{p}}^{\wedge} \boldsymbol{\varphi}}{\varphi}
+      =-\boldsymbol{R} {\boldsymbol{p}}^{\wedge} \end{aligned}
+\]</span></p>
+<blockquote>
+<p>上述两种扰动中都利用了<span class="math inline">\(a^{\wedge} b = -
+b^{\wedge}
+a\)</span>的性质，这个性质几何上很好理解，即交换叉乘的顺序，得到的结果是相反方向的。</p>
+</blockquote>
+<h2 id="对于不可加法因变量的扰动求导">2.
+对于不可加法因变量的扰动求导</h2>
+<blockquote>
+<p>旋转矩阵群上加法不成立，乘法具有各向异性，假设如下都是哈密顿形式的姿态存储，则单纯求导有如下四种情况。（JPL也是四种，仅仅扰动形式稍有不同，可以查看第三节）。实际应用中会简单很多，因为通常哈密顿仅仅会进行右扰动，JPL仅仅会进行左扰动（因为通常都是在局部坐标系上添加扰动）。</p>
+</blockquote>
+<p>假设因变量为<span class="math inline">\(R =
+R_1R_2\)</span>，自变量为<span class="math inline">\(R_1\)</span>和<span
+class="math inline">\(R_2\)</span>，此时，假设我们先求R对<span
+class="math inline">\(R_1\)</span>的雅克比（对<span
+class="math inline">\(R_2\)</span>的雅克比类似），则情况可以分为四种：</p>
+<ul>
+<li>R的右扰动对<span
+class="math inline">\(R_1\)</span>的右扰动求导：</li>
+</ul>
+<p><span class="math display">\[
+\begin{aligned}
+(R_1R_2)Exp(\theta) &amp;= R_1 Exp(\phi)R_2 \\
+(R_1R_2)Exp(\theta) &amp;= R_1 R_2 Exp(R_2^T \phi) \\
+Exp(\theta) &amp;= Exp(R_2^T \phi) \\
+J &amp;= R_2^T
+\end{aligned}
+\]</span></p>
+<ul>
+<li>R的右扰动对<span
+class="math inline">\(R_1\)</span>的左扰动求导：</li>
+</ul>
+<p><span class="math display">\[
+\begin{aligned}
+(R_1R_2)Exp(\theta) &amp;= Exp(\phi) R_1 R_2 \\
+Exp(\theta) &amp;= R_2^T R_1^T Exp(\phi) R_1 R_2 \\
+Exp(\theta) &amp;= R_2^T Exp( R_1^T \phi) R_2 \\
+Exp(\theta) &amp;=  Exp( R_2^T R_1^T \phi) \\
+J &amp;=  R_2^T R_1^T
+\end{aligned}
+\]</span></p>
+<ul>
+<li>R的左扰动对<span
+class="math inline">\(R_2\)</span>的左扰动求导：</li>
+<li>R的左扰动对<span
+class="math inline">\(R_2\)</span>的右扰动求导：</li>
+</ul>
+<blockquote>
+<p>上述求导中大量使用了矩阵的伴随性质。</p>
+</blockquote>
+<h2 id="左扰动与右扰动">3 左扰动与右扰动</h2>
+<p>在导航中，我们一般会定义两个主要的坐标系，分别是全局(Global，比如enu)坐标系与局部(Local，常常为运动物体的body坐标系)坐标系，其中全局坐标系最好是固定的。物体的姿态其实是相对坐标系定义的，所以在添加的扰动可以理解为是对坐标系的扰动，因此需要<strong>添加扰动时最好是对局部坐标系进行扰动</strong>（我的理解是全局坐标系的扰动容易导致出现整体的偏移，影响结果），假设对局部坐标系的扰动为<span
+class="math inline">\(\mathbf{R}_{\tilde{L}}^{L} = exp
+\left({\theta}_{L&#39;}^{L}\right)\)</span>(含义是从L'到L的旋转变换)。</p>
+<p>因此当姿态表达在全局坐标系时（哈密顿，从局部坐标系矢量到全局坐标系矢量的旋转变换，从下标到上标），根据旋转的叠加方式，需要添加的是右扰动，即：
+<span class="math display">\[
+\mathbf{R}_{\tilde{L}}^{G} = \mathbf{R}_{L}^{G}
+\mathbf{R}_{\tilde{L}}^{L} = \mathbf{R}_{L}^{G}(I +
+\lfloor{\theta}_{L&#39;} ^{L} \rfloor)
+\]</span>
+当姿态表达在局部坐标系时（JPL，旋转矩阵为从全局坐标系到局部坐标系的旋转变换，从下标到上标），根据旋转的叠加方式，需要添加的是左扰动，即：
+<span class="math display">\[
+\mathbf{R}_{G}^{L&#39;} = \mathbf{R}_{L}^{L&#39;} \mathbf{R}_{G}^{L} =
+(I +\lfloor {\theta}_{L} ^{L&#39;} \rfloor) \mathbf{R}_{G}^{L} = (I -
+\lfloor{\theta}_{L&#39;} ^{L} \rfloor) \mathbf{R}_{G}^{L}
+\]</span></p>
+<p>查看一个项目中是使用什么形式的扰动，只需要查看a.姿态的表示形式，b.其获得更新量后对姿态的更新方式即可。接下来是<strong>重点</strong>！</p>
+<ol type="1">
+<li>比如openvins中姿态表示使用JPL，更新方式是首先将扰动三维向量dx转为单位四元数<span
+class="math inline">\(dq=[\frac{1}{2}\bf{dx},1]\)</span>，然后使用dq左乘原本的姿态q，因为上述dq转换为矩阵为<span
+class="math inline">\(dR = I_{3\times3}-\lfloor \bf{dx}
+\rfloor\)</span>，因此openvins中计算雅克比时需要是左扰动并且是左乘$(I -
+_{L'} ^{L} ) $的扰动形式。</li>
+<li>如果有一个项目中姿态表示使用哈密顿，更新方式是首先将扰动三维向量dx转为单位四元数<span
+class="math inline">\(dq=[\frac{1}{2}\bf{dx},1]\)</span>，然后使用dq右乘原本的姿态q，因为上述dq转换为矩阵为<span
+class="math inline">\(dR = I_{3\times3}+\lfloor \bf{dx}
+\rfloor\)</span>，因此此项目中计算雅克比时需要是右扰动并且是右乘$(I +
+_{L'} ^{L}) $的扰动形式。</li>
+</ol>
+<blockquote>
+<p>总结：根据你想在局部坐标系上添加扰动还是在全局坐标系上确定是左扰动还是右扰动。根据是JPL还是哈密顿决定扰动的形式<span
+class="math inline">\(exp(\theta)\)</span>或<span
+class="math inline">\(exp(-\theta)\)</span>)。注意！：：上述的旋转矩阵的叠加全都是<strong>从右向左</strong>的叠加，这是因为在对一个向量进行旋转时通常都是右乘这个向量，因此旋转叠加是从右向左叠加。</p>
+</blockquote>
+<p>经过上述叙述，我们可以总结：</p>
+<ul>
+<li>对于JPL形式的四元数表示的旋转，其表示的的姿态转换成旋转矩阵为<span
+class="math inline">\(\mathbf{R}_{G}^{L}\)</span>，该旋转矩阵可以将一个全局坐标系下的向量变换到局部坐标系下，即<span
+class="math inline">\({}^L\mathbf{p} =\mathbf{R}_{G}^{L} {}^G
+\mathbf{p}\)</span>。当body运动，局部坐标系变化为<span
+class="math inline">\(L&#39;\)</span>时，可以添加左扰动</li>
+</ul>
+<p><span class="math display">\[
+\mathbf{R}_{G}^{L&#39;} = \mathbf{R}_{L}^{L&#39;} \mathbf{R}_{G}^{L} \\
+{}^{L&#39;}\mathbf{p} =\mathbf{R}_{G}^{L&#39;} {}^G \mathbf{p}
+=  \mathbf{R}_{L}^{L&#39;} \mathbf{R}_{G}^{L} {}^G \mathbf{p}
+\]</span></p>
+<ul>
+<li>对于哈密顿形式的四元数表示的旋转，其表示的的姿态转换成旋转矩阵为<span
+class="math inline">\(\mathbf{R}_{L}^{G}\)</span>，该旋转矩阵可以将一个局部坐标系下的向量变换到全局坐标系下，即<span
+class="math inline">\({}^G\mathbf{p} =\mathbf{R}_{L}^{G} {}^L
+\mathbf{p}\)</span>。当body运动，局部坐标系变化为<span
+class="math inline">\(L&#39;\)</span>时，可以添加右扰动</li>
+</ul>
+<p><span class="math display">\[
+\mathbf{R}_{L&#39;}^{G} = \mathbf{R}_{L}^{G} \mathbf{R}_{L&#39;}^{L} \\
+{}^{G}\mathbf{p} =\mathbf{R}_{L&#39;}^{G} {}^{L&#39;} \mathbf{p}
+=  \mathbf{R}_{L}^{G} \mathbf{R}_{L&#39;}^{L} {}^{L&#39;} \mathbf{p}
+\]</span></p>
+<ul>
+<li>由上可知，JPL与哈密顿在局部坐标系添加的扰动分别为<span
+class="math inline">\(\mathbf{R}_{L}^{L&#39;}\)</span>与<span
+class="math inline">\(\mathbf{R}_{L&#39;}^{L}\)</span>，这二者互为反变换。一般空间坐标系为右手系，一般旋转向量通过右手法则定义。假设局部载体以z轴为旋转轴，右手法则旋转角度为<span
+class="math inline">\(\theta\)</span>，则旋转向量为<span
+class="math inline">\(\mathbf{\Theta} =
+[0,0,\theta]^{\top}\)</span>，从<span
+class="math inline">\(L\)</span>变换到<span
+class="math inline">\(L&#39;\)</span>。则此时有</li>
+</ul>
+<p><span class="math display">\[
+\mathbf{q}_{jpl} \approx [\frac{1}{2}\mathbf{\Theta}, 1] \\
+C(\mathbf{q}_{jpl}) = \mathbf{R}_{L}^{L&#39;} =  exp(-\lfloor
+\mathbf{\Theta} \rfloor)\\
+\mathbf{q}_{hamilton} \approx [\frac{1}{2}\mathbf{\Theta}, 1] \\
+C(\mathbf{q}_{hamilton}) =\mathbf{R}_{L&#39;}^{L} = exp(\lfloor
+\mathbf{\Theta} \rfloor)
+\]</span></p>
+<blockquote>
+<p>其中<span
+class="math inline">\(C()\)</span>表示将四元数变为对应的旋转矩阵，其中比较容易误解的一点是，载体从<span
+class="math inline">\(L\)</span>到<span
+class="math inline">\(L&#39;\)</span>的旋转向量为<span
+class="math inline">\(\mathbf{\Theta}\)</span>，但是对应的<span
+class="math inline">\(\mathbf{R}_{L}^{L&#39;} = exp(-\lfloor
+\mathbf{\Theta}
+\rfloor)\)</span>，这是因为该旋转矩阵表示的是将坐标系<span
+class="math inline">\(L\)</span>中的向量变换到<span
+class="math inline">\(L&#39;\)</span>坐标系中，这和坐标系本身的变换是刚好相反的。也正因为这一点，才有<span
+class="math inline">\(\mathbf{R}_{L&#39;}^{L} = exp(\lfloor
+\mathbf{\Theta} \rfloor)\)</span>。</p>
+</blockquote>
+<ul>
+<li>上述描述中涉及到了旋转向量，旋转向量可以表示为<span
+class="math inline">\(\theta\mathbf{r}\)</span>，其中<span
+class="math inline">\(\theta\)</span>为旋转角度，<span
+class="math inline">\(\mathbf{r}\)</span>为旋转轴，其表示的旋转通过右手定则定义。对于一个三维点<span
+class="math inline">\(\mathbf{p}\)</span>，其通过该旋转向量变换后得到的三维点为<span
+class="math inline">\(\mathbf{p&#39;}\)</span>为</li>
+</ul>
+<p><span class="math display">\[
+\mathbf{p&#39;} = \cos\theta \cdot  \mathbf{p}
++(1-\cos\theta)(\mathbf{p\cdot r})\mathbf{r} + \sin\theta \cdot
+\mathbf{r} \times\mathbf{p}
+\]</span></p>
+<blockquote>
+<p>可以发现，旋转向量的旋转轴方向上的向量在经过该旋转变换后不变，因此旋转向量的旋转轴既可以看做是定义在原坐标系中，也可以看做是定义在旋转后的坐标系中。</p>
+</blockquote>
+<h2 id="旋转的叠加方式与系统中四元数表达方式的关系">4.
+旋转的叠加方式与系统中四元数表达方式的关系</h2>
+<blockquote>
+<p>上面讲了添加扰动需要遵从旋转的叠加方式。而旋转的叠加方式与系统中四元数的表达方式有关。</p>
+</blockquote>
+<p>其实四元数的JPL格式（基于左手定则）与汉密尔顿格式（基于右手定则）的内容有不少，此处就不详细展开了。只指出几点如下，将四元数转成旋转矩阵，JPL与汉密尔顿得到的旋转矩阵是不同的，并且满足如下关系。</p>
+<figure>
+<img src="/img/rotation-jacobian/四元数转旋转矩阵.PNG" srcset="/img/loading.gif" lazyload
+alt="四元数转旋转矩阵" />
+<figcaption aria-hidden="true">四元数转旋转矩阵</figcaption>
+</figure>
+<blockquote>
+<p>由于这个性质，所以对于一个旋转向量扰动<span
+class="math inline">\(\delta \theta\)</span>，其构造四元数为<span
+class="math inline">\([1,\frac{1}{2}
+\delta\theta]\)</span>。对于这个四元数，哈密顿定则下其对应的旋转矩阵为<span
+class="math inline">\(I+[\delta
+\theta_{\times}]\)</span>，JPL定则下其对应的旋转矩阵为<span
+class="math inline">\(I-[\delta \theta_{\times}]\)</span></p>
+</blockquote>
+<p>我们发现这两个旋转矩阵互为转置，因此在<strong>这两种四元数的表示方式下的系统姿态旋转矩阵的叠加方式是刚好相反的</strong>。可以参考，第3节，其中第一个式子就是汉密尔顿表示的位姿的旋转矩阵的叠加，一般添加右扰动；第二个式子是JPL表示的位姿的旋转矩阵的叠加。</p>
+<blockquote>
+<p>黄国权老师的openvins就是使用了jpl的姿态表示形式。北航的很多滤波slam工作都是使用了哈密顿的姿态表示形式。根据上述分析可以发现，<strong>JPL还有哈密顿主要是决定了在系统中存储的姿态与坐标系之间相对变换的形式。哈密顿表示的姿态其实是全局坐标系到局部坐标系的旋转，JPL表示的姿态其实是从局部坐标系到全局坐标系的旋转。</strong></p>
+</blockquote>
+<p>这个问题在邱笑晨的一个pdf笔记里有过说明，主要意思是说对于一个四元数<span
+class="math inline">\(q=cos(\theta/2) + u^g .
+sin(\theta/2)\)</span>，我们一般将其表示为<span
+class="math inline">\(q_g^b\)</span>，其中g就是四元数中轴角表示的轴所在的参考系，b是经过当前四元数变换后一个向量所在的另一个参考系。因此按理来说应该需要有<span
+class="math inline">\(q_g^b\)</span>与<span
+class="math inline">\(R_g^b\)</span>（从g坐标系到b坐标系的旋转变换矩阵）相互映射的关系的。但是按照传统的右手规则定义的四元数不满足这个映射，而是满足<span
+class="math inline">\(q_g^b\)</span>与<span
+class="math inline">\(R_b^g\)</span>互为映射，因此shuster改变了四元数的虚部乘法规则，使用左手定则定义，获得的四元数刚好满足<span
+class="math inline">\(q_g^b\)</span>与<span
+class="math inline">\(R_g^b\)</span>互为映射。</p>
+<h2 id="bch公式与伴随">5. BCH公式与伴随</h2>
+<blockquote>
+<p>在三维旋转矩阵群SO(3)上没有提供加法，因此不能求旋转矩阵的导数。但是三维旋转矩阵群对应的李代数与其是可以通过指数映射的（罗德里格斯公式），并且其李代数上是可以进行加法的，因此我们对姿态的更新通过流形进行更新。</p>
+</blockquote>
+<p>BCH公式主要是</p>
+<p><span class="math display">\[
+R_1 R_2 = \textbf{exp}({\phi_1}^{\wedge})\textbf{exp}({\phi_2}^{\wedge})
+\approx \begin{equation} \begin{cases} \textbf{exp}(( J_l(\phi_2)^{-1}
+\phi_1 + \phi_2    )^{\wedge})  &amp; \textbf{if  } \phi_1 \textbf{ is
+small}\\ \textbf{exp}(( J_r(\phi_1)^{-1} \phi_2+
+\phi_1    )^{\wedge})   &amp; \textbf{if  } \phi_2 \textbf{ is small}
+\end{cases} \end{equation}
+\]</span> 与 <span class="math display">\[
+\textbf{exp}((\phi_1+\phi_2)^{\wedge})  \approx \begin{equation}
+\begin{cases}  \textbf{exp}( (J_l(\phi_2){\phi_1})^{\wedge})
+\textbf{exp}({\phi_2}^{\wedge})  &amp; \textbf{if  } \phi_1 \textbf{ is
+small}\\   \textbf{exp}({\phi_1}^{\wedge}) \textbf{exp}(
+(J_r(\phi_1){\phi_2})^{\wedge})  &amp; \textbf{if  } \phi_2 \textbf{ is
+small} \end{cases} \end{equation}
+\]</span></p>
+<blockquote>
+<p>在上面第2节中使用了第一个BCH公式。</p>
+</blockquote>
+<p>伴随性质 <span class="math display">\[
+\mathbf{R}^T \exp \left(\boldsymbol{\phi}^{\wedge}\right) \mathbf{R} =
+\exp \left(\left(\mathbf{R}^{T} \boldsymbol{\phi}\right)^{\wedge}\right)
+\]</span></p>
+<h2 id="gps视觉插值残差姿态雅克比推导">6.
+gps视觉插值残差姿态雅克比推导</h2>
+<blockquote>
+<p>本节主要是想完成一次对姿态的扰动求导，选取了gps视觉插值残差对相邻vio帧的姿态雅克比求导。此处残差构造可以参考黄国权老师的论文《Intermittent
+GPS-aided VIO: Online Initialization and Calibration》。</p>
+</blockquote>
+<p>此处假设k时刻gnss的测量的时间戳在vio的a帧与b帧之间，因此首先会通过线性插值获得k时刻的imu位姿，此处主要分析姿态，因此姿态插值的公式为(可以发现系统使用JPL的姿态表示)：
+<span class="math display">\[
+R_V^{k} = Exp(\lambda Log(R_V^b R_a^V))R_V^a
+\]</span>
+其中此处求导中最关键的就是此处k时刻的imu姿态对a时刻imu姿态的雅克比，与对b时刻imu姿态的雅克比的求导。
+<span class="math display">\[
+\begin{aligned}
+\frac{\mathrm{d} Log \left(R_V^{k}\right)}{\mathrm{d} Log (R_V^b)}
+     &amp;=\lim _{\phi \rightarrow 0} \frac{Log \left(Exp(\lambda Log(
+Exp(\phi) R_V^b R_a^V))R_V^a \right)- Log \left(Exp(\lambda Log(R_V^b
+R_a^V))R_V^a \right)} {\phi} \\
+     &amp;=\lim _{\phi \rightarrow 0} \frac{Log \left(Exp \left(
+\lambda  J_l({\theta}_a^b)^{-1} \phi + \lambda {\theta}_a^b \right)
+R_V^a \right) - Log \left(Exp(\lambda {\theta}_a^b) R_V^a \right)}{\phi}
+\\
+     &amp;=\lim _{\phi \rightarrow 0} \frac{Log \left(Exp \left(
+\lambda  J_l(\lambda {\theta}_a^b) J_l({\theta}_a^b)^{-1} \phi \right)
+Exp \left(\lambda {\theta}_a^b \right) R_V^a \right) - Log
+\left(Exp(\lambda {\theta}_a^b) R_V^a \right)}{\phi} \\
+     &amp;=\lim _{\phi \rightarrow 0} \frac{\lambda J_l(Log \left(Exp
+\left(\lambda {\theta}_a^b \right) R_V^a \right))^{-1} J_l(\lambda
+{\theta}_a^b) J_l({\theta}_a^b)^{-1} \phi + Log \left(Exp \left(\lambda
+{\theta}_a^b \right) R_V^a \right) - Log \left(Exp(\lambda {\theta}_a^b)
+R_V^a \right)}{\phi} \\
+     &amp;=\lambda J_l({\theta}_V^k)^{-1} J_l(\lambda {\theta}_a^b)
+J_l({\theta}_a^b)^{-1}
+\end{aligned}
+\]</span></p>
+<blockquote>
+<p>我擦，与黄老师它们推导的不一样。。。。好吧，再看看哪里错了</p>
+</blockquote>
+<p>经邮件咨询，黄老师组的推导过程如下：</p>
+<blockquote>
+<p>自变量的扰动是左扰动（对b帧姿态的扰动），因变量的扰动是也是左扰动（我们探索对k帧姿态的扰动）</p>
+</blockquote>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{\mathrm{d} Log \left(R_V^{k}\right)}{\mathrm{d} Log (R_V^b)}
+     &amp;=\lim _{\phi \rightarrow 0} \frac{Log \left(Exp(\lambda Log(
+Exp(\phi) R_V^b R_a^V))R_V^a \ \ \  \left(Exp(\lambda Log(R_V^b
+R_a^V))R_V^a \right)^{-1} \right)} {\phi} \\
+     &amp;=\lim _{\phi \rightarrow 0} \frac{Log \left(Exp \left(
+\lambda  J_l({\theta}_a^b)^{-1} \phi + \lambda {\theta}_a^b \right)
+R_V^a  \ \ \  \left(Exp(\lambda {\theta}_a^b) R_V^a
+\right)^{-1}\right)  }{\phi} \\
+     &amp;=\lim _{\phi \rightarrow 0} \frac{Log \left(Exp \left(
+\lambda  J_l(\lambda {\theta}_a^b) J_l({\theta}_a^b)^{-1} \phi \right)
+Exp \left(\lambda {\theta}_a^b \right) R_V^a  \ \ \  \left(Exp(\lambda
+{\theta}_a^b) R_V^a \right)^{-1} \right)}{\phi} \\
+     &amp;=\lim _{\phi \rightarrow 0} \frac{Log \left(Exp \left(
+\lambda  J_l(\lambda {\theta}_a^b) J_l({\theta}_a^b)^{-1} \phi \right)
+\right)}{\phi}  \\
+     &amp;=\lambda J_l(\lambda {\theta}_a^b) J_l({\theta}_a^b)^{-1}
+\end{aligned}
+\]</span> 额问题已经很明显了，黄老师组对导数的定义与我们是不一样的。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%95%B0%E5%AD%A6/" class="category-chain-item">数学</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%95%B0%E5%AD%A6/">#数学</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>关于旋转或姿态的扰动求导问题总结</div>
+      <div>http://line.com/2021/05/25/2021-05-25-rotation-jacobian/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Line</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年5月25日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/06/04/2021-06-04-lagrangian-multipliers/" title="拉格朗日乘子法--带约束的最优化问题求解">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">拉格朗日乘子法--带约束的最优化问题求解</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/05/19/2021-05-19-ax=b-solve/" title="关于Ax=b形式的矩阵分解与求解问题">
+                        <span class="hidden-mobile">关于Ax=b形式的矩阵分解与求解问题</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"uznFHsAGgsXleHUL5QmcCb0l-gzGzoHsz","appKey":"WPsMgbdUtj0IglgPWwVB8B7s","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("4/10/2018 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

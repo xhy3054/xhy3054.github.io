@@ -58,6 +58,7 @@
 
   
 <link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+<link rel="stylesheet" href="/css/mac.css">
 
 
 
@@ -231,7 +232,429 @@
   <div class="row mx-auto index-card">
     
     
-    <article class="col-12 col-md-12 mx-auto index-info">
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2018/10/20/2018-10-21-cpp-const-constexpr/" target="_self">
+          <img src="/img/cute3.jpg" srcset="/img/loading.gif" lazyload alt="c++中const与constexpr关键字">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2018/10/20/2018-10-21-cpp-const-constexpr/" target="_self">
+          c++中const与constexpr关键字
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2018/10/20/2018-10-21-cpp-const-constexpr/" target="_self">
+        <div>
+          本文主要讨论const变量与constexpr变量的初始化时刻与constexpr函数的编译期计算问题。转载 const变量的初始化时刻 const修饰变量，表示这个变量是不可修改的，因此const变量必须初始化，一经初始化就不可修改。 1. 如果const变量的初始化值是在编译时就可以确定，则在编译时初始化；  如果const变量的初始化值是在运行时才确定，则在运行时初始化；  1const i
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2018-10-20 01:07" pubdate>
+              2018-10-20
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/c%E4%B8%8Ec/">#c与c++</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2018/10/18/2018-10-18-cpp-shared-ptr/" target="_self">
+          <img src="/img/cute1.jpg" srcset="/img/loading.gif" lazyload alt="c++智能指针－－shared_ptr">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2018/10/18/2018-10-18-cpp-shared-ptr/" target="_self">
+          c++智能指针－－shared_ptr
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2018/10/18/2018-10-18-cpp-shared-ptr/" target="_self">
+        <div>
+          众所周知，c语言与c++需要自行管理动态的内存。许多代码写到最后，防止内存泄漏需要花费程序员大量的心力。在c++11标准中，提出了智能指针来帮助程序员管理动态内存。智能指针主要有三种，分别是shared_ptr、unique_ptr与weak_ptr。本文主要讲的就是shared_ptr使用中的问题。 shared_ptr 首先需要说明的是，shared_ptr是一个模板类。为了让用户可以像使用内
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2018-10-18 01:07" pubdate>
+              2018-10-18
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/c%E4%B8%8Ec/">#c与c++</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2018/10/16/2018-10-16-cpp-class-construct-destruct/" target="_self">
+          <img src="/img/cartoon2.jpg" srcset="/img/loading.gif" lazyload alt="c++中类的拷贝控制操作">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2018/10/16/2018-10-16-cpp-class-construct-destruct/" target="_self">
+          c++中类的拷贝控制操作
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2018/10/16/2018-10-16-cpp-class-construct-destruct/" target="_self">
+        <div>
+          通常一个类的拷贝控制操作由以下三个函数来定义： 1. 拷贝构造函数  拷贝赋值运算符 析构函数  以上这３个成员，如果在一个类中未自己定义时，编译器会为这个类自动生成默认的版本。三个成员共同构成了一个类基本的的拷贝控制与资源管理操作。 =default 与 =delete 的使用 我们可以通过将拷贝控制成员定义为=default来显式地要求编译器生成合成版本的。 在c++11标准以后我们可以通过将
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2018-10-16 01:07" pubdate>
+              2018-10-16
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/c%E4%B8%8Ec/">#c与c++</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2018/10/10/2018-10-10-opencv-mat/" target="_self">
+          <img src="/img/cartoon4.jpg" srcset="/img/loading.gif" lazyload alt="opencv中的Mat类讲解">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2018/10/10/2018-10-10-opencv-mat/" target="_self">
+          opencv中的Mat类讲解
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2018/10/10/2018-10-10-opencv-mat/" target="_self">
+        <div>
+          Mat类 很久以前（大概两千年左右），opencv还只是提供ｃ接口的一个库。那时它使用一种ｃ语言的结构体叫做IplImage来存储图像。后来实在是受不了了，因为使用ｃ语言接口的用户需要自己来管理内存，实在特别麻烦并且容易出错。opencv维护者们就使用c++又翻新了一遍opencv库。新版本中（2.0往后）支持使用Mat来存储图像。 Mat的组成 Mat主要由两部分组成： 1. 矩阵头信息：主要是
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2018-10-10 01:07" pubdate>
+              2018-10-10
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">#计算机视觉</a>
+            
+              <a href="/tags/opencv/">#opencv</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2018/10/09/2018-10-09-reference-cpp/" target="_self">
+          <img src="/img/cartoon1.jpg" srcset="/img/loading.gif" lazyload alt="c++中的引用">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2018/10/09/2018-10-09-reference-cpp/" target="_self">
+          c++中的引用
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2018/10/09/2018-10-09-reference-cpp/" target="_self">
+        <div>
+          在c++中，为了改变c语言中指针使用的种种麻烦与困难，定义了一种新的复合类型－－－引用，引用也分为很多种，比如左值引用、右值引用、常量引用等等。 左值引用 一般情况下，大家见的最多的就是左值引用。右值引用通常与移动操作结合起来的比较多。其中左值引用使用&amp;符号，右值引用使用&amp;&amp;。 下面是左值引用的两个大类。 ## 普通引用 引用为对象起了另外一个名字，引用类型引用（refer
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2018-10-09 01:07" pubdate>
+              2018-10-09
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/c%E4%B8%8Ec/">#c与c++</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2018/10/03/2018-10-03-hafuo-feng-struct/" target="_self">
+          <img src="/img/village.jpg" srcset="/img/loading.gif" lazyload alt="哈佛体系结构与冯诺依曼体系结构的区别">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2018/10/03/2018-10-03-hafuo-feng-struct/" target="_self">
+          哈佛体系结构与冯诺依曼体系结构的区别
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2018/10/03/2018-10-03-hafuo-feng-struct/" target="_self">
+        <div>
+          MCS-51单片机有着嵌入式处理器经典的体系结构，这种体系结构在当前嵌入式处理器的高端ARM系列上仍然在延续，这就是哈佛结构。相对于大名鼎鼎的冯·诺依曼结构，哈佛结构的知名度显然逊色许多，但在嵌入式应用领域，哈佛结构却拥有着绝对的优势。哈佛结构与冯·诺依曼结构的最大区别在于冯·诺依曼结构的计算机采用代码与数据的统一编址，而哈佛结构是独立编址的，代码空间与数据空间完全分开。 在通用计算机系统中，应用
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2018-10-03 01:07" pubdate>
+              2018-10-03
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">#计算机基础</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2018/10/01/2018-10-01-gdb/" target="_self">
+          <img src="/img/cartoon3.jpg" srcset="/img/loading.gif" lazyload alt="命令行调试工具gdb小结">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2018/10/01/2018-10-01-gdb/" target="_self">
+          命令行调试工具gdb小结
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2018/10/01/2018-10-01-gdb/" target="_self">
+        <div>
+          一个合格的程序猿，肯定熟练掌握一种或者几种编程语言。而要想熟练掌握ｃ与c++语言，gdb这个工具是一定得了解的。额，不过我写它主要是给自己一个快速查看的链接，等到我把这些背下来就没什么价值了。这里只会写最常用最简单的功能，如果想要了解更多，可以查看gdb技术手册。 gdb GDB是一个由GNU开源组织发布的、UNIX/LINUX操作系统下的、基于命令行的、功能强大的程序调试工具。gdb的功能及其强
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2018-10-01 01:07" pubdate>
+              2018-10-01
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/tools/">#tools</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2018/09/16/2018-09-16-visual-feature-orb/" target="_self">
+          <img src="/img/village1.jpg" srcset="/img/loading.gif" lazyload alt="图像特征之ORB特征详解">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2018/09/16/2018-09-16-visual-feature-orb/" target="_self">
+          图像特征之ORB特征详解
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2018/09/16/2018-09-16-visual-feature-orb/" target="_self">
+        <div>
+          学术需要，最近开始着手一些视觉slam的工作，首先接触了如今github上最火的开源valsm的项目－－ORB-Slam，这是一种基于特征点匹配的方法。其实以前我就已经接触过一些图像特征了，比如说SURF、SIFT等经典的特征点，记得当时还依据SURF特征写过一个图像拼接的MATLAB大作业。但是说实话，当时对于图像特征这个概念我的理解是非常浅显的。这次进行视觉SLAM的学习，首先就从ORB特征点
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2018-09-16 01:07" pubdate>
+              2018-09-16
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">#计算机视觉</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2018/09/15/2018-09-15-c-cpp-common/" target="_self">
+          <img src="/img/town1.jpg" srcset="/img/loading.gif" lazyload alt="c语言和ｃ++语言中的几个常识问题">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2018/09/15/2018-09-15-c-cpp-common/" target="_self">
+          c语言和ｃ++语言中的几个常识问题
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2018/09/15/2018-09-15-c-cpp-common/" target="_self">
+        <div>
+          在我刚上大学那会儿，学了ｃ语言与cpp。当时肯定是没学好哈哈，记得我好长一段时间都认为c++语言就是ｃ语言多了面向对象的部分（这个有可能是因为谭浩强的两本书实在太像了）。这段时间一直在总结c语言和cpp语言学习，cpp语言确实脱胎于c语言，但是有些地方确实还是会有细微的差别的。已经写了几篇博客了，今天这应该是最后一篇，讲的是一些ｃ语言和cpp的几个常识问题．比如关键字struct与关键字class
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2018-09-15 01:07" pubdate>
+              2018-09-15
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/c%E4%B8%8Ec/">#c与c++</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2018/09/09/2018-09-09-c-cpp-argu-passing/" target="_self">
+          <img src="/img/reef.jpg" srcset="/img/loading.gif" lazyload alt="c语言和ｃ++语言中函数参数的传递">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
       <h1 class="index-header">
         
         <a href="/2018/09/09/2018-09-09-c-cpp-argu-passing/" target="_self">
@@ -240,9 +663,9 @@
       </h1>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/09/09/2018-09-09-c-cpp-argu-passing/" target="_self">
+      <a class="index-excerpt " href="/2018/09/09/2018-09-09-c-cpp-argu-passing/" target="_self">
         <div>
-          其实关于函数参数的传递，我一直以来的理解还算到位的。但是经常会有一些稀奇古怪的写法会让我有点懵圈，仔细想清楚了，就会发现都是一样的道理，不过要是我来写我可能会那样写，而不这样写，在这里稍微吐槽一下ｃ语言关于数组指针的很多写法，真是很难理解了。写这个博客希望自己从此不要被很多拗口的写法吓住，抓住本质的东西，写自己的代码。  1 函数参数传递的本质 在调用一个函数时进行参数传递（不只是讲参数列表里的参
+          其实关于函数参数的传递，我一直以来的理解还算到位的。但是经常会有一些稀奇古怪的写法会让我有点懵圈，仔细想清楚了，就会发现都是一样的道理，不过要是我来写我可能会那样写，而不这样写，在这里稍微吐槽一下ｃ语言关于数组指针的很多写法，真是很难理解了。写这个博客希望自己从此不要被很多拗口的写法吓住，抓住本质的东西，写自己的代码。 1 函数参数传递的本质 在调用一个函数时进行参数传递（不只是讲参数列表里的参数
         </div>
       </a>
 
@@ -268,371 +691,11 @@
     </article>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2018/09/08/2018-09-08-c-cpp-type-convert/" target="_self">
-          c语言和ｃ++语言中的类型转换
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/09/08/2018-09-08-c-cpp-type-convert/" target="_self">
-        <div>
-          关于类型转换的问题，本来我并没有如何在意。因为一直都是写的ｃ的代码比较多一点嘛，而ｃ这方面的内容并不多，形式也很简单。所以一直以来都会有一点错觉，觉得这方面自己应该了解的差不多，够用了。偶尔写代码有些关于这部分的内容老是出错，我也都是尽量“绕”过去，没想过深究原因。这段时间的基础学习，真的是学到了很多，也让我意识到自己很多错误的观点。其中关于类型转换，我以前的理解确实是很肤浅的，直到现在我可能了解
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-09-08 01:07" pubdate>
-              2018-09-08
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/c%E4%B8%8Ec/">#c与c++</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2018/09/02/2018-09-02-c-cpp-operator/" target="_self">
-          c语言和ｃ++语言中的几种运算符
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/09/02/2018-09-02-c-cpp-operator/" target="_self">
-        <div>
-          ｃ与c++中的运算符种类繁多，虽然大多数都很简单，且用法明确。但是也有很多需要注意的地方。很早之前我就想将其中的一些注意点写下来了，但是总觉得每个点都很小，写一篇博客似乎篇幅太小了。今天一合计，不如就写一个关于运算符的合集吧。这篇博客里不会写的很详细，但是都是一些容易让人困惑的点。  i++ 与++i   i++: 首先将ｉ的值进行拷贝，然后将ｉ值加１，最后返回拷贝；   ++i: 首先将ｉ值加１
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-09-02 01:07" pubdate>
-              2018-09-02
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/c%E4%B8%8Ec/">#c与c++</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2018/08/29/2018-08-29-c-ArrayOfVariableLength/" target="_self">
-          c语言中的变长数组与零长数组
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/08/29/2018-08-29-c-ArrayOfVariableLength/" target="_self">
-        <div>
-          编程确实是需要在实践中提高，这段时间一直在学习ｃ++，同时刷刷leetcode。遇到了很多问题，也搞清楚了很多原本模糊不清的概念，今天主要写一下ｃ语言中的变长数组与零长数组。尤其是其中的变长数组，可是困扰了我一段时间了。  c语言中的变长数组 想必很多学习c++的人都会在书上看到，数组在初始化时一定得确定维度，也就是说定义数组时，维度一定要用常量。但是在编程中很多人肯定发现了，如下程序也能正常运行
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-08-29 01:07" pubdate>
-              2018-08-29
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/c%E4%B8%8Ec/">#c与c++</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2018/08/26/2018-08-26-auto-c-cpp/" target="_self">
-          c语言与c++语言中关键字auto的使用
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/08/26/2018-08-26-auto-c-cpp/" target="_self">
-        <div>
-          最近一直在读cpp方面的书籍，虽然每天看的页数不多，但是收获很多，我时间不是很充裕，只能挑拣着一点我觉得我已经掌握的还可以了，有一定把握写好的记录下来。之前写了两篇博客都是讲解cpp与C中的一些关键字的差别，这一篇也是，讲的是关键字auto在c与cpp中的差异。  c语言中的auto 大家都学过ｃ语言，但是可能很多人都不知道ｃ语言中还有个关键字叫做auto。其实很正常，这个关键字在ｃ语言中确实没什
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-08-26 01:07" pubdate>
-              2018-08-26
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/c%E4%B8%8Ec/">#c与c++</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2018/08/15/2018-08-15-c-cpp-extern/" target="_self">
-          c语言与c++语言中关键字extern的使用
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/08/15/2018-08-15-c-cpp-extern/" target="_self">
-        <div>
-          相比static关键字，可能大家对于extern更是陌生一些。我有段时间就是这样，看到static，觉得自己好像知道一点，虽然其实是半知半解。看到extern，我通常会心里一虚，确实很陌生啊。记得查过几次，但是似乎看完就又忘记了，原因就是根本没理解。所以，在昨天把曾让自己半知半解的static关键字讲解完毕后，今天再来写曾经让我半知半解都没有的extern关键字。  链接属性 我们知道一个程序中的
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-08-15 01:07" pubdate>
-              2018-08-15
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/c%E4%B8%8Ec/">#c与c++</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2018/08/14/2018-08-14-c-cpp-static/" target="_self">
-          c语言与c++语言中关键字static的使用
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/08/14/2018-08-14-c-cpp-static/" target="_self">
-        <div>
-          想必很多人对c语言的static都不是很熟悉，我有段时间就是，经常看到一些代码中这个关键词出现的频率很高，但是并不是很懂，大概的了解过几次，还是半知半解。最近在对c语言和c++进行基础重翻，终于是弄懂了这部分。  链接属性 我们知道一个程序中的多个源文件是分别被编译，最后通过链接器将多个目标文件还有库文件链接起来才形成一个单一完整的可执行文件的。那么如果相同的标识符出现在几个不同的源文件中，它们是
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-08-14 01:07" pubdate>
-              2018-08-14
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/c%E4%B8%8Ec/">#c与c++</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2018/07/02/2018-07-02-register-cache-memory/" target="_self">
-          计算机中register、cache、memory的区别
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/07/02/2018-07-02-register-cache-memory/" target="_self">
-        <div>
-          概念  register：寄存器。cpu中的基本单元，与cpu中的运算单元是一个级别的。运算单元直接处理的数据存储器。从普通单片机到intel的cpu全都存在寄存器。 cache：缓存。一般普通MCU是没有缓存的，一些强大的个人电脑或者手机芯片才会有缓存，缓存的一般用的是SRAM静态随机存储器，速度很快。通常情况是电脑在工作时将从内存中读入的用过的数据放入缓存，以便下次用时可以快速找到它。不过c
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-07-02 02:07" pubdate>
-              2018-07-02
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">#计算机基础</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2018/06/25/2018-06-25-resnet/" target="_self">
-          ResNet论文笔记
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/06/25/2018-06-25-resnet/" target="_self">
-        <div>
-          退化问题 2013年以来cnn飞速发展，从比较简单的LeNet、AlexNet,到结构对称美观的VGGNet（经典结构之一，SegNet、SSD等都使用它作为基础网络），再到可以大量减少参数的GoogleNet（Inception），一直到本文主角ResNet的出现，它们都有一个共同的特点：网络层数在不断加深。 按理说，深度cnn网络集成了特征提取器与特征分类器，并且特征水平可以通过层数的堆砌来
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-06-25 01:07" pubdate>
-              2018-06-25
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">#深度学习</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2018/06/22/2018-06-22-dhcp/" target="_self">
-          DHCP 实现动态 IP 上网简析
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/06/22/2018-06-22-dhcp/" target="_self">
-        <div>
-          首先，我们需要知道计算机是如何上网的。 计算机之间的通信是建立在五层架构上的，一台计算机要想实现与互联网中另外一台台计算机之间的通信，计算机至少需要知道下面四个参数： *本机的IP地址 *子网掩码 *网关的IP地址 *DNS服务器的IP地址  其中本机的 IP 地址和子网掩码的作用与来历已经在互联网分层结构实现博客中说明了。 网关的 IP 地址也是必须知道的，这个是因为一般情况下我们访问的主机都和
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-06-22 01:07" pubdate>
-              2018-06-22
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">#计算机网络</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
 
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/8/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/#board">7</a><a class="page-number" href="/page/8/#board">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/#board">10</a><a class="page-number" href="/page/11/#board">11</a><a class="extend next" rel="next" href="/page/10/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/8/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/#board">7</a><a class="page-number" href="/page/8/#board">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/#board">10</a><a class="page-number" href="/page/11/#board">11</a><a class="page-number" href="/page/12/#board">12</a><a class="extend next" rel="next" href="/page/10/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 

@@ -23,11 +23,13 @@
 <meta property="og:site_name" content="Line&#39;s Blog">
 <meta property="og:description" content="MCS-51单片机有着嵌入式处理器经典的体系结构，这种体系结构在当前嵌入式处理器的高端ARM系列上仍然在延续，这就是哈佛结构。相对于大名鼎鼎的冯·诺依曼结构，哈佛结构的知名度显然逊色许多，但在嵌入式应用领域，哈佛结构却拥有着绝对的优势。哈佛结构与冯·诺依曼结构的最大区别在于冯·诺依曼结构的计算机采用代码与数据的统一编址，而哈佛结构是独立编址的，代码空间与数据空间完全分开。 在通用计算机系统中，应用">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://line.com/img/village.jpg">
 <meta property="article:published_time" content="2018-10-02T17:07:24.000Z">
-<meta property="article:modified_time" content="2023-01-08T16:21:28.849Z">
+<meta property="article:modified_time" content="2023-03-05T06:12:04.430Z">
 <meta property="article:author" content="Line">
 <meta property="article:tag" content="计算机基础">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://line.com/img/village.jpg">
   
   
   
@@ -42,8 +44,6 @@
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
 
 
 
@@ -69,6 +69,7 @@
 
   
 <link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+<link rel="stylesheet" href="/css/mac.css">
 
 
 
@@ -290,11 +291,12 @@
 <p>那是为什么说哈佛结构有优势呢？嵌入式计算机在工作时与通用计算机有着一些区别：嵌入式计算机在工作期间的绝大部分时间是无人值守的，而通用计算机工作期间一般是有人操作的；嵌入式计算机的故障可能会导致灾难性的后果，而通用计算机一般就是死死机，重新启动即可。这两点决定了对嵌入式计算机的一个基本要求：<strong>可靠性</strong>。</p>
 <p>使用冯·诺依曼结构的计算机，程序空间不封闭，期程序空间的数据在运行期理论上可以被修改，此外程序一旦跑飞也有可能运行到数据区。虽然都是一些不常见的特殊情况下，但是看看哈佛结构德计算机在这些情况下是怎样的：基于哈佛结构的处理器入MCS-51，不需要可以对代码段进行写操作的指令，所以不会有代码区被改写的问题；程序只能在封闭的代码区中运行，不可能跑到数据区，这也是跑飞的几率减少并且跑飞后的行为有规律（数据区的数据是不断变化的而代码区是不变的）。Microchip公司的PIC系列芯片，还有摩托罗拉公司的MC68系列、Zilog公司的Z8系列、ATMEL公司的AVR系列和ARM公司的ARM9、ARM10和ARM11，51单片机也属于哈佛结构</p>
 <p>所以，<strong>相对于冯·诺依曼结构，哈佛结构更加适合于那些程序固化、任务相对简单的控制系统</strong>。</p>
-<h1 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h1>
+<h1 id="总结">总结</h1>
 <p>冯.诺依曼指出：程序只是一种（特殊）的数据，它可以像数据一样被处理，因此可以和数据一起被存储在同一个存储器中——这就是著名的<strong>冯.诺依曼原理</strong>。注意:<strong>数据总线和地址总线共用。</strong></p>
 <p>哈佛结构:</p>
 <p>哈佛结构是一种<strong>并行</strong>体系结构，它的主要特点是将程序和数据存储在不同的存储空间中，即程序存储器和数据存储器是两个独立的存储器，每个存储器独立编址、独立访问。与两个存储器相对应的是系统的<strong>4条总线</strong>：程序的数据总线与地址总线，数据的数据总线与地址总线。这种分离的程序总线和数据总线<strong>允许在一个机器周期内同时获得指令字（来自程序存储器）和操作数（来自数据存储器）</strong>，从而提高了执行速度，使数据的吞吐率提高了1倍。又由于程序和数据存储器在两个分开的物理空间中，因此取指和执行能完全重叠。CPU首先到程序指令存储器中读取程序指令内容，解码后得到数据地址，再到相应的数据存储器中读取数据，并进行下一步的操作（通常是执行）。</p>
-<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/li-hao/archive/2011/12/21/2296010.html">参考来源</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://www.cnblogs.com/li-hao/archive/2011/12/21/2296010.html">参考来源</a></p>
 
                 
               </div>
@@ -467,6 +469,7 @@
 
   
   
+
 
 
 
@@ -661,6 +664,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 

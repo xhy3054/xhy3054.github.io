@@ -16,18 +16,20 @@
   <meta name="author" content="Line">
   <meta name="keywords" content="">
   
-    <meta name="description" content="最近一直在读cpp方面的书籍，虽然每天看的页数不多，但是收获很多，我时间不是很充裕，只能挑拣着一点我觉得我已经掌握的还可以了，有一定把握写好的记录下来。之前写了两篇博客都是讲解cpp与C中的一些关键字的差别，这一篇也是，讲的是关键字auto在c与cpp中的差异。  c语言中的auto 大家都学过ｃ语言，但是可能很多人都不知道ｃ语言中还有个关键字叫做auto。其实很正常，这个关键字在ｃ语言中确实没什">
+    <meta name="description" content="最近一直在读cpp方面的书籍，虽然每天看的页数不多，但是收获很多，我时间不是很充裕，只能挑拣着一点我觉得我已经掌握的还可以了，有一定把握写好的记录下来。之前写了两篇博客都是讲解cpp与C中的一些关键字的差别，这一篇也是，讲的是关键字auto在c与cpp中的差异。 c语言中的auto 大家都学过ｃ语言，但是可能很多人都不知道ｃ语言中还有个关键字叫做auto。其实很正常，这个关键字在ｃ语言中确实没什么">
 <meta property="og:type" content="article">
 <meta property="og:title" content="c语言与c++语言中关键字auto的使用">
 <meta property="og:url" content="http://line.com/2018/08/26/2018-08-26-auto-c-cpp/index.html">
 <meta property="og:site_name" content="Line&#39;s Blog">
-<meta property="og:description" content="最近一直在读cpp方面的书籍，虽然每天看的页数不多，但是收获很多，我时间不是很充裕，只能挑拣着一点我觉得我已经掌握的还可以了，有一定把握写好的记录下来。之前写了两篇博客都是讲解cpp与C中的一些关键字的差别，这一篇也是，讲的是关键字auto在c与cpp中的差异。  c语言中的auto 大家都学过ｃ语言，但是可能很多人都不知道ｃ语言中还有个关键字叫做auto。其实很正常，这个关键字在ｃ语言中确实没什">
+<meta property="og:description" content="最近一直在读cpp方面的书籍，虽然每天看的页数不多，但是收获很多，我时间不是很充裕，只能挑拣着一点我觉得我已经掌握的还可以了，有一定把握写好的记录下来。之前写了两篇博客都是讲解cpp与C中的一些关键字的差别，这一篇也是，讲的是关键字auto在c与cpp中的差异。 c语言中的auto 大家都学过ｃ语言，但是可能很多人都不知道ｃ语言中还有个关键字叫做auto。其实很正常，这个关键字在ｃ语言中确实没什么">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://line.com/img/lavender2.jpg">
 <meta property="article:published_time" content="2018-08-25T17:07:24.000Z">
-<meta property="article:modified_time" content="2023-02-28T14:01:00.712Z">
+<meta property="article:modified_time" content="2023-03-05T06:12:55.734Z">
 <meta property="article:author" content="Line">
 <meta property="article:tag" content="c与c++">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://line.com/img/lavender2.jpg">
   
   
   
@@ -42,8 +44,6 @@
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
 
 
 
@@ -69,6 +69,7 @@
 
   
 <link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+<link rel="stylesheet" href="/css/mac.css">
 
 
 
@@ -285,34 +286,33 @@
               <div class="markdown-body">
                 
                 <p>最近一直在读cpp方面的书籍，虽然每天看的页数不多，但是收获很多，我时间不是很充裕，只能挑拣着一点我觉得我已经掌握的还可以了，有一定把握写好的记录下来。之前写了两篇博客都是讲解cpp与C中的一些关键字的差别，这一篇也是，讲的是关键字auto在c与cpp中的差异。</p>
-<h1 id="c语言中的auto"><a class="markdownIt-Anchor" href="#c语言中的auto"></a> c语言中的auto</h1>
+<h1 id="c语言中的auto">c语言中的auto</h1>
 <p>大家都学过ｃ语言，但是可能很多人都不知道ｃ语言中还有个关键字叫做auto。其实很正常，这个关键字在ｃ语言中确实没什么存在感。在讲解之前，我们先来了解一下ｃ语言中变量的存储类型。</p>
-<h3 id="存储类型"><a class="markdownIt-Anchor" href="#存储类型"></a> 存储类型</h3>
+<h3 id="存储类型">存储类型</h3>
 <p>变量的存储类型是指存储变量值的内存类型。变量的内存类型决定了变量何时创建、何时销毁、以及它的值将保持多久。</p>
 <p>一般有三个地方可以存储变量：静态普通内存、运行时堆栈、硬件寄存器。</p>
-<ol>
+<ol type="1">
 <li>其中静态变量存储在静态普通内存，这种变量在程序运行之前创建，在程序的整个执行期间始终存在。它始终保持原先的值，除非赋给它一个不同的值或者程序结束。</li>
 <li>自动变量存储在堆栈中，代码块中的变量在缺省情况下就是自动变量。在程序执行到声明自动变量的代码块时，自动变量才创建，当程序执行离开该代码块时，这些自动变量便会自行销毁。</li>
 <li>寄存器变量存储在硬件寄存器中，需要用关键字register来声明。这种变量访问效率更高，一般用于对效率要求高的地方，同时由于寄存器有限，编译器只会理睬有限少数几个register声明，甚至不理睬（有的编译器）。寄存器变量的创建与销毁和自动变量相同，但它需要一些额外操作，在一个使用寄存器变量的函数返回之前，这些寄存器先前存储的值需要恢复，确保调用者的寄存器变量未被破坏。</li>
 </ol>
-<h3 id="auto的作用"><a class="markdownIt-Anchor" href="#auto的作用"></a> auto的作用</h3>
+<h3 id="auto的作用">auto的作用</h3>
 <p>上面讲解了ｃ语言中变量的存储类型，这关auto什么事情呢？细心地人可能会发现，三种存储类型的变量中有一种叫做自动变量，auto刚好有自动的意思。这不是巧合，ｃ语言中auto关键字就是用来修饰这种类型的。</p>
 <p>但是在ｃ语言中auto极少使用，因为代码块中的变量在缺省情况下就是自动变量。实在是找不到用它的场合。</p>
-<h1 id="c中的auto"><a class="markdownIt-Anchor" href="#c中的auto"></a> c++中的auto</h1>
+<h1 id="c中的auto">c++中的auto</h1>
 <p>相比较于ｃ语言中auto关键字打酱油一般的角色，在c++中，auto关键字的地位简直是天差地别，当然，关键字的含义也是天差地别。</p>
-<p>在c++中，auto是一种类型说明符，用它就会使编译器替我们分析表达式所属于的类型。</p>
+<p>在c++中，auto是一种类型说明符，用它就会使编译器替我们分析表达式所属于的类型。
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">int</span> i=<span class="hljs-number">10</span>;<br><span class="hljs-keyword">auto</span> j=i;<br></code></pre></td></tr></table></figure>
-<p>在上述代码中，编译器会根据初始值分析并未变量j选择int类型作为初始化类型。也因为这个特性，auto定义的变量<strong>必须有初始值（不然编译器不好分析啊）</strong>。阅读相关代码时，大家可以简单的把auto替换成合适的类型说明符（比int,float等）。</p>
-<p>在c++中，经常会将auto用于基于范围的for语句，用于遍历string对象或者vector的每个元素。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">string <span class="hljs-title">str</span><span class="hljs-params">(<span class="hljs-string">&quot;some string&quot;</span>)</span></span>;<br><span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> &amp;c : str)<br>	c = <span class="hljs-built_in">toupper</span>(c);<br>cout&lt;&lt;str&lt;&lt;endl;<br></code></pre></td></tr></table></figure>
-<p>还有一种场合，在你不知道或者不确定一个元素的类型时，比如使用迭代器时，迭代器的类型很难记，又长，可以直接用auto代替。</p>
+在上述代码中，编译器会根据初始值分析并未变量j选择int类型作为初始化类型。也因为这个特性，auto定义的变量<strong>必须有初始值（不然编译器不好分析啊）</strong>。阅读相关代码时，大家可以简单的把auto替换成合适的类型说明符（比int,float等）。</p>
+<p>在c++中，经常会将auto用于基于范围的for语句，用于遍历string对象或者vector的每个元素。
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">string <span class="hljs-title">str</span><span class="hljs-params">(<span class="hljs-string">&quot;some string&quot;</span>)</span></span>;<br><span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> &amp;c : str)<br>	c = <span class="hljs-built_in">toupper</span>(c);<br>cout&lt;&lt;str&lt;&lt;endl;<br></code></pre></td></tr></table></figure></p>
+<p>还有一种场合，在你不知道或者不确定一个元素的类型时，比如使用迭代器时，迭代器的类型很难记，又长，可以直接用auto代替。
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">v</span><span class="hljs-params">(<span class="hljs-number">10</span>,<span class="hljs-number">1</span>)</span></span>;<br><span class="hljs-keyword">auto</span> b = v.<span class="hljs-built_in">begin</span>(); <span class="hljs-comment">//代表ｖ的第一个元素</span><br></code></pre></td></tr></table></figure>
-<p>其中auto就相当于<code>vector&lt;int&gt;::iterator</code>，明显省事了很多，而且迭代器的类型实在难记。类似的还有string和vector的size_type成员到底是什么类型一样等。</p>
-<h3 id="题外话-decltype"><a class="markdownIt-Anchor" href="#题外话-decltype"></a> 题外话 decltype</h3>
-<p>在c++还有一个与auto功能类似的符号，就是decltype。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">int</span> ci = <span class="hljs-number">0</span>;<br><span class="hljs-keyword">decltype</span>(ci) x = <span class="hljs-number">0</span>;<br></code></pre></td></tr></table></figure>
-<p>上述代码中<code>decltype(ci)</code>返回变量ci的类型，并将ｘ声明为这种类型。</p>
-<h1 id="参考资料"><a class="markdownIt-Anchor" href="#参考资料"></a> 参考资料</h1>
+其中auto就相当于<code>vector&lt;int&gt;::iterator</code>，明显省事了很多，而且迭代器的类型实在难记。类似的还有string和vector的size_type成员到底是什么类型一样等。</p>
+<h3 id="题外话-decltype">题外话 decltype</h3>
+<p>在c++还有一个与auto功能类似的符号，就是decltype。 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">int</span> ci = <span class="hljs-number">0</span>;<br><span class="hljs-keyword">decltype</span>(ci) x = <span class="hljs-number">0</span>;<br></code></pre></td></tr></table></figure>
+上述代码中<code>decltype(ci)</code>返回变量ci的类型，并将ｘ声明为这种类型。</p>
+<h1 id="参考资料">参考资料</h1>
 <ul>
 <li>[1] C++ Primer（第5版）</li>
 <li>[2] c和指针</li>
@@ -489,6 +489,7 @@
 
   
   
+
 
 
 
@@ -683,6 +684,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 

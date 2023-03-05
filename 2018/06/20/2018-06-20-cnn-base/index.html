@@ -16,23 +16,20 @@
   <meta name="author" content="Line">
   <meta name="keywords" content="">
   
-    <meta name="description" content="从神经网络到卷积神经网络（cnn） 学过模式识别课程的都知道神经网络，它是一种重要的模式识别手段。基本结构如下：  卷积神经网络（Convolutional neural network，CNN），听名字就可以猜到，没错，这是一种特殊的神经网络。至于它特殊在哪？下面我们慢慢来说。 首先，由神经网络的结构图我们可以发现，神经网络中每个节点都与相邻层上的所有节点有一条权重连接。比如上图，输入层3个节">
+    <meta name="description" content="从神经网络到卷积神经网络（cnn） 学过模式识别课程的都知道神经网络，它是一种重要的模式识别手段。基本结构如下：   neural_network  卷积神经网络（Convolutional neural network，CNN），听名字就可以猜到，没错，这是一种特殊的神经网络。至于它特殊在哪？下面我们慢慢来说。 首先，由神经网络的结构图我们可以发现，神经网络中每个节点都与相邻层上的所有节点有一条">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CNN基础回顾">
 <meta property="og:url" content="http://line.com/2018/06/20/2018-06-20-cnn-base/index.html">
 <meta property="og:site_name" content="Line&#39;s Blog">
-<meta property="og:description" content="从神经网络到卷积神经网络（cnn） 学过模式识别课程的都知道神经网络，它是一种重要的模式识别手段。基本结构如下：  卷积神经网络（Convolutional neural network，CNN），听名字就可以猜到，没错，这是一种特殊的神经网络。至于它特殊在哪？下面我们慢慢来说。 首先，由神经网络的结构图我们可以发现，神经网络中每个节点都与相邻层上的所有节点有一条权重连接。比如上图，输入层3个节">
+<meta property="og:description" content="从神经网络到卷积神经网络（cnn） 学过模式识别课程的都知道神经网络，它是一种重要的模式识别手段。基本结构如下：   neural_network  卷积神经网络（Convolutional neural network，CNN），听名字就可以猜到，没错，这是一种特殊的神经网络。至于它特殊在哪？下面我们慢慢来说。 首先，由神经网络的结构图我们可以发现，神经网络中每个节点都与相邻层上的所有节点有一条">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://line.com/img/cnn_base/neural_network.jpg">
-<meta property="og:image" content="http://line.com/img/cnn_base/pretreat.jpg">
-<meta property="og:image" content="http://line.com/img/cnn_base/conv.gif">
-<meta property="og:image" content="http://line.com/img/cnn_base/relu.png">
+<meta property="og:image" content="http://line.com/img/rabbit.jpg">
 <meta property="article:published_time" content="2018-06-19T17:07:24.000Z">
-<meta property="article:modified_time" content="2023-01-09T07:35:50.653Z">
+<meta property="article:modified_time" content="2023-03-05T06:13:54.394Z">
 <meta property="article:author" content="Line">
 <meta property="article:tag" content="深度学习">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://line.com/img/cnn_base/neural_network.jpg">
+<meta name="twitter:image" content="http://line.com/img/rabbit.jpg">
   
   
   
@@ -47,8 +44,6 @@
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
 
 
 
@@ -74,6 +69,7 @@
 
   
 <link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+<link rel="stylesheet" href="/css/mac.css">
 
 
 
@@ -235,7 +231,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.7k 字
+          2.8k 字
         
       </span>
     
@@ -246,7 +242,7 @@
         
         
         
-          23 分钟
+          24 分钟
         
       </span>
     
@@ -289,29 +285,28 @@
             
               <div class="markdown-body">
                 
-                <h2 id="从神经网络到卷积神经网络cnn"><a class="markdownIt-Anchor" href="#从神经网络到卷积神经网络cnn"></a> 从神经网络到卷积神经网络（cnn）</h2>
+                <h2
+id="从神经网络到卷积神经网络cnn">从神经网络到卷积神经网络（cnn）</h2>
 <p>学过模式识别课程的都知道神经网络，它是一种重要的模式识别手段。基本结构如下：</p>
-<p><img src="/img/cnn_base/neural_network.jpg" srcset="/img/loading.gif" lazyload alt="neural_network" /></p>
-<p>卷积神经网络（Convolutional neural network，CNN），听名字就可以猜到，没错，这是一种特殊的神经网络。至于它特殊在哪？下面我们慢慢来说。</p>
+<figure>
+<img src="/img/cnn_base/neural_network.jpg" srcset="/img/loading.gif" lazyload alt="neural_network" />
+<figcaption aria-hidden="true">neural_network</figcaption>
+</figure>
+<p>卷积神经网络（Convolutional neural
+network，CNN），听名字就可以猜到，没错，这是一种特殊的神经网络。至于它特殊在哪？下面我们慢慢来说。</p>
 <p>首先，由神经网络的结构图我们可以发现，神经网络中每个节点都与相邻层上的所有节点有一条权重连接。比如上图，输入层3个节点，隐藏层1、2各有4个节点，输出层1个节点，所以这个神经网络总共有<code>12+16+4=32</code>个权重。若是扩大神经网络比如输入层为<code>100×100</code>图片，下一层为<code>50×50</code>大小，则仅仅这一层便有<code>100×100×50×50=25000000</code>个权重！多的可怕！如此大的数据量，使用神经网络来做图像的分析处理，计算量不敢想象，基本不现实。</p>
-<p>为了<em><strong>削减计算量</strong></em>，后来有人提出了卷积神经网络。卷积神经网络对于数据的处理模式与图像处理中对一幅图像加滤波器的操作是一样的。主要有以下两个特点：</p>
-<ol>
-<li><strong>局部关联</strong>：每个点的取值只与上一层中附近的点关联，比如<code>3×3</code>的卷积核表示此点取值只与周围8个点还有自身加起来9个点的取值有关，而传统神经网络中每个点的取值是与上一层所有的点关联的。</li>
-<li><strong>权值共享</strong>：我们都知道，cnn主要是用来提取特征的，而一般提取同样的特征需要的卷积核是相同的，即对每个点的取值进行计算时使用相同的卷积核。</li>
-</ol>
-<h2 id="卷积神经网络的层级结构"><a class="markdownIt-Anchor" href="#卷积神经网络的层级结构"></a> 卷积神经网络的层级结构</h2>
-<p>一般卷积神经网络由以下功能层组成：</p>
-<ol>
-<li>数据输入层（input layer）</li>
-<li>卷积计算层（CONV layer）</li>
-<li>（非线性）激励层（Relu layer等）</li>
-<li>池化层（Pooling layer）</li>
-<li>全连接层（FC layer）</li>
-</ol>
+<p>为了<strong><em>削减计算量</em></strong>，后来有人提出了卷积神经网络。卷积神经网络对于数据的处理模式与图像处理中对一幅图像加滤波器的操作是一样的。主要有以下两个特点：
+1.
+<strong>局部关联</strong>：每个点的取值只与上一层中附近的点关联，比如<code>3×3</code>的卷积核表示此点取值只与周围8个点还有自身加起来9个点的取值有关，而传统神经网络中每个点的取值是与上一层所有的点关联的。
+2.
+<strong>权值共享</strong>：我们都知道，cnn主要是用来提取特征的，而一般提取同样的特征需要的卷积核是相同的，即对每个点的取值进行计算时使用相同的卷积核。</p>
+<h2 id="卷积神经网络的层级结构">卷积神经网络的层级结构</h2>
+<p>一般卷积神经网络由以下功能层组成： 1. 数据输入层（input layer） 2.
+卷积计算层（CONV layer） 3. （非线性）激励层（Relu layer等） 4.
+池化层（Pooling layer） 5. 全连接层（FC layer）</p>
 <p>一个典型的CNN结构如下：</p>
-<pre><code class="hljs">input layer +[n×(卷积层+Relu)+pooling层]*m+（全连接层+Relu）*k +全连接层
-</code></pre>
-<h3 id="数据输入层input-layer"><a class="markdownIt-Anchor" href="#数据输入层input-layer"></a> 数据输入层（input layer）</h3>
+<pre><code class="hljs">input layer +[n×(卷积层+Relu)+pooling层]*m+（全连接层+Relu）*k +全连接层</code></pre>
+<h3 id="数据输入层input-layer">数据输入层（input layer）</h3>
 <p>该层主要是对原始图像数据进行预处理，包括：</p>
 <ul>
 <li>去均值：即把输入数据的各个维度都中心化为0,目的是把样本中心拉回到坐标系原点。</li>
@@ -319,48 +314,52 @@
 <li>PCA：用PCA降维。</li>
 </ul>
 <p>去均值与归一化图解：</p>
-<p><img src="/img/cnn_base/pretreat.jpg" srcset="/img/loading.gif" lazyload alt="pretreat" /></p>
-<h3 id="卷积计算层conv-layer"><a class="markdownIt-Anchor" href="#卷积计算层conv-layer"></a> 卷积计算层（CONV layer）</h3>
-<p>这一层是卷积神经网络最关键的一层，上文中讲到的cnn的特点局部关联与权值共享就体现在这一层，权重参数的减少也主要是在这一步完成的。如果有图像处理空域的一些知识，理解起来会比较轻松。这一层操作与图像处理中空域滤波操作是一样的，即使用固定的权重和不同窗口数据做内积，这一层主要要理解以下几个参数概念：</p>
-<ol>
-<li>卷积核（窗函数）</li>
-<li>填充值（一般为0）</li>
-<li>步长</li>
-<li>深度（卷积核的深度必须和输入图像的深度一致。比如彩色图像三通道深度为3）</li>
-</ol>
+<figure>
+<img src="/img/cnn_base/pretreat.jpg" srcset="/img/loading.gif" lazyload alt="pretreat" />
+<figcaption aria-hidden="true">pretreat</figcaption>
+</figure>
+<h3 id="卷积计算层conv-layer">卷积计算层（CONV layer）</h3>
+<p>这一层是卷积神经网络最关键的一层，上文中讲到的cnn的特点局部关联与权值共享就体现在这一层，权重参数的减少也主要是在这一步完成的。如果有图像处理空域的一些知识，理解起来会比较轻松。这一层操作与图像处理中空域滤波操作是一样的，即使用固定的权重和不同窗口数据做内积，这一层主要要理解以下几个参数概念：
+1. 卷积核（窗函数） 2. 填充值（一般为0） 3. 步长 4.
+深度（卷积核的深度必须和输入图像的深度一致。比如彩色图像三通道深度为3）</p>
 <p>卷积的计算过程如下：</p>
-<p><img src="/img/cnn_base/conv.gif" srcset="/img/loading.gif" lazyload alt="conv" /></p>
-<h3 id="激励层"><a class="markdownIt-Anchor" href="#激励层"></a> 激励层</h3>
+<figure>
+<img src="/img/cnn_base/conv.gif" srcset="/img/loading.gif" lazyload alt="conv" />
+<figcaption aria-hidden="true">conv</figcaption>
+</figure>
+<h3 id="激励层">激励层</h3>
 <p>学习过神经网络都知道激励层的作用是<strong>非线性</strong>，如果没有这一层那神经网络每个层都是线性的，而多个线性层其实可以合为一个线性层的。这样神经网络的层级深度就成了一个笑话。卷积神经网络同样如此。</p>
-<p>CNN采用的激励函数一般为RELU（the rectified linear unit：修正线性单元），它的特点是收敛快，求梯度简单，但是比较脆弱，如下图：</p>
-<p><img src="/img/cnn_base/relu.png" srcset="/img/loading.gif" lazyload alt="relu" /></p>
-<h3 id="池化层"><a class="markdownIt-Anchor" href="#池化层"></a> 池化层</h3>
-<p>池化层一般夹在连续的卷积层中间，用于压缩数据和参数量，减小过拟合。个人觉得池化层其实与卷积层计算方式一样，都是使用固定的权重和不同窗口数据做内积，只是池化层可以是非线性的，比如MAX Pooling等，因此这一层也会有人用它代替激励层。</p>
-<p>池化层的作用与意义是很明显的：</p>
-<ol>
-<li>特征不变性。也就是图像处理中常说的特征的尺度不变性，举例说明就是一张1080p的人脸图像和一张320p的人脸图像我们都可以看出这是一张人脸。因此在对图像进行resize时去掉的信息大多是一些无用的信息，留下来的往往都是具有尺度不变特征的。</li>
-<li>特征降维。我们都知道一张图像所包含的信息量是巨大的，但是其中大部分的信息量对于我们来说是无用的，池化操作具有将重要的特征抽取出来的作用。</li>
-<li>一定程度上可以防止过拟合，方便于优化。</li>
-</ol>
-<p>池化层用的方法有 Max pooling 和 average pooling 等，一般用的较多的是 max pooling 。</p>
-<h3 id="全连接层"><a class="markdownIt-Anchor" href="#全连接层"></a> 全连接层</h3>
+<p>CNN采用的激励函数一般为RELU（the rectified linear
+unit：修正线性单元），它的特点是收敛快，求梯度简单，但是比较脆弱，如下图：</p>
+<figure>
+<img src="/img/cnn_base/relu.png" srcset="/img/loading.gif" lazyload alt="relu" />
+<figcaption aria-hidden="true">relu</figcaption>
+</figure>
+<h3 id="池化层">池化层</h3>
+<p>池化层一般夹在连续的卷积层中间，用于压缩数据和参数量，减小过拟合。个人觉得池化层其实与卷积层计算方式一样，都是使用固定的权重和不同窗口数据做内积，只是池化层可以是非线性的，比如MAX
+Pooling等，因此这一层也会有人用它代替激励层。</p>
+<p>池化层的作用与意义是很明显的： 1.
+特征不变性。也就是图像处理中常说的特征的尺度不变性，举例说明就是一张1080p的人脸图像和一张320p的人脸图像我们都可以看出这是一张人脸。因此在对图像进行resize时去掉的信息大多是一些无用的信息，留下来的往往都是具有尺度不变特征的。
+2.
+特征降维。我们都知道一张图像所包含的信息量是巨大的，但是其中大部分的信息量对于我们来说是无用的，池化操作具有将重要的特征抽取出来的作用。
+3. 一定程度上可以防止过拟合，方便于优化。</p>
+<p>池化层用的方法有 Max pooling 和 average pooling 等，一般用的较多的是
+max pooling 。</p>
+<h3 id="全连接层">全连接层</h3>
 <p>全连接层两层之间所有的神经元都有权重连接，也就是开头处讲过的传统神经网络的层级连接方式。通常全连接层在卷积神经网络的尾部，当然，也有的网络根本没有全连接层。</p>
-<h3 id="各层总结"><a class="markdownIt-Anchor" href="#各层总结"></a> 各层总结</h3>
+<h3 id="各层总结">各层总结</h3>
 <p>总的来说，上述各种层都有自己的作用，各司其职，使得卷积神经网络的效果更好。但是其实一个cnn网络中不是必须具备上面每一个层的。比如说有些没有全连接层，有些没有激励层（用非线性的pooling也能起到相同效果），当然，一般卷积层是肯定有的。分开学习各个层主要是对每层起到的作用都有了解，这样在自己搭建新的cnn架构时可以因地制宜选取合适的层，同时看到新论文中新的cnn网络结构时可以理解作者为什么要这么做。比如googlenet中就提出了新的inception的结构，后面也会写相关的笔记博客的。</p>
-<h2 id="卷积神经网络基本知识"><a class="markdownIt-Anchor" href="#卷积神经网络基本知识"></a> 卷积神经网络基本知识</h2>
-<h3 id="训练方法"><a class="markdownIt-Anchor" href="#训练方法"></a> 训练方法</h3>
-<p>同一般机器学习方法类似，先定义<strong>loss function</strong>,然后通过梯度下降法不断对权重进行调整进行训练。</p>
-<h3 id="优缺点"><a class="markdownIt-Anchor" href="#优缺点"></a> 优缺点</h3>
-<p>优点：</p>
-<ol>
-<li>共享卷积核，对高维数据处理无压力</li>
-<li>无需手动选取特征，且训练好后得到的特征分类效果好<br />
-缺点：</li>
-<li>需要调参，需要大量样本，计算量庞大，需要GPU</li>
-<li>物理含义不明确，对于cnn提取的特征，我们并不清楚其物理含义，因此不好调整。</li>
-</ol>
-<h3 id="典型cnn"><a class="markdownIt-Anchor" href="#典型cnn"></a> 典型CNN</h3>
-<ol>
+<h2 id="卷积神经网络基本知识">卷积神经网络基本知识</h2>
+<h3 id="训练方法">训练方法</h3>
+<p>同一般机器学习方法类似，先定义<strong>loss
+function</strong>,然后通过梯度下降法不断对权重进行调整进行训练。</p>
+<h3 id="优缺点">优缺点</h3>
+<p>优点： 1. 共享卷积核，对高维数据处理无压力 2.
+无需手动选取特征，且训练好后得到的特征分类效果好 缺点： 1.
+需要调参，需要大量样本，计算量庞大，需要GPU 2.
+物理含义不明确，对于cnn提取的特征，我们并不清楚其物理含义，因此不好调整。</p>
+<h3 id="典型cnn">典型CNN</h3>
+<ol type="1">
 <li>LeNet</li>
 <li>AlexNet</li>
 <li>VGGNet</li>
@@ -368,23 +367,21 @@
 <li>ResNet</li>
 <li>DenseNet</li>
 </ol>
-<h3 id="fine-tuning"><a class="markdownIt-Anchor" href="#fine-tuning"></a> fine-tuning</h3>
-<p>fine-tuning就是将别人已经训练好的权重作为初始值，在此基础上进行训练，这样可以比较快的收敛，并且不容易出现问题。省时省心。具体做法是：</p>
-<ol>
-<li>复用相同层的权重，新定义的层取随即权重初始值;</li>
-<li>调大新定义层的学习率，调小复用层的学习率。</li>
-</ol>
-<h3 id="cnn-常用框架"><a class="markdownIt-Anchor" href="#cnn-常用框架"></a> CNN 常用框架</h3>
-<ol>
+<h3 id="fine-tuning">fine-tuning</h3>
+<p>fine-tuning就是将别人已经训练好的权重作为初始值，在此基础上进行训练，这样可以比较快的收敛，并且不容易出现问题。省时省心。具体做法是：
+1. 复用相同层的权重，新定义的层取随即权重初始值; 2.
+调大新定义层的学习率，调小复用层的学习率。</p>
+<h3 id="cnn-常用框架">CNN 常用框架</h3>
+<ol type="1">
 <li>Caffe</li>
 <li>Pytorch</li>
 <li>Tensorflow</li>
 </ol>
-<h3 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h3>
+<h3 id="总结">总结</h3>
 <p>一般也有一种说法是cnn主要负责提取图像的特征，至于分类器可以与前部分网络分开来看。但是实际应用时cnn的参数与分类器的参数最好是一起训练确定的。原因是cnn提取的特征是没有明确的物理含义的，这样分类器类型的选取就会变得很纠结。确定分类器类型后，将他们一起训练得到参数其实有助于实现，使得cnn提取的特征适合此种分类器进行分类操作。</p>
-<h1 id="参考文献"><a class="markdownIt-Anchor" href="#参考文献"></a> 参考文献</h1>
+<h1 id="参考文献">参考文献</h1>
 <ul>
-<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/skyfsm/p/6790245.html">https://www.cnblogs.com/skyfsm/p/6790245.html</a></li>
+<li>https://www.cnblogs.com/skyfsm/p/6790245.html</li>
 </ul>
 
                 
@@ -558,6 +555,7 @@
 
   
   
+
 
 
 
@@ -752,6 +750,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 

@@ -16,18 +16,20 @@
   <meta name="author" content="Line">
   <meta name="keywords" content="">
   
-    <meta name="description" content="通常一个类的拷贝控制操作由以下三个函数来定义：   拷贝构造函数   拷贝赋值运算符   析构函数   以上这３个成员，如果在一个类中未自己定义时，编译器会为这个类自动生成默认的版本。三个成员共同构成了一个类基本的的拷贝控制与资源管理操作。  &#x3D;default 与 &#x3D;delete 的使用 我们可以通过将拷贝控制成员定义为&#x3D;default来显式地要求编译器生成合成版本的。 在c++11标准以后我们可">
+    <meta name="description" content="通常一个类的拷贝控制操作由以下三个函数来定义： 1. 拷贝构造函数  拷贝赋值运算符 析构函数  以上这３个成员，如果在一个类中未自己定义时，编译器会为这个类自动生成默认的版本。三个成员共同构成了一个类基本的的拷贝控制与资源管理操作。 &#x3D;default 与 &#x3D;delete 的使用 我们可以通过将拷贝控制成员定义为&#x3D;default来显式地要求编译器生成合成版本的。 在c++11标准以后我们可以通过将">
 <meta property="og:type" content="article">
 <meta property="og:title" content="c++中类的拷贝控制操作">
 <meta property="og:url" content="http://line.com/2018/10/16/2018-10-16-cpp-class-construct-destruct/index.html">
 <meta property="og:site_name" content="Line&#39;s Blog">
-<meta property="og:description" content="通常一个类的拷贝控制操作由以下三个函数来定义：   拷贝构造函数   拷贝赋值运算符   析构函数   以上这３个成员，如果在一个类中未自己定义时，编译器会为这个类自动生成默认的版本。三个成员共同构成了一个类基本的的拷贝控制与资源管理操作。  &#x3D;default 与 &#x3D;delete 的使用 我们可以通过将拷贝控制成员定义为&#x3D;default来显式地要求编译器生成合成版本的。 在c++11标准以后我们可">
+<meta property="og:description" content="通常一个类的拷贝控制操作由以下三个函数来定义： 1. 拷贝构造函数  拷贝赋值运算符 析构函数  以上这３个成员，如果在一个类中未自己定义时，编译器会为这个类自动生成默认的版本。三个成员共同构成了一个类基本的的拷贝控制与资源管理操作。 &#x3D;default 与 &#x3D;delete 的使用 我们可以通过将拷贝控制成员定义为&#x3D;default来显式地要求编译器生成合成版本的。 在c++11标准以后我们可以通过将">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://line.com/img/cartoon2.jpg">
 <meta property="article:published_time" content="2018-10-15T17:07:24.000Z">
-<meta property="article:modified_time" content="2023-01-08T16:21:28.849Z">
+<meta property="article:modified_time" content="2023-03-05T06:11:42.926Z">
 <meta property="article:author" content="Line">
 <meta property="article:tag" content="c与c++">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://line.com/img/cartoon2.jpg">
   
   
   
@@ -42,8 +44,6 @@
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
 
 
 
@@ -69,6 +69,7 @@
 
   
 <link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+<link rel="stylesheet" href="/css/mac.css">
 
 
 
@@ -284,74 +285,49 @@
             
               <div class="markdown-body">
                 
-                <p>通常一个类的拷贝控制操作由以下三个函数来定义：</p>
-<ol>
-<li>
-<p>拷贝构造函数</p>
-</li>
-<li>
-<p>拷贝赋值运算符</p>
-</li>
-<li>
-<p>析构函数</p>
-</li>
+                <p>通常一个类的拷贝控制操作由以下三个函数来定义： 1. 拷贝构造函数</p>
+<ol start="2" type="1">
+<li><p>拷贝赋值运算符</p></li>
+<li><p>析构函数</p></li>
 </ol>
 <p>以上这３个成员，如果在一个类中未自己定义时，编译器会为这个类自动生成默认的版本。三个成员共同构成了一个类基本的的拷贝控制与资源管理操作。</p>
-<h2 id="default-与-delete-的使用"><a class="markdownIt-Anchor" href="#default-与-delete-的使用"></a> <code>=default</code> 与 <code>=delete</code> 的使用</h2>
+<h2 id="default-与-delete-的使用"><code>=default</code> 与
+<code>=delete</code> 的使用</h2>
 <p>我们可以通过将拷贝控制成员定义为<code>=default</code>来<strong>显式</strong>地要求编译器生成合成版本的。</p>
 <p>在c++11标准以后我们可以通过将拷贝构造函数与拷贝赋值运算符定义为<code>=delete</code>来<strong>组织拷贝的发生</strong>。<code>=delete</code>告诉编译器，我们不希望定义这些成员。例如，<code>iostream</code>类阻止了拷贝操作。<strong>析构函数不能是<code>=delete</code>的</strong>，如果我们用<code>=delete</code>将一个类的析构函数定义为删除的，则我们不能定义该类型的变量（但是可以动态分配内存），也不能释放指向该类型动态分配对象的指针。</p>
-<h2 id="拷贝构造函数"><a class="markdownIt-Anchor" href="#拷贝构造函数"></a> 拷贝构造函数</h2>
+<h2 id="拷贝构造函数">拷贝构造函数</h2>
 <p>拷贝构造函数也是一种构造函数。我们知道，不同版本的构造函数的区别在于参数列表的不同。<strong>拷贝构造函数的第一个参数一定是自身类类型的引用</strong>，任何额外参数都有默认值。</p>
 <p>如果一个类未定义自己的拷贝构造函数，则编译器会为其自动生成一个，自动生成的拷贝构造函数就是将类中的每一个数据成员进行简单的拷贝构造。如果不希望自己的类有拷贝构造函数操作，必须显式将拷贝构造函数声明成<code>=delete</code>来指出我们希望将它定义成删除的，比如<code>iostream</code>类就阻止了拷贝操作来避免多个对象写入或者读取相同的IO操作。</p>
-<p>此处编写一个简陋的<code>HasPtr</code>类为例实现<strong>深拷贝</strong>，比较直观有代码感受：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">HasPtr</span><br>&#123;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-built_in">HasPtr</span>(<span class="hljs-type">const</span> string &amp;s = <span class="hljs-built_in">string</span>()) : <span class="hljs-built_in">ps</span>(<span class="hljs-keyword">new</span> std::<span class="hljs-built_in">string</span>(s)) &#123;cout&lt;&lt;<span class="hljs-string">&quot;调用HasPtr()&quot;</span>&lt;&lt;endl;&#125;<br><br>	<span class="hljs-built_in">HasPtr</span>(<span class="hljs-type">const</span> HasPtr&amp; hp) :<span class="hljs-built_in">ps</span>(<span class="hljs-keyword">new</span> std::<span class="hljs-built_in">string</span>(*hp.ps)) &#123;cout&lt;&lt;<span class="hljs-string">&quot;调用HasPtr(HasPtr&amp;)&quot;</span>&lt;&lt;endl;&#125;<br><br>	~<span class="hljs-built_in">HasPtr</span>()&#123;<span class="hljs-keyword">delete</span> ps;&#125;<br><br><span class="hljs-keyword">private</span>:<br>	std::string *ps;<br>&#125;;<br><br></code></pre></td></tr></table></figure>
-<hr />
-<p>如上，这个类有两个版本的构造函数，其中第一个是普通构造函数（可以没有参数，也可以有一个<code>string&amp;</code>类型），第二个是拷贝构造函数（参数是自身类型的引用）。</p>
+<p>此处编写一个简陋的<code>HasPtr</code>类为例实现<strong>深拷贝</strong>，比较直观有代码感受：
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">HasPtr</span><br>&#123;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-built_in">HasPtr</span>(<span class="hljs-type">const</span> string &amp;s = <span class="hljs-built_in">string</span>()) : <span class="hljs-built_in">ps</span>(<span class="hljs-keyword">new</span> std::<span class="hljs-built_in">string</span>(s)) &#123;cout&lt;&lt;<span class="hljs-string">&quot;调用HasPtr()&quot;</span>&lt;&lt;endl;&#125;<br><br>	<span class="hljs-built_in">HasPtr</span>(<span class="hljs-type">const</span> HasPtr&amp; hp) :<span class="hljs-built_in">ps</span>(<span class="hljs-keyword">new</span> std::<span class="hljs-built_in">string</span>(*hp.ps)) &#123;cout&lt;&lt;<span class="hljs-string">&quot;调用HasPtr(HasPtr&amp;)&quot;</span>&lt;&lt;endl;&#125;<br><br>	~<span class="hljs-built_in">HasPtr</span>()&#123;<span class="hljs-keyword">delete</span> ps;&#125;<br><br><span class="hljs-keyword">private</span>:<br>	std::string *ps;<br>&#125;;<br><br></code></pre></td></tr></table></figure> ***
+如上，这个类有两个版本的构造函数，其中第一个是普通构造函数（可以没有参数，也可以有一个<code>string&amp;</code>类型），第二个是拷贝构造函数（参数是自身类型的引用）。</p>
 <blockquote>
-<p>注意：拷贝构造函数的第一个参数之所以是引用类型，是因为在<strong>函数调用过程中，具有非引用类型的参数要进行拷贝初始化</strong>。如果拷贝构造函数的参数不是引用类型的话，则会对拷贝构造函数的形参进行拷贝初始化，会再一次调用拷贝构造函数，再对这个拷贝构造函数的形参进行拷贝初始化…如此往复，无限循环。</p>
+<p>注意：拷贝构造函数的第一个参数之所以是引用类型，是因为在<strong>函数调用过程中，具有非引用类型的参数要进行拷贝初始化</strong>。如果拷贝构造函数的参数不是引用类型的话，则会对拷贝构造函数的形参进行拷贝初始化，会再一次调用拷贝构造函数，再对这个拷贝构造函数的形参进行拷贝初始化....如此往复，无限循环。</p>
 </blockquote>
-<h2 id="拷贝赋值运算符"><a class="markdownIt-Anchor" href="#拷贝赋值运算符"></a> 拷贝赋值运算符</h2>
-<p>拷贝赋值运算符其实就是重载了<code>=</code>，如果类未定义自己的拷贝赋值运算符，编译器会为它合成一个，合成的拷贝赋值运算符也就是简单的对类的每个数据成员进行简单的拷贝赋值。如果不希望自己的类有拷贝构造函数操作，必须显式将拷贝构造函数声明成<code>=delete</code>来指出我们希望将它定义成删除的，比如<code>iostream</code>类就阻止了拷贝操作来避免多个对象写入或者读取相同的IO操作。继续上一个<code>HasPtr</code>，为其添加拷贝赋值运算符；</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">HasPtr</span><br>&#123;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-built_in">HasPtr</span>(<span class="hljs-type">const</span> string &amp;s = <span class="hljs-built_in">string</span>()) : <span class="hljs-built_in">ps</span>(<span class="hljs-keyword">new</span> std::<span class="hljs-built_in">string</span>(s)) &#123;cout&lt;&lt;<span class="hljs-string">&quot;调用HasPtr()&quot;</span>&lt;&lt;endl;&#125;<br><br>	<span class="hljs-built_in">HasPtr</span>(<span class="hljs-type">const</span> HasPtr&amp; hp) :<span class="hljs-built_in">ps</span>(<span class="hljs-keyword">new</span> std::<span class="hljs-built_in">string</span>(*hp.ps)) &#123;cout&lt;&lt;<span class="hljs-string">&quot;调用HasPtr(HasPtr&amp;)&quot;</span>&lt;&lt;endl;&#125;<br><br>	HasPtr&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> HasPtr&amp; hp)&#123;<br>		cout&lt;&lt;<span class="hljs-string">&quot;调用operator=&quot;</span>&lt;&lt;endl;<br>		<span class="hljs-keyword">auto</span> new_ptr = <span class="hljs-keyword">new</span> std::<span class="hljs-built_in">string</span>(*hp.ps);	<span class="hljs-comment">//防止对自身进行赋值，不能先释放ps指向的内存</span><br>		<span class="hljs-keyword">delete</span> ps;<br>		ps = new_ptr;<br>		<span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>	&#125;<br><br>	~<span class="hljs-built_in">HasPtr</span>()&#123;<span class="hljs-keyword">delete</span> ps;&#125;<br><br><span class="hljs-keyword">private</span>:<br>	std::string *ps;<br>&#125;;<br></code></pre></td></tr></table></figure>
-<hr />
-<h2 id="析构函数"><a class="markdownIt-Anchor" href="#析构函数"></a> 析构函数</h2>
-<p>因为一个对象通常在自己的作用域结束后会自动销毁，它销毁的方式就是挨个销毁自己的数据成员。但是有时<strong>光销毁自己的数据成员</strong>是不够的，比如说当此类的数据成员中有一个指向一块动态分配来的内存的指针。此时光销毁指针显然是不够的。我们还需要在销毁指针之前将指针指向的这块动态内存给释放了。而析构函数就是做这个工作的。其中成员的销毁是隐式进行的。</p>
+<h2 id="拷贝赋值运算符">拷贝赋值运算符</h2>
+<p>拷贝赋值运算符其实就是重载了<code>=</code>，如果类未定义自己的拷贝赋值运算符，编译器会为它合成一个，合成的拷贝赋值运算符也就是简单的对类的每个数据成员进行简单的拷贝赋值。如果不希望自己的类有拷贝构造函数操作，必须显式将拷贝构造函数声明成<code>=delete</code>来指出我们希望将它定义成删除的，比如<code>iostream</code>类就阻止了拷贝操作来避免多个对象写入或者读取相同的IO操作。继续上一个<code>HasPtr</code>，为其添加拷贝赋值运算符；
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">HasPtr</span><br>&#123;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-built_in">HasPtr</span>(<span class="hljs-type">const</span> string &amp;s = <span class="hljs-built_in">string</span>()) : <span class="hljs-built_in">ps</span>(<span class="hljs-keyword">new</span> std::<span class="hljs-built_in">string</span>(s)) &#123;cout&lt;&lt;<span class="hljs-string">&quot;调用HasPtr()&quot;</span>&lt;&lt;endl;&#125;<br><br>	<span class="hljs-built_in">HasPtr</span>(<span class="hljs-type">const</span> HasPtr&amp; hp) :<span class="hljs-built_in">ps</span>(<span class="hljs-keyword">new</span> std::<span class="hljs-built_in">string</span>(*hp.ps)) &#123;cout&lt;&lt;<span class="hljs-string">&quot;调用HasPtr(HasPtr&amp;)&quot;</span>&lt;&lt;endl;&#125;<br><br>	HasPtr&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> HasPtr&amp; hp)&#123;<br>		cout&lt;&lt;<span class="hljs-string">&quot;调用operator=&quot;</span>&lt;&lt;endl;<br>		<span class="hljs-keyword">auto</span> new_ptr = <span class="hljs-keyword">new</span> std::<span class="hljs-built_in">string</span>(*hp.ps);	<span class="hljs-comment">//防止对自身进行赋值，不能先释放ps指向的内存</span><br>		<span class="hljs-keyword">delete</span> ps;<br>		ps = new_ptr;<br>		<span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>	&#125;<br><br>	~<span class="hljs-built_in">HasPtr</span>()&#123;<span class="hljs-keyword">delete</span> ps;&#125;<br><br><span class="hljs-keyword">private</span>:<br>	std::string *ps;<br>&#125;;<br></code></pre></td></tr></table></figure> *<strong> ## 析构函数
+因为一个对象通常在自己的作用域结束后会自动销毁，它销毁的方式就是挨个销毁自己的数据成员。但是有时</strong>光销毁自己的数据成员**是不够的，比如说当此类的数据成员中有一个指向一块动态分配来的内存的指针。此时光销毁指针显然是不够的。我们还需要在销毁指针之前将指针指向的这块动态内存给释放了。而析构函数就是做这个工作的。其中成员的销毁是隐式进行的。</p>
 <blockquote>
 <p>析构函数负责在销毁对象的数据成员前完成料理好它们的<strong>身后事</strong>。使得即使这个对象的数据成员被销毁了，依然不会有乱子出现。</p>
 </blockquote>
-<h2 id="三五法则自己翻书把"><a class="markdownIt-Anchor" href="#三五法则自己翻书把"></a> 三/五法则（自己翻书把）</h2>
-<h2 id="探究初始化操作与赋值操作真正调用的函数"><a class="markdownIt-Anchor" href="#探究初始化操作与赋值操作真正调用的函数"></a> 探究初始化操作与赋值操作真正调用的函数</h2>
-<p>使用上述定义的类，对它进行测试：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-function">HasPtr  <span class="hljs-title">a</span><span class="hljs-params">(<span class="hljs-string">&quot;hello wprld&quot;</span>)</span></span>;  <br>	cout&lt;&lt;endl;<br><br>	<span class="hljs-function">HasPtr <span class="hljs-title">b</span><span class="hljs-params">(a)</span></span>;    <br>	cout&lt;&lt;endl;<br><br>	HasPtr c = a;<br>	cout&lt;&lt;endl;<br><br>	string s = <span class="hljs-string">&quot;hello&quot;</span>;<br>	HasPtr d = s;<br>	cout&lt;&lt;endl;<br><br>	HasPtr e;<br>	e=a;<br> <br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-<hr />
-<p>上述程序运行后，输出如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash">xhy@ubuntu:~/cpp_learn/ch13$ ./test_init <br>调用HasPtr()<br><br>调用HasPtr(HasPtr&amp;)<br><br>调用HasPtr(HasPtr&amp;)<br><br>调用HasPtr()<br><br>调用HasPtr()<br>调用operator=<br></code></pre></td></tr></table></figure>
-<p>***</p>
-<blockquote>
-<p>由上可知，只要是<strong>初始化操作</strong>，无论是直接初始化（使用参数表）还是拷贝初始化（使用＝），全部使用的是构造函数，具体使用哪个版本的构造函数则由括号或者＝号提供的参数形式决定。只有当是普通的赋值操作时，才使用拷贝赋值运算符（重载的＝）。</p>
-</blockquote>
-<h3 id="加强版测试"><a class="markdownIt-Anchor" href="#加强版测试"></a> 加强版测试</h3>
+<h2 id="三五法则自己翻书把">三/五法则（自己翻书把）</h2>
+<h2
+id="探究初始化操作与赋值操作真正调用的函数">探究初始化操作与赋值操作真正调用的函数</h2>
+<p>使用上述定义的类，对它进行测试： <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-function">HasPtr  <span class="hljs-title">a</span><span class="hljs-params">(<span class="hljs-string">&quot;hello wprld&quot;</span>)</span></span>;  <br>	cout&lt;&lt;endl;<br><br>	<span class="hljs-function">HasPtr <span class="hljs-title">b</span><span class="hljs-params">(a)</span></span>;    <br>	cout&lt;&lt;endl;<br><br>	HasPtr c = a;<br>	cout&lt;&lt;endl;<br><br>	string s = <span class="hljs-string">&quot;hello&quot;</span>;<br>	HasPtr d = s;<br>	cout&lt;&lt;endl;<br><br>	HasPtr e;<br>	e=a;<br> <br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure> ***
+上述程序运行后，输出如下： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash">xhy@ubuntu:~/cpp_learn/ch13$ ./test_init <br>调用HasPtr()<br><br>调用HasPtr(HasPtr&amp;)<br><br>调用HasPtr(HasPtr&amp;)<br><br>调用HasPtr()<br><br>调用HasPtr()<br>调用operator=<br></code></pre></td></tr></table></figure> *<strong>　 &gt;
+由上可知，只要是</strong>初始化操作**，无论是直接初始化（使用参数表）还是拷贝初始化（使用＝），全部使用的是构造函数，具体使用哪个版本的构造函数则由括号或者＝号提供的参数形式决定。只有当是普通的赋值操作时，才使用拷贝赋值运算符（重载的＝）。</p>
+<h3 id="加强版测试">加强版测试</h3>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;initializer_list&gt;</span></span><br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">X</span><br>&#123;<br>	<span class="hljs-built_in">X</span>() &#123; std::cout &lt;&lt; <span class="hljs-string">&quot;X()&quot;</span> &lt;&lt; std::endl; &#125;<br>	<span class="hljs-built_in">X</span>(<span class="hljs-type">const</span> X&amp;) &#123; std::cout &lt;&lt; <span class="hljs-string">&quot;X(const X&amp;)&quot;</span> &lt;&lt; std::endl; &#125;<br>	X&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> X&amp;) &#123; std::cout &lt;&lt; <span class="hljs-string">&quot;X&amp; operator=(const X&amp;)&quot;</span> &lt;&lt; std::endl; <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>; &#125;<br>	~<span class="hljs-built_in">X</span>() &#123; std::cout &lt;&lt; <span class="hljs-string">&quot;~X()&quot;</span> &lt;&lt; std::endl; &#125;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">f</span><span class="hljs-params">(<span class="hljs-type">const</span> X &amp;rx, X x)</span></span><br><span class="hljs-function"></span>&#123;<br>	std::vector&lt;X&gt; vec;<br>	vec.<span class="hljs-built_in">reserve</span>(<span class="hljs-number">2</span>);<br>	vec.<span class="hljs-built_in">push_back</span>(rx);<br>	vec.<span class="hljs-built_in">push_back</span>(x);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>	X *px = <span class="hljs-keyword">new</span> X;<br>	<span class="hljs-built_in">f</span>(*px, *px);<br>    X x;<br>    x = *px;<br>	<span class="hljs-keyword">delete</span> px;<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 <hr />
-<p>输出结果如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash">xhy@ubuntu:~/cpp_learn/ch13$ ./test_all <br>X()<br>X(const X&amp;)<br>X(const X&amp;)<br>X(const X&amp;)<br>~X()<br>~X()<br>~X()<br>X()<br>X&amp; operator=(const X&amp;)<br>~X()<br>~X()<br></code></pre></td></tr></table></figure>
-<hr />
-<p>如上，测试函数说明了：</p>
-<ol>
-<li>
-<p>在函数调用时，<strong>不是引用类型的形参都是采用拷贝构造函数</strong>进行形参的初始化的，引用类型的形参直接绑定到实参上。</p>
-</li>
-<li>
-<p>在<code>vector</code>进行<code>reserve</code>函数进行空间分配时，只是分配了空间，并没有在分配的空间上进行初始化操作。</p>
-</li>
-<li>
-<p>在<code>vector</code>进行<code>push_back</code>操作时，使用拷贝初始化函数对新增元素进行初始化操作；</p>
-</li>
-<li>
-<p>在一个函数作用域结束时，会将此<strong>作用域中的自动变量</strong>一一析构（包括形参）。</p>
-</li>
+<p>输出结果如下： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash">xhy@ubuntu:~/cpp_learn/ch13$ ./test_all <br>X()<br>X(const X&amp;)<br>X(const X&amp;)<br>X(const X&amp;)<br>~X()<br>~X()<br>~X()<br>X()<br>X&amp; operator=(const X&amp;)<br>~X()<br>~X()<br></code></pre></td></tr></table></figure> *<strong> 如上，测试函数说明了： 1.
+在函数调用时，</strong>不是引用类型的形参都是采用拷贝构造函数**进行形参的初始化的，引用类型的形参直接绑定到实参上。</p>
+<ol start="2" type="1">
+<li><p>在<code>vector</code>进行<code>reserve</code>函数进行空间分配时，只是分配了空间，并没有在分配的空间上进行初始化操作。</p></li>
+<li><p>在<code>vector</code>进行<code>push_back</code>操作时，使用拷贝初始化函数对新增元素进行初始化操作；</p></li>
+<li><p>在一个函数作用域结束时，会将此<strong>作用域中的自动变量</strong>一一析构（包括形参）。</p></li>
 </ol>
-<h1 id="参考资料"><a class="markdownIt-Anchor" href="#参考资料"></a> 参考资料</h1>
+<h1 id="参考资料">参考资料</h1>
 <ul>
 <li>[1] C++ Primer（第5版）</li>
 </ul>
@@ -527,6 +503,7 @@
 
   
   
+
 
 
 
@@ -721,6 +698,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 

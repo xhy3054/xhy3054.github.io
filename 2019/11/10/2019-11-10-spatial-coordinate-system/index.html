@@ -16,18 +16,20 @@
   <meta name="author" content="Line">
   <meta name="keywords" content="">
   
-    <meta name="description" content="最近好忙，只能想起来就写一点，把空间坐标系总结一下。  空间坐标系  我们生活在宇宙中，我们生活在地球上。地球相对于宇宙肯定不是固定不动的，我们知道地球绕太阳公转，同时本身也有自转（具体地球的运动，请见附录）。  我们知道，定义坐标系都是有一个参照物的，因此，根据参照物的属性，我们首先可以将空间坐标系划分为两种：惯性坐标系与地球坐标系。  惯性坐标系 地球坐标系  地心地固坐标系  地心地固直角坐">
+    <meta name="description" content="最近好忙，只能想起来就写一点，把空间坐标系总结一下。 空间坐标系  我们生活在宇宙中，我们生活在地球上。地球相对于宇宙肯定不是固定不动的，我们知道地球绕太阳公转，同时本身也有自转（具体地球的运动，请见附录）。  我们知道，定义坐标系都是有一个参照物的，因此，根据参照物的属性，我们首先可以将空间坐标系划分为两种：惯性坐标系与地球坐标系。  惯性坐标系 地球坐标系  地心地固坐标系  地心地固直角坐标">
 <meta property="og:type" content="article">
 <meta property="og:title" content="空间坐标系系统介绍">
 <meta property="og:url" content="http://line.com/2019/11/10/2019-11-10-spatial-coordinate-system/index.html">
 <meta property="og:site_name" content="Line&#39;s Blog">
-<meta property="og:description" content="最近好忙，只能想起来就写一点，把空间坐标系总结一下。  空间坐标系  我们生活在宇宙中，我们生活在地球上。地球相对于宇宙肯定不是固定不动的，我们知道地球绕太阳公转，同时本身也有自转（具体地球的运动，请见附录）。  我们知道，定义坐标系都是有一个参照物的，因此，根据参照物的属性，我们首先可以将空间坐标系划分为两种：惯性坐标系与地球坐标系。  惯性坐标系 地球坐标系  地心地固坐标系  地心地固直角坐">
+<meta property="og:description" content="最近好忙，只能想起来就写一点，把空间坐标系总结一下。 空间坐标系  我们生活在宇宙中，我们生活在地球上。地球相对于宇宙肯定不是固定不动的，我们知道地球绕太阳公转，同时本身也有自转（具体地球的运动，请见附录）。  我们知道，定义坐标系都是有一个参照物的，因此，根据参照物的属性，我们首先可以将空间坐标系划分为两种：惯性坐标系与地球坐标系。  惯性坐标系 地球坐标系  地心地固坐标系  地心地固直角坐标">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://line.com/img/one-piece/one-piece21.jpg">
 <meta property="article:published_time" content="2019-11-09T17:07:24.000Z">
-<meta property="article:modified_time" content="2023-02-28T04:06:17.714Z">
+<meta property="article:modified_time" content="2023-03-05T06:01:32.272Z">
 <meta property="article:author" content="Line">
 <meta property="article:tag" content="多传感器融合">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://line.com/img/one-piece/one-piece21.jpg">
   
   
   
@@ -42,8 +44,6 @@
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
 
 
 
@@ -69,6 +69,7 @@
 
   
 <link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+<link rel="stylesheet" href="/css/mac.css">
 
 
 
@@ -285,12 +286,12 @@
               <div class="markdown-body">
                 
                 <p>最近好忙，只能想起来就写一点，把空间坐标系总结一下。</p>
-<h1 id="空间坐标系"><a class="markdownIt-Anchor" href="#空间坐标系"></a> 空间坐标系</h1>
+<h1 id="空间坐标系">空间坐标系</h1>
 <blockquote>
 <p>我们生活在宇宙中，我们生活在地球上。地球相对于宇宙肯定不是固定不动的，我们知道地球绕太阳公转，同时本身也有自转（具体地球的运动，请见附录）。</p>
 </blockquote>
 <p>我们知道，定义坐标系都是有一个参照物的，因此，根据参照物的属性，我们首先可以将空间坐标系划分为两种：<strong>惯性坐标系</strong>与<strong>地球坐标系</strong>。</p>
-<ol>
+<ol type="1">
 <li>惯性坐标系</li>
 <li>地球坐标系
 <ul>
@@ -298,53 +299,48 @@
 <ul>
 <li>地心地固直角坐标系</li>
 <li>大地坐标系</li>
-</ul>
-</li>
+</ul></li>
 <li>站心坐标系
 <ul>
 <li>ENU（东北天）坐标系</li>
-</ul>
-</li>
-</ul>
-</li>
+</ul></li>
+</ul></li>
 </ol>
-<h2 id="1-惯性坐标系"><a class="markdownIt-Anchor" href="#1-惯性坐标系"></a> 1 惯性坐标系</h2>
+<h2 id="惯性坐标系">1 惯性坐标系</h2>
 <blockquote>
 <p>在空间中静止或者做匀速直线运动的坐标系称为<strong>惯性坐标系</strong>，也叫做<strong>空固坐标系。</strong></p>
 </blockquote>
 <p>由上面定义可知，要建立一个严格意义上的惯性坐标系，相当困难。毕竟，我们生活在地球上，而地球运动复杂。</p>
-<h2 id="2-地球坐标系"><a class="markdownIt-Anchor" href="#2-地球坐标系"></a> 2 地球坐标系</h2>
+<h2 id="地球坐标系">2 地球坐标系</h2>
 <blockquote>
 <p><strong>地球坐标系</strong>固定在地球上随着地球一起在空间里做公转与自传运动，因此也称为<strong>地固坐标系。</strong></p>
 </blockquote>
 <p>地固坐标系根据<strong>坐标系原点的不同</strong>，又可以分为<strong>地心地固坐标系</strong>与<strong>站心坐标系</strong></p>
-<h3 id="21-地心地固坐标系"><a class="markdownIt-Anchor" href="#21-地心地固坐标系"></a> 2.1 地心地固坐标系</h3>
-<h4 id="211-地心地固直角坐标系"><a class="markdownIt-Anchor" href="#211-地心地固直角坐标系"></a> 2.1.1 地心地固直角坐标系</h4>
-<p>地心地固直角坐标系以地心<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi></mrow><annotation encoding="application/x-tex">O</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span></span></span></span>为坐标原点，Z轴与地球自传轴重合并指向北极（协议北极），X轴指向参考子午面（通常是英国伦敦处的格林尼治子午面）与地球赤道的一个交点，而X,Y,Z三轴一起构成右手直角坐标系。</p>
-<h4 id="212大地坐标系"><a class="markdownIt-Anchor" href="#212大地坐标系"></a> 2.1.2大地坐标系</h4>
+<h3 id="地心地固坐标系">2.1 地心地固坐标系</h3>
+<h4 id="地心地固直角坐标系">2.1.1 地心地固直角坐标系</h4>
+<p>地心地固直角坐标系以地心<span
+class="math inline">\(O\)</span>为坐标原点，Z轴与地球自传轴重合并指向北极（协议北极），X轴指向参考子午面（通常是英国伦敦处的格林尼治子午面）与地球赤道的一个交点，而X,Y,Z三轴一起构成右手直角坐标系。</p>
+<h4 id="大地坐标系">2.1.2大地坐标系</h4>
 <p>大地坐标系也叫经纬高坐标系。三个坐标分别表示经度、纬度、高度信息。</p>
 <p>为了给出高度值，大地坐标系首先会定义一个与地球几何最吻合的椭球体来代替表面凹凸不平的地球，这个椭球体成为基准椭球体。此时大地高度h是从P点到基准椭球面的法线距离，基准椭球面以外为正，以内为负。</p>
 <blockquote>
 <p>由于地球会有极移现象，因此为了产生固定的地心地固坐标系，一般会定义协议地级，据此制定协议地球坐标系。最常使用的是WGS-84坐标系。</p>
 </blockquote>
-<h3 id="22-站心坐标系"><a class="markdownIt-Anchor" href="#22-站心坐标系"></a> 2.2 站心坐标系</h3>
+<h3 id="站心坐标系">2.2 站心坐标系</h3>
 <p>站心坐标系通常以用户所在的位置P为坐标原点，东向为x轴正方向，北向为y轴正方向，天向为z轴正方向。因此，站心坐标系也叫作东北天（ENU）坐标系。</p>
-<h1 id="附录"><a class="markdownIt-Anchor" href="#附录"></a> 附录</h1>
-<h2 id="地球的运动"><a class="markdownIt-Anchor" href="#地球的运动"></a> 地球的运动</h2>
-<p>地球的运动比较复杂，不过可以大体说一下</p>
-<ol>
-<li>绕太阳公转：地球及其质心围绕太阳做非匀速直线运动</li>
-<li>地球自传：但地球自传轴的方向不是固定不变的，地球自转轴的方向在空间的运动大致可以描述成下面两种运动的叠加
-<ul>
-<li>从上万年尺度长期来看，地球自转轴绕北黄极做缓慢的旋转（北极绕北黄极顺时针大圆周运动，半径等于黄赤交角乘以地球半径，周期大约25800年）</li>
-<li>从几年尺度短期来看，地球自转轴还存在一种称为<strong>章动</strong>的局部小幅度旋转（北极做顺时针小椭圆运动，周期18.6年）</li>
-</ul>
-</li>
-</ol>
+<h1 id="附录">附录</h1>
+<h2 id="地球的运动">地球的运动</h2>
+<p>地球的运动比较复杂，不过可以大体说一下 1.
+绕太阳公转：地球及其质心围绕太阳做非匀速直线运动 2.
+地球自传：但地球自传轴的方向不是固定不变的，地球自转轴的方向在空间的运动大致可以描述成下面两种运动的叠加
+-
+从上万年尺度长期来看，地球自转轴绕北黄极做缓慢的旋转（北极绕北黄极顺时针大圆周运动，半径等于黄赤交角乘以地球半径，周期大约25800年）
+-
+从几年尺度短期来看，地球自转轴还存在一种称为<strong>章动</strong>的局部小幅度旋转（北极做顺时针小椭圆运动，周期18.6年）</p>
 <blockquote>
 <p>地球自转轴的运动主要是由于：1.其自身密度不均匀；2.赤道隆起的地球受到日月引力共同作用；</p>
 </blockquote>
-<h1 id="参考文献"><a class="markdownIt-Anchor" href="#参考文献"></a> 参考文献</h1>
+<h1 id="参考文献">参考文献</h1>
 <ul>
 <li>[1] GPS原理与接收机设计 谢刚著</li>
 </ul>
@@ -520,6 +516,7 @@
 
   
   
+
 
 
 
@@ -714,6 +711,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 

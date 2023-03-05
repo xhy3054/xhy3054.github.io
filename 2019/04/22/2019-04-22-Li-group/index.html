@@ -16,20 +16,20 @@
   <meta name="author" content="Line">
   <meta name="keywords" content="">
   
-    <meta name="description" content="这部分内容是在slam中经常会用到的数学内容。  群 群(group)是一种代数结构，由两部分(一个集合A与一种运算⋅\cdot⋅)构成，可以记作G&#x3D;(A,⋅)G&#x3D;(A, \cdot)G&#x3D;(A,⋅),并且群满足如下条件:  封闭性:     $ \quad \forall a_1, a_2, \quad a_1 \cdot a_2 \in A $ 结合律:     $ \quad \forall">
+    <meta name="description" content="这部分内容是在slam中经常会用到的数学内容。 群 群(group)是一种代数结构，由两部分(一个集合A与一种运算\(\cdot\))构成，可以记作\(G&#x3D;(A, \cdot)\),并且群满足如下条件: 1. 封闭性: $ a_1, a_2, a_1 a_2 A $ 2. 结合律: $ a_1, a_2, a_3, (a_1 a_2) a_3 &#x3D; a_1 ( a_2 a_3) $ 3. 幺元: $">
 <meta property="og:type" content="article">
 <meta property="og:title" content="李群与李代数">
 <meta property="og:url" content="http://line.com/2019/04/22/2019-04-22-Li-group/index.html">
 <meta property="og:site_name" content="Line&#39;s Blog">
-<meta property="og:description" content="这部分内容是在slam中经常会用到的数学内容。  群 群(group)是一种代数结构，由两部分(一个集合A与一种运算⋅\cdot⋅)构成，可以记作G&#x3D;(A,⋅)G&#x3D;(A, \cdot)G&#x3D;(A,⋅),并且群满足如下条件:  封闭性:     $ \quad \forall a_1, a_2, \quad a_1 \cdot a_2 \in A $ 结合律:     $ \quad \forall">
+<meta property="og:description" content="这部分内容是在slam中经常会用到的数学内容。 群 群(group)是一种代数结构，由两部分(一个集合A与一种运算\(\cdot\))构成，可以记作\(G&#x3D;(A, \cdot)\),并且群满足如下条件: 1. 封闭性: $ a_1, a_2, a_1 a_2 A $ 2. 结合律: $ a_1, a_2, a_3, (a_1 a_2) a_3 &#x3D; a_1 ( a_2 a_3) $ 3. 幺元: $">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://line.com/assets/img/liqun/li-qun.png">
+<meta property="og:image" content="http://line.com/img/sword/sword10.jpg">
 <meta property="article:published_time" content="2019-04-21T17:07:24.000Z">
-<meta property="article:modified_time" content="2023-01-08T16:21:28.853Z">
+<meta property="article:modified_time" content="2023-03-05T06:05:00.752Z">
 <meta property="article:author" content="Line">
 <meta property="article:tag" content="数学">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://line.com/assets/img/liqun/li-qun.png">
+<meta name="twitter:image" content="http://line.com/img/sword/sword10.jpg">
   
   
   
@@ -44,8 +44,6 @@
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
 
 
 
@@ -71,6 +69,7 @@
 
   
 <link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+<link rel="stylesheet" href="/css/mac.css">
 
 
 
@@ -232,7 +231,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          8.8k 字
+          8.1k 字
         
       </span>
     
@@ -243,7 +242,7 @@
         
         
         
-          74 分钟
+          68 分钟
         
       </span>
     
@@ -287,148 +286,272 @@
               <div class="markdown-body">
                 
                 <p>这部分内容是在slam中经常会用到的数学内容。</p>
-<h1 id="群"><a class="markdownIt-Anchor" href="#群"></a> 群</h1>
-<p>群(group)是一种代数结构，由两部分(一个集合A与一种运算<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>⋅</mo></mrow><annotation encoding="application/x-tex">\cdot</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.44445em;vertical-align:0em;"></span><span class="mord">⋅</span></span></span></span>)构成，可以记作<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mo>=</mo><mo stretchy="false">(</mo><mi>A</mi><mo separator="true">,</mo><mo>⋅</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">G=(A, \cdot)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal">G</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">A</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">⋅</span><span class="mclose">)</span></span></span></span>,并且群满足如下条件:</p>
-<ol>
-<li>封闭性:     $ \quad \forall a_1, a_2, \quad a_1 \cdot a_2 \in A $</li>
-<li>结合律:     $ \quad \forall a_1, a_2, a_3, \quad (a_1 \cdot a_2) \cdot a_3 = a_1 \cdot ( a_2 \cdot a_3) $</li>
-<li>幺元:       $ \quad \exists a_0 \in A, \quad s.t. \quad \forall a \in A, \quad a_0 \cdot a = a \cdot a_0 = a $</li>
-<li>逆:        $ \quad \forall a \in A, \quad \exists a^{-1} \in A, \quad s.t. \quad a \cdot a^{-1} = a_0 $</li>
-</ol>
-<p>由上面我们可以知道了群的定义，下面例举几个群：</p>
+<h1 id="群">群</h1>
+<p>群(group)是一种代数结构，由两部分(一个集合A与一种运算<span
+class="math inline">\(\cdot\)</span>)构成，可以记作<span
+class="math inline">\(G=(A, \cdot)\)</span>,并且群满足如下条件: 1.
+封闭性: $ a_1, a_2, a_1 a_2 A $ 2. 结合律: $ a_1, a_2, a_3, (a_1 a_2)
+a_3 = a_1 ( a_2 a_3) $ 3. 幺元: $ a_0 A, s.t. a A, a_0 a = a a_0 = a $
+4. 逆: $ a A, a^{-1} A, s.t. a a^{-1} = a_0 $</p>
+<p>由上面我们可以知道了群的定义，下面例举几个群： -
+<strong>一般线性群</strong><span class="math inline">\(GL(n)\)</span>:
+n×n的可逆矩阵与矩阵乘法构成一个群，幺元是E矩阵</p>
 <ul>
-<li>
-<p><strong>一般线性群</strong><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi>L</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">GL(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">G</span><span class="mord mathnormal">L</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>: n×n的可逆矩阵与矩阵乘法构成一个群，幺元是E矩阵</p>
-</li>
-<li>
-<p><strong>旋转矩阵群</strong><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">SO(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>: 旋转矩阵与矩阵乘法构成的一个群，满足上面任何一个性质，幺元是旋转角度0的矩阵。</p>
-</li>
+<li><p><strong>旋转矩阵群</strong><span
+class="math inline">\(SO(n)\)</span>:
+旋转矩阵与矩阵乘法构成的一个群，满足上面任何一个性质，幺元是旋转角度0的矩阵。
+<span class="math display">\[\begin{equation} SO(n) = \{ \mathbf{R} \in
+\mathbb{R}^{n \times n} | \mathbf{R R}^T = \mathbf{I}, det(\mathbf{R})=1
+\} \end{equation}\]</span></p></li>
+<li><p><strong>特殊欧式群</strong><span
+class="math inline">\(SE(n)\)</span>:
+欧式变换矩阵(旋转加平移)与矩阵乘法也构成一个群，它的幺元是旋转角度为0，平移也是0的变换矩阵。
+<span class="math display">\[\begin{equation} SE(3) = \left\{ \mathbf{T}
+= \left[ {\begin{array}{*{20}{c}} \mathbf{R} &amp; \mathbf{t} \\
+{\mathbf{0}^T} &amp; 1 \end{array}} \right]  \in \mathbb{R}^{4 \times 4}
+| \mathbf{R} \in SO(3), \mathbf{t} \in \mathbb{R}^3\right\}
+\end{equation} \]</span></p></li>
+<li><p><strong>相似变换群</strong><span
+class="math inline">\(Sim(n)\)</span>:
+相似变换就是在旋转矩阵上再加上尺度变换，这个群主要会在<strong>单目视觉</strong>中使用，因为单目具有尺度不确定性。如果在单目slam中使用<span
+class="math inline">\(SE(3)\)</span>来表示位姿，那么由于尺度不确定性与尺度漂移，整个slam过程中尺度会发生变化，而这在SE(3)中不能体现出来。所以在单目视觉中，我们一般在相似变换群上来进行位姿的优化。
+<span class="math display">\[ \begin{equation} Sim(3) = \left\{
+\mathbf{S} = \left[ {\begin{array}{*{20}{c}} \mathbf{sR} &amp;
+\mathbf{t} \\ {\mathbf{0}^T} &amp; 1 \end{array}} \right]  \in
+\mathbb{R}^{4 \times 4} | \mathbf{R} \in SO(3), \mathbf{t} \in
+\mathbb{R}^3\right\} \end{equation} \]</span></p></li>
 </ul>
-<p class='katex-block katex-error' title='ParseError: KaTeX parse error: No such environment: equation at position 7: \begin{̲e̲q̲u̲a̲t̲i̲o̲n̲}̲ SO(n) = \{ \ma…'>\begin{equation} SO(n) = \{ \mathbf{R} \in \mathbb{R}^{n \times n} | \mathbf{R R}^T = \mathbf{I}, det(\mathbf{R})=1 \} \end{equation}
-</p>
-<ul>
-<li><strong>特殊欧式群</strong><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>E</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">SE(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>: 欧式变换矩阵(旋转加平移)与矩阵乘法也构成一个群，它的幺元是旋转角度为0，平移也是0的变换矩阵。</li>
-</ul>
-<p class='katex-block katex-error' title='ParseError: KaTeX parse error: No such environment: equation at position 7: \begin{̲e̲q̲u̲a̲t̲i̲o̲n̲}̲ SE(3) = \left\…'>\begin{equation} SE(3) = \left\{ \mathbf{T} = \left[ {\begin{array}{*{20}{c}} \mathbf{R} &amp; \mathbf{t} \\ {\mathbf{0}^T} &amp; 1 \end{array}} \right]  \in \mathbb{R}^{4 \times 4} | \mathbf{R} \in SO(3), \mathbf{t} \in \mathbb{R}^3\right\} \end{equation} 
-</p>
-<ul>
-<li><strong>相似变换群</strong><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>i</mi><mi>m</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">Sim(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal">i</span><span class="mord mathnormal">m</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>: 相似变换就是在旋转矩阵上再加上尺度变换，这个群主要会在<strong>单目视觉</strong>中使用，因为单目具有尺度不确定性。如果在单目slam中使用<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>E</mi><mo stretchy="false">(</mo><mn>3</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">SE(3)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord">3</span><span class="mclose">)</span></span></span></span>来表示位姿，那么由于尺度不确定性与尺度漂移，整个slam过程中尺度会发生变化，而这在SE(3)中不能体现出来。所以在单目视觉中，我们一般在相似变换群上来进行位姿的优化。</li>
-</ul>
-<p class='katex-block katex-error' title='ParseError: KaTeX parse error: No such environment: equation at position 7: \begin{̲e̲q̲u̲a̲t̲i̲o̲n̲}̲ Sim(3) = \left…'>\begin{equation} Sim(3) = \left\{ \mathbf{S} = \left[ {\begin{array}{*{20}{c}} \mathbf{sR} &amp; \mathbf{t} \\ {\mathbf{0}^T} &amp; 1 \end{array}} \right]  \in \mathbb{R}^{4 \times 4} | \mathbf{R} \in SO(3), \mathbf{t} \in \mathbb{R}^3\right\} \end{equation} 
-</p>
-<h2 id="李群"><a class="markdownIt-Anchor" href="#李群"></a> 李群</h2>
-<p>李群是指具有连续性质的群。比如向整数群Z那样的离散的群就没有连续性质，所以不是李群。而<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">SO(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>与<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>E</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">SE(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>是李群</p>
-<h3 id="李代数"><a class="markdownIt-Anchor" href="#李代数"></a> 李代数</h3>
+<h2 id="李群">李群</h2>
+<p>李群是指具有连续性质的群。比如向整数群Z那样的离散的群就没有连续性质，所以不是李群。而<span
+class="math inline">\(SO(n)\)</span>与<span
+class="math inline">\(SE(n)\)</span>是李群</p>
+<h3 id="李代数">李代数</h3>
 <p>每个李群都有与之对应的李代数。李代数描述了李群的局部性质。</p>
-<p>通常李代数由一个集合V，一个数域F和一个二元运算[]组成。通常如果我们说<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi mathvariant="double-struck">V</mi><mo separator="true">,</mo><mi mathvariant="double-struck">F</mi><mo separator="true">,</mo><mo stretchy="false">[</mo><mo stretchy="false">]</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(\mathbb{V}, \mathbb{F}, [])</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathbb">V</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathbb">F</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mopen">[</span><span class="mclose">]</span><span class="mclose">)</span></span></span></span>是一个李代数，那么它具有如下性质:</p>
+<p>通常李代数由一个集合V，一个数域F和一个二元运算[]组成。通常如果我们说<span
+class="math inline">\((\mathbb{V}, \mathbb{F},
+[])\)</span>是一个李代数，那么它具有如下性质: - 封闭性: <span
+class="math inline">\(\forall \mathbf{X}, \mathbf{Y} \in \mathbb{V},
+[\mathbf{X} \mathbf{Y}] \in \mathbb{V}\)</span></p>
 <ul>
-<li>
-<p>封闭性: <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∀</mi><mi mathvariant="bold">X</mi><mo separator="true">,</mo><mi mathvariant="bold">Y</mi><mo>∈</mo><mi mathvariant="double-struck">V</mi><mo separator="true">,</mo><mo stretchy="false">[</mo><mi mathvariant="bold">X</mi><mi mathvariant="bold">Y</mi><mo stretchy="false">]</mo><mo>∈</mo><mi mathvariant="double-struck">V</mi></mrow><annotation encoding="application/x-tex">\forall \mathbf{X}, \mathbf{Y} \in \mathbb{V}, [\mathbf{X} \mathbf{Y}] \in \mathbb{V}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord">∀</span><span class="mord"><span class="mord mathbf">X</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathbf" style="margin-right:0.02875em;">Y</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathbb">V</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mopen">[</span><span class="mord"><span class="mord mathbf">X</span></span><span class="mord"><span class="mord mathbf" style="margin-right:0.02875em;">Y</span></span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68889em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbb">V</span></span></span></span></span></p>
-</li>
-<li>
-<p>双线性: <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∀</mi><mrow><mi mathvariant="bold">X</mi><mo separator="true">,</mo><mi mathvariant="bold">Y</mi><mo separator="true">,</mo><mi mathvariant="bold">Z</mi></mrow><mo>∈</mo><mi mathvariant="double-struck">V</mi><mo separator="true">,</mo><mi>a</mi><mo separator="true">,</mo><mi>b</mi><mo>∈</mo><mi mathvariant="double-struck">F</mi><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">\forall \mathbf{X,Y,Z} \in \mathbb{V}, a,b \in \mathbb{F},</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord">∀</span><span class="mord"><span class="mord mathbf">X</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathbf" style="margin-right:0.02875em;">Y</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathbf">Z</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathbb">V</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">b</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.88333em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathbb">F</span></span><span class="mpunct">,</span></span></span></span>有</p>
-</li>
-</ul>
-<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mo stretchy="false">[</mo><mi>a</mi><mi mathvariant="bold">X</mi><mo>+</mo><mi>b</mi><mi mathvariant="bold">Y</mi><mo separator="true">,</mo><mi mathvariant="bold">Z</mi><mo stretchy="false">]</mo><mo>=</mo><mi>a</mi><mo stretchy="false">[</mo><mi mathvariant="bold">X</mi><mi mathvariant="bold">Z</mi><mo stretchy="false">]</mo><mo>+</mo><mi>b</mi><mo stretchy="false">[</mo><mi mathvariant="bold">Y</mi><mi mathvariant="bold">Z</mi><mo stretchy="false">]</mo><mspace width="1em"/><mo stretchy="false">[</mo><mi mathvariant="bold">Z</mi><mo separator="true">,</mo><mi>a</mi><mi mathvariant="bold">X</mi><mo>+</mo><mi>b</mi><mi mathvariant="bold">Y</mi><mo stretchy="false">]</mo><mo>=</mo><mi>a</mi><mo stretchy="false">[</mo><mi mathvariant="bold">Z</mi><mi mathvariant="bold">X</mi><mo stretchy="false">]</mo><mo>+</mo><mi>b</mi><mo stretchy="false">[</mo><mrow><mi mathvariant="bold">Z</mi><mi mathvariant="bold">Y</mi></mrow><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[a\mathbf{X}+b\mathbf{Y}, \mathbf{Z}] = a[\mathbf{X}\mathbf{Z}] + b [ \mathbf{Y} \mathbf{Z} ] \quad [\mathbf{Z}, a \mathbf{X}+b\mathbf{Y}] = a [\mathbf{Z} \mathbf{X} ]+ b [\mathbf{ZY}]
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathnormal">a</span><span class="mord"><span class="mord mathbf">X</span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">b</span><span class="mord"><span class="mord mathbf" style="margin-right:0.02875em;">Y</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathbf">Z</span></span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">a</span><span class="mopen">[</span><span class="mord"><span class="mord mathbf">X</span></span><span class="mord"><span class="mord mathbf">Z</span></span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">b</span><span class="mopen">[</span><span class="mord"><span class="mord mathbf" style="margin-right:0.02875em;">Y</span></span><span class="mord"><span class="mord mathbf">Z</span></span><span class="mclose">]</span><span class="mspace" style="margin-right:1em;"></span><span class="mopen">[</span><span class="mord"><span class="mord mathbf">Z</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">a</span><span class="mord"><span class="mord mathbf">X</span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">b</span><span class="mord"><span class="mord mathbf" style="margin-right:0.02875em;">Y</span></span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">a</span><span class="mopen">[</span><span class="mord"><span class="mord mathbf">Z</span></span><span class="mord"><span class="mord mathbf">X</span></span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">b</span><span class="mopen">[</span><span class="mord"><span class="mord mathbf">Z</span><span class="mord mathbf" style="margin-right:0.02875em;">Y</span></span><span class="mclose">]</span></span></span></span></span></p>
-<ul>
-<li>
-<p>自反性: <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∀</mi><mi mathvariant="bold">X</mi><mo>∈</mo><mi mathvariant="double-struck">V</mi><mo separator="true">,</mo><mo stretchy="false">[</mo><mi mathvariant="bold">X</mi><mi mathvariant="bold">X</mi><mo stretchy="false">]</mo><mo>=</mo><mn mathvariant="bold">0</mn></mrow><annotation encoding="application/x-tex">\forall \mathbf{X} \in \mathbb{V}, [\mathbf{X} \mathbf{X}] = \mathbf{0}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.73354em;vertical-align:-0.0391em;"></span><span class="mord">∀</span><span class="mord"><span class="mord mathbf">X</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathbb">V</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mopen">[</span><span class="mord"><span class="mord mathbf">X</span></span><span class="mord"><span class="mord mathbf">X</span></span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">0</span></span></span></span></span></p>
-</li>
-<li>
-<p>雅可比等价: <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∀</mi><mrow><mi mathvariant="bold">X</mi><mo separator="true">,</mo><mi mathvariant="bold">Y</mi><mo separator="true">,</mo><mi mathvariant="bold">Z</mi></mrow><mo>∈</mo><mi mathvariant="double-struck">V</mi><mo separator="true">,</mo><mo stretchy="false">[</mo><mi mathvariant="bold">X</mi><mo separator="true">,</mo><mo stretchy="false">[</mo><mrow><mi mathvariant="bold">Y</mi><mi mathvariant="bold">Z</mi></mrow><mo stretchy="false">]</mo><mo stretchy="false">]</mo><mo>+</mo><mo stretchy="false">[</mo><mi mathvariant="bold">Z</mi><mo separator="true">,</mo><mo stretchy="false">[</mo><mrow><mi mathvariant="bold">Y</mi><mi mathvariant="bold">X</mi></mrow><mo stretchy="false">]</mo><mo stretchy="false">]</mo><mo>+</mo><mo stretchy="false">[</mo><mi mathvariant="bold">Y</mi><mo separator="true">,</mo><mo stretchy="false">[</mo><mrow><mi mathvariant="bold">Z</mi><mi mathvariant="bold">X</mi></mrow><mo stretchy="false">]</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">\forall \mathbf{X,Y,Z} \in \mathbb{V}, [\mathbf{X}, [\mathbf{YZ}] ] + [\mathbf{Z}, [\mathbf{YX}] ] + [\mathbf{Y}, [\mathbf{ZX}]]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord">∀</span><span class="mord"><span class="mord mathbf">X</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathbf" style="margin-right:0.02875em;">Y</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathbf">Z</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathbb">V</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mopen">[</span><span class="mord"><span class="mord mathbf">X</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mopen">[</span><span class="mord"><span class="mord mathbf" style="margin-right:0.02875em;">Y</span><span class="mord mathbf">Z</span></span><span class="mclose">]</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord"><span class="mord mathbf">Z</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mopen">[</span><span class="mord"><span class="mord mathbf" style="margin-right:0.02875em;">Y</span><span class="mord mathbf">X</span></span><span class="mclose">]</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord"><span class="mord mathbf" style="margin-right:0.02875em;">Y</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mopen">[</span><span class="mord"><span class="mord mathbf">Z</span><span class="mord mathbf">X</span></span><span class="mclose">]</span><span class="mclose">]</span></span></span></span></p>
-</li>
+<li><p>双线性: <span class="math inline">\(\forall \mathbf{X,Y,Z} \in
+\mathbb{V}, a,b \in \mathbb{F},\)</span>有 <span
+class="math display">\[[a\mathbf{X}+b\mathbf{Y}, \mathbf{Z}] =
+a[\mathbf{X}\mathbf{Z}] + b [ \mathbf{Y} \mathbf{Z} ] \quad [\mathbf{Z},
+a \mathbf{X}+b\mathbf{Y}] = a [\mathbf{Z} \mathbf{X} ]+ b
+[\mathbf{ZY}]\]</span></p></li>
+<li><p>自反性: <span class="math inline">\(\forall \mathbf{X} \in
+\mathbb{V}, [\mathbf{X} \mathbf{X}] = \mathbf{0}\)</span></p></li>
+<li><p>雅可比等价: <span class="math inline">\(\forall \mathbf{X,Y,Z}
+\in \mathbb{V}, [\mathbf{X}, [\mathbf{YZ}] ] + [\mathbf{Z},
+[\mathbf{YX}] ] + [\mathbf{Y}, [\mathbf{ZX}]]\)</span></p></li>
 </ul>
 <blockquote>
-<p>通常我们成李代数中的二元运算为<strong>李括号</strong>。相比于群中较为简单的二元运算，李括号通常的含义是计算集合中两个元素的差异。一般它不要求结合律，但是满足反对称性，以及元素和自己做李括号之后为0的性质。一个典型的例子是<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="fraktur">g</mi><mo>=</mo><mo stretchy="false">(</mo><msup><mi mathvariant="double-struck">R</mi><mn>3</mn></msup><mo separator="true">,</mo><mi mathvariant="double-struck">R</mi><mo separator="true">,</mo><mo>×</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\mathfrak{g} = (\mathbb{R}^3, \mathbb{R}, \times)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6644em;vertical-align:-0.18906em;"></span><span class="mord"><span class="mord mathfrak">g</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord"><span class="mord mathbb">R</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathbb">R</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">×</span><span class="mclose">)</span></span></span></span>是一个李代数。</p>
+<p>通常我们成李代数中的二元运算为<strong>李括号</strong>。相比于群中较为简单的二元运算，李括号通常的含义是计算集合中两个元素的差异。一般它不要求结合律，但是满足反对称性，以及元素和自己做李括号之后为0的性质。一个典型的例子是<span
+class="math inline">\(\mathfrak{g} = (\mathbb{R}^3, \mathbb{R},
+\times)\)</span>是一个李代数。</p>
 </blockquote>
-<h2 id="三维旋转群so3与其对应的李代数mathfrakso3"><a class="markdownIt-Anchor" href="#三维旋转群so3与其对应的李代数mathfrakso3"></a> 三维旋转群<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>O</mi><mo stretchy="false">(</mo><mn>3</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">SO(3)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">3</span><span class="mclose">)</span></span></span></span>与其对应的李代数<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="fraktur">s</mi><mi mathvariant="fraktur">o</mi></mrow><mo stretchy="false">(</mo><mn>3</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\mathfrak{so}(3)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathfrak">s</span><span class="mord mathfrak">o</span></span><span class="mopen">(</span><span class="mord">3</span><span class="mclose">)</span></span></span></span></h2>
-<p>三维旋转群描述三维空间中的旋转，其集合元素为3×3的正交且行列式为1的矩阵R，我们知道<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><msup><mi>R</mi><mi>T</mi></msup><mo>=</mo><mi>I</mi></mrow><annotation encoding="application/x-tex">RR^T=I</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span></span></span></span>。如果将R看作一个随着时间t变化的函数R(t),则有<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">R</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mi mathvariant="bold">R</mi><mo stretchy="false">(</mo><mi>t</mi><msup><mo stretchy="false">)</mo><mi>T</mi></msup><mo>=</mo><mi mathvariant="bold">I</mi></mrow><annotation encoding="application/x-tex">\mathbf{R}(t) \mathbf{R}(t) ^T = \mathbf{I}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0913309999999998em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathbf">R</span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mord"><span class="mord mathbf">R</span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68611em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">I</span></span></span></span></span>。在等式两边分别对时间求导，可以得到:</p>
-<p class='katex-block katex-error' title='ParseError: KaTeX parse error: No such environment: equation at position 7: \begin{̲e̲q̲u̲a̲t̲i̲o̲n̲}̲ \mathbf{\dot{R…'>\begin{equation} \mathbf{\dot{R}} (t) \mathbf{R} {(t)^T} + \mathbf{R} (t) \mathbf{\dot{R}} {(t)^T} = 0 \end{equation} 
-</p>
+<h2 id="三维旋转群so3与其对应的李代数mathfrakso3">三维旋转群<span
+class="math inline">\(SO(3)\)</span>与其对应的李代数<span
+class="math inline">\(\mathfrak{so}(3)\)</span></h2>
+<p>三维旋转群描述三维空间中的旋转，其集合元素为3×3的正交且行列式为1的矩阵R，我们知道<span
+class="math inline">\(RR^T=I\)</span>。如果将R看作一个随着时间t变化的函数R(t),则有<span
+class="math inline">\(\mathbf{R}(t) \mathbf{R}(t) ^T =
+\mathbf{I}\)</span>。在等式两边分别对时间求导，可以得到:</p>
+<p><span class="math display">\[ \begin{equation} \mathbf{\dot{R}} (t)
+\mathbf{R} {(t)^T} + \mathbf{R} (t) \mathbf{\dot{R}} {(t)^T} = 0
+\end{equation} \]</span></p>
 <p>对上式进行整理，可以得到:</p>
-<p class='katex-block katex-error' title='ParseError: KaTeX parse error: No such environment: equation at position 7: \begin{̲e̲q̲u̲a̲t̲i̲o̲n̲}̲ \mathbf{\dot{R…'>\begin{equation} \mathbf{\dot{R}} (t) \mathbf{R} {(t)^T} = - \left(  \mathbf{\dot{R}} (t) \mathbf{R} {(t)^T} \right)^T \end{equation}
-</p>
-<p>从上面的公式我们可以看出<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mi mathvariant="bold">R</mi><mo>˙</mo></mover><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mi mathvariant="bold">R</mi><mrow><mo stretchy="false">(</mo><mi>t</mi><msup><mo stretchy="false">)</mo><mi>T</mi></msup></mrow></mrow><annotation encoding="application/x-tex">\mathbf{\dot{R}} (t) \mathbf{R} {(t)^T}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.19955em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9495499999999999em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathbf">R</span></span></span><span style="top:-3.25511em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.15972em;"><span class="mord mathbf">˙</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mord"><span class="mord mathbf">R</span></span><span class="mord"><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span></span></span></span></span>是一个<strong>反对称矩阵</strong>。</p>
-<h3 id="反对称矩阵与叉乘"><a class="markdownIt-Anchor" href="#反对称矩阵与叉乘"></a> 反对称矩阵与叉乘</h3>
-<p>对于三维向量a与b之间的外积，其中<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">a</mi><mo>=</mo><mo stretchy="false">[</mo><msub><mi>a</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>a</mi><mn>2</mn></msub><mo separator="true">,</mo><msub><mi>a</mi><mn>3</mn></msub><msup><mo stretchy="false">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">\mathbf{a}=[a_1, a_2, a_3]^T</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.44444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">a</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.0913309999999998em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose"><span class="mclose">]</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span></span></span></span>,如下公式:</p>
-<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>a</mi><mo>×</mo><mi>b</mi><mo>=</mo><msup><mi>a</mi><mo lspace="0em" rspace="0em">∧</mo></msup><mi>b</mi></mrow><annotation encoding="application/x-tex">a×b = a^{\wedge} b 
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal">a</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal">b</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.801892em;vertical-align:0em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">∧</span></span></span></span></span></span></span></span></span><span class="mord mathnormal">b</span></span></span></span></span></p>
-<p class='katex-block katex-error' title='ParseError: KaTeX parse error: No such environment: equation at position 7: \begin{̲e̲q̲u̲a̲t̲i̲o̲n̲}̲   {\mathbf{a}^…'>\begin{equation}   {\mathbf{a}^ \wedge } = \left[ {\begin{array}{*{20}{c}} 0&amp;{ - {a_3}}&amp;{a_2} \\ {a_3}&amp;0&amp;{ - {a_1}}\\ { - {a_2}}&amp;{a_1}&amp;0 \end{array}} \right] \end{equation} 
-</p>
-<hr />
-<p>回到刚才的话题，对于<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mi mathvariant="bold">R</mi><mo>˙</mo></mover><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mi mathvariant="bold">R</mi><mrow><mo stretchy="false">(</mo><mi>t</mi><msup><mo stretchy="false">)</mo><mi>T</mi></msup></mrow></mrow><annotation encoding="application/x-tex">\mathbf{\dot{R}} (t) \mathbf{R} {(t)^T}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.19955em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9495499999999999em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathbf">R</span></span></span><span style="top:-3.25511em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.15972em;"><span class="mord mathbf">˙</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mord"><span class="mord mathbf">R</span></span><span class="mord"><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span></span></span></span></span>这个反对称矩阵，我们将其记为A。可以将其对应到一个向量<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">a</mi><mo>=</mo><mo stretchy="false">[</mo><msub><mi>a</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>a</mi><mn>2</mn></msub><mo separator="true">,</mo><msub><mi>a</mi><mn>3</mn></msub><msup><mo stretchy="false">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">\mathbf{a}=[a_1, a_2, a_3]^T</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.44444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">a</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.0913309999999998em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose"><span class="mclose">]</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span></span></span></span>。</p>
-<p class='katex-block katex-error' title='ParseError: KaTeX parse error: No such environment: equation at position 7: \begin{̲e̲q̲u̲a̲t̲i̲o̲n̲}̲   {\mathbf{a}^…'>\begin{equation}   {\mathbf{a}^ \wedge } = \mathbf{A} = \left[ {\begin{array}{*{20}{c}} 0&amp;{ - {a_3}}&amp;{a_2}\\ {a_3}&amp;0&amp;{ - {a_1}}\\ { - {a_2}}&amp;{a_1}&amp;0 \end{array}} \right] \end{equation}
-</p>
-<p>上式也就可以写做</p>
-<p class='katex-block katex-error' title='ParseError: KaTeX parse error: No such environment: equation at position 7: \begin{̲e̲q̲u̲a̲t̲i̲o̲n̲}̲   \mathbf{ \do…'>\begin{equation}   \mathbf{ \dot{R} } (t) \mathbf{R}(t)^T = \mathbf{\phi} (t) ^ {\wedge} \end{equation} 
-</p>
-<p>将上式左右各右乘<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">R</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\mathbf{R}(t)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathbf">R</span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span></span></span></span>，由于R是正交的，所以有</p>
-<p class='katex-block katex-error' title='ParseError: KaTeX parse error: No such environment: equation at position 7: \begin{̲e̲q̲u̲a̲t̲i̲o̲n̲}̲   \mathbf{ \do…'>\begin{equation}   \mathbf{ \dot{R} } (t)  = \mathbf{\phi} (t)^{\wedge} \mathbf{R}(t) =   \left[ {\begin{array}{*{20}{c}}    0&amp;{ - {\phi _3}}&amp;{\phi _2}\\      {\phi _3}&amp;0&amp;{ - {\phi _1}}\\      { - {\phi _2}}&amp;{\phi _1}&amp;0    \end{array}} \right] \mathbf{R} (t) \end{equation}
-</p>
-<p>由上式我们可以发现，每次<strong>对旋转矩阵求导数</strong>，只需要左乘一个<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">ϕ</mi></mrow><annotation encoding="application/x-tex">\mathbf{\phi}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">ϕ</span></span></span></span></span>矩阵即可。这表明<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">ϕ</mi></mrow><annotation encoding="application/x-tex">\mathbf{\phi}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">ϕ</span></span></span></span></span>反映了R的导数性质，所以称其在<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>O</mi><mo stretchy="false">(</mo><mn>3</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">SO(3)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">3</span><span class="mclose">)</span></span></span></span>的正切空间上。同时对上面微分方程进行求解，我们可以得到</p>
-<p class='katex-block katex-error' title='ParseError: KaTeX parse error: No such environment: equation at position 7: \begin{̲e̲q̲u̲a̲t̲i̲o̲n̲}̲ \label{eq:so3o…'>\begin{equation} \label{eq:so3ode} \mathbf{R}(t) = \exp \left( \mathbf{\phi} (t) ^\wedge \right) \mathbf{R}(t_0) \end{equation}
-</p>
-<hr />
-<p>由上我们可以知道，<strong>三维旋转群<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>O</mi><mo stretchy="false">(</mo><mn>3</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">SO(3)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">3</span><span class="mclose">)</span></span></span></span>与其对应的李代数<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="fraktur">s</mi><mi mathvariant="fraktur">o</mi></mrow><mo stretchy="false">(</mo><mn>3</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\mathfrak{so}(3)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathfrak">s</span><span class="mord mathfrak">o</span></span><span class="mopen">(</span><span class="mord">3</span><span class="mclose">)</span></span></span></span>是<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><msup><mi mathvariant="double-struck">R</mi><mn>3</mn></msup><mo separator="true">,</mo><mi mathvariant="double-struck">R</mi><mo separator="true">,</mo><mo>×</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(\mathbb{R}^3, \mathbb{R}, \times)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord"><span class="mord mathbb">R</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathbb">R</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">×</span><span class="mclose">)</span></span></span></span>(三维向量，实数，外积运算)，这个李代数的集合由三维向量组成，每个向量对应到一个反对称矩阵，可以表达旋转矩阵的导数</strong>。它描述了三维旋转群<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>O</mi><mo stretchy="false">(</mo><mn>3</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">SO(3)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">3</span><span class="mclose">)</span></span></span></span>的局部性质。</p>
-<p>此处我们发现SO(3)对应的李代数是定义在<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="double-struck">R</mi><mn>3</mn></msup></mrow><annotation encoding="application/x-tex">\mathbb{R}^3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathbb">R</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span></span></span></span>上的向量，我们记作<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">ϕ</mi></mrow><annotation encoding="application/x-tex">\mathbf{\phi}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">ϕ</span></span></span></span></span>（注意这是个向量，虽然希腊字母的粗体不明显）。而每个<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">ϕ</mi></mrow><annotation encoding="application/x-tex">\mathbf{\phi}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">ϕ</span></span></span></span></span>都可以生成一个反对称矩阵:</p>
-<p class='katex-block katex-error' title='ParseError: KaTeX parse error: No such environment: equation at position 7: \begin{̲e̲q̲u̲a̲t̲i̲o̲n̲}̲ \label{eq:phi}…'>\begin{equation} \label{eq:phi} \mathbf{\Phi} = \mathbf{\phi}^{\wedge} = \left[ {\begin{array}{*{20}{c}}     0&amp;{ - {\phi _3}}&amp;{\phi _2}\\  {\phi _3}&amp;0&amp;{ - {\phi _1}}\\  { - {\phi _2}}&amp;{\phi _1}&amp;0    \end{array}} \right] \in \mathbb{R}^{3 \times 3} \end{equation} 
-</p>
-<p>在此定义下，两个向量<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold">ϕ</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi mathvariant="bold">ϕ</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">\mathbf{\phi}_1, \mathbf{\phi}_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal">ϕ</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal">ϕ</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>的李括号运算对应的反对称矩阵运算为:</p>
-<p class='katex-block katex-error' title='ParseError: KaTeX parse error: No such environment: equation at position 7: \begin{̲e̲q̲u̲a̲t̲i̲o̲n̲}̲ [\mathbf{\phi}…'>\begin{equation} [\mathbf{\phi}_1, \mathbf{\phi}_2]^{\wedge} = \mathbf{ \Phi }_1 \mathbf{ \Phi }_2 - \mathbf{ \Phi }_2 \mathbf{ \Phi }_1 \end{equation} 
-</p>
+<p><span class="math display">\[ \begin{equation} \mathbf{\dot{R}} (t)
+\mathbf{R} {(t)^T} = - \left(  \mathbf{\dot{R}} (t) \mathbf{R} {(t)^T}
+\right)^T \end{equation}\]</span></p>
+<p>从上面的公式我们可以看出<span class="math inline">\(\mathbf{\dot{R}}
+(t) \mathbf{R} {(t)^T}\)</span>是一个<strong>反对称矩阵</strong>。</p>
+<h3 id="反对称矩阵与叉乘">反对称矩阵与叉乘</h3>
+<p>对于三维向量a与b之间的外积，其中<span
+class="math inline">\(\mathbf{a}=[a_1, a_2,
+a_3]^T\)</span>,如下公式:</p>
+<p><span class="math display">\[ a×b = a^{\wedge} b \]</span></p>
+<p><span class="math display">\[\begin{equation}   {\mathbf{a}^ \wedge }
+= \left[ {\begin{array}{*{20}{c}} 0&amp;{ - {a_3}}&amp;{a_2} \\
+{a_3}&amp;0&amp;{ - {a_1}}\\ { - {a_2}}&amp;{a_1}&amp;0 \end{array}}
+\right] \end{equation} \]</span></p>
+<table style="width:6%;">
+
+<tbody>
+<tr class="odd">
+<td>回到刚才的话题，对于<span class="math inline">\(\mathbf{\dot{R}} (t)
+\mathbf{R}
+{(t)^T}\)</span>这个反对称矩阵，我们将其记为A。可以将其对应到一个向量<span
+class="math inline">\(\mathbf{a}=[a_1, a_2, a_3]^T\)</span>。</td>
+</tr>
+<tr class="even">
+<td><span class="math display">\[\begin{equation}   {\mathbf{a}^ \wedge
+} = \mathbf{A} = \left[ {\begin{array}{*{20}{c}} 0&amp;{ -
+{a_3}}&amp;{a_2}\\ {a_3}&amp;0&amp;{ - {a_1}}\\ { -
+{a_2}}&amp;{a_1}&amp;0 \end{array}} \right] \end{equation}\]</span></td>
+</tr>
+<tr class="odd">
+<td>上式也就可以写做</td>
+</tr>
+<tr class="even">
+<td><span class="math display">\[ \begin{equation}   \mathbf{ \dot{R} }
+(t) \mathbf{R}(t)^T = \mathbf{\phi} (t) ^ {\wedge} \end{equation}
+\]</span></td>
+</tr>
+<tr class="odd">
+<td>将上式左右各右乘<span
+class="math inline">\(\mathbf{R}(t)\)</span>，由于R是正交的，所以有</td>
+</tr>
+<tr class="even">
+<td><span class="math display">\[ \begin{equation}   \mathbf{ \dot{R} }
+(t)  = \mathbf{\phi} (t)^{\wedge} \mathbf{R}(t) =   \left[
+{\begin{array}{*{20}{c}}    0&amp;{ - {\phi _3}}&amp;{\phi
+_2}\\      {\phi _3}&amp;0&amp;{ - {\phi _1}}\\      { - {\phi
+_2}}&amp;{\phi _1}&amp;0    \end{array}} \right] \mathbf{R} (t)
+\end{equation}\]</span></td>
+</tr>
+<tr class="odd">
+<td>由上式我们可以发现，每次<strong>对旋转矩阵求导数</strong>，只需要左乘一个<span
+class="math inline">\(\mathbf{\phi}\)</span>矩阵即可。这表明<span
+class="math inline">\(\mathbf{\phi}\)</span>反映了R的导数性质，所以称其在<span
+class="math inline">\(SO(3)\)</span>的正切空间上。同时对上面微分方程进行求解，我们可以得到</td>
+</tr>
+<tr class="even">
+<td><span class="math display">\[\begin{equation}  \mathbf{R}(t) = \exp
+\left( \mathbf{\phi} (t) ^\wedge \right) \mathbf{R}(t_0)
+\end{equation}\]</span></td>
+</tr>
+</tbody>
+</table>
+<p>由上我们可以知道，<strong>三维旋转群<span
+class="math inline">\(SO(3)\)</span>与其对应的李代数<span
+class="math inline">\(\mathfrak{so}(3)\)</span>是<span
+class="math inline">\((\mathbb{R}^3, \mathbb{R},
+\times)\)</span>(三维向量，实数，外积运算)，这个李代数的集合由三维向量组成，每个向量对应到一个反对称矩阵，可以表达旋转矩阵的导数</strong>。它描述了三维旋转群<span
+class="math inline">\(SO(3)\)</span>的局部性质。</p>
+<p>此处我们发现SO(3)对应的李代数是定义在<span
+class="math inline">\(\mathbb{R}^3\)</span>上的向量，我们记作<span
+class="math inline">\(\mathbf{\phi}\)</span>（注意这是个向量，虽然希腊字母的粗体不明显）。而每个<span
+class="math inline">\(\mathbf{\phi}\)</span>都可以生成一个反对称矩阵:</p>
+<p><span class="math display">\[ \begin{equation} \label{eq:phi}
+\mathbf{\Phi} = \mathbf{\phi}^{\wedge} = \left[
+{\begin{array}{*{20}{c}}     0&amp;{ - {\phi _3}}&amp;{\phi _2}\\  {\phi
+_3}&amp;0&amp;{ - {\phi _1}}\\  { - {\phi _2}}&amp;{\phi
+_1}&amp;0    \end{array}} \right] \in \mathbb{R}^{3 \times 3}
+\end{equation} \]</span></p>
+<p>在此定义下，两个向量<span class="math inline">\(\mathbf{\phi}_1,
+\mathbf{\phi}_2\)</span>的李括号运算对应的反对称矩阵运算为:</p>
+<p><span class="math display">\[ \begin{equation} [\mathbf{\phi}_1,
+\mathbf{\phi}_2]^{\wedge} = \mathbf{ \Phi }_1 \mathbf{ \Phi }_2 -
+\mathbf{ \Phi }_2 \mathbf{ \Phi }_1 \end{equation} \]</span></p>
 <p><strong>由于向量与其对应的反对称矩阵关系密切，所以我们说旋转矩阵群的李代数的元素是3维向量或者3维反对称矩阵，都是可以的。</strong></p>
-<p class='katex-block katex-error' title='ParseError: KaTeX parse error: No such environment: equation at position 7: \begin{̲e̲q̲u̲a̲t̲i̲o̲n̲}̲ \mathfrak{so}(…'>\begin{equation} \mathfrak{so}(3) = \left\{ \Phi = \mathbf{\phi^\wedge} \in \mathbb{R}^{3 \times 3} | \mathbf{\phi} \in \mathbb{R}^3 \right\} \end{equation} 
-</p>
-<h3 id="so3上的指数映射"><a class="markdownIt-Anchor" href="#so3上的指数映射"></a> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>O</mi><mo stretchy="false">(</mo><mn>3</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">SO(3)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">3</span><span class="mclose">)</span></span></span></span>上的指数映射</h3>
+<p><span class="math display">\[ \begin{equation} \mathfrak{so}(3) =
+\left\{ \Phi = \mathbf{\phi^\wedge} \in \mathbb{R}^{3 \times 3} |
+\mathbf{\phi} \in \mathbb{R}^3 \right\} \end{equation} \]</span></p>
+<h3 id="so3上的指数映射"><span
+class="math inline">\(SO(3)\)</span>上的指数映射</h3>
 <p>首先，任意矩阵的指数映射可以写成一个泰勒展开，当然，只有在收敛的情况下才会有结果，其结果仍然是一个矩阵。</p>
-<p class='katex-block katex-error' title='ParseError: KaTeX parse error: No such environment: equation at position 7: \begin{̲e̲q̲u̲a̲t̲i̲o̲n̲}̲ \exp(\mathbf{A…'>\begin{equation} \exp(\mathbf{A}) = \sum\limits_{n = 0}^\infty  {\frac{1}{n!}{ \mathbf{A}^n}} \end{equation}
-</p>
-<p>同样，对$$\mathfrak{so}(3)$$中任意一个元素<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">ϕ</mi></mrow><annotation encoding="application/x-tex">\mathbf{\phi}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">ϕ</span></span></span></span></span>，它的指数映射是:</p>
-<p class='katex-block katex-error' title='ParseError: KaTeX parse error: No such environment: equation at position 7: \begin{̲e̲q̲u̲a̲t̲i̲o̲n̲}̲ \exp(\mathbf{\…'>\begin{equation} \exp(\mathbf{\phi}^\wedge) = \sum\limits_{n = 0}^\infty  {\frac{1}{n!}{ (\mathbf{\phi}^{\wedge})^n}} \end{equation} 
-</p>
-<p>仔细推导这个定义，首先<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">ϕ</mi></mrow><annotation encoding="application/x-tex">\mathbf{\phi}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">ϕ</span></span></span></span></span>是一个三维向量，我们可以定义它的模长和方法，分别记作<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">\theta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span></span></span></span>与<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">a</mi></mrow><annotation encoding="application/x-tex">\mathbf{a}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.44444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">a</span></span></span></span></span>(注意此处的<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">a</mi></mrow><annotation encoding="application/x-tex">\mathbf{a}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.44444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">a</span></span></span></span></span>是一个单位长度的向量)，于是有<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">ϕ</mi><mo>=</mo><mi>θ</mi><mi>a</mi></mrow><annotation encoding="application/x-tex">\mathbf{\phi} = {\theta} {a}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">ϕ</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span></span><span class="mord"><span class="mord mathnormal">a</span></span></span></span></span>，首先此处说明的是，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>a</mi><mo lspace="0em" rspace="0em">∧</mo></msup></mrow><annotation encoding="application/x-tex">a^{\wedge}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.751892em;vertical-align:0em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.751892em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">∧</span></span></span></span></span></span></span></span></span></span></span></span>具有如下两条性质:</p>
-<p class='katex-block katex-error' title='ParseError: KaTeX parse error: No such environment: equation at position 7: \begin{̲e̲q̲u̲a̲t̲i̲o̲n̲}̲ \mathbf{a} \ma…'>\begin{equation} \mathbf{a} \mathbf{a}^T = \mathbf{a}^{\wedge} \mathbf{a}^{\wedge} + \mathbf{I} \end{equation}
-</p>
-<p class='katex-block katex-error' title='ParseError: KaTeX parse error: No such environment: equation at position 7: \begin{̲e̲q̲u̲a̲t̲i̲o̲n̲}̲ \mathbf{a}^{\w…'>\begin{equation} \mathbf{a}^{\wedge} \mathbf{a}^{\wedge} \mathbf{a}^{\wedge} = - \mathbf{a}^{\wedge} \end{equation} 
-</p>
+<p><span class="math display">\[\begin{equation} \exp(\mathbf{A}) =
+\sum\limits_{n = 0}^\infty  {\frac{1}{n!}{ \mathbf{A}^n}}
+\end{equation}\]</span></p>
+<p>同样，对<span
+class="math display">\[\mathfrak{so}(3)\]</span>中任意一个元素<span
+class="math inline">\(\mathbf{\phi}\)</span>，它的指数映射是:</p>
+<p><span class="math display">\[ \begin{equation}
+\exp(\mathbf{\phi}^\wedge) = \sum\limits_{n = 0}^\infty  {\frac{1}{n!}{
+(\mathbf{\phi}^{\wedge})^n}} \end{equation} \]</span></p>
+<p>仔细推导这个定义，首先<span
+class="math inline">\(\mathbf{\phi}\)</span>是一个三维向量，我们可以定义它的模长和方法，分别记作<span
+class="math inline">\(\theta\)</span>与<span
+class="math inline">\(\mathbf{a}\)</span>(注意此处的<span
+class="math inline">\(\mathbf{a}\)</span>是一个单位长度的向量)，于是有<span
+class="math inline">\(\mathbf{\phi} = {\theta}
+{a}\)</span>，首先此处说明的是，<span
+class="math inline">\(a^{\wedge}\)</span>具有如下两条性质:</p>
+<p><span class="math display">\[\begin{equation} \mathbf{a} \mathbf{a}^T
+= \mathbf{a}^{\wedge} \mathbf{a}^{\wedge} + \mathbf{I}
+\end{equation}\]</span></p>
+<p><span class="math display">\[ \begin{equation} \mathbf{a}^{\wedge}
+\mathbf{a}^{\wedge} \mathbf{a}^{\wedge} = - \mathbf{a}^{\wedge}
+\end{equation} \]</span></p>
 <p>上述性质有时间可以尝试证明一下，利用这两个性质，我们可以进行如下推导:</p>
-<p class='katex-block katex-error' title='ParseError: KaTeX parse error: No such environment: align* at position 7: \begin{̲a̲l̲i̲g̲n̲*̲}̲ \exp \left( {\…'>\begin{align*} \exp \left( {\mathbf{\phi} ^ \wedge } \right) &amp;= \exp \left( {\theta {\mathbf{a}^ \wedge }} \right) = \sum\limits_{n = 0}^\infty  {\frac{1}{n!}{\left( {\theta {\mathbf{a}^ \wedge }} \right)}^n} \\ &amp;= \mathbf{I} + \theta {\mathbf{a}^ \wedge } + \frac{1}{2!}{\theta ^2}{\mathbf{a}^ \wedge }{\mathbf{a}^ \wedge } + \frac{1}{3!}{\theta ^3}{\mathbf{a}^ \wedge }{\mathbf{a}^ \wedge }{\mathbf{a}^ \wedge } + \frac{1}{4!}{\theta ^4}{\left( {\mathbf{a}^ \wedge } \right)^4} + ...\\ &amp;= \mathbf{a} {\mathbf{a}^T} - {\mathbf{a}^ \wedge }{\mathbf{a}^ \wedge } + \theta {\mathbf{a}^ \wedge } + \frac{1}{2!}\theta {\mathbf{a}^ \wedge }{\mathbf{a}^ \wedge } - \frac{1}{3!}{\theta ^3}{\mathbf{a}^ \wedge } + \frac{1}{4!}{\theta ^4}{\left( {\mathbf{a}^ \wedge } \right)^4} + ...\\ &amp;= \mathbf{a}{\mathbf{a}^T} + \left( {\theta  - \frac{1}{3!}{\theta ^3} + \frac{1}{5!}{\theta ^5} - ...} \right){\mathbf{a}^ \wedge } - \left( {1 - \frac{1}{2!}{\theta ^2} + \frac{1}{4!}{\theta ^4} - ...} \right){\mathbf{a}^ \wedge }{\mathbf{a}^ \wedge }\\ &amp;= {\mathbf{a}^ \wedge }{\mathbf{a}^ \wedge } + \mathbf{I} + \sin \theta {\mathbf{a}^ \wedge } - \cos \theta {\mathbf{a}^ \wedge }{\mathbf{a}^ \wedge }\\ &amp;= (1 - \cos \theta ){\mathbf{a}^ \wedge }{\mathbf{a}^ \wedge } + I + \sin \theta {\mathbf{a}^ \wedge }\\ &amp;= \cos \theta \mathbf{I} + (1 - \cos \theta )\mathbf{a}{\mathbf{a}^T} + \sin \theta {\mathbf{a}^ \wedge } \\ \end{align*} 
-</p>
+<p><span class="math display">\[ \begin{align*} \exp \left(
+{\mathbf{\phi} ^ \wedge } \right) &amp;= \exp \left( {\theta
+{\mathbf{a}^ \wedge }} \right) = \sum\limits_{n =
+0}^\infty  {\frac{1}{n!}{\left( {\theta {\mathbf{a}^ \wedge }}
+\right)}^n} \\ &amp;= \mathbf{I} + \theta {\mathbf{a}^ \wedge } +
+\frac{1}{2!}{\theta ^2}{\mathbf{a}^ \wedge }{\mathbf{a}^ \wedge } +
+\frac{1}{3!}{\theta ^3}{\mathbf{a}^ \wedge }{\mathbf{a}^ \wedge
+}{\mathbf{a}^ \wedge } + \frac{1}{4!}{\theta ^4}{\left( {\mathbf{a}^
+\wedge } \right)^4} + ...\\ &amp;= \mathbf{a} {\mathbf{a}^T} -
+{\mathbf{a}^ \wedge }{\mathbf{a}^ \wedge } + \theta {\mathbf{a}^ \wedge
+} + \frac{1}{2!}\theta {\mathbf{a}^ \wedge }{\mathbf{a}^ \wedge } -
+\frac{1}{3!}{\theta ^3}{\mathbf{a}^ \wedge } + \frac{1}{4!}{\theta
+^4}{\left( {\mathbf{a}^ \wedge } \right)^4} + ...\\ &amp;=
+\mathbf{a}{\mathbf{a}^T} + \left( {\theta  - \frac{1}{3!}{\theta ^3} +
+\frac{1}{5!}{\theta ^5} - ...} \right){\mathbf{a}^ \wedge } - \left( {1
+- \frac{1}{2!}{\theta ^2} + \frac{1}{4!}{\theta ^4} - ...}
+\right){\mathbf{a}^ \wedge }{\mathbf{a}^ \wedge }\\ &amp;= {\mathbf{a}^
+\wedge }{\mathbf{a}^ \wedge } + \mathbf{I} + \sin \theta {\mathbf{a}^
+\wedge } - \cos \theta {\mathbf{a}^ \wedge }{\mathbf{a}^ \wedge }\\
+&amp;= (1 - \cos \theta ){\mathbf{a}^ \wedge }{\mathbf{a}^ \wedge } + I
++ \sin \theta {\mathbf{a}^ \wedge }\\ &amp;= \cos \theta \mathbf{I} + (1
+- \cos \theta )\mathbf{a}{\mathbf{a}^T} + \sin \theta {\mathbf{a}^
+\wedge } \\ \end{align*} \]</span></p>
 <p>记住最后的这个公式:</p>
-<p class='katex-block katex-error' title='ParseError: KaTeX parse error: No such environment: equation at position 7: \begin{̲e̲q̲u̲a̲t̲i̲o̲n̲}̲ \exp( \theta \…'>\begin{equation} \exp( \theta \mathbf{a} ) = \cos \theta \mathbf{I} + (1 - \cos \theta )\mathbf{a}{\mathbf{a}^T} + \sin \theta {\mathbf{a}^ \wedge } \end{equation} 
-</p>
-<p>这时<strong>罗德里格斯公式</strong>，这个公式本身的作用是将旋转向量变换成旋转矩阵。所以从这里我们知道$$\mathfrak{so}(3)$$实际上是由旋转向量组成的空间。而指数映射就是罗德里格斯公式映射，通过他们我们可以将$$\mathfrak{so}(3)$$中的任意一个旋转向量对应到一个<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>O</mi><mo stretchy="false">(</mo><mn>3</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">SO(3)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">3</span><span class="mclose">)</span></span></span></span>中的一个旋转矩阵。</p>
+<p><span class="math display">\[ \begin{equation} \exp( \theta
+\mathbf{a} ) = \cos \theta \mathbf{I} + (1 - \cos \theta
+)\mathbf{a}{\mathbf{a}^T} + \sin \theta {\mathbf{a}^ \wedge }
+\end{equation} \]</span></p>
+<p>这时<strong>罗德里格斯公式</strong>，这个公式本身的作用是将旋转向量变换成旋转矩阵。所以从这里我们知道<span
+class="math display">\[\mathfrak{so}(3)\]</span>实际上是由旋转向量组成的空间。而指数映射就是罗德里格斯公式映射，通过他们我们可以将<span
+class="math display">\[\mathfrak{so}(3)\]</span>中的任意一个旋转向量对应到一个<span
+class="math inline">\(SO(3)\)</span>中的一个旋转矩阵。</p>
 <blockquote>
 <p>这里需要提到的一点是，指数映射不是一个双射，但他是一个满射。这一意味着每一个旋转矩阵都可以找到一个向量与之对应，但是可能存在多个向量对应到同一个矩阵。这个很好理解，因为旋转角度具有周期性，多转360度效果一样。</p>
 </blockquote>
 <blockquote>
 <p>同理，<strong>指数映射</strong>作用是从向量到矩阵的映射，反过来，从矩阵到向量的映射是<strong>对数映射</strong>。</p>
 </blockquote>
-<h2 id="三维欧式群se3与其对应的李代数mathfrakse3"><a class="markdownIt-Anchor" href="#三维欧式群se3与其对应的李代数mathfrakse3"></a> 三维欧式群<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>E</mi><mo stretchy="false">(</mo><mn>3</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">SE(3)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord">3</span><span class="mclose">)</span></span></span></span>与其对应的李代数<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="fraktur">s</mi><mi mathvariant="fraktur">e</mi></mrow><mo stretchy="false">(</mo><mn>3</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\mathfrak{se}(3)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathfrak">s</span><span class="mord mathfrak">e</span></span><span class="mopen">(</span><span class="mord">3</span><span class="mclose">)</span></span></span></span></h2>
-<p>首先，列出三维欧式群<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>E</mi><mo stretchy="false">(</mo><mn>3</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">SE(3)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord">3</span><span class="mclose">)</span></span></span></span>的定义:</p>
-<p class='katex-block katex-error' title='ParseError: KaTeX parse error: No such environment: equation at position 7: \begin{̲e̲q̲u̲a̲t̲i̲o̲n̲}̲ SE(3) = \left\…'>\begin{equation} SE(3) = \left\{ \mathbf{T} = \left[ {\begin{array}{*{20}{c}}     \mathbf{R} &amp; \mathbf{t} \\  {\mathbf{0}^T} &amp; 1    \end{array}} \right] \in \mathbb{R}^{4 \times 4} | \mathbf{R} \in SO(3), \mathbf{t} \in \mathbb{R}^3\right\} \end{equation}
-</p>
-<p>由于每个欧式变换矩阵具有六个自由度，所以其对应的李代数位于<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="double-struck">R</mi><mn>6</mn></msup></mrow><annotation encoding="application/x-tex">\mathbb{R}^6</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathbb">R</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">6</span></span></span></span></span></span></span></span></span></span></span>中:</p>
-<p class='katex-block katex-error' title='ParseError: KaTeX parse error: No such environment: equation at position 7: \begin{̲e̲q̲u̲a̲t̲i̲o̲n̲}̲ \mathfrak{se}(…'>\begin{equation} \mathfrak{se}(3) = \left\{ \mathbf{ \Xi } = \mathbf{\xi}^\wedge \in \mathbb{R}^{4 \times 4} | \mathbf{\xi} \in \mathbb{R}^6 \right\} \end{equation}
-</p>
-<p>不过需要注意的是，此处我们对<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mrow></mrow><mo>∧</mo></msup></mrow><annotation encoding="application/x-tex">^\wedge</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.751892em;vertical-align:0em;"></span><span class="mord"><span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.751892em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∧</span></span></span></span></span></span></span></span></span></span></span>的作用进行拓展，使得其不再是一个反对称关系，而是讲一个六维度向量转换成四维矩阵。如下:</p>
-<p class='katex-block katex-error' title='ParseError: KaTeX parse error: No such environment: equation at position 7: \begin{̲e̲q̲u̲a̲t̲i̲o̲n̲}̲ \mathbf{\xi}^\…'>\begin{equation} \mathbf{\xi}^\wedge = {\left[ \begin{array}{l}   \mathbf{\rho} \\    \mathbf{\phi}   \end{array} \right]^ \wedge } = \left[ {\begin{array}{*{20}{c}}     {\mathbf{\phi} ^ \wedge }&amp;\mathbf{\rho} \\    {\mathbf{0}^T}&amp;0  \end{array}} \right] = \mathbf{\Xi} \end{equation}
-</p>
-<p>其中，前三维是平移分量，后三位为旋转分量，这个分量是<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="fraktur">s</mi><mi mathvariant="fraktur">o</mi></mrow><mo stretchy="false">(</mo><mn>3</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\mathfrak{so}(3)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathfrak">s</span><span class="mord mathfrak">o</span></span><span class="mopen">(</span><span class="mord">3</span><span class="mclose">)</span></span></span></span>的元素。在此处，该李代数对应的微分方程是:</p>
-<p class='katex-block katex-error' title='ParseError: KaTeX parse error: No such environment: equation at position 7: \begin{̲e̲q̲u̲a̲t̲i̲o̲n̲}̲ \mathbf{\dot{T…'>\begin{equation} \mathbf{\dot{T}}(t) = \mathbf{\xi}^\wedge(t) \mathbf{T}(t) \end{equation}
-</p>
+<h2 id="三维欧式群se3与其对应的李代数mathfrakse3">三维欧式群<span
+class="math inline">\(SE(3)\)</span>与其对应的李代数<span
+class="math inline">\(\mathfrak{se}(3)\)</span></h2>
+<p>首先，列出三维欧式群<span
+class="math inline">\(SE(3)\)</span>的定义:</p>
+<p><span class="math display">\[\begin{equation} SE(3) = \left\{
+\mathbf{T} = \left[ {\begin{array}{*{20}{c}}     \mathbf{R} &amp;
+\mathbf{t} \\  {\mathbf{0}^T} &amp; 1    \end{array}} \right] \in
+\mathbb{R}^{4 \times 4} | \mathbf{R} \in SO(3), \mathbf{t} \in
+\mathbb{R}^3\right\} \end{equation}\]</span></p>
+<p>由于每个欧式变换矩阵具有六个自由度，所以其对应的李代数位于<span
+class="math inline">\(\mathbb{R}^6\)</span>中:</p>
+<p><span class="math display">\[\begin{equation} \mathfrak{se}(3) =
+\left\{ \mathbf{ \Xi } = \mathbf{\xi}^\wedge \in \mathbb{R}^{4 \times 4}
+| \mathbf{\xi} \in \mathbb{R}^6 \right\} \end{equation}\]</span></p>
+<p>不过需要注意的是，此处我们对<span
+class="math inline">\(^\wedge\)</span>的作用进行拓展，使得其不再是一个反对称关系，而是讲一个六维度向量转换成四维矩阵。如下:</p>
+<p><span class="math display">\[\begin{equation} \mathbf{\xi}^\wedge =
+{\left[ \begin{array}{l}   \mathbf{\rho}
+\\    \mathbf{\phi}   \end{array} \right]^ \wedge } = \left[
+{\begin{array}{*{20}{c}}     {\mathbf{\phi} ^ \wedge }&amp;\mathbf{\rho}
+\\    {\mathbf{0}^T}&amp;0  \end{array}} \right] = \mathbf{\Xi}
+\end{equation}\]</span></p>
+<p>其中，前三维是平移分量，后三位为旋转分量，这个分量是<span
+class="math inline">\(\mathfrak{so}(3)\)</span>的元素。在此处，该李代数对应的微分方程是:</p>
+<p><span class="math display">\[\begin{equation} \mathbf{\dot{T}}(t) =
+\mathbf{\xi}^\wedge(t) \mathbf{T}(t) \end{equation}\]</span></p>
 <blockquote>
 <p>三维欧式群及其李代数的指数与对数映射类似。</p>
 </blockquote>
-<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<h2 id="总结">总结</h2>
 <div style="text-align: center">
-<img src="/assets/img/liqun/li-qun.png" srcset="/img/loading.gif" lazyload width="700" height="600"/>
+<p><img src="/assets/img/liqun/li-qun.png" srcset="/img/loading.gif" lazyload width="700"
+height="600"/&gt;</p>
 </div>
 <blockquote>
 <p>其中，J是雅克比矩阵，这个矩阵是在SE(3)上的指数映射中，平移部分经过指数映射后，发生了一次以J为系数矩阵的线性变换。旋转部分的指数映射还是罗德里格斯公式。</p>
 </blockquote>
-<h1 id="参考文献"><a class="markdownIt-Anchor" href="#参考文献"></a> 参考文献</h1>
+<h1 id="参考文献">参考文献</h1>
 <ul>
 <li>[1] 视觉SLAM十四讲:从理论到实践</li>
 </ul>
@@ -604,6 +727,7 @@
 
   
   
+
 
 
 
@@ -798,6 +922,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 
