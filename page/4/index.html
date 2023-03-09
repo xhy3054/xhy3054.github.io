@@ -233,6 +233,52 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2019/09/29/2019-09-29-dogleg/" target="_self">
+          <img src="/img/one-piece/one-piece16.jpg" srcset="/img/loading.gif" lazyload alt="dogleg算法解析">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2019/09/29/2019-09-29-dogleg/" target="_self">
+          dogleg算法解析
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2019/09/29/2019-09-29-dogleg/" target="_self">
+        <div>
+          之前有仔细介绍过非线性优化，其中二阶梯度的方法有高斯牛顿法、LM算法、dogleg算法等。前段时间仔细研究了dogleg算法的实现步骤，今天抽出时间总结一下。  dogleg属于二阶梯度法，为了解决高斯牛顿法在使用一阶导数平方近似计算hessian矩阵时可能不准确的问题，它结合了高斯牛顿法与最速下降法，通过定义近似半径来限制近似的可执行范围。本质上与LM算法类似，不过实现细节大有不同。  算法 d
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-09-29 01:07" pubdate>
+              2019-09-29
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E6%95%B0%E5%AD%A6/">#数学</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
         <a href="/2019/09/03/2019-09-03-vins-backend-optimize/" target="_self">
           <img src="/img/one-piece/one-piece15.jpg" srcset="/img/loading.gif" lazyload alt="vins中基于滑窗的后端优化">
         </a>
@@ -627,52 +673,6 @@
             <i class="iconfont icon-date"></i>
             <time datetime="2019-07-03 01:07" pubdate>
               2019-07-03
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E6%95%B0%E5%AD%A6/">#数学</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2019/06/19/2019-06-19-rotation-3d/" target="_self">
-          <img src="/img/one-piece/one-piece6.jpg" srcset="/img/loading.gif" lazyload alt="三维中间中旋转的表示方式--欧拉角、旋转矩阵、旋转向量、四元数">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2019/06/19/2019-06-19-rotation-3d/" target="_self">
-          三维中间中旋转的表示方式--欧拉角、旋转矩阵、旋转向量、四元数
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt " href="/2019/06/19/2019-06-19-rotation-3d/" target="_self">
-        <div>
-          三维空间中的旋转有很多种表示方式，欧拉角，旋转矩阵，旋转向量，四元数。由于在slam与机器人中会大量用到这方面的知识，所以在这里将此方面的知识总结一下，方便以后查阅。 在slam系统中一般使用四元数来存储姿态（也有使用旋转矩阵的，不过比较少），不使用旋转向量，个人认为原因主要在于：  首先得到一个旋转向量之后，我们是不可以直接通过类似相加的方式对旋转向量进行更新的，而矩阵和四元数的更新（乘法）是有
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-06-19 01:07" pubdate>
-              2019-06-19
             </time>
           </div>
         

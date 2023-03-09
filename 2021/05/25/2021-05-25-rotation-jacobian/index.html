@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://line.com/img/one-piece/one-piece41.jpg">
 <meta property="article:published_time" content="2021-05-24T17:07:24.000Z">
-<meta property="article:modified_time" content="2023-03-05T06:27:43.721Z">
+<meta property="article:modified_time" content="2023-03-07T13:03:54.465Z">
 <meta property="article:author" content="Line">
 <meta property="article:tag" content="数学">
 <meta name="twitter:card" content="summary_large_image">
@@ -231,7 +231,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          9.7k 字
+          10k 字
         
       </span>
     
@@ -242,7 +242,7 @@
         
         
         
-          82 分钟
+          85 分钟
         
       </span>
     
@@ -579,9 +579,8 @@ J_l({\theta}_a^b)^{-1}
 \end{aligned}
 \]</span></p>
 <blockquote>
-<p>我擦，与黄老师它们推导的不一样。。。。好吧，再看看哪里错了</p>
+<p>这是错的，为啥呢？可以参考第2节对于不可加因变量的绕动求导，对应的正确推导如下</p>
 </blockquote>
-<p>经邮件咨询，黄老师组的推导过程如下：</p>
 <blockquote>
 <p>自变量的扰动是左扰动（对b帧姿态的扰动），因变量的扰动是也是左扰动（我们探索对k帧姿态的扰动）</p>
 </blockquote>
@@ -604,7 +603,24 @@ Exp \left(\lambda {\theta}_a^b \right) R_V^a  \ \ \  \left(Exp(\lambda
 \right)}{\phi}  \\
      &amp;=\lambda J_l(\lambda {\theta}_a^b) J_l({\theta}_a^b)^{-1}
 \end{aligned}
-\]</span> 额问题已经很明显了，黄老师组对导数的定义与我们是不一样的。</p>
+\]</span></p>
+<blockquote>
+<p>利用第2节的方式会更简单</p>
+</blockquote>
+<p><span class="math display">\[
+\begin{aligned}
+Exp(\theta) Exp(\lambda Log(R_V^b R_a^V) )R_V^a  
+&amp;= Exp(\lambda Log( Exp(\phi) R_V^b R_a^V) )R_V^a \\
+Exp(\theta) Exp(\lambda {\theta}_a^b )
+&amp;= Exp ( \lambda  J_l({\theta}_a^b)^{-1} \phi + \lambda {\theta}_a^b
+) \\
+Exp(\theta) Exp(\lambda {\theta}_a^b ) &amp;=
+Exp \left( \lambda  J_l(\lambda {\theta}_a^b) J_l({\theta}_a^b)^{-1}
+\phi \right) Exp \left(\lambda {\theta}_a^b \right) \\
+Exp(\theta) &amp;= Exp \left( \lambda  J_l(\lambda {\theta}_a^b)
+J_l({\theta}_a^b)^{-1} \phi \right)
+\end{aligned}
+\]</span></p>
 
                 
               </div>
@@ -705,8 +721,8 @@ Exp \left(\lambda {\theta}_a^b \right) R_V^a  \ \ \  \left(Exp(\lambda
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/05/19/2021-05-19-ax=b-solve/" title="关于Ax=b形式的矩阵分解与求解问题">
-                        <span class="hidden-mobile">关于Ax=b形式的矩阵分解与求解问题</span>
+                      <a href="/2021/05/25/2023-03-08-rotation-common-math/" title="机器人领域常用数学转换总结">
+                        <span class="hidden-mobile">机器人领域常用数学转换总结</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
